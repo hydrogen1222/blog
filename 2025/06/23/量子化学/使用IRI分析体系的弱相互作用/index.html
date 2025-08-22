@@ -11,22 +11,22 @@
     
     
     
-    <script type="application/ld+json">{"@context":"http://schema.org","@type":"BlogPosting","author":{"@type":"Person","name":"John Doe","sameAs":["https://github.com/","http://stackoverflow.com/users","https://twitter.com/","https://facebook.com/","https://plus.google.com/","https://www.linkedin.com/profile/","mailto"]},"articleBody":"IRI等值面图\r\n启动Multiwfn，载入输入文件，我使用的输入文件是.fchk文件，别的如.wfn文件等也可以\r\n使用功能20 Visual study of weak interaction，进行弱相互作用分析，选择4 IRI: Interaction region indicator analysis (Chemistry-Methods, 1, 231)进行IRI分析，选择精度，这里我选的是高精度3 High quality grid,   covering whole system, about 1728000 points in total（精度是根据格点数目确定的，对于巨大体系可能高精度也不够用需要手动指定格点数目）\r\n\r\n\r\n已完成IRI分析\r\n\r\n至此，格点计算已经完成，然后我们导出数据3 Output cube files to func1.cub and func2.cub in current folder，借助VMD\r\n分子可视化程序画出更好看的图，将载入文件所在文件夹下导出的func1.cub和func2.cub(这两个文件分别记录的是sign(λ2)ρ和IRI格点数据)复制到VMD程序的根目录并在根目录下新建一个脚本文件，名为IRIfill.vmd，内容为：\r\n12345678910111213141516171819mol new func1.cubmol addfile func2.cubmol delrep 0 topmol representation CPK 1.0 0.3 18.0 16.0mol addrep topmol representation Isosurface 1.0 1 0 0 1 1mol color Volume 0mol addrep topmol scaleminmax top 1 -0.04 0.02mol modstyle 0 top CPK 0.700000 0.300000 18.000000 16.000000color scale midpoint 0.666color scale method BGRcolor Display Background whiteaxes location Offdisplay depthcue offdisplay rendermode GLSLlight 3 oncolor Element N icebluemol modcolor 0 top Element\r\n然后启动VMD，在文本窗口中输入source IRIfill.vmd，\r\n","dateCreated":"2025-06-23T09:20:02+08:00","dateModified":"2025-08-22T17:23:29+08:00","datePublished":"2025-06-23T09:20:02+08:00","description":"","headline":"使用IRI方法进行弱相互作用分析","image":[],"mainEntityOfPage":{"@type":"WebPage","@id":"http://example.com/2025/06/23/%E9%87%8F%E5%AD%90%E5%8C%96%E5%AD%A6/%E4%BD%BF%E7%94%A8IRI%E5%88%86%E6%9E%90%E4%BD%93%E7%B3%BB%E7%9A%84%E5%BC%B1%E7%9B%B8%E4%BA%92%E4%BD%9C%E7%94%A8/"},"publisher":{"@type":"Organization","name":"John Doe","sameAs":["https://github.com/","http://stackoverflow.com/users","https://twitter.com/","https://facebook.com/","https://plus.google.com/","https://www.linkedin.com/profile/","mailto"]},"url":"http://example.com/2025/06/23/%E9%87%8F%E5%AD%90%E5%8C%96%E5%AD%A6/%E4%BD%BF%E7%94%A8IRI%E5%88%86%E6%9E%90%E4%BD%93%E7%B3%BB%E7%9A%84%E5%BC%B1%E7%9B%B8%E4%BA%92%E4%BD%9C%E7%94%A8/","keywords":"化学, 科研"}</script>
+    <script type="application/ld+json">{"@context":"http://schema.org","@type":"BlogPosting","author":{"@type":"Person","name":"John Doe","sameAs":["https://github.com/","http://stackoverflow.com/users","https://twitter.com/","https://facebook.com/","https://plus.google.com/","https://www.linkedin.com/profile/","mailto"]},"articleBody":"IRI等值面图\r\n启动Multiwfn，载入输入文件，我使用的输入文件是.fchk文件，别的如.wfn文件等也可以\r\n使用功能20 Visual study of weak interaction，进行弱相互作用分析，选择4 IRI: Interaction region indicator analysis (Chemistry-Methods, 1, 231)进行IRI分析，选择精度，这里我选的是高精度3 High quality grid,   covering whole system, about 1728000 points in total（精度是根据格点数目确定的，对于巨大体系可能高精度也不够用需要手动指定格点数目）\r\n\r\n\r\n已完成IRI分析\r\n\r\n至此，格点计算已经完成，然后我们导出数据3 Output cube files to func1.cub and func2.cub in current folder，借助VMD\r\n分子可视化程序画出更好看的图，将载入文件所在文件夹下导出的func1.cub和func2.cub(这两个文件分别记录的是sign(λ2)ρ和IRI格点数据)复制到VMD程序的根目录并在根目录下新建一个脚本文件，名为IRIfill.vmd，内容为：\r\n12345678910111213141516171819mol new func1.cubmol addfile func2.cubmol delrep 0 topmol representation CPK 1.0 0.3 18.0 16.0mol addrep topmol representation Isosurface 1.0 1 0 0 1 1mol color Volume 0mol addrep topmol scaleminmax top 1 -0.04 0.02mol modstyle 0 top CPK 0.700000 0.300000 18.000000 16.000000color scale midpoint 0.666color scale method BGRcolor Display Background whiteaxes location Offdisplay depthcue offdisplay rendermode GLSLlight 3 oncolor Element N icebluemol modcolor 0 top Element\r\n然后启动VMD，在文本窗口中输入source IRIfill.vmd，\r\n","dateCreated":"2025-06-23T09:20:02+08:00","dateModified":"2025-08-22T17:23:29+08:00","datePublished":"2025-06-23T09:20:02+08:00","description":"","headline":"使用IRI方法进行弱相互作用分析","image":[],"mainEntityOfPage":{"@type":"WebPage","@id":"https://hydrogen1222.xyz/2025/06/23/%E9%87%8F%E5%AD%90%E5%8C%96%E5%AD%A6/%E4%BD%BF%E7%94%A8IRI%E5%88%86%E6%9E%90%E4%BD%93%E7%B3%BB%E7%9A%84%E5%BC%B1%E7%9B%B8%E4%BA%92%E4%BD%9C%E7%94%A8/"},"publisher":{"@type":"Organization","name":"John Doe","sameAs":["https://github.com/","http://stackoverflow.com/users","https://twitter.com/","https://facebook.com/","https://plus.google.com/","https://www.linkedin.com/profile/","mailto"]},"url":"https://hydrogen1222.xyz/2025/06/23/%E9%87%8F%E5%AD%90%E5%8C%96%E5%AD%A6/%E4%BD%BF%E7%94%A8IRI%E5%88%86%E6%9E%90%E4%BD%93%E7%B3%BB%E7%9A%84%E5%BC%B1%E7%9B%B8%E4%BA%92%E4%BD%9C%E7%94%A8/","keywords":"化学, 科研"}</script>
     <meta name="description" content="IRI等值面图 启动Multiwfn，载入输入文件，我使用的输入文件是.fchk文件，别的如.wfn文件等也可以 使用功能20 Visual study of weak interaction，进行弱相互作用分析，选择4 IRI: Interaction region indicator analysis (Chemistry-Methods, 1, 231)进行IRI分析，选择精度，这里我选">
 <meta property="og:type" content="blog">
 <meta property="og:title" content="使用IRI方法进行弱相互作用分析">
-<meta property="og:url" content="http://example.com/2025/06/23/%E9%87%8F%E5%AD%90%E5%8C%96%E5%AD%A6/%E4%BD%BF%E7%94%A8IRI%E5%88%86%E6%9E%90%E4%BD%93%E7%B3%BB%E7%9A%84%E5%BC%B1%E7%9B%B8%E4%BA%92%E4%BD%9C%E7%94%A8/index.html">
+<meta property="og:url" content="https://hydrogen1222.xyz/2025/06/23/%E9%87%8F%E5%AD%90%E5%8C%96%E5%AD%A6/%E4%BD%BF%E7%94%A8IRI%E5%88%86%E6%9E%90%E4%BD%93%E7%B3%BB%E7%9A%84%E5%BC%B1%E7%9B%B8%E4%BA%92%E4%BD%9C%E7%94%A8/index.html">
 <meta property="og:site_name" content="Hexo">
 <meta property="og:description" content="IRI等值面图 启动Multiwfn，载入输入文件，我使用的输入文件是.fchk文件，别的如.wfn文件等也可以 使用功能20 Visual study of weak interaction，进行弱相互作用分析，选择4 IRI: Interaction region indicator analysis (Chemistry-Methods, 1, 231)进行IRI分析，选择精度，这里我选">
 <meta property="og:locale" content="en_US">
-<meta property="og:image" content="http://example.com/2025/06/23/%E9%87%8F%E5%AD%90%E5%8C%96%E5%AD%A6/%E4%BD%BF%E7%94%A8IRI%E5%88%86%E6%9E%90%E4%BD%93%E7%B3%BB%E7%9A%84%E5%BC%B1%E7%9B%B8%E4%BA%92%E4%BD%9C%E7%94%A8/%E4%BD%BF%E7%94%A8IRI%E5%88%86%E6%9E%90%E4%BD%93%E7%B3%BB%E7%9A%84%E5%BC%B1%E7%9B%B8%E4%BA%92%E4%BD%9C%E7%94%A8/image-20250628101522602.png">
+<meta property="og:image" content="https://hydrogen1222.xyz/2025/06/23/%E9%87%8F%E5%AD%90%E5%8C%96%E5%AD%A6/%E4%BD%BF%E7%94%A8IRI%E5%88%86%E6%9E%90%E4%BD%93%E7%B3%BB%E7%9A%84%E5%BC%B1%E7%9B%B8%E4%BA%92%E4%BD%9C%E7%94%A8/%E4%BD%BF%E7%94%A8IRI%E5%88%86%E6%9E%90%E4%BD%93%E7%B3%BB%E7%9A%84%E5%BC%B1%E7%9B%B8%E4%BA%92%E4%BD%9C%E7%94%A8/image-20250628101522602.png">
 <meta property="article:published_time" content="2025-06-23T01:20:02.000Z">
 <meta property="article:modified_time" content="2025-08-22T09:23:29.846Z">
 <meta property="article:author" content="John Doe">
 <meta property="article:tag" content="化学">
 <meta property="article:tag" content="科研">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:image" content="http://example.com/2025/06/23/%E9%87%8F%E5%AD%90%E5%8C%96%E5%AD%A6/%E4%BD%BF%E7%94%A8IRI%E5%88%86%E6%9E%90%E4%BD%93%E7%B3%BB%E7%9A%84%E5%BC%B1%E7%9B%B8%E4%BA%92%E4%BD%9C%E7%94%A8/%E4%BD%BF%E7%94%A8IRI%E5%88%86%E6%9E%90%E4%BD%93%E7%B3%BB%E7%9A%84%E5%BC%B1%E7%9B%B8%E4%BA%92%E4%BD%9C%E7%94%A8/image-20250628101522602.png">
+<meta name="twitter:image" content="https://hydrogen1222.xyz/2025/06/23/%E9%87%8F%E5%AD%90%E5%8C%96%E5%AD%A6/%E4%BD%BF%E7%94%A8IRI%E5%88%86%E6%9E%90%E4%BD%93%E7%B3%BB%E7%9A%84%E5%BC%B1%E7%9B%B8%E4%BA%92%E4%BD%9C%E7%94%A8/%E4%BD%BF%E7%94%A8IRI%E5%88%86%E6%9E%90%E4%BD%93%E7%B3%BB%E7%9A%84%E5%BC%B1%E7%9B%B8%E4%BA%92%E4%BD%9C%E7%94%A8/image-20250628101522602.png">
     
     
         
@@ -460,7 +460,7 @@ class="math inline"><em>λ</em><sub>2</sub></span>)ρ和IRI格点数据)复制�
             <li class="post-action hide-xs">
                 <a
                     class="post-action-btn btn btn--default"
-                    target="new" href="https://www.facebook.com/sharer/sharer.php?u=http://example.com/2025/06/23/%E9%87%8F%E5%AD%90%E5%8C%96%E5%AD%A6/%E4%BD%BF%E7%94%A8IRI%E5%88%86%E6%9E%90%E4%BD%93%E7%B3%BB%E7%9A%84%E5%BC%B1%E7%9B%B8%E4%BA%92%E4%BD%9C%E7%94%A8/"
+                    target="new" href="https://www.facebook.com/sharer/sharer.php?u=https://hydrogen1222.xyz/2025/06/23/%E9%87%8F%E5%AD%90%E5%8C%96%E5%AD%A6/%E4%BD%BF%E7%94%A8IRI%E5%88%86%E6%9E%90%E4%BD%93%E7%B3%BB%E7%9A%84%E5%BC%B1%E7%9B%B8%E4%BA%92%E4%BD%9C%E7%94%A8/"
                     title="Share on Facebook"
                     aria-label="Share on Facebook"
                 >
@@ -473,7 +473,7 @@ class="math inline"><em>λ</em><sub>2</sub></span>)ρ和IRI格点数据)复制�
             <li class="post-action hide-xs">
                 <a
                     class="post-action-btn btn btn--default"
-                    target="new" href="https://twitter.com/intent/tweet?text=http://example.com/2025/06/23/%E9%87%8F%E5%AD%90%E5%8C%96%E5%AD%A6/%E4%BD%BF%E7%94%A8IRI%E5%88%86%E6%9E%90%E4%BD%93%E7%B3%BB%E7%9A%84%E5%BC%B1%E7%9B%B8%E4%BA%92%E4%BD%9C%E7%94%A8/"
+                    target="new" href="https://twitter.com/intent/tweet?text=https://hydrogen1222.xyz/2025/06/23/%E9%87%8F%E5%AD%90%E5%8C%96%E5%AD%A6/%E4%BD%BF%E7%94%A8IRI%E5%88%86%E6%9E%90%E4%BD%93%E7%B3%BB%E7%9A%84%E5%BC%B1%E7%9B%B8%E4%BA%92%E4%BD%9C%E7%94%A8/"
                     title="Share on Twitter"
                     aria-label="Share on Twitter"
                 >
@@ -486,7 +486,7 @@ class="math inline"><em>λ</em><sub>2</sub></span>)ρ和IRI格点数据)复制�
             <li class="post-action hide-xs">
                 <a
                     class="post-action-btn btn btn--default"
-                    target="new" href="https://plus.google.com/share?url=http://example.com/2025/06/23/%E9%87%8F%E5%AD%90%E5%8C%96%E5%AD%A6/%E4%BD%BF%E7%94%A8IRI%E5%88%86%E6%9E%90%E4%BD%93%E7%B3%BB%E7%9A%84%E5%BC%B1%E7%9B%B8%E4%BA%92%E4%BD%9C%E7%94%A8/"
+                    target="new" href="https://plus.google.com/share?url=https://hydrogen1222.xyz/2025/06/23/%E9%87%8F%E5%AD%90%E5%8C%96%E5%AD%A6/%E4%BD%BF%E7%94%A8IRI%E5%88%86%E6%9E%90%E4%BD%93%E7%B3%BB%E7%9A%84%E5%BC%B1%E7%9B%B8%E4%BA%92%E4%BD%9C%E7%94%A8/"
                     title="Share on Google+"
                     aria-label="Share on Google+"
                 >
@@ -575,7 +575,7 @@ class="math inline"><em>λ</em><sub>2</sub></span>)ρ和IRI格点数据)复制�
             <li class="post-action hide-xs">
                 <a
                     class="post-action-btn btn btn--default"
-                    target="new" href="https://www.facebook.com/sharer/sharer.php?u=http://example.com/2025/06/23/%E9%87%8F%E5%AD%90%E5%8C%96%E5%AD%A6/%E4%BD%BF%E7%94%A8IRI%E5%88%86%E6%9E%90%E4%BD%93%E7%B3%BB%E7%9A%84%E5%BC%B1%E7%9B%B8%E4%BA%92%E4%BD%9C%E7%94%A8/"
+                    target="new" href="https://www.facebook.com/sharer/sharer.php?u=https://hydrogen1222.xyz/2025/06/23/%E9%87%8F%E5%AD%90%E5%8C%96%E5%AD%A6/%E4%BD%BF%E7%94%A8IRI%E5%88%86%E6%9E%90%E4%BD%93%E7%B3%BB%E7%9A%84%E5%BC%B1%E7%9B%B8%E4%BA%92%E4%BD%9C%E7%94%A8/"
                     title="Share on Facebook"
                     aria-label="Share on Facebook"
                 >
@@ -588,7 +588,7 @@ class="math inline"><em>λ</em><sub>2</sub></span>)ρ和IRI格点数据)复制�
             <li class="post-action hide-xs">
                 <a
                     class="post-action-btn btn btn--default"
-                    target="new" href="https://twitter.com/intent/tweet?text=http://example.com/2025/06/23/%E9%87%8F%E5%AD%90%E5%8C%96%E5%AD%A6/%E4%BD%BF%E7%94%A8IRI%E5%88%86%E6%9E%90%E4%BD%93%E7%B3%BB%E7%9A%84%E5%BC%B1%E7%9B%B8%E4%BA%92%E4%BD%9C%E7%94%A8/"
+                    target="new" href="https://twitter.com/intent/tweet?text=https://hydrogen1222.xyz/2025/06/23/%E9%87%8F%E5%AD%90%E5%8C%96%E5%AD%A6/%E4%BD%BF%E7%94%A8IRI%E5%88%86%E6%9E%90%E4%BD%93%E7%B3%BB%E7%9A%84%E5%BC%B1%E7%9B%B8%E4%BA%92%E4%BD%9C%E7%94%A8/"
                     title="Share on Twitter"
                     aria-label="Share on Twitter"
                 >
@@ -601,7 +601,7 @@ class="math inline"><em>λ</em><sub>2</sub></span>)ρ和IRI格点数据)复制�
             <li class="post-action hide-xs">
                 <a
                     class="post-action-btn btn btn--default"
-                    target="new" href="https://plus.google.com/share?url=http://example.com/2025/06/23/%E9%87%8F%E5%AD%90%E5%8C%96%E5%AD%A6/%E4%BD%BF%E7%94%A8IRI%E5%88%86%E6%9E%90%E4%BD%93%E7%B3%BB%E7%9A%84%E5%BC%B1%E7%9B%B8%E4%BA%92%E4%BD%9C%E7%94%A8/"
+                    target="new" href="https://plus.google.com/share?url=https://hydrogen1222.xyz/2025/06/23/%E9%87%8F%E5%AD%90%E5%8C%96%E5%AD%A6/%E4%BD%BF%E7%94%A8IRI%E5%88%86%E6%9E%90%E4%BD%93%E7%B3%BB%E7%9A%84%E5%BC%B1%E7%9B%B8%E4%BA%92%E4%BD%9C%E7%94%A8/"
                     title="Share on Google+"
                     aria-label="Share on Google+"
                 >
@@ -635,7 +635,7 @@ class="math inline"><em>λ</em><sub>2</sub></span>)ρ和IRI格点数据)复制�
                     <a
                         class="share-option-btn"
                         target="new"
-                        href="https://www.facebook.com/sharer/sharer.php?u=http://example.com/2025/06/23/%E9%87%8F%E5%AD%90%E5%8C%96%E5%AD%A6/%E4%BD%BF%E7%94%A8IRI%E5%88%86%E6%9E%90%E4%BD%93%E7%B3%BB%E7%9A%84%E5%BC%B1%E7%9B%B8%E4%BA%92%E4%BD%9C%E7%94%A8/"
+                        href="https://www.facebook.com/sharer/sharer.php?u=https://hydrogen1222.xyz/2025/06/23/%E9%87%8F%E5%AD%90%E5%8C%96%E5%AD%A6/%E4%BD%BF%E7%94%A8IRI%E5%88%86%E6%9E%90%E4%BD%93%E7%B3%BB%E7%9A%84%E5%BC%B1%E7%9B%B8%E4%BA%92%E4%BD%9C%E7%94%A8/"
                         aria-label="Share on Facebook"
                     >
                         <i class="fab fa-facebook" aria-hidden="true"></i><span>Share on Facebook</span>
@@ -648,7 +648,7 @@ class="math inline"><em>λ</em><sub>2</sub></span>)ρ和IRI格点数据)复制�
                     <a
                         class="share-option-btn"
                         target="new"
-                        href="https://twitter.com/intent/tweet?text=http://example.com/2025/06/23/%E9%87%8F%E5%AD%90%E5%8C%96%E5%AD%A6/%E4%BD%BF%E7%94%A8IRI%E5%88%86%E6%9E%90%E4%BD%93%E7%B3%BB%E7%9A%84%E5%BC%B1%E7%9B%B8%E4%BA%92%E4%BD%9C%E7%94%A8/"
+                        href="https://twitter.com/intent/tweet?text=https://hydrogen1222.xyz/2025/06/23/%E9%87%8F%E5%AD%90%E5%8C%96%E5%AD%A6/%E4%BD%BF%E7%94%A8IRI%E5%88%86%E6%9E%90%E4%BD%93%E7%B3%BB%E7%9A%84%E5%BC%B1%E7%9B%B8%E4%BA%92%E4%BD%9C%E7%94%A8/"
                         aria-label="Share on Twitter"
                     >
                         <i class="fab fa-twitter" aria-hidden="true"></i><span>Share on Twitter</span>
@@ -661,7 +661,7 @@ class="math inline"><em>λ</em><sub>2</sub></span>)ρ和IRI格点数据)复制�
                     <a
                         class="share-option-btn"
                         target="new"
-                        href="https://plus.google.com/share?url=http://example.com/2025/06/23/%E9%87%8F%E5%AD%90%E5%8C%96%E5%AD%A6/%E4%BD%BF%E7%94%A8IRI%E5%88%86%E6%9E%90%E4%BD%93%E7%B3%BB%E7%9A%84%E5%BC%B1%E7%9B%B8%E4%BA%92%E4%BD%9C%E7%94%A8/"
+                        href="https://plus.google.com/share?url=https://hydrogen1222.xyz/2025/06/23/%E9%87%8F%E5%AD%90%E5%8C%96%E5%AD%A6/%E4%BD%BF%E7%94%A8IRI%E5%88%86%E6%9E%90%E4%BD%93%E7%B3%BB%E7%9A%84%E5%BC%B1%E7%9B%B8%E4%BA%92%E4%BD%9C%E7%94%A8/"
                         aria-label="Share on Google+"
                     >
                         <i class="fab fa-google-plus" aria-hidden="true"></i><span>Share on Google+</span>

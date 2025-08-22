@@ -11,11 +11,11 @@
     
     
     
-    <script type="application/ld+json">{"@context":"http://schema.org","@type":"BlogPosting","author":{"@type":"Person","name":"John Doe","sameAs":["https://github.com/","http://stackoverflow.com/users","https://twitter.com/","https://facebook.com/","https://plus.google.com/","https://www.linkedin.com/profile/","mailto"]},"articleBody":"使用for循环批量创建文件夹\r\n1for i in &#123;2..9&#125;; do cp 0.01 0.0$i -r ; done\r\n使用sed命令不打开文件而进行替换\r\n1sed &#x27;3s/0.01/0.02/g&#x27; ICNAR\r\n\r\n对第三行(3)出现的所有0.01(g,全局替换)进行替换(s表示替换操作)，替换为0.02，只输出替换后的结果\r\nsed ‘3/0.01/0.02/g’ INCAR &gt; INCAR最后什么也没有\r\n加上-i参数可以直接进行编辑\r\n\r\n结合for循环和sed批量命名\r\n1234567891011[storm@cachyos-x8664 ex03]$ for i in *; do sed -i &quot;3s/0.05/$i/g&quot; $i/INCAR ; done[storm@cachyos-x8664 ex03]$ grep SIGMA */INCAR0.01/INCAR:SIGMA = 0.010.02/INCAR:SIGMA = 0.020.03/INCAR:SIGMA = 0.030.04/INCAR:SIGMA = 0.040.05/INCAR:SIGMA = 0.050.06/INCAR:SIGMA = 0.060.07/INCAR:SIGMA = 0.070.08/INCAR:SIGMA = 0.080.09/INCAR:SIGMA = 0.09\r\n\r\n使用双引号以读取变量的值\r\n\r\n注意这里使用的是英文括号而不是花括号\r\n1for i in $(seq 8 2 16); do cp 888/POSCAR $&#123;i&#125;$&#123;i&#125;$&#123;i&#125;/POSCAR; done\r\n“提交任务的命令”\r\n1yhbatch -p gsc -N 1 -J test job_sub \r\n找能量的命令\r\n123grep  without OUTCAR | tail -n 1grep &#x27;  without&#x27; OUTCAR | tail -n 1  # 本人常用的是这个grep sigma OUTCAR | tail -n 1 \r\n提交任务，多个文件夹\r\n1for i in *; do cd $i ; vasp1; cd $OLDPWD; done\r\n\r\nalias vasp1=‘mpirun -n 8 vasp’\r\n\r\n输出时间信息\r\n1for i in *0; do echo -e  $i &quot;\\t&quot; $(grep User $i/OUTCAR | awk &#x27;&#123;print $4&#125;&#x27;); done\r\n绘图脚本\r\n123456789import matplotlib.pyplot as pltimport numpy as npx,y = np.loadtxt(&#x27;data.dat&#x27;, delimiter =  &#x27;,&#x27;,      usecols=(0,1), unpack=True)plt.xlabel(&#x27;ENCUT / eV&#x27;)plt.ylabel(&#x27;Ttme / S&#x27;)plt.plot(x,y, &#x27;rs-&#x27;, linewidth=2.0)plt.show()\r\n在vim中进行替换\r\n1: 10,30s/$/T T T/g\r\n\r\n$表示每一行的末尾\r\n\r\n提取能量（用制表符TAB进行分隔）\r\n12345for i in [0-9]*/; do  dir=$&#123;i%/&#125;  energy=$(grep &#x27;  without&#x27; &quot;$dir/OUTCAR&quot; | tail -n 1 | awk &#x27;&#123;print $7&#125;&#x27;)  printf &quot;%s\\t%s\\n&quot; &quot;$dir&quot; &quot;$energy&quot;done &gt; data\r\n","dateCreated":"2025-04-14T16:40:40+08:00","dateModified":"2025-04-18T20:30:36+08:00","datePublished":"2025-04-14T16:40:40+08:00","description":"","headline":"一些简单的Linux命令","image":[],"mainEntityOfPage":{"@type":"WebPage","@id":"http://example.com/2025/04/14/%E7%A7%91%E7%A0%94/VASP/formula/"},"publisher":{"@type":"Organization","name":"John Doe","sameAs":["https://github.com/","http://stackoverflow.com/users","https://twitter.com/","https://facebook.com/","https://plus.google.com/","https://www.linkedin.com/profile/","mailto"]},"url":"http://example.com/2025/04/14/%E7%A7%91%E7%A0%94/VASP/formula/","keywords":"化学, 科研"}</script>
+    <script type="application/ld+json">{"@context":"http://schema.org","@type":"BlogPosting","author":{"@type":"Person","name":"John Doe","sameAs":["https://github.com/","http://stackoverflow.com/users","https://twitter.com/","https://facebook.com/","https://plus.google.com/","https://www.linkedin.com/profile/","mailto"]},"articleBody":"使用for循环批量创建文件夹\r\n1for i in &#123;2..9&#125;; do cp 0.01 0.0$i -r ; done\r\n使用sed命令不打开文件而进行替换\r\n1sed &#x27;3s/0.01/0.02/g&#x27; ICNAR\r\n\r\n对第三行(3)出现的所有0.01(g,全局替换)进行替换(s表示替换操作)，替换为0.02，只输出替换后的结果\r\nsed ‘3/0.01/0.02/g’ INCAR &gt; INCAR最后什么也没有\r\n加上-i参数可以直接进行编辑\r\n\r\n结合for循环和sed批量命名\r\n1234567891011[storm@cachyos-x8664 ex03]$ for i in *; do sed -i &quot;3s/0.05/$i/g&quot; $i/INCAR ; done[storm@cachyos-x8664 ex03]$ grep SIGMA */INCAR0.01/INCAR:SIGMA = 0.010.02/INCAR:SIGMA = 0.020.03/INCAR:SIGMA = 0.030.04/INCAR:SIGMA = 0.040.05/INCAR:SIGMA = 0.050.06/INCAR:SIGMA = 0.060.07/INCAR:SIGMA = 0.070.08/INCAR:SIGMA = 0.080.09/INCAR:SIGMA = 0.09\r\n\r\n使用双引号以读取变量的值\r\n\r\n注意这里使用的是英文括号而不是花括号\r\n1for i in $(seq 8 2 16); do cp 888/POSCAR $&#123;i&#125;$&#123;i&#125;$&#123;i&#125;/POSCAR; done\r\n“提交任务的命令”\r\n1yhbatch -p gsc -N 1 -J test job_sub \r\n找能量的命令\r\n123grep  without OUTCAR | tail -n 1grep &#x27;  without&#x27; OUTCAR | tail -n 1  # 本人常用的是这个grep sigma OUTCAR | tail -n 1 \r\n提交任务，多个文件夹\r\n1for i in *; do cd $i ; vasp1; cd $OLDPWD; done\r\n\r\nalias vasp1=‘mpirun -n 8 vasp’\r\n\r\n输出时间信息\r\n1for i in *0; do echo -e  $i &quot;\\t&quot; $(grep User $i/OUTCAR | awk &#x27;&#123;print $4&#125;&#x27;); done\r\n绘图脚本\r\n123456789import matplotlib.pyplot as pltimport numpy as npx,y = np.loadtxt(&#x27;data.dat&#x27;, delimiter =  &#x27;,&#x27;,      usecols=(0,1), unpack=True)plt.xlabel(&#x27;ENCUT / eV&#x27;)plt.ylabel(&#x27;Ttme / S&#x27;)plt.plot(x,y, &#x27;rs-&#x27;, linewidth=2.0)plt.show()\r\n在vim中进行替换\r\n1: 10,30s/$/T T T/g\r\n\r\n$表示每一行的末尾\r\n\r\n提取能量（用制表符TAB进行分隔）\r\n12345for i in [0-9]*/; do  dir=$&#123;i%/&#125;  energy=$(grep &#x27;  without&#x27; &quot;$dir/OUTCAR&quot; | tail -n 1 | awk &#x27;&#123;print $7&#125;&#x27;)  printf &quot;%s\\t%s\\n&quot; &quot;$dir&quot; &quot;$energy&quot;done &gt; data\r\n","dateCreated":"2025-04-14T16:40:40+08:00","dateModified":"2025-04-18T20:30:36+08:00","datePublished":"2025-04-14T16:40:40+08:00","description":"","headline":"一些简单的Linux命令","image":[],"mainEntityOfPage":{"@type":"WebPage","@id":"https://hydrogen1222.xyz/2025/04/14/%E7%A7%91%E7%A0%94/VASP/formula/"},"publisher":{"@type":"Organization","name":"John Doe","sameAs":["https://github.com/","http://stackoverflow.com/users","https://twitter.com/","https://facebook.com/","https://plus.google.com/","https://www.linkedin.com/profile/","mailto"]},"url":"https://hydrogen1222.xyz/2025/04/14/%E7%A7%91%E7%A0%94/VASP/formula/","keywords":"化学, 科研"}</script>
     <meta name="description" content="使用for循环批量创建文件夹 1for i in &#123;2..9&#125;; do cp 0.01 0.0$i -r ; done 使用sed命令不打开文件而进行替换 1sed &#x27;3s&#x2F;0.01&#x2F;0.02&#x2F;g&#x27; ICNAR  对第三行(3)出现的所有0.01(g,全局替换)进行替换(s表示替换操作)，替换为0.02，只输出替换后的结果 sed ‘3&#x2F;0.01">
 <meta property="og:type" content="blog">
 <meta property="og:title" content="一些简单的Linux命令">
-<meta property="og:url" content="http://example.com/2025/04/14/%E7%A7%91%E7%A0%94/VASP/formula/index.html">
+<meta property="og:url" content="https://hydrogen1222.xyz/2025/04/14/%E7%A7%91%E7%A0%94/VASP/formula/index.html">
 <meta property="og:site_name" content="Hexo">
 <meta property="og:description" content="使用for循环批量创建文件夹 1for i in &#123;2..9&#125;; do cp 0.01 0.0$i -r ; done 使用sed命令不打开文件而进行替换 1sed &#x27;3s&#x2F;0.01&#x2F;0.02&#x2F;g&#x27; ICNAR  对第三行(3)出现的所有0.01(g,全局替换)进行替换(s表示替换操作)，替换为0.02，只输出替换后的结果 sed ‘3&#x2F;0.01">
 <meta property="og:locale" content="en_US">
@@ -481,7 +481,7 @@
             <li class="post-action hide-xs">
                 <a
                     class="post-action-btn btn btn--default"
-                    target="new" href="https://www.facebook.com/sharer/sharer.php?u=http://example.com/2025/04/14/%E7%A7%91%E7%A0%94/VASP/formula/"
+                    target="new" href="https://www.facebook.com/sharer/sharer.php?u=https://hydrogen1222.xyz/2025/04/14/%E7%A7%91%E7%A0%94/VASP/formula/"
                     title="Share on Facebook"
                     aria-label="Share on Facebook"
                 >
@@ -494,7 +494,7 @@
             <li class="post-action hide-xs">
                 <a
                     class="post-action-btn btn btn--default"
-                    target="new" href="https://twitter.com/intent/tweet?text=http://example.com/2025/04/14/%E7%A7%91%E7%A0%94/VASP/formula/"
+                    target="new" href="https://twitter.com/intent/tweet?text=https://hydrogen1222.xyz/2025/04/14/%E7%A7%91%E7%A0%94/VASP/formula/"
                     title="Share on Twitter"
                     aria-label="Share on Twitter"
                 >
@@ -507,7 +507,7 @@
             <li class="post-action hide-xs">
                 <a
                     class="post-action-btn btn btn--default"
-                    target="new" href="https://plus.google.com/share?url=http://example.com/2025/04/14/%E7%A7%91%E7%A0%94/VASP/formula/"
+                    target="new" href="https://plus.google.com/share?url=https://hydrogen1222.xyz/2025/04/14/%E7%A7%91%E7%A0%94/VASP/formula/"
                     title="Share on Google+"
                     aria-label="Share on Google+"
                 >
@@ -596,7 +596,7 @@
             <li class="post-action hide-xs">
                 <a
                     class="post-action-btn btn btn--default"
-                    target="new" href="https://www.facebook.com/sharer/sharer.php?u=http://example.com/2025/04/14/%E7%A7%91%E7%A0%94/VASP/formula/"
+                    target="new" href="https://www.facebook.com/sharer/sharer.php?u=https://hydrogen1222.xyz/2025/04/14/%E7%A7%91%E7%A0%94/VASP/formula/"
                     title="Share on Facebook"
                     aria-label="Share on Facebook"
                 >
@@ -609,7 +609,7 @@
             <li class="post-action hide-xs">
                 <a
                     class="post-action-btn btn btn--default"
-                    target="new" href="https://twitter.com/intent/tweet?text=http://example.com/2025/04/14/%E7%A7%91%E7%A0%94/VASP/formula/"
+                    target="new" href="https://twitter.com/intent/tweet?text=https://hydrogen1222.xyz/2025/04/14/%E7%A7%91%E7%A0%94/VASP/formula/"
                     title="Share on Twitter"
                     aria-label="Share on Twitter"
                 >
@@ -622,7 +622,7 @@
             <li class="post-action hide-xs">
                 <a
                     class="post-action-btn btn btn--default"
-                    target="new" href="https://plus.google.com/share?url=http://example.com/2025/04/14/%E7%A7%91%E7%A0%94/VASP/formula/"
+                    target="new" href="https://plus.google.com/share?url=https://hydrogen1222.xyz/2025/04/14/%E7%A7%91%E7%A0%94/VASP/formula/"
                     title="Share on Google+"
                     aria-label="Share on Google+"
                 >
@@ -656,7 +656,7 @@
                     <a
                         class="share-option-btn"
                         target="new"
-                        href="https://www.facebook.com/sharer/sharer.php?u=http://example.com/2025/04/14/%E7%A7%91%E7%A0%94/VASP/formula/"
+                        href="https://www.facebook.com/sharer/sharer.php?u=https://hydrogen1222.xyz/2025/04/14/%E7%A7%91%E7%A0%94/VASP/formula/"
                         aria-label="Share on Facebook"
                     >
                         <i class="fab fa-facebook" aria-hidden="true"></i><span>Share on Facebook</span>
@@ -669,7 +669,7 @@
                     <a
                         class="share-option-btn"
                         target="new"
-                        href="https://twitter.com/intent/tweet?text=http://example.com/2025/04/14/%E7%A7%91%E7%A0%94/VASP/formula/"
+                        href="https://twitter.com/intent/tweet?text=https://hydrogen1222.xyz/2025/04/14/%E7%A7%91%E7%A0%94/VASP/formula/"
                         aria-label="Share on Twitter"
                     >
                         <i class="fab fa-twitter" aria-hidden="true"></i><span>Share on Twitter</span>
@@ -682,7 +682,7 @@
                     <a
                         class="share-option-btn"
                         target="new"
-                        href="https://plus.google.com/share?url=http://example.com/2025/04/14/%E7%A7%91%E7%A0%94/VASP/formula/"
+                        href="https://plus.google.com/share?url=https://hydrogen1222.xyz/2025/04/14/%E7%A7%91%E7%A0%94/VASP/formula/"
                         aria-label="Share on Google+"
                     >
                         <i class="fab fa-google-plus" aria-hidden="true"></i><span>Share on Google+</span>

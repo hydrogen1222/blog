@@ -11,11 +11,11 @@
     
     
     
-    <script type="application/ld+json">{"@context":"http://schema.org","@type":"BlogPosting","author":{"@type":"Person","name":"John Doe","sameAs":["https://github.com/","http://stackoverflow.com/users","https://twitter.com/","https://facebook.com/","https://plus.google.com/","https://www.linkedin.com/profile/","mailto"]},"articleBody":"费米孔\r\nCoulomb孔\r\n由于Coulomb孔的存在，电子之间存在动态相关，如何描述原子分子体系中电子之间的动态相关是量子化学的主要任务\r\n玻色子的波函数是对称的，没有反对称性的要求因此可以靠得很近\r\nHartree-Fock方程与自洽场计算\r\nHF方程\r\nHF方程是量子化学中计算多电子体系近似波函数和能量的基本方法，通过“平均场”近似把复杂的多电子问题拆解成单电子问题。\r\n多电子波函数用单电子轨道（分子轨道）的Slater行列式表示\r\nf̂(xi)φk(x1) = εkφk(x1)\r\nFock算符 $$\r\n\\hat{f}(x_1)=\\hat{h}(x_1)+\\sum_{j=1}^{N/2}(2\\hat{J}-\\hat{K_j})\r\n$$\r\n\r\n每个电子在其他电子构成的“平均场”中运动，忽略瞬时电子相关性（这是HF的局限性）。\r\n\r\n类比理解\r\n想象教室里的学生（电子）在考试：\r\n\r\nHF方法：每个学生只关心自己的试卷（轨道），并假设其他学生的行为是固定的“平均干扰”（库仑和交换势）。\r\n现实：学生之间其实会互相偷看（电子相关作用），但HF忽略了这点。\r\n\r\n自洽场计算（SCF）\r\n一句话总结\r\nSCF是求解HF方程的迭代计算过程，通过不断更新“平均场”直到结果自洽。\r\n关键步骤\r\n\r\n猜初始轨道（如用原子轨道线性组合）。\r\n构建Fock算符 （依赖当前轨道）。\r\n解HF方程 ，得到新轨道。\r\n检查收敛\r\n新轨道与旧轨道是否几乎相同？\r\n\r\n是 → 计算结束，输出能量和波函数。\r\n否 → 用新轨道回到步骤2，继续迭代。\r\n\r\n\r\n为什么叫“自洽”？\r\n最终得到的轨道生成的“平均场”，与计算这些轨道时用的场是一致的（自圆其说）。\r\n1234567[多电子薛定谔方程]     ↓ 太难解 → 近似  [HF方程]（单电子近似 + 平均场）     ↓ 需要迭代求解  [SCF计算]     ↓ 收敛后  [分子轨道和能量] → 用于计算化学性质\r\n组态相互作用（Configuration\r\nInteraction, CI）计算\r\nCI是一种后Hartree-Fock方法，通过将多个电子组态（Slater行列式）线性组合，考虑电子相关能，弥补HF方法的不足。\r\n核心思想\r\n\r\nHF的缺陷：\r\nHF单行列式近似忽略了电子瞬时排斥（动态相关）和激发态贡献（静态相关），导致能量偏高。\r\nCI的改进： 将波函数表示为多个激发组态的叠加：\r\nΨCI = c0ΦHF + ∑iciΦisingle + ∑jcjΦjdouble + ⋯\r\n\r\n($ _i^ $)：单激发组态（一个电子从占据轨道跃迁到虚轨道）。\r\n( Φjdouble\r\n)：双激发组态（两个电子同时跃迁），贡献最大。\r\n\r\n\r\nCI等级\r\n\r\n\r\n\r\n\r\n\r\n\r\n\r\n\r\n\r\n类型\r\n包含的激发组态\r\n计算成本\r\n典型应用\r\n\r\n\r\n\r\n\r\nCIS\r\n仅单激发\r\n低\r\n激发态初步探索\r\n\r\n\r\nCISD\r\n单+双激发\r\n中等\r\n小分子基态相关能修正\r\n\r\n\r\nCISDT\r\n单+双+三激发\r\n高\r\n高精度小体系\r\n\r\n\r\nFCI\r\n全组态（所有可能激发）\r\n天文数字\r\n极限精度（如H₂O极小基）\r\n\r\n\r\n\r\n关键问题：\r\n\r\n计算量爆炸：FCI的组态数随电子数和轨道数阶乘增长，仅适用于极小体系。\r\n大小一致性：CISD不满足大小一致性（如两个远离的H原子能量≠2×单个H能量），需更高激发或耦合簇（CC）修正。\r\n\r\n1234567[Gauss基函数]   ↓ 基组展开[Hartree-Fock方程] → 单行列式近似   ↓ 电子相关修正[组态相互作用(CI)] → 用二次量子化算符组合激发组态   ↓ 更高精度[耦合簇(CC)、多参考方法]\r\n理论计算中的各种方法\r\n简单总结了一下Sob老师的博文，个人的总结仅供参考，详细信息请阅读原文：http://sobereva.com/680\r\n任务类型\r\n\r\n优化极小点\r\n优化过渡态\r\n产生反应路径\r\n振动分析\r\n分子动力学\r\n构象/构型搜索\r\n波函数分析\r\n\r\n计算方法\r\n\r\n\r\n\r\n\r\n\r\n\r\n\r\n\r\n计算方法\r\nVASP\r\n\r\n\r\n\r\n\r\n\r\n分子力场\r\n计算耗时极低\r\n无法描述化学反应\r\n\r\n\r\n机器学习势\r\n通过机器学习的思想构造依赖于原子坐标的分子描述符与能量之间的抽象关系\r\n\r\n\r\n\r\n密度泛函理论（QM）\r\n性价比非常高\r\n耗时高于分子力场N个数量级\r\n\r\n\r\nHartree-Fock（QM）\r\n\r\n完全过时\r\n\r\n\r\n后Hatree-Fock类（QM）\r\n额外把动态相关在一定程度上考虑了进来\r\n耗时高了很多\r\n\r\n\r\nMCSCF如CASSCF（QM）\r\n弥补HF缺乏对静态相关的考虑\r\n几乎没有或很少考虑动态相关\r\n\r\n\r\n多参考方法如CASPT2、NEVPT2、MRCI（QM）\r\n在MCSCF基础上进一步把动态相关考虑进来，精度整体很好，普适性很强\r\n昂贵\r\n\r\n\r\n半经验类方法如AM1、PM3、PM6（QM）\r\n对HF的简化以巨幅降低耗时，耗时只是HF的微小零头\r\n精度低，只能用于有限的元素\r\n\r\n\r\nGFN-xTB（QM）\r\n相当于纳入了一定DFT思想的半经验级别的方法，整体精度和可靠性&gt;=主流的半经验方法\r\n\r\n\r\n\r\n\r\n\r\n\r\n\r\n\r\n\r\n凡是基于量子理论思想提出的，在实际数值求解的过程中一般都要涉及分子轨道，绝大多数计算程序中都是把分子轨道展开成基函数的线性组合来描述的\r\n最常见的基函数一类是原子中心基函数（如Gaussian等大多数量子化学程序以及CP2K等部分第一性原理程序用的高斯型基函数），其中心一般位于原子核，还有一类常见的基函数是平面波基函数，是大多数计算周期性体系为主的第一性原理程序用的，它的分布覆盖整个被计算的晶胞\r\n基组（basis\r\nset）是对于原子中心基函数而言的，例如6-31G*、def2-TZVP、cc-pVDZ等都是很常见的基组，它定义了实际计算时对各种元素原子具体用多少、什么参数的基函数。做HF、DFT、后HF、MCSCF、多参考等方法计算时都需要告诉计算程序用什么基组，基组质量越好，也就是越接近于所谓的完备基组极限，这些方法自身的精度发挥得就越充分，但代价就是耗时越高。一个好方法配一个烂基组，以及一个烂方法配一个好基组，结果都不理想，必须好方法配好基组才能得到较准确结果。\r\n123456789101112131415161718192021222324252627282930graph TD    A[基函数] --&gt;|组合成| B[基组]    B --&gt;|用于展开| C[分子轨道]    D[泛函] --&gt;|计算| E[电子相互作用能]    C --&gt;|输入| F[量子化学计算]    E --&gt;|输入| F    F --&gt;|输出| G[能量与性质]    %% 注释说明    subgraph 理论方法层        A        D    end    subgraph 实际计算层        B        C        E    end    subgraph 结果层        G    end    %% 样式优化    style A fill:#f9f,stroke:#333    style B fill:#bbf,stroke:#333    style D fill:#f96,stroke:#333    style C fill:#9f9,stroke:#333    style E fill:#6bf,stroke:#333    style F fill:#ccc,stroke:#333,stroke-width:2px    style G fill:#ff9,stroke:#333\r\n","dateCreated":"2025-08-22T23:02:45+08:00","dateModified":"2025-05-22T11:11:32+08:00","datePublished":"2025-08-22T23:02:45+08:00","description":"","headline":"","image":[],"mainEntityOfPage":{"@type":"WebPage","@id":"http://example.com/2025/08/22/%E7%A7%91%E7%A0%94/VASP/%E8%B4%B9%E7%B1%B3%E5%AD%94/"},"publisher":{"@type":"Organization","name":"John Doe","sameAs":["https://github.com/","http://stackoverflow.com/users","https://twitter.com/","https://facebook.com/","https://plus.google.com/","https://www.linkedin.com/profile/","mailto"]},"url":"http://example.com/2025/08/22/%E7%A7%91%E7%A0%94/VASP/%E8%B4%B9%E7%B1%B3%E5%AD%94/"}</script>
+    <script type="application/ld+json">{"@context":"http://schema.org","@type":"BlogPosting","author":{"@type":"Person","name":"John Doe","sameAs":["https://github.com/","http://stackoverflow.com/users","https://twitter.com/","https://facebook.com/","https://plus.google.com/","https://www.linkedin.com/profile/","mailto"]},"articleBody":"费米孔\r\nCoulomb孔\r\n由于Coulomb孔的存在，电子之间存在动态相关，如何描述原子分子体系中电子之间的动态相关是量子化学的主要任务\r\n玻色子的波函数是对称的，没有反对称性的要求因此可以靠得很近\r\nHartree-Fock方程与自洽场计算\r\nHF方程\r\nHF方程是量子化学中计算多电子体系近似波函数和能量的基本方法，通过“平均场”近似把复杂的多电子问题拆解成单电子问题。\r\n多电子波函数用单电子轨道（分子轨道）的Slater行列式表示\r\nf̂(xi)φk(x1) = εkφk(x1)\r\nFock算符 $$\r\n\\hat{f}(x_1)=\\hat{h}(x_1)+\\sum_{j=1}^{N/2}(2\\hat{J}-\\hat{K_j})\r\n$$\r\n\r\n每个电子在其他电子构成的“平均场”中运动，忽略瞬时电子相关性（这是HF的局限性）。\r\n\r\n类比理解\r\n想象教室里的学生（电子）在考试：\r\n\r\nHF方法：每个学生只关心自己的试卷（轨道），并假设其他学生的行为是固定的“平均干扰”（库仑和交换势）。\r\n现实：学生之间其实会互相偷看（电子相关作用），但HF忽略了这点。\r\n\r\n自洽场计算（SCF）\r\n一句话总结\r\nSCF是求解HF方程的迭代计算过程，通过不断更新“平均场”直到结果自洽。\r\n关键步骤\r\n\r\n猜初始轨道（如用原子轨道线性组合）。\r\n构建Fock算符 （依赖当前轨道）。\r\n解HF方程 ，得到新轨道。\r\n检查收敛\r\n新轨道与旧轨道是否几乎相同？\r\n\r\n是 → 计算结束，输出能量和波函数。\r\n否 → 用新轨道回到步骤2，继续迭代。\r\n\r\n\r\n为什么叫“自洽”？\r\n最终得到的轨道生成的“平均场”，与计算这些轨道时用的场是一致的（自圆其说）。\r\n1234567[多电子薛定谔方程]     ↓ 太难解 → 近似  [HF方程]（单电子近似 + 平均场）     ↓ 需要迭代求解  [SCF计算]     ↓ 收敛后  [分子轨道和能量] → 用于计算化学性质\r\n组态相互作用（Configuration\r\nInteraction, CI）计算\r\nCI是一种后Hartree-Fock方法，通过将多个电子组态（Slater行列式）线性组合，考虑电子相关能，弥补HF方法的不足。\r\n核心思想\r\n\r\nHF的缺陷：\r\nHF单行列式近似忽略了电子瞬时排斥（动态相关）和激发态贡献（静态相关），导致能量偏高。\r\nCI的改进： 将波函数表示为多个激发组态的叠加：\r\nΨCI = c0ΦHF + ∑iciΦisingle + ∑jcjΦjdouble + ⋯\r\n\r\n($ _i^ $)：单激发组态（一个电子从占据轨道跃迁到虚轨道）。\r\n( Φjdouble\r\n)：双激发组态（两个电子同时跃迁），贡献最大。\r\n\r\n\r\nCI等级\r\n\r\n\r\n\r\n\r\n\r\n\r\n\r\n\r\n\r\n类型\r\n包含的激发组态\r\n计算成本\r\n典型应用\r\n\r\n\r\n\r\n\r\nCIS\r\n仅单激发\r\n低\r\n激发态初步探索\r\n\r\n\r\nCISD\r\n单+双激发\r\n中等\r\n小分子基态相关能修正\r\n\r\n\r\nCISDT\r\n单+双+三激发\r\n高\r\n高精度小体系\r\n\r\n\r\nFCI\r\n全组态（所有可能激发）\r\n天文数字\r\n极限精度（如H₂O极小基）\r\n\r\n\r\n\r\n关键问题：\r\n\r\n计算量爆炸：FCI的组态数随电子数和轨道数阶乘增长，仅适用于极小体系。\r\n大小一致性：CISD不满足大小一致性（如两个远离的H原子能量≠2×单个H能量），需更高激发或耦合簇（CC）修正。\r\n\r\n1234567[Gauss基函数]   ↓ 基组展开[Hartree-Fock方程] → 单行列式近似   ↓ 电子相关修正[组态相互作用(CI)] → 用二次量子化算符组合激发组态   ↓ 更高精度[耦合簇(CC)、多参考方法]\r\n理论计算中的各种方法\r\n简单总结了一下Sob老师的博文，个人的总结仅供参考，详细信息请阅读原文：http://sobereva.com/680\r\n任务类型\r\n\r\n优化极小点\r\n优化过渡态\r\n产生反应路径\r\n振动分析\r\n分子动力学\r\n构象/构型搜索\r\n波函数分析\r\n\r\n计算方法\r\n\r\n\r\n\r\n\r\n\r\n\r\n\r\n\r\n计算方法\r\nVASP\r\n\r\n\r\n\r\n\r\n\r\n分子力场\r\n计算耗时极低\r\n无法描述化学反应\r\n\r\n\r\n机器学习势\r\n通过机器学习的思想构造依赖于原子坐标的分子描述符与能量之间的抽象关系\r\n\r\n\r\n\r\n密度泛函理论（QM）\r\n性价比非常高\r\n耗时高于分子力场N个数量级\r\n\r\n\r\nHartree-Fock（QM）\r\n\r\n完全过时\r\n\r\n\r\n后Hatree-Fock类（QM）\r\n额外把动态相关在一定程度上考虑了进来\r\n耗时高了很多\r\n\r\n\r\nMCSCF如CASSCF（QM）\r\n弥补HF缺乏对静态相关的考虑\r\n几乎没有或很少考虑动态相关\r\n\r\n\r\n多参考方法如CASPT2、NEVPT2、MRCI（QM）\r\n在MCSCF基础上进一步把动态相关考虑进来，精度整体很好，普适性很强\r\n昂贵\r\n\r\n\r\n半经验类方法如AM1、PM3、PM6（QM）\r\n对HF的简化以巨幅降低耗时，耗时只是HF的微小零头\r\n精度低，只能用于有限的元素\r\n\r\n\r\nGFN-xTB（QM）\r\n相当于纳入了一定DFT思想的半经验级别的方法，整体精度和可靠性&gt;=主流的半经验方法\r\n\r\n\r\n\r\n\r\n\r\n\r\n\r\n\r\n\r\n凡是基于量子理论思想提出的，在实际数值求解的过程中一般都要涉及分子轨道，绝大多数计算程序中都是把分子轨道展开成基函数的线性组合来描述的\r\n最常见的基函数一类是原子中心基函数（如Gaussian等大多数量子化学程序以及CP2K等部分第一性原理程序用的高斯型基函数），其中心一般位于原子核，还有一类常见的基函数是平面波基函数，是大多数计算周期性体系为主的第一性原理程序用的，它的分布覆盖整个被计算的晶胞\r\n基组（basis\r\nset）是对于原子中心基函数而言的，例如6-31G*、def2-TZVP、cc-pVDZ等都是很常见的基组，它定义了实际计算时对各种元素原子具体用多少、什么参数的基函数。做HF、DFT、后HF、MCSCF、多参考等方法计算时都需要告诉计算程序用什么基组，基组质量越好，也就是越接近于所谓的完备基组极限，这些方法自身的精度发挥得就越充分，但代价就是耗时越高。一个好方法配一个烂基组，以及一个烂方法配一个好基组，结果都不理想，必须好方法配好基组才能得到较准确结果。\r\n123456789101112131415161718192021222324252627282930graph TD    A[基函数] --&gt;|组合成| B[基组]    B --&gt;|用于展开| C[分子轨道]    D[泛函] --&gt;|计算| E[电子相互作用能]    C --&gt;|输入| F[量子化学计算]    E --&gt;|输入| F    F --&gt;|输出| G[能量与性质]    %% 注释说明    subgraph 理论方法层        A        D    end    subgraph 实际计算层        B        C        E    end    subgraph 结果层        G    end    %% 样式优化    style A fill:#f9f,stroke:#333    style B fill:#bbf,stroke:#333    style D fill:#f96,stroke:#333    style C fill:#9f9,stroke:#333    style E fill:#6bf,stroke:#333    style F fill:#ccc,stroke:#333,stroke-width:2px    style G fill:#ff9,stroke:#333\r\n","dateCreated":"2025-08-22T23:02:45+08:00","dateModified":"2025-05-22T11:11:32+08:00","datePublished":"2025-08-22T23:02:45+08:00","description":"","headline":"","image":[],"mainEntityOfPage":{"@type":"WebPage","@id":"https://hydrogen1222.xyz/2025/08/22/%E7%A7%91%E7%A0%94/VASP/%E8%B4%B9%E7%B1%B3%E5%AD%94/"},"publisher":{"@type":"Organization","name":"John Doe","sameAs":["https://github.com/","http://stackoverflow.com/users","https://twitter.com/","https://facebook.com/","https://plus.google.com/","https://www.linkedin.com/profile/","mailto"]},"url":"https://hydrogen1222.xyz/2025/08/22/%E7%A7%91%E7%A0%94/VASP/%E8%B4%B9%E7%B1%B3%E5%AD%94/"}</script>
     <meta name="description" content="费米孔 Coulomb孔 由于Coulomb孔的存在，电子之间存在动态相关，如何描述原子分子体系中电子之间的动态相关是量子化学的主要任务 玻色子的波函数是对称的，没有反对称性的要求因此可以靠得很近 Hartree-Fock方程与自洽场计算 HF方程 HF方程是量子化学中计算多电子体系近似波函数和能量的基本方法，通过“平均场”近似把复杂的多电子问题拆解成单电子问题。 多电子波函数用单电">
 <meta property="og:type" content="blog">
 <meta property="og:title" content="Hexo">
-<meta property="og:url" content="http://example.com/2025/08/22/%E7%A7%91%E7%A0%94/VASP/%E8%B4%B9%E7%B1%B3%E5%AD%94/index.html">
+<meta property="og:url" content="https://hydrogen1222.xyz/2025/08/22/%E7%A7%91%E7%A0%94/VASP/%E8%B4%B9%E7%B1%B3%E5%AD%94/index.html">
 <meta property="og:site_name" content="Hexo">
 <meta property="og:description" content="费米孔 Coulomb孔 由于Coulomb孔的存在，电子之间存在动态相关，如何描述原子分子体系中电子之间的动态相关是量子化学的主要任务 玻色子的波函数是对称的，没有反对称性的要求因此可以靠得很近 Hartree-Fock方程与自洽场计算 HF方程 HF方程是量子化学中计算多电子体系近似波函数和能量的基本方法，通过“平均场”近似把复杂的多电子问题拆解成单电子问题。 多电子波函数用单电">
 <meta property="og:locale" content="en_US">
@@ -618,7 +618,7 @@ set）是<strong>对于原子中心基函数而言的</strong>，例如6-31G*、
             <li class="post-action hide-xs">
                 <a
                     class="post-action-btn btn btn--default"
-                    target="new" href="https://www.facebook.com/sharer/sharer.php?u=http://example.com/2025/08/22/%E7%A7%91%E7%A0%94/VASP/%E8%B4%B9%E7%B1%B3%E5%AD%94/"
+                    target="new" href="https://www.facebook.com/sharer/sharer.php?u=https://hydrogen1222.xyz/2025/08/22/%E7%A7%91%E7%A0%94/VASP/%E8%B4%B9%E7%B1%B3%E5%AD%94/"
                     title="Share on Facebook"
                     aria-label="Share on Facebook"
                 >
@@ -631,7 +631,7 @@ set）是<strong>对于原子中心基函数而言的</strong>，例如6-31G*、
             <li class="post-action hide-xs">
                 <a
                     class="post-action-btn btn btn--default"
-                    target="new" href="https://twitter.com/intent/tweet?text=http://example.com/2025/08/22/%E7%A7%91%E7%A0%94/VASP/%E8%B4%B9%E7%B1%B3%E5%AD%94/"
+                    target="new" href="https://twitter.com/intent/tweet?text=https://hydrogen1222.xyz/2025/08/22/%E7%A7%91%E7%A0%94/VASP/%E8%B4%B9%E7%B1%B3%E5%AD%94/"
                     title="Share on Twitter"
                     aria-label="Share on Twitter"
                 >
@@ -644,7 +644,7 @@ set）是<strong>对于原子中心基函数而言的</strong>，例如6-31G*、
             <li class="post-action hide-xs">
                 <a
                     class="post-action-btn btn btn--default"
-                    target="new" href="https://plus.google.com/share?url=http://example.com/2025/08/22/%E7%A7%91%E7%A0%94/VASP/%E8%B4%B9%E7%B1%B3%E5%AD%94/"
+                    target="new" href="https://plus.google.com/share?url=https://hydrogen1222.xyz/2025/08/22/%E7%A7%91%E7%A0%94/VASP/%E8%B4%B9%E7%B1%B3%E5%AD%94/"
                     title="Share on Google+"
                     aria-label="Share on Google+"
                 >
@@ -730,7 +730,7 @@ set）是<strong>对于原子中心基函数而言的</strong>，例如6-31G*、
             <li class="post-action hide-xs">
                 <a
                     class="post-action-btn btn btn--default"
-                    target="new" href="https://www.facebook.com/sharer/sharer.php?u=http://example.com/2025/08/22/%E7%A7%91%E7%A0%94/VASP/%E8%B4%B9%E7%B1%B3%E5%AD%94/"
+                    target="new" href="https://www.facebook.com/sharer/sharer.php?u=https://hydrogen1222.xyz/2025/08/22/%E7%A7%91%E7%A0%94/VASP/%E8%B4%B9%E7%B1%B3%E5%AD%94/"
                     title="Share on Facebook"
                     aria-label="Share on Facebook"
                 >
@@ -743,7 +743,7 @@ set）是<strong>对于原子中心基函数而言的</strong>，例如6-31G*、
             <li class="post-action hide-xs">
                 <a
                     class="post-action-btn btn btn--default"
-                    target="new" href="https://twitter.com/intent/tweet?text=http://example.com/2025/08/22/%E7%A7%91%E7%A0%94/VASP/%E8%B4%B9%E7%B1%B3%E5%AD%94/"
+                    target="new" href="https://twitter.com/intent/tweet?text=https://hydrogen1222.xyz/2025/08/22/%E7%A7%91%E7%A0%94/VASP/%E8%B4%B9%E7%B1%B3%E5%AD%94/"
                     title="Share on Twitter"
                     aria-label="Share on Twitter"
                 >
@@ -756,7 +756,7 @@ set）是<strong>对于原子中心基函数而言的</strong>，例如6-31G*、
             <li class="post-action hide-xs">
                 <a
                     class="post-action-btn btn btn--default"
-                    target="new" href="https://plus.google.com/share?url=http://example.com/2025/08/22/%E7%A7%91%E7%A0%94/VASP/%E8%B4%B9%E7%B1%B3%E5%AD%94/"
+                    target="new" href="https://plus.google.com/share?url=https://hydrogen1222.xyz/2025/08/22/%E7%A7%91%E7%A0%94/VASP/%E8%B4%B9%E7%B1%B3%E5%AD%94/"
                     title="Share on Google+"
                     aria-label="Share on Google+"
                 >
@@ -790,7 +790,7 @@ set）是<strong>对于原子中心基函数而言的</strong>，例如6-31G*、
                     <a
                         class="share-option-btn"
                         target="new"
-                        href="https://www.facebook.com/sharer/sharer.php?u=http://example.com/2025/08/22/%E7%A7%91%E7%A0%94/VASP/%E8%B4%B9%E7%B1%B3%E5%AD%94/"
+                        href="https://www.facebook.com/sharer/sharer.php?u=https://hydrogen1222.xyz/2025/08/22/%E7%A7%91%E7%A0%94/VASP/%E8%B4%B9%E7%B1%B3%E5%AD%94/"
                         aria-label="Share on Facebook"
                     >
                         <i class="fab fa-facebook" aria-hidden="true"></i><span>Share on Facebook</span>
@@ -803,7 +803,7 @@ set）是<strong>对于原子中心基函数而言的</strong>，例如6-31G*、
                     <a
                         class="share-option-btn"
                         target="new"
-                        href="https://twitter.com/intent/tweet?text=http://example.com/2025/08/22/%E7%A7%91%E7%A0%94/VASP/%E8%B4%B9%E7%B1%B3%E5%AD%94/"
+                        href="https://twitter.com/intent/tweet?text=https://hydrogen1222.xyz/2025/08/22/%E7%A7%91%E7%A0%94/VASP/%E8%B4%B9%E7%B1%B3%E5%AD%94/"
                         aria-label="Share on Twitter"
                     >
                         <i class="fab fa-twitter" aria-hidden="true"></i><span>Share on Twitter</span>
@@ -816,7 +816,7 @@ set）是<strong>对于原子中心基函数而言的</strong>，例如6-31G*、
                     <a
                         class="share-option-btn"
                         target="new"
-                        href="https://plus.google.com/share?url=http://example.com/2025/08/22/%E7%A7%91%E7%A0%94/VASP/%E8%B4%B9%E7%B1%B3%E5%AD%94/"
+                        href="https://plus.google.com/share?url=https://hydrogen1222.xyz/2025/08/22/%E7%A7%91%E7%A0%94/VASP/%E8%B4%B9%E7%B1%B3%E5%AD%94/"
                         aria-label="Share on Google+"
                     >
                         <i class="fab fa-google-plus" aria-hidden="true"></i><span>Share on Google+</span>
