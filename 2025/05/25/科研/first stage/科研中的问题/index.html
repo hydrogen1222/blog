@@ -1,0 +1,738 @@
+
+<!DOCTYPE html>
+<html lang="en">
+    
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="generator" content="Hexo">
+    <title>科研中的小问题 - Hexo</title>
+    <meta name="author" content="John Doe">
+    
+    
+    
+    <script type="application/ld+json">{"@context":"http://schema.org","@type":"BlogPosting","author":{"@type":"Person","name":"John Doe","sameAs":["https://github.com/","http://stackoverflow.com/users","https://twitter.com/","https://facebook.com/","https://plus.google.com/","https://www.linkedin.com/profile/","mailto"]},"articleBody":"实验部分\r\n球磨\r\n\r\n球磨的原理是什么？\r\n球磨的作用是什么？\r\n200rpm合不出来，300rpm就能合出来？\r\n\r\nX-ray diffraction\r\n\r\nX射线是什么？\r\nX射线衍射的原理和用途是什么？\r\nXRD谱图的横坐标和纵坐标分别是什么意义？\r\nXRD为什么会产生峰？峰是什么意义？\r\n横坐标2theta角度为什么通常选择20∘~80∘\r\n单晶衍射和粉末衍射分别是什么？\r\n关于消光？\r\n\r\n近年来锂离子电池大规模应用的快速发展要求系统地了解锂离子电池的退化机制，这在很大程度上取决于先进表征方法的利用和发展。基于\r\nX 射线的技术，如 X 射线吸收光谱（XAS）、X 射线衍射（XRD）和 X\r\n射线光电子能谱（XPS），可以确定化学成分和元素的价态和晶体结构的变化。\r\n电子和扫描探针显微技术，（3）如扫描电子显微镜（SEM）、透射电子显微镜（TEM）和低温透射电镜，可以观察电极的形貌变化和固体电解质界面（SEI）的厚度。基于滴定的技术，如滴定气相色谱（TGC）（4）和质谱滴定（MST），（5,6）可以定量死\r\nLi 金属和 SEI\r\n组分。此外，固态核磁共振（NMR）（7）和电子顺磁共振（EPR）（8）能够实现对\r\nLi\r\n镀层的时间分辨和定量检测。然而，这些方法大多是侵入性技术，需要额外昂贵以及具有特殊电池设计的精密仪器进行测试，在实际应用中是不可行的。\r\n除了这些物理特性之外，电化学方法，如差分电压分析（DVA）、（9,10）差分充电电压（DCV）、（11）增量容量分析（ICA）、（12）和库仑效率（CE）、（13,14）也在电池老化研究中发挥了重要作用。然而，它们是相当复杂的确定方法，需要很长的监测时间。\r\n电化学阻抗谱测试\r\n\r\n为什么测出来的Nyquist图没有半圆部分呢？\r\n\r\n理论知识\r\n记得看Sob老师的博客，多逛逛计算化学公社呀\r\n","dateCreated":"2025-05-25T16:40:40+08:00","dateModified":"2025-06-08T19:08:48+08:00","datePublished":"2025-05-25T16:40:40+08:00","description":"","headline":"科研中的小问题","image":[],"mainEntityOfPage":{"@type":"WebPage","@id":"http://example.com/2025/05/25/%E7%A7%91%E7%A0%94/first%20stage/%E7%A7%91%E7%A0%94%E4%B8%AD%E7%9A%84%E9%97%AE%E9%A2%98/"},"publisher":{"@type":"Organization","name":"John Doe","sameAs":["https://github.com/","http://stackoverflow.com/users","https://twitter.com/","https://facebook.com/","https://plus.google.com/","https://www.linkedin.com/profile/","mailto"]},"url":"http://example.com/2025/05/25/%E7%A7%91%E7%A0%94/first%20stage/%E7%A7%91%E7%A0%94%E4%B8%AD%E7%9A%84%E9%97%AE%E9%A2%98/","keywords":"化学, 科研"}</script>
+    <meta name="description" content="实验部分 球磨  球磨的原理是什么？ 球磨的作用是什么？ 200rpm合不出来，300rpm就能合出来？  X-ray diffraction  X射线是什么？ X射线衍射的原理和用途是什么？ XRD谱图的横坐标和纵坐标分别是什么意义？ XRD为什么会产生峰？峰是什么意义？ 横坐标2theta角度为什么通常选择20∘~80∘ 单晶衍射和粉末衍射分别是什么？ 关于消光？">
+<meta property="og:type" content="blog">
+<meta property="og:title" content="科研中的小问题">
+<meta property="og:url" content="http://example.com/2025/05/25/%E7%A7%91%E7%A0%94/first%20stage/%E7%A7%91%E7%A0%94%E4%B8%AD%E7%9A%84%E9%97%AE%E9%A2%98/index.html">
+<meta property="og:site_name" content="Hexo">
+<meta property="og:description" content="实验部分 球磨  球磨的原理是什么？ 球磨的作用是什么？ 200rpm合不出来，300rpm就能合出来？  X-ray diffraction  X射线是什么？ X射线衍射的原理和用途是什么？ XRD谱图的横坐标和纵坐标分别是什么意义？ XRD为什么会产生峰？峰是什么意义？ 横坐标2theta角度为什么通常选择20∘~80∘ 单晶衍射和粉末衍射分别是什么？ 关于消光？">
+<meta property="og:locale" content="en_US">
+<meta property="article:published_time" content="2025-05-25T08:40:40.000Z">
+<meta property="article:modified_time" content="2025-06-08T11:08:48.000Z">
+<meta property="article:author" content="John Doe">
+<meta property="article:tag" content="化学">
+<meta property="article:tag" content="科研">
+<meta name="twitter:card" content="summary">
+    
+    
+        
+    
+    
+    
+    
+    
+    <!--STYLES-->
+    
+<link rel="stylesheet" href="/assets/css/all.css">
+
+    
+<link rel="stylesheet" href="/assets/css/jquery.fancybox.css">
+
+    
+<link rel="stylesheet" href="/assets/css/thumbs.css">
+
+    
+<link rel="stylesheet" href="/assets/css/tranquilpeak.css">
+
+    <!--STYLES END-->
+    
+
+    
+
+    
+        
+    
+
+
+
+
+<script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+<script>
+  MathJax = {
+    tex: {
+      inlineMath: [['$', '$'], ['\\(', '\\)']],
+      displayMath: [['$$', '$$'], ['\\[', '\\]']],
+      tags: 'ams'
+    },
+    svg: {
+      fontCache: 'global'
+    }
+  };
+</script>
+
+
+
+
+
+<!-- hexo injector head_end start -->
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.12.0/dist/katex.min.css">
+
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/hexo-math@4.0.0/dist/style.css">
+<!-- hexo injector head_end end --></head>
+
+    <body>
+        <div id="blog">
+            <!-- Define author's picture -->
+
+
+    
+
+<header id="header" data-behavior="4">
+    <i id="btn-open-sidebar" class="fa fa-lg fa-bars"></i>
+    <div class="header-title">
+        <a
+            class="header-title-link"
+            href="/"
+            aria-label=""
+        >
+            Hexo
+        </a>
+    </div>
+    
+        
+            <a
+                class="header-right-picture "
+                href="#about"
+                aria-label="Open the link: /#about"
+            >
+        
+        
+        </a>
+    
+</header>
+
+            <!-- Define author's picture -->
+
+
+<nav id="sidebar" data-behavior="4">
+    <div class="sidebar-container">
+        
+        
+            <ul class="sidebar-buttons">
+            
+                <li class="sidebar-button">
+                    
+                        <a
+                            class="sidebar-button-link "
+                            href="/"
+                            
+                            rel="noopener"
+                            title="Home"
+                        >
+                        <i class="sidebar-button-icon fa fa-home" aria-hidden="true"></i>
+                        <span class="sidebar-button-desc">Home</span>
+                    </a>
+            </li>
+            
+                <li class="sidebar-button">
+                    
+                        <a
+                            class="sidebar-button-link "
+                            href="/all-categories"
+                            
+                            rel="noopener"
+                            title="Categories"
+                        >
+                        <i class="sidebar-button-icon fa fa-bookmark" aria-hidden="true"></i>
+                        <span class="sidebar-button-desc">Categories</span>
+                    </a>
+            </li>
+            
+                <li class="sidebar-button">
+                    
+                        <a
+                            class="sidebar-button-link "
+                            href="/all-tags"
+                            
+                            rel="noopener"
+                            title="Tags"
+                        >
+                        <i class="sidebar-button-icon fa fa-tags" aria-hidden="true"></i>
+                        <span class="sidebar-button-desc">Tags</span>
+                    </a>
+            </li>
+            
+                <li class="sidebar-button">
+                    
+                        <a
+                            class="sidebar-button-link "
+                            href="/all-archives"
+                            
+                            rel="noopener"
+                            title="Archives"
+                        >
+                        <i class="sidebar-button-icon fa fa-archive" aria-hidden="true"></i>
+                        <span class="sidebar-button-desc">Archives</span>
+                    </a>
+            </li>
+            
+                <li class="sidebar-button">
+                    
+                        <a
+                            class="sidebar-button-link open-algolia-search"
+                            href="#search"
+                            
+                            rel="noopener"
+                            title="Search"
+                        >
+                        <i class="sidebar-button-icon fa fa-search" aria-hidden="true"></i>
+                        <span class="sidebar-button-desc">Search</span>
+                    </a>
+            </li>
+            
+                <li class="sidebar-button">
+                    
+                        <a
+                            class="sidebar-button-link "
+                            href="#about"
+                            
+                            rel="noopener"
+                            title="About"
+                        >
+                        <i class="sidebar-button-icon fa fa-question" aria-hidden="true"></i>
+                        <span class="sidebar-button-desc">About</span>
+                    </a>
+            </li>
+            
+        </ul>
+        
+            <ul class="sidebar-buttons">
+            
+                <li class="sidebar-button">
+                    
+                        <a
+                            class="sidebar-button-link "
+                            href="https://github.com/"
+                            
+                                target="_blank"
+                            
+                            rel="noopener"
+                            title="GitHub"
+                        >
+                        <i class="sidebar-button-icon fab fa-github" aria-hidden="true"></i>
+                        <span class="sidebar-button-desc">GitHub</span>
+                    </a>
+            </li>
+            
+                <li class="sidebar-button">
+                    
+                        <a
+                            class="sidebar-button-link "
+                            href="http://stackoverflow.com/users"
+                            
+                                target="_blank"
+                            
+                            rel="noopener"
+                            title="Stack Overflow"
+                        >
+                        <i class="sidebar-button-icon fab fa-stack-overflow" aria-hidden="true"></i>
+                        <span class="sidebar-button-desc">Stack Overflow</span>
+                    </a>
+            </li>
+            
+                <li class="sidebar-button">
+                    
+                        <a
+                            class="sidebar-button-link "
+                            href="https://twitter.com/"
+                            
+                                target="_blank"
+                            
+                            rel="noopener"
+                            title="Twitter"
+                        >
+                        <i class="sidebar-button-icon fab fa-twitter" aria-hidden="true"></i>
+                        <span class="sidebar-button-desc">Twitter</span>
+                    </a>
+            </li>
+            
+                <li class="sidebar-button">
+                    
+                        <a
+                            class="sidebar-button-link "
+                            href="https://facebook.com/"
+                            
+                                target="_blank"
+                            
+                            rel="noopener"
+                            title="Facebook"
+                        >
+                        <i class="sidebar-button-icon fab fa-facebook" aria-hidden="true"></i>
+                        <span class="sidebar-button-desc">Facebook</span>
+                    </a>
+            </li>
+            
+                <li class="sidebar-button">
+                    
+                        <a
+                            class="sidebar-button-link "
+                            href="https://plus.google.com/"
+                            
+                                target="_blank"
+                            
+                            rel="noopener"
+                            title="Google +"
+                        >
+                        <i class="sidebar-button-icon fab fa-google-plus" aria-hidden="true"></i>
+                        <span class="sidebar-button-desc">Google +</span>
+                    </a>
+            </li>
+            
+                <li class="sidebar-button">
+                    
+                        <a
+                            class="sidebar-button-link "
+                            href="https://www.linkedin.com/profile/"
+                            
+                                target="_blank"
+                            
+                            rel="noopener"
+                            title="LinkedIn"
+                        >
+                        <i class="sidebar-button-icon fab fa-linkedin" aria-hidden="true"></i>
+                        <span class="sidebar-button-desc">LinkedIn</span>
+                    </a>
+            </li>
+            
+                <li class="sidebar-button">
+                    
+                        <a
+                            class="sidebar-button-link "
+                            href="/mailto"
+                            
+                            rel="noopener"
+                            title="Mail"
+                        >
+                        <i class="sidebar-button-icon fa fa-envelope" aria-hidden="true"></i>
+                        <span class="sidebar-button-desc">Mail</span>
+                    </a>
+            </li>
+            
+        </ul>
+        
+            <ul class="sidebar-buttons">
+            
+                <li class="sidebar-button">
+                    
+                        <a
+                            class="sidebar-button-link "
+                            href="/atom.xml"
+                            
+                            rel="noopener"
+                            title="RSS"
+                        >
+                        <i class="sidebar-button-icon fa fa-rss" aria-hidden="true"></i>
+                        <span class="sidebar-button-desc">RSS</span>
+                    </a>
+            </li>
+            
+        </ul>
+        
+    </div>
+</nav>
+
+            
+            <div id="main" data-behavior="4"
+                 class="
+                        hasCoverMetaIn
+                        ">
+                
+<article class="post">
+    
+    
+        <div class="post-header main-content-wrap text-left">
+    
+        <h1 class="post-title">
+            科研中的小问题
+        </h1>
+    
+    
+        <div class="post-meta">
+    <time datetime="2025-05-25T16:40:40+08:00">
+	
+		    May 25, 2025
+    	
+    </time>
+    
+        <span>in </span>
+        
+    <a class="category-link" href="/all-categories/%E4%BB%8E%E9%9B%B6%E5%BC%80%E5%A7%8B%E7%9A%84%E7%A7%91%E7%A0%94%E4%B9%8B%E6%97%85/">从零开始的科研之旅</a>, <a class="category-link" href="/all-categories/%E4%BB%8E%E9%9B%B6%E5%BC%80%E5%A7%8B%E7%9A%84%E7%A7%91%E7%A0%94%E4%B9%8B%E6%97%85/first-stage/">first stage</a>
+
+
+    
+</div>
+
+    
+</div>
+
+    
+    <div class="post-content markdown">
+        <div class="main-content-wrap">
+            <h1 id="实验部分">实验部分</h1>
+<h2 id="球磨">球磨</h2>
+<ul>
+<li>球磨的原理是什么？</li>
+<li>球磨的作用是什么？</li>
+<li>200rpm合不出来，300rpm就能合出来？</li>
+</ul>
+<h2 id="x-ray-diffraction">X-ray diffraction</h2>
+<ul>
+<li>X射线是什么？</li>
+<li>X射线衍射的原理和用途是什么？</li>
+<li>XRD谱图的横坐标和纵坐标分别是什么意义？</li>
+<li>XRD为什么会产生峰？峰是什么意义？</li>
+<li>横坐标2theta角度为什么通常选择20<span
+class="math inline"><sup>∘</sup></span>~80<span
+class="math inline"><sup>∘</sup></span></li>
+<li>单晶衍射和粉末衍射分别是什么？</li>
+<li>关于消光？</li>
+</ul>
+<p>近年来锂离子电池大规模应用的快速发展要求系统地了解锂离子电池的退化机制，这在很大程度上取决于先进表征方法的利用和发展。基于
+X 射线的技术，如 X 射线吸收光谱（XAS）、X 射线衍射（XRD）和 X
+射线光电子能谱（XPS），可以确定化学成分和元素的价态和晶体结构的变化。
+电子和扫描探针显微技术，（3）如扫描电子显微镜（SEM）、透射电子显微镜（TEM）和低温透射电镜，可以观察电极的形貌变化和固体电解质界面（SEI）的厚度。基于滴定的技术，如滴定气相色谱（TGC）（4）和质谱滴定（MST），（5,6）可以定量死
+Li 金属和 SEI
+组分。此外，固态核磁共振（NMR）（7）和电子顺磁共振（EPR）（8）能够实现对
+Li
+镀层的时间分辨和定量检测。然而，这些方法大多是侵入性技术，需要额外昂贵以及具有特殊电池设计的精密仪器进行测试，在实际应用中是不可行的。
+除了这些物理特性之外，电化学方法，如差分电压分析（DVA）、（9,10）差分充电电压（DCV）、（11）增量容量分析（ICA）、（12）和库仑效率（CE）、（13,14）也在电池老化研究中发挥了重要作用。然而，它们是相当复杂的确定方法，需要很长的监测时间。</p>
+<h2 id="电化学阻抗谱测试">电化学阻抗谱测试</h2>
+<ul>
+<li>为什么测出来的Nyquist图没有半圆部分呢？</li>
+</ul>
+<h2 id="理论知识">理论知识</h2>
+<p>记得看Sob老师的博客，多逛逛计算化学公社呀</p>
+
+            
+
+
+        </div>
+    </div>
+    <div id="post-footer" class="post-footer main-content-wrap">
+        
+            <div class="post-footer-tags">
+                <span class="text-color-light text-small">TAGGED IN</span><br/>
+                
+    <a class="tag tag--primary tag--small t-none-link" href="/all-tags/%E5%8C%96%E5%AD%A6/" rel="tag">化学</a> <a class="tag tag--primary tag--small t-none-link" href="/all-tags/%E7%A7%91%E7%A0%94/" rel="tag">科研</a>
+
+            </div>
+        
+        
+            <div class="post-actions-wrap">
+    <nav>
+        <ul class="post-actions post-action-nav">
+            <li class="post-action">
+                
+                    
+                <a
+                    class="post-action-btn btn btn--default tooltip--top"
+                    href="/2025/05/27/%E7%A7%91%E7%A0%94/first%20stage/%E7%94%B5%E5%8C%96%E5%AD%A6%E9%98%BB%E6%8A%97%E8%B0%B1/"
+                    data-tooltip="从零开始的电化学阻抗谱原理"
+                    aria-label="PREVIOUS: 从零开始的电化学阻抗谱原理"
+                >
+                    
+                        <i class="fa fa-angle-left" aria-hidden="true"></i>
+                        <span class="hide-xs hide-sm text-small icon-ml">PREVIOUS</span>
+                    </a>
+            </li>
+            <li class="post-action">
+                
+                    
+                <a
+                    class="post-action-btn btn btn--default tooltip--top"
+                    href="/2025/05/24/%E7%A7%91%E7%A0%94/first%20stage/2025-05-24-%E5%85%B3%E4%BA%8EX%E5%B0%84%E7%BA%BF%E7%B2%89%E6%9C%AB%E8%A1%8D%E5%B0%84/"
+                    data-tooltip="从零开始的X射线原理"
+                    aria-label="NEXT: 从零开始的X射线原理"
+                >
+                    
+                        <span class="hide-xs hide-sm text-small icon-mr">NEXT</span>
+                        <i class="fa fa-angle-right" aria-hidden="true"></i>
+                    </a>
+            </li>
+        </ul>
+    </nav>
+    <ul class="post-actions post-action-share">
+        <li class="post-action hide-lg hide-md hide-sm">
+            <a
+                class="post-action-btn btn btn--default btn-open-shareoptions"
+                href="#btn-open-shareoptions"
+                aria-label="Share this post"
+            >
+                <i class="fa fa-share-alt" aria-hidden="true"></i>
+            </a>
+        </li>
+        
+            
+            
+            <li class="post-action hide-xs">
+                <a
+                    class="post-action-btn btn btn--default"
+                    target="new" href="https://www.facebook.com/sharer/sharer.php?u=http://example.com/2025/05/25/%E7%A7%91%E7%A0%94/first%20stage/%E7%A7%91%E7%A0%94%E4%B8%AD%E7%9A%84%E9%97%AE%E9%A2%98/"
+                    title="Share on Facebook"
+                    aria-label="Share on Facebook"
+                >
+                    <i class="fab fa-facebook" aria-hidden="true"></i>
+                </a>
+            </li>
+        
+            
+            
+            <li class="post-action hide-xs">
+                <a
+                    class="post-action-btn btn btn--default"
+                    target="new" href="https://twitter.com/intent/tweet?text=http://example.com/2025/05/25/%E7%A7%91%E7%A0%94/first%20stage/%E7%A7%91%E7%A0%94%E4%B8%AD%E7%9A%84%E9%97%AE%E9%A2%98/"
+                    title="Share on Twitter"
+                    aria-label="Share on Twitter"
+                >
+                    <i class="fab fa-twitter" aria-hidden="true"></i>
+                </a>
+            </li>
+        
+            
+            
+            <li class="post-action hide-xs">
+                <a
+                    class="post-action-btn btn btn--default"
+                    target="new" href="https://plus.google.com/share?url=http://example.com/2025/05/25/%E7%A7%91%E7%A0%94/first%20stage/%E7%A7%91%E7%A0%94%E4%B8%AD%E7%9A%84%E9%97%AE%E9%A2%98/"
+                    title="Share on Google+"
+                    aria-label="Share on Google+"
+                >
+                    <i class="fab fa-google-plus" aria-hidden="true"></i>
+                </a>
+            </li>
+        
+        
+            
+        
+        <li class="post-action">
+            
+                <a class="post-action-btn btn btn--default" href="#" aria-label="Back to top">
+            
+                <i class="fa fa-list" aria-hidden="true"></i>
+            </a>
+        </li>
+    </ul>
+</div>
+
+
+        
+        
+            
+        
+    </div>
+</article>
+
+
+
+                <footer id="footer" class="main-content-wrap">
+    <span class="copyrights">
+        Copyrights &copy; 2025 John Doe. All Rights Reserved.
+    </span>
+</footer>
+
+            </div>
+            
+                <div id="bottom-bar" class="post-bottom-bar" data-behavior="4">
+                    <div class="post-actions-wrap">
+    <nav>
+        <ul class="post-actions post-action-nav">
+            <li class="post-action">
+                
+                    
+                <a
+                    class="post-action-btn btn btn--default tooltip--top"
+                    href="/2025/05/27/%E7%A7%91%E7%A0%94/first%20stage/%E7%94%B5%E5%8C%96%E5%AD%A6%E9%98%BB%E6%8A%97%E8%B0%B1/"
+                    data-tooltip="从零开始的电化学阻抗谱原理"
+                    aria-label="PREVIOUS: 从零开始的电化学阻抗谱原理"
+                >
+                    
+                        <i class="fa fa-angle-left" aria-hidden="true"></i>
+                        <span class="hide-xs hide-sm text-small icon-ml">PREVIOUS</span>
+                    </a>
+            </li>
+            <li class="post-action">
+                
+                    
+                <a
+                    class="post-action-btn btn btn--default tooltip--top"
+                    href="/2025/05/24/%E7%A7%91%E7%A0%94/first%20stage/2025-05-24-%E5%85%B3%E4%BA%8EX%E5%B0%84%E7%BA%BF%E7%B2%89%E6%9C%AB%E8%A1%8D%E5%B0%84/"
+                    data-tooltip="从零开始的X射线原理"
+                    aria-label="NEXT: 从零开始的X射线原理"
+                >
+                    
+                        <span class="hide-xs hide-sm text-small icon-mr">NEXT</span>
+                        <i class="fa fa-angle-right" aria-hidden="true"></i>
+                    </a>
+            </li>
+        </ul>
+    </nav>
+    <ul class="post-actions post-action-share">
+        <li class="post-action hide-lg hide-md hide-sm">
+            <a
+                class="post-action-btn btn btn--default btn-open-shareoptions"
+                href="#btn-open-shareoptions"
+                aria-label="Share this post"
+            >
+                <i class="fa fa-share-alt" aria-hidden="true"></i>
+            </a>
+        </li>
+        
+            
+            
+            <li class="post-action hide-xs">
+                <a
+                    class="post-action-btn btn btn--default"
+                    target="new" href="https://www.facebook.com/sharer/sharer.php?u=http://example.com/2025/05/25/%E7%A7%91%E7%A0%94/first%20stage/%E7%A7%91%E7%A0%94%E4%B8%AD%E7%9A%84%E9%97%AE%E9%A2%98/"
+                    title="Share on Facebook"
+                    aria-label="Share on Facebook"
+                >
+                    <i class="fab fa-facebook" aria-hidden="true"></i>
+                </a>
+            </li>
+        
+            
+            
+            <li class="post-action hide-xs">
+                <a
+                    class="post-action-btn btn btn--default"
+                    target="new" href="https://twitter.com/intent/tweet?text=http://example.com/2025/05/25/%E7%A7%91%E7%A0%94/first%20stage/%E7%A7%91%E7%A0%94%E4%B8%AD%E7%9A%84%E9%97%AE%E9%A2%98/"
+                    title="Share on Twitter"
+                    aria-label="Share on Twitter"
+                >
+                    <i class="fab fa-twitter" aria-hidden="true"></i>
+                </a>
+            </li>
+        
+            
+            
+            <li class="post-action hide-xs">
+                <a
+                    class="post-action-btn btn btn--default"
+                    target="new" href="https://plus.google.com/share?url=http://example.com/2025/05/25/%E7%A7%91%E7%A0%94/first%20stage/%E7%A7%91%E7%A0%94%E4%B8%AD%E7%9A%84%E9%97%AE%E9%A2%98/"
+                    title="Share on Google+"
+                    aria-label="Share on Google+"
+                >
+                    <i class="fab fa-google-plus" aria-hidden="true"></i>
+                </a>
+            </li>
+        
+        
+            
+        
+        <li class="post-action">
+            
+                <a class="post-action-btn btn btn--default" href="#" aria-label="Back to top">
+            
+                <i class="fa fa-list" aria-hidden="true"></i>
+            </a>
+        </li>
+    </ul>
+</div>
+
+
+                </div>
+                
+    <div id="share-options-bar" class="share-options-bar" data-behavior="4">
+        <i id="btn-close-shareoptions" class="fa fa-times"></i>
+        <ul class="share-options">
+            
+                
+                
+                <li class="share-option">
+                    <a
+                        class="share-option-btn"
+                        target="new"
+                        href="https://www.facebook.com/sharer/sharer.php?u=http://example.com/2025/05/25/%E7%A7%91%E7%A0%94/first%20stage/%E7%A7%91%E7%A0%94%E4%B8%AD%E7%9A%84%E9%97%AE%E9%A2%98/"
+                        aria-label="Share on Facebook"
+                    >
+                        <i class="fab fa-facebook" aria-hidden="true"></i><span>Share on Facebook</span>
+                    </a>
+                </li>
+            
+                
+                
+                <li class="share-option">
+                    <a
+                        class="share-option-btn"
+                        target="new"
+                        href="https://twitter.com/intent/tweet?text=http://example.com/2025/05/25/%E7%A7%91%E7%A0%94/first%20stage/%E7%A7%91%E7%A0%94%E4%B8%AD%E7%9A%84%E9%97%AE%E9%A2%98/"
+                        aria-label="Share on Twitter"
+                    >
+                        <i class="fab fa-twitter" aria-hidden="true"></i><span>Share on Twitter</span>
+                    </a>
+                </li>
+            
+                
+                
+                <li class="share-option">
+                    <a
+                        class="share-option-btn"
+                        target="new"
+                        href="https://plus.google.com/share?url=http://example.com/2025/05/25/%E7%A7%91%E7%A0%94/first%20stage/%E7%A7%91%E7%A0%94%E4%B8%AD%E7%9A%84%E9%97%AE%E9%A2%98/"
+                        aria-label="Share on Google+"
+                    >
+                        <i class="fab fa-google-plus" aria-hidden="true"></i><span>Share on Google+</span>
+                    </a>
+                </li>
+            
+        </ul>
+    </div>
+
+
+            
+        </div>
+        
+
+
+<div id="about">
+    <div id="about-card">
+        <div id="about-btn-close">
+            <i class="fa fa-times"></i>
+        </div>
+        
+            <h4 id="about-card-name">John Doe</h4>
+        
+            <div id="about-card-bio"><p>author.bio</p>
+</div>
+        
+        
+            <div id="about-card-job">
+                <i class="fa fa-briefcase"></i>
+                <br/>
+                <p>author.job</p>
+
+            </div>
+        
+        
+    </div>
+</div>
+
+        
+        
+<div id="cover" style="background-image:url('/assets/images/cover.jpg');"></div>
+        <!--SCRIPTS-->
+
+<script src="/assets/js/script-akgy1kkmfssyzznzlvk9mjwcvnsn87aqalldnf43rojvlib0s8vpmeb5mayw.min.js"></script>
+
+<!--SCRIPTS END-->
+
+
+    
+
+
+
+
+    </body>
+</html>

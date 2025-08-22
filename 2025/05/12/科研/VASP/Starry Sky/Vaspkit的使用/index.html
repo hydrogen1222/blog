@@ -1,0 +1,750 @@
+
+<!DOCTYPE html>
+<html lang="en">
+    
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="generator" content="Hexo">
+    <title>Vaspkit的使用 - Hexo</title>
+    <meta name="author" content="John Doe">
+    
+    
+    
+    <script type="application/ld+json">{"@context":"http://schema.org","@type":"BlogPosting","author":{"@type":"Person","name":"John Doe","sameAs":["https://github.com/","http://stackoverflow.com/users","https://twitter.com/","https://facebook.com/","https://plus.google.com/","https://www.linkedin.com/profile/","mailto"]},"articleBody":"p\r\n安装、配置好vaspkit之后输入vaspkit可启动软件包\r\n12345678910111213141516171819202122232425262728293031323334(base) storm@DESKTOP-HE4FQ8Q:~/my-learn/trash-vaspkit$ vaspkit            \\\\\\///           / _  _ \\         Hey, you must know what you are doing.         (| (o)(o) |)       Otherwise you might get wrong results. o-----.OOOo--()--oOOO.------------------------------------------o |         VASPKIT Standard Edition 1.5.1 (27 Jan. 2024)         | |         Lead Developer: Vei WANG (wangvei@icloud.com)         | |      Main Contributors: Gang TANG, Nan XU &amp; Jin-Cheng LIU     | |  Online Tutorials Available on Website: https://vaspkit.com   | o-----.oooO-----------------------------------------------------o        (   )   Oooo.                          VASPKIT Made Simple         \\ (    (   )          \\_)    ) /                (_/ ===================== Structural Utilities ====================== 01) VASP Input-Files Generator    02) Mechanical Properties 03) K-Path for Band-Structure     04) Structure Editor 05) Catalysis-ElectroChem Kit     06) Symmetry Analysis 07) Materials Databases           08) Advanced Structure Models ===================== Electronic Utilities ====================== 11) Density-of-States             21) Band-Structure 23) 3D Band-Structure             25) Hybrid-DFT Band-Structure 26) Fermi-Surface                 28) Band-Structure Unfolding 31) Charge-Density Analysis       42) Potential Analysis 44) Piezoelectric Properties      51) Wave-Function Analysis 62) Magnetic Analysis             65) Spin-Texture 68) Transport Properties ======================== Misc Utilities ========================= 71) Optical Properties            72) Molecular-Dynamics Kit 74) User Interface                78) VASP2other Interface 84) ABACUS Interface              91) Semiconductor Kit 92) 2D-Material Kit               95) Phonon Analysis 0)  Quit ------------&gt;&gt;\r\n以下是中文翻译对照：\r\n123456789101112131415161718192021222324252627282930313233===================== 结构工具 ======================01) VASP 输入文件生成器02) 力学性质03) 能带结构的 K 路径04) 结构编辑器05) 催化 - 电化学套件06) 对称性分析07) 材料数据库08) 高级结构模型==================== 电子工具 ======================11) 密度态21) 能带结构23) 三维能带结构25) 混合 DFT 能带结构26) 费米面28) 能带结构展开31) 电荷密度分析42) 势分析44) 压电性质51) 波函数分析62) 磁性分析65) 自旋纹理68) 输运性质====================== 杂项工具 ========================71) 光学性质72) 分子动力学套件74) 用户界面78) VASP 转其他格式接口84) ABACUS 接口91) 半导体套件92) 二维材料套件95) 声子分析0) 退出\r\n我目前还是初学者小白，使用得最多的功能还是生成输入文件功能尤其是生成INCAR文件，\r\n12345678910111213141516171819202122232425262728293031323334353637383940 ------------&gt;&gt;01 ==================== VASP Input Files Options =================== 101) Customize INCAR File 102) Generate KPOINTS File for SCF Calculation 103) Generate POTCAR File with Default Setting 104) Generate POTCAR File with User Specified Potential 105) Generate POSCAR File from cif (no fractional occupations) 106) Generate POSCAR File from Material Studio xsd (retain fixes) 107) Reformat POSCAR File in Specified Order of Elements 108) Successive Procedure to Generate VASP Files and Check 109) Submit Job Queue 0)   Quit 9)   Back ------------&gt;&gt;  ------------&gt;&gt;101 +---------------------------- Tip ------------------------------+ |          WARNNING: You MUST know what wou are doing!          | |Some Parameters in INCAR file need to be set/adjusted manually.| +---------------------------------------------------------------+ ======================== INCAR Options ========================== ST) Static-Calculation            SR) Standard Relaxation MG) Magnetic Properties           SO) Spin-Orbit Coupling D3) DFT-D3 no-damping Correction  H6) HSE06 Calculation PU) DFT+U Calculation             MD) Molecular Dynamics GW) GW0 Calculation               BS) BSE Calculation DC) Elastic Constant              EL) ELF Calculation BD) Bader Charge Analysis         OP) Optical Properties EC) Static Dielectric Constant    PC) Decomposed Charge Density PH) Phonon-Calculation            PY) Phonon with Phononpy NE) Nudged Elastic Band (NEB)     DM) The Dimer Method FQ) Frequence Calculation         LR) Lattice Relaxation MT) Meta-GGA Calculation          PZ) Piezoelectric Calculation 0)   Quit 9)   Back ------------&gt;&gt; Input Key-Parameters (STH6D3 means HSE06-D3 Static-Calcualtion)\r\n以下是中文对照：\r\n1234567891011121314151617+---------------------------- 提示 ------------------------------+|          警告：你必须清楚自己在做什么！          ||INCAR 文件中的一些参数需要手动设置/调整。|+---------------------------------------------------------------+======================= INCAR 选项 ==========================ST) 静态计算            SR) 标准松弛MG) 磁性性质            SO) 自旋轨道耦合D3) DFT-D3 无阻尼校正  H6) HSE06 计算PU) DFT+U 计算          MD) 分子动力学GW) GW0 计算            BS) BSE 计算DC) 弹性常数            EL) ELF 计算BD) Bader 电荷分析      OP) 光学性质EC) 静态介电常数        PC) 分解电荷密度PH) 声子计算            PY) 使用 Phonopy 的声子计算NE) 强制弹性带（NEB）   DM) 二聚体方法FQ) 频率计算            LR) 晶格松弛MT) Meta-GGA 计算       PZ) 压电计算\r\nLR晶格弛豫就对应着结构优化，当然生成的INCAR文件可能仍需要进行一些修改，比如ENCUT可能需要调整为赝势中ENMAX的1.3倍\r\n生成KPOINTS文件\r\n对于非能带的计算，选择102) Generate KPOINTS File for SCF Calculation使用程序自动撒点即可，但是需要用户选择撒点方式和撒点密度，选择Gamma Scheme，使用0.04精度\r\n\r\n关于生成 KPOINTS 文件\r\n\r\n在 VASP 计算中，KPOINTS 文件用于指定 k\r\n点网格的设置。对于非能带计算，比如进行能量计算、优化结构等，通常不需要像计算能带结构那样沿特定的高对称路径采样\r\nk 点，而是可以在整个布里渊区均匀地分布 k 点，这就是所说的\r\n“自动撒点”。\r\n\r\n撒点方式\r\n\r\nMonkhorst-Pack 方式\r\n：这是最常用的自动撒点方式。它通过指定一组三个整数（nx, ny,\r\nnz），在三个倒易晶格方向上均匀地分布 k\r\n点，形成的网格可以系统地逼近布里渊区的积分。例如，对于简单晶格，若指定 k\r\n点网格为 3×3×3，程序就会按照 Monkhorst-Pack 方式在这三个方向各取 3\r\n个点，生成一个均匀分布的 k 点网格。\r\nGamma 方式 ：这种方式会在 k 点网格中包含 Γ\r\n点（布里渊区的中心点）。对于金属等具有高对称性的材料，在 Γ\r\n点附近采样很重要，这时候 Gamma 方式撒点更合适。比如指定 k 点网格为 4×4×4\r\n并采用 Gamma 方式撒点，生成的网格会以 Γ 点为中心，向周围均匀分布其他 k\r\n点。\r\n\r\nK 点密度\r\n\r\nK 点密度指的是在布里渊区单位体积内分布的 k 点数量，它决定了 k\r\n点网格的疏密程度。较高的 K\r\n点密度意味着更精细地采样布里渊区，能够更精确地计算系统的物理性质，但也会增加计算量和资源消耗。\r\n例如，对于一个计算资源充足的大型超算任务，为了获得高精度结果，可以选择较大的\r\nK 点密度，如 8×8×8\r\n甚至更高；而对于初步探索或计算资源有限的情况，可以适当降低 K 点密度，如\r\n4×4×4。\r\n\r\n\r\n生成KPOINTS的同时，POTCAR也会被自动生成，前提是在vaspkit的配置文件中正确设置了赝势的路径和赝势稳健的种类（默认type为PBE）\r\n","dateCreated":"2025-05-12T10:40:00+08:00","dateModified":"2025-05-12T23:10:02+08:00","datePublished":"2025-05-12T10:40:00+08:00","description":"","headline":"Vaspkit的使用","image":[],"mainEntityOfPage":{"@type":"WebPage","@id":"http://example.com/2025/05/12/%E7%A7%91%E7%A0%94/VASP/Starry%20Sky/Vaspkit%E7%9A%84%E4%BD%BF%E7%94%A8/"},"publisher":{"@type":"Organization","name":"John Doe","sameAs":["https://github.com/","http://stackoverflow.com/users","https://twitter.com/","https://facebook.com/","https://plus.google.com/","https://www.linkedin.com/profile/","mailto"]},"url":"http://example.com/2025/05/12/%E7%A7%91%E7%A0%94/VASP/Starry%20Sky/Vaspkit%E7%9A%84%E4%BD%BF%E7%94%A8/","keywords":"化学, 科研"}</script>
+    <meta name="description" content="p 安装、配置好vaspkit之后输入vaspkit可启动软件包 12345678910111213141516171819202122232425262728293031323334(base) storm@DESKTOP-HE4FQ8Q:~&#x2F;my-learn&#x2F;trash-vaspkit$ vaspkit            \\\&#x2F;&#x2F;&#x2F;           &#x2F; _  _ \">
+<meta property="og:type" content="blog">
+<meta property="og:title" content="Vaspkit的使用">
+<meta property="og:url" content="http://example.com/2025/05/12/%E7%A7%91%E7%A0%94/VASP/Starry%20Sky/Vaspkit%E7%9A%84%E4%BD%BF%E7%94%A8/index.html">
+<meta property="og:site_name" content="Hexo">
+<meta property="og:description" content="p 安装、配置好vaspkit之后输入vaspkit可启动软件包 12345678910111213141516171819202122232425262728293031323334(base) storm@DESKTOP-HE4FQ8Q:~&#x2F;my-learn&#x2F;trash-vaspkit$ vaspkit            \\\&#x2F;&#x2F;&#x2F;           &#x2F; _  _ \">
+<meta property="og:locale" content="en_US">
+<meta property="article:published_time" content="2025-05-12T02:40:00.000Z">
+<meta property="article:modified_time" content="2025-05-12T15:10:02.000Z">
+<meta property="article:author" content="John Doe">
+<meta property="article:tag" content="化学">
+<meta property="article:tag" content="科研">
+<meta name="twitter:card" content="summary">
+    
+    
+        
+    
+    
+    
+    
+    
+    <!--STYLES-->
+    
+<link rel="stylesheet" href="/assets/css/all.css">
+
+    
+<link rel="stylesheet" href="/assets/css/jquery.fancybox.css">
+
+    
+<link rel="stylesheet" href="/assets/css/thumbs.css">
+
+    
+<link rel="stylesheet" href="/assets/css/tranquilpeak.css">
+
+    <!--STYLES END-->
+    
+
+    
+
+    
+        
+    
+
+
+
+
+<script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+<script>
+  MathJax = {
+    tex: {
+      inlineMath: [['$', '$'], ['\\(', '\\)']],
+      displayMath: [['$$', '$$'], ['\\[', '\\]']],
+      tags: 'ams'
+    },
+    svg: {
+      fontCache: 'global'
+    }
+  };
+</script>
+
+
+
+
+
+<!-- hexo injector head_end start -->
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.12.0/dist/katex.min.css">
+
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/hexo-math@4.0.0/dist/style.css">
+<!-- hexo injector head_end end --></head>
+
+    <body>
+        <div id="blog">
+            <!-- Define author's picture -->
+
+
+    
+
+<header id="header" data-behavior="4">
+    <i id="btn-open-sidebar" class="fa fa-lg fa-bars"></i>
+    <div class="header-title">
+        <a
+            class="header-title-link"
+            href="/"
+            aria-label=""
+        >
+            Hexo
+        </a>
+    </div>
+    
+        
+            <a
+                class="header-right-picture "
+                href="#about"
+                aria-label="Open the link: /#about"
+            >
+        
+        
+        </a>
+    
+</header>
+
+            <!-- Define author's picture -->
+
+
+<nav id="sidebar" data-behavior="4">
+    <div class="sidebar-container">
+        
+        
+            <ul class="sidebar-buttons">
+            
+                <li class="sidebar-button">
+                    
+                        <a
+                            class="sidebar-button-link "
+                            href="/"
+                            
+                            rel="noopener"
+                            title="Home"
+                        >
+                        <i class="sidebar-button-icon fa fa-home" aria-hidden="true"></i>
+                        <span class="sidebar-button-desc">Home</span>
+                    </a>
+            </li>
+            
+                <li class="sidebar-button">
+                    
+                        <a
+                            class="sidebar-button-link "
+                            href="/all-categories"
+                            
+                            rel="noopener"
+                            title="Categories"
+                        >
+                        <i class="sidebar-button-icon fa fa-bookmark" aria-hidden="true"></i>
+                        <span class="sidebar-button-desc">Categories</span>
+                    </a>
+            </li>
+            
+                <li class="sidebar-button">
+                    
+                        <a
+                            class="sidebar-button-link "
+                            href="/all-tags"
+                            
+                            rel="noopener"
+                            title="Tags"
+                        >
+                        <i class="sidebar-button-icon fa fa-tags" aria-hidden="true"></i>
+                        <span class="sidebar-button-desc">Tags</span>
+                    </a>
+            </li>
+            
+                <li class="sidebar-button">
+                    
+                        <a
+                            class="sidebar-button-link "
+                            href="/all-archives"
+                            
+                            rel="noopener"
+                            title="Archives"
+                        >
+                        <i class="sidebar-button-icon fa fa-archive" aria-hidden="true"></i>
+                        <span class="sidebar-button-desc">Archives</span>
+                    </a>
+            </li>
+            
+                <li class="sidebar-button">
+                    
+                        <a
+                            class="sidebar-button-link open-algolia-search"
+                            href="#search"
+                            
+                            rel="noopener"
+                            title="Search"
+                        >
+                        <i class="sidebar-button-icon fa fa-search" aria-hidden="true"></i>
+                        <span class="sidebar-button-desc">Search</span>
+                    </a>
+            </li>
+            
+                <li class="sidebar-button">
+                    
+                        <a
+                            class="sidebar-button-link "
+                            href="#about"
+                            
+                            rel="noopener"
+                            title="About"
+                        >
+                        <i class="sidebar-button-icon fa fa-question" aria-hidden="true"></i>
+                        <span class="sidebar-button-desc">About</span>
+                    </a>
+            </li>
+            
+        </ul>
+        
+            <ul class="sidebar-buttons">
+            
+                <li class="sidebar-button">
+                    
+                        <a
+                            class="sidebar-button-link "
+                            href="https://github.com/"
+                            
+                                target="_blank"
+                            
+                            rel="noopener"
+                            title="GitHub"
+                        >
+                        <i class="sidebar-button-icon fab fa-github" aria-hidden="true"></i>
+                        <span class="sidebar-button-desc">GitHub</span>
+                    </a>
+            </li>
+            
+                <li class="sidebar-button">
+                    
+                        <a
+                            class="sidebar-button-link "
+                            href="http://stackoverflow.com/users"
+                            
+                                target="_blank"
+                            
+                            rel="noopener"
+                            title="Stack Overflow"
+                        >
+                        <i class="sidebar-button-icon fab fa-stack-overflow" aria-hidden="true"></i>
+                        <span class="sidebar-button-desc">Stack Overflow</span>
+                    </a>
+            </li>
+            
+                <li class="sidebar-button">
+                    
+                        <a
+                            class="sidebar-button-link "
+                            href="https://twitter.com/"
+                            
+                                target="_blank"
+                            
+                            rel="noopener"
+                            title="Twitter"
+                        >
+                        <i class="sidebar-button-icon fab fa-twitter" aria-hidden="true"></i>
+                        <span class="sidebar-button-desc">Twitter</span>
+                    </a>
+            </li>
+            
+                <li class="sidebar-button">
+                    
+                        <a
+                            class="sidebar-button-link "
+                            href="https://facebook.com/"
+                            
+                                target="_blank"
+                            
+                            rel="noopener"
+                            title="Facebook"
+                        >
+                        <i class="sidebar-button-icon fab fa-facebook" aria-hidden="true"></i>
+                        <span class="sidebar-button-desc">Facebook</span>
+                    </a>
+            </li>
+            
+                <li class="sidebar-button">
+                    
+                        <a
+                            class="sidebar-button-link "
+                            href="https://plus.google.com/"
+                            
+                                target="_blank"
+                            
+                            rel="noopener"
+                            title="Google +"
+                        >
+                        <i class="sidebar-button-icon fab fa-google-plus" aria-hidden="true"></i>
+                        <span class="sidebar-button-desc">Google +</span>
+                    </a>
+            </li>
+            
+                <li class="sidebar-button">
+                    
+                        <a
+                            class="sidebar-button-link "
+                            href="https://www.linkedin.com/profile/"
+                            
+                                target="_blank"
+                            
+                            rel="noopener"
+                            title="LinkedIn"
+                        >
+                        <i class="sidebar-button-icon fab fa-linkedin" aria-hidden="true"></i>
+                        <span class="sidebar-button-desc">LinkedIn</span>
+                    </a>
+            </li>
+            
+                <li class="sidebar-button">
+                    
+                        <a
+                            class="sidebar-button-link "
+                            href="/mailto"
+                            
+                            rel="noopener"
+                            title="Mail"
+                        >
+                        <i class="sidebar-button-icon fa fa-envelope" aria-hidden="true"></i>
+                        <span class="sidebar-button-desc">Mail</span>
+                    </a>
+            </li>
+            
+        </ul>
+        
+            <ul class="sidebar-buttons">
+            
+                <li class="sidebar-button">
+                    
+                        <a
+                            class="sidebar-button-link "
+                            href="/atom.xml"
+                            
+                            rel="noopener"
+                            title="RSS"
+                        >
+                        <i class="sidebar-button-icon fa fa-rss" aria-hidden="true"></i>
+                        <span class="sidebar-button-desc">RSS</span>
+                    </a>
+            </li>
+            
+        </ul>
+        
+    </div>
+</nav>
+
+            
+            <div id="main" data-behavior="4"
+                 class="
+                        hasCoverMetaIn
+                        ">
+                
+<article class="post">
+    
+    
+        <div class="post-header main-content-wrap text-left">
+    
+        <h1 class="post-title">
+            Vaspkit的使用
+        </h1>
+    
+    
+        <div class="post-meta">
+    <time datetime="2025-05-12T10:40:00+08:00">
+	
+		    May 12, 2025
+    	
+    </time>
+    
+        <span>in </span>
+        
+    <a class="category-link" href="/all-categories/%E4%BB%8E%E9%9B%B6%E5%BC%80%E5%A7%8B%E7%9A%84%E7%A7%91%E7%A0%94%E4%B9%8B%E6%97%85/">从零开始的科研之旅</a>, <a class="category-link" href="/all-categories/%E4%BB%8E%E9%9B%B6%E5%BC%80%E5%A7%8B%E7%9A%84%E7%A7%91%E7%A0%94%E4%B9%8B%E6%97%85/VASP/">VASP</a>
+
+
+    
+</div>
+
+    
+</div>
+
+    
+    <div class="post-content markdown">
+        <div class="main-content-wrap">
+            <p>p</p>
+<p>安装、配置好<code>vaspkit</code>之后输入<code>vaspkit</code>可启动软件包</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br></pre></td><td class="code"><pre><span class="line">(base) storm@DESKTOP-HE4FQ8Q:~/my-learn/trash-vaspkit$ vaspkit</span><br><span class="line">            \\\///</span><br><span class="line">           / _  _ \         Hey, you must know what you are doing.</span><br><span class="line">         (| (o)(o) |)       Otherwise you might get wrong results.</span><br><span class="line"> o-----.OOOo--()--oOOO.------------------------------------------o</span><br><span class="line"> |         VASPKIT Standard Edition 1.5.1 (27 Jan. 2024)         |</span><br><span class="line"> |         Lead Developer: Vei WANG (wangvei@icloud.com)         |</span><br><span class="line"> |      Main Contributors: Gang TANG, Nan XU &amp; Jin-Cheng LIU     |</span><br><span class="line"> |  Online Tutorials Available on Website: https://vaspkit.com   |</span><br><span class="line"> o-----.oooO-----------------------------------------------------o</span><br><span class="line">        (   )   Oooo.                          VASPKIT Made Simple</span><br><span class="line">         \ (    (   )</span><br><span class="line">          \_)    ) /</span><br><span class="line">                (_/</span><br><span class="line"> ===================== Structural Utilities ======================</span><br><span class="line"> 01) VASP Input-Files Generator    02) Mechanical Properties</span><br><span class="line"> 03) K-Path <span class="keyword">for</span> Band-Structure     04) Structure Editor</span><br><span class="line"> 05) Catalysis-ElectroChem Kit     06) Symmetry Analysis</span><br><span class="line"> 07) Materials Databases           08) Advanced Structure Models</span><br><span class="line"> ===================== Electronic Utilities ======================</span><br><span class="line"> 11) Density-of-States             21) Band-Structure</span><br><span class="line"> 23) 3D Band-Structure             25) Hybrid-DFT Band-Structure</span><br><span class="line"> 26) Fermi-Surface                 28) Band-Structure Unfolding</span><br><span class="line"> 31) Charge-Density Analysis       42) Potential Analysis</span><br><span class="line"> 44) Piezoelectric Properties      51) Wave-Function Analysis</span><br><span class="line"> 62) Magnetic Analysis             65) Spin-Texture</span><br><span class="line"> 68) Transport Properties</span><br><span class="line"> ======================== Misc Utilities =========================</span><br><span class="line"> 71) Optical Properties            72) Molecular-Dynamics Kit</span><br><span class="line"> 74) User Interface                78) VASP2other Interface</span><br><span class="line"> 84) ABACUS Interface              91) Semiconductor Kit</span><br><span class="line"> 92) 2D-Material Kit               95) Phonon Analysis</span><br><span class="line"> 0)  Quit</span><br><span class="line"> ------------&gt;&gt;</span><br></pre></td></tr></table></figure>
+<p>以下是中文翻译对照：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br></pre></td><td class="code"><pre><span class="line">===================== 结构工具 ======================</span><br><span class="line">01) VASP 输入文件生成器</span><br><span class="line">02) 力学性质</span><br><span class="line">03) 能带结构的 K 路径</span><br><span class="line">04) 结构编辑器</span><br><span class="line">05) 催化 - 电化学套件</span><br><span class="line">06) 对称性分析</span><br><span class="line">07) 材料数据库</span><br><span class="line">08) 高级结构模型</span><br><span class="line">==================== 电子工具 ======================</span><br><span class="line">11) 密度态</span><br><span class="line">21) 能带结构</span><br><span class="line">23) 三维能带结构</span><br><span class="line">25) 混合 DFT 能带结构</span><br><span class="line">26) 费米面</span><br><span class="line">28) 能带结构展开</span><br><span class="line">31) 电荷密度分析</span><br><span class="line">42) 势分析</span><br><span class="line">44) 压电性质</span><br><span class="line">51) 波函数分析</span><br><span class="line">62) 磁性分析</span><br><span class="line">65) 自旋纹理</span><br><span class="line">68) 输运性质</span><br><span class="line">====================== 杂项工具 ========================</span><br><span class="line">71) 光学性质</span><br><span class="line">72) 分子动力学套件</span><br><span class="line">74) 用户界面</span><br><span class="line">78) VASP 转其他格式接口</span><br><span class="line">84) ABACUS 接口</span><br><span class="line">91) 半导体套件</span><br><span class="line">92) 二维材料套件</span><br><span class="line">95) 声子分析</span><br><span class="line">0) 退出</span><br></pre></td></tr></table></figure>
+<p>我目前还是初学者小白，使用得最多的功能还是生成输入文件功能尤其是生成<code>INCAR</code>文件，</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br></pre></td><td class="code"><pre><span class="line"> ------------&gt;&gt;</span><br><span class="line">01</span><br><span class="line"> ==================== VASP Input Files Options ===================</span><br><span class="line"> 101) Customize INCAR File</span><br><span class="line"> 102) Generate KPOINTS File <span class="keyword">for</span> SCF Calculation</span><br><span class="line"> 103) Generate POTCAR File with Default Setting</span><br><span class="line"> 104) Generate POTCAR File with User Specified Potential</span><br><span class="line"> 105) Generate POSCAR File from cif (no fractional occupations)</span><br><span class="line"> 106) Generate POSCAR File from Material Studio xsd (retain fixes)</span><br><span class="line"> 107) Reformat POSCAR File <span class="keyword">in</span> Specified Order of Elements</span><br><span class="line"> 108) Successive Procedure to Generate VASP Files and Check</span><br><span class="line"> 109) Submit Job Queue</span><br><span class="line"></span><br><span class="line"> 0)   Quit</span><br><span class="line"> 9)   Back</span><br><span class="line"> ------------&gt;&gt;</span><br><span class="line">  ------------&gt;&gt;</span><br><span class="line">101</span><br><span class="line"> +---------------------------- Tip ------------------------------+</span><br><span class="line"> |          WARNNING: You MUST know what wou are doing!          |</span><br><span class="line"> |Some Parameters <span class="keyword">in</span> INCAR file need to be <span class="built_in">set</span>/adjusted manually.|</span><br><span class="line"> +---------------------------------------------------------------+</span><br><span class="line"> ======================== INCAR Options ==========================</span><br><span class="line"> ST) Static-Calculation            SR) Standard Relaxation</span><br><span class="line"> MG) Magnetic Properties           SO) Spin-Orbit Coupling</span><br><span class="line"> D3) DFT-D3 no-damping Correction  H6) HSE06 Calculation</span><br><span class="line"> PU) DFT+U Calculation             MD) Molecular Dynamics</span><br><span class="line"> GW) GW0 Calculation               BS) BSE Calculation</span><br><span class="line"> DC) Elastic Constant              EL) ELF Calculation</span><br><span class="line"> BD) Bader Charge Analysis         OP) Optical Properties</span><br><span class="line"> EC) Static Dielectric Constant    PC) Decomposed Charge Density</span><br><span class="line"> PH) Phonon-Calculation            PY) Phonon with Phononpy</span><br><span class="line"> NE) Nudged Elastic Band (NEB)     DM) The Dimer Method</span><br><span class="line"> FQ) Frequence Calculation         LR) Lattice Relaxation</span><br><span class="line"> MT) Meta-GGA Calculation          PZ) Piezoelectric Calculation</span><br><span class="line"></span><br><span class="line"> 0)   Quit</span><br><span class="line"> 9)   Back</span><br><span class="line"> ------------&gt;&gt;</span><br><span class="line"> Input Key-Parameters (STH6D3 means HSE06-D3 Static-Calcualtion)</span><br></pre></td></tr></table></figure>
+<p>以下是中文对照：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line">+---------------------------- 提示 ------------------------------+</span><br><span class="line">|          警告：你必须清楚自己在做什么！          |</span><br><span class="line">|INCAR 文件中的一些参数需要手动设置/调整。|</span><br><span class="line">+---------------------------------------------------------------+</span><br><span class="line">======================= INCAR 选项 ==========================</span><br><span class="line">ST) 静态计算            SR) 标准松弛</span><br><span class="line">MG) 磁性性质            SO) 自旋轨道耦合</span><br><span class="line">D3) DFT-D3 无阻尼校正  H6) HSE06 计算</span><br><span class="line">PU) DFT+U 计算          MD) 分子动力学</span><br><span class="line">GW) GW0 计算            BS) BSE 计算</span><br><span class="line">DC) 弹性常数            EL) ELF 计算</span><br><span class="line">BD) Bader 电荷分析      OP) 光学性质</span><br><span class="line">EC) 静态介电常数        PC) 分解电荷密度</span><br><span class="line">PH) 声子计算            PY) 使用 Phonopy 的声子计算</span><br><span class="line">NE) 强制弹性带（NEB）   DM) 二聚体方法</span><br><span class="line">FQ) 频率计算            LR) 晶格松弛</span><br><span class="line">MT) Meta-GGA 计算       PZ) 压电计算</span><br></pre></td></tr></table></figure>
+<p><code>LR</code>晶格弛豫就对应着结构优化，当然生成的<code>INCAR</code>文件可能仍需要进行一些修改，比如<code>ENCUT</code>可能需要调整为赝势中<code>ENMAX</code>的1.3倍</p>
+<h2 id="生成kpoints文件">生成KPOINTS文件</h2>
+<p>对于<strong>非能带的计算</strong>，选择<code>102) Generate KPOINTS File for SCF Calculation</code>使用程序自动撒点即可，但是需要用户选择撒点方式和撒点密度，选择<code>Gamma Scheme</code>，使用0.04精度</p>
+<blockquote>
+<p>关于生成 KPOINTS 文件</p>
+<ul>
+<li>在 VASP 计算中，KPOINTS 文件用于指定 k
+点网格的设置。对于非能带计算，比如进行能量计算、优化结构等，通常不需要像计算能带结构那样沿特定的高对称路径采样
+k 点，而是可以在整个布里渊区均匀地分布 k 点，这就是所说的
+“自动撒点”。</li>
+</ul>
+<p>撒点方式</p>
+<ul>
+<li><strong>Monkhorst-Pack 方式</strong>
+：这是最常用的自动撒点方式。它通过指定一组三个整数（nx, ny,
+nz），在三个倒易晶格方向上均匀地分布 k
+点，形成的网格可以系统地逼近布里渊区的积分。例如，对于简单晶格，若指定 k
+点网格为 3×3×3，程序就会按照 Monkhorst-Pack 方式在这三个方向各取 3
+个点，生成一个均匀分布的 k 点网格。</li>
+<li><strong>Gamma 方式</strong> ：这种方式会在 k 点网格中包含 Γ
+点（布里渊区的中心点）。对于金属等具有高对称性的材料，在 Γ
+点附近采样很重要，这时候 Gamma 方式撒点更合适。比如指定 k 点网格为 4×4×4
+并采用 Gamma 方式撒点，生成的网格会以 Γ 点为中心，向周围均匀分布其他 k
+点。</li>
+</ul>
+<p>K 点密度</p>
+<ul>
+<li>K 点密度指的是在布里渊区单位体积内分布的 k 点数量，它决定了 k
+点网格的疏密程度。较高的 K
+点密度意味着更精细地采样布里渊区，能够更精确地计算系统的物理性质，但也会增加计算量和资源消耗。</li>
+<li>例如，对于一个计算资源充足的大型超算任务，为了获得高精度结果，可以选择较大的
+K 点密度，如 8×8×8
+甚至更高；而对于初步探索或计算资源有限的情况，可以适当降低 K 点密度，如
+4×4×4。</li>
+</ul>
+</blockquote>
+<p>生成<code>KPOINTS</code>的同时，<code>POTCAR</code>也会被自动生成，前提是在vaspkit的配置文件中正确设置了赝势的路径和赝势稳健的种类（默认type为PBE）</p>
+
+            
+
+
+        </div>
+    </div>
+    <div id="post-footer" class="post-footer main-content-wrap">
+        
+            <div class="post-footer-tags">
+                <span class="text-color-light text-small">TAGGED IN</span><br/>
+                
+    <a class="tag tag--primary tag--small t-none-link" href="/all-tags/%E5%8C%96%E5%AD%A6/" rel="tag">化学</a> <a class="tag tag--primary tag--small t-none-link" href="/all-tags/%E7%A7%91%E7%A0%94/" rel="tag">科研</a>
+
+            </div>
+        
+        
+            <div class="post-actions-wrap">
+    <nav>
+        <ul class="post-actions post-action-nav">
+            <li class="post-action">
+                
+                    
+                <a
+                    class="post-action-btn btn btn--default tooltip--top"
+                    href="/2025/05/12/%E7%A7%91%E7%A0%94/VASP/2025-04-21-2025%E5%B9%B44%E6%9C%88Intel%E5%B9%B3%E5%8F%B0VASP.6.4.3%E7%9A%84%E7%BC%96%E8%AF%91%E5%AE%89%E8%A3%85/"
+                    data-tooltip="2025年5月Intel平台VASP.6.4.3的编译安装"
+                    aria-label="PREVIOUS: 2025年5月Intel平台VASP.6.4.3的编译安装"
+                >
+                    
+                        <i class="fa fa-angle-left" aria-hidden="true"></i>
+                        <span class="hide-xs hide-sm text-small icon-ml">PREVIOUS</span>
+                    </a>
+            </li>
+            <li class="post-action">
+                
+                    
+                <a
+                    class="post-action-btn btn btn--default tooltip--top"
+                    href="/2025/05/06/%E6%B2%89%E6%80%9D%E5%BD%95/Phoenix/"
+                    data-tooltip="Phoenix in fire"
+                    aria-label="NEXT: Phoenix in fire"
+                >
+                    
+                        <span class="hide-xs hide-sm text-small icon-mr">NEXT</span>
+                        <i class="fa fa-angle-right" aria-hidden="true"></i>
+                    </a>
+            </li>
+        </ul>
+    </nav>
+    <ul class="post-actions post-action-share">
+        <li class="post-action hide-lg hide-md hide-sm">
+            <a
+                class="post-action-btn btn btn--default btn-open-shareoptions"
+                href="#btn-open-shareoptions"
+                aria-label="Share this post"
+            >
+                <i class="fa fa-share-alt" aria-hidden="true"></i>
+            </a>
+        </li>
+        
+            
+            
+            <li class="post-action hide-xs">
+                <a
+                    class="post-action-btn btn btn--default"
+                    target="new" href="https://www.facebook.com/sharer/sharer.php?u=http://example.com/2025/05/12/%E7%A7%91%E7%A0%94/VASP/Starry%20Sky/Vaspkit%E7%9A%84%E4%BD%BF%E7%94%A8/"
+                    title="Share on Facebook"
+                    aria-label="Share on Facebook"
+                >
+                    <i class="fab fa-facebook" aria-hidden="true"></i>
+                </a>
+            </li>
+        
+            
+            
+            <li class="post-action hide-xs">
+                <a
+                    class="post-action-btn btn btn--default"
+                    target="new" href="https://twitter.com/intent/tweet?text=http://example.com/2025/05/12/%E7%A7%91%E7%A0%94/VASP/Starry%20Sky/Vaspkit%E7%9A%84%E4%BD%BF%E7%94%A8/"
+                    title="Share on Twitter"
+                    aria-label="Share on Twitter"
+                >
+                    <i class="fab fa-twitter" aria-hidden="true"></i>
+                </a>
+            </li>
+        
+            
+            
+            <li class="post-action hide-xs">
+                <a
+                    class="post-action-btn btn btn--default"
+                    target="new" href="https://plus.google.com/share?url=http://example.com/2025/05/12/%E7%A7%91%E7%A0%94/VASP/Starry%20Sky/Vaspkit%E7%9A%84%E4%BD%BF%E7%94%A8/"
+                    title="Share on Google+"
+                    aria-label="Share on Google+"
+                >
+                    <i class="fab fa-google-plus" aria-hidden="true"></i>
+                </a>
+            </li>
+        
+        
+            
+        
+        <li class="post-action">
+            
+                <a class="post-action-btn btn btn--default" href="#" aria-label="Back to top">
+            
+                <i class="fa fa-list" aria-hidden="true"></i>
+            </a>
+        </li>
+    </ul>
+</div>
+
+
+        
+        
+            
+        
+    </div>
+</article>
+
+
+
+                <footer id="footer" class="main-content-wrap">
+    <span class="copyrights">
+        Copyrights &copy; 2025 John Doe. All Rights Reserved.
+    </span>
+</footer>
+
+            </div>
+            
+                <div id="bottom-bar" class="post-bottom-bar" data-behavior="4">
+                    <div class="post-actions-wrap">
+    <nav>
+        <ul class="post-actions post-action-nav">
+            <li class="post-action">
+                
+                    
+                <a
+                    class="post-action-btn btn btn--default tooltip--top"
+                    href="/2025/05/12/%E7%A7%91%E7%A0%94/VASP/2025-04-21-2025%E5%B9%B44%E6%9C%88Intel%E5%B9%B3%E5%8F%B0VASP.6.4.3%E7%9A%84%E7%BC%96%E8%AF%91%E5%AE%89%E8%A3%85/"
+                    data-tooltip="2025年5月Intel平台VASP.6.4.3的编译安装"
+                    aria-label="PREVIOUS: 2025年5月Intel平台VASP.6.4.3的编译安装"
+                >
+                    
+                        <i class="fa fa-angle-left" aria-hidden="true"></i>
+                        <span class="hide-xs hide-sm text-small icon-ml">PREVIOUS</span>
+                    </a>
+            </li>
+            <li class="post-action">
+                
+                    
+                <a
+                    class="post-action-btn btn btn--default tooltip--top"
+                    href="/2025/05/06/%E6%B2%89%E6%80%9D%E5%BD%95/Phoenix/"
+                    data-tooltip="Phoenix in fire"
+                    aria-label="NEXT: Phoenix in fire"
+                >
+                    
+                        <span class="hide-xs hide-sm text-small icon-mr">NEXT</span>
+                        <i class="fa fa-angle-right" aria-hidden="true"></i>
+                    </a>
+            </li>
+        </ul>
+    </nav>
+    <ul class="post-actions post-action-share">
+        <li class="post-action hide-lg hide-md hide-sm">
+            <a
+                class="post-action-btn btn btn--default btn-open-shareoptions"
+                href="#btn-open-shareoptions"
+                aria-label="Share this post"
+            >
+                <i class="fa fa-share-alt" aria-hidden="true"></i>
+            </a>
+        </li>
+        
+            
+            
+            <li class="post-action hide-xs">
+                <a
+                    class="post-action-btn btn btn--default"
+                    target="new" href="https://www.facebook.com/sharer/sharer.php?u=http://example.com/2025/05/12/%E7%A7%91%E7%A0%94/VASP/Starry%20Sky/Vaspkit%E7%9A%84%E4%BD%BF%E7%94%A8/"
+                    title="Share on Facebook"
+                    aria-label="Share on Facebook"
+                >
+                    <i class="fab fa-facebook" aria-hidden="true"></i>
+                </a>
+            </li>
+        
+            
+            
+            <li class="post-action hide-xs">
+                <a
+                    class="post-action-btn btn btn--default"
+                    target="new" href="https://twitter.com/intent/tweet?text=http://example.com/2025/05/12/%E7%A7%91%E7%A0%94/VASP/Starry%20Sky/Vaspkit%E7%9A%84%E4%BD%BF%E7%94%A8/"
+                    title="Share on Twitter"
+                    aria-label="Share on Twitter"
+                >
+                    <i class="fab fa-twitter" aria-hidden="true"></i>
+                </a>
+            </li>
+        
+            
+            
+            <li class="post-action hide-xs">
+                <a
+                    class="post-action-btn btn btn--default"
+                    target="new" href="https://plus.google.com/share?url=http://example.com/2025/05/12/%E7%A7%91%E7%A0%94/VASP/Starry%20Sky/Vaspkit%E7%9A%84%E4%BD%BF%E7%94%A8/"
+                    title="Share on Google+"
+                    aria-label="Share on Google+"
+                >
+                    <i class="fab fa-google-plus" aria-hidden="true"></i>
+                </a>
+            </li>
+        
+        
+            
+        
+        <li class="post-action">
+            
+                <a class="post-action-btn btn btn--default" href="#" aria-label="Back to top">
+            
+                <i class="fa fa-list" aria-hidden="true"></i>
+            </a>
+        </li>
+    </ul>
+</div>
+
+
+                </div>
+                
+    <div id="share-options-bar" class="share-options-bar" data-behavior="4">
+        <i id="btn-close-shareoptions" class="fa fa-times"></i>
+        <ul class="share-options">
+            
+                
+                
+                <li class="share-option">
+                    <a
+                        class="share-option-btn"
+                        target="new"
+                        href="https://www.facebook.com/sharer/sharer.php?u=http://example.com/2025/05/12/%E7%A7%91%E7%A0%94/VASP/Starry%20Sky/Vaspkit%E7%9A%84%E4%BD%BF%E7%94%A8/"
+                        aria-label="Share on Facebook"
+                    >
+                        <i class="fab fa-facebook" aria-hidden="true"></i><span>Share on Facebook</span>
+                    </a>
+                </li>
+            
+                
+                
+                <li class="share-option">
+                    <a
+                        class="share-option-btn"
+                        target="new"
+                        href="https://twitter.com/intent/tweet?text=http://example.com/2025/05/12/%E7%A7%91%E7%A0%94/VASP/Starry%20Sky/Vaspkit%E7%9A%84%E4%BD%BF%E7%94%A8/"
+                        aria-label="Share on Twitter"
+                    >
+                        <i class="fab fa-twitter" aria-hidden="true"></i><span>Share on Twitter</span>
+                    </a>
+                </li>
+            
+                
+                
+                <li class="share-option">
+                    <a
+                        class="share-option-btn"
+                        target="new"
+                        href="https://plus.google.com/share?url=http://example.com/2025/05/12/%E7%A7%91%E7%A0%94/VASP/Starry%20Sky/Vaspkit%E7%9A%84%E4%BD%BF%E7%94%A8/"
+                        aria-label="Share on Google+"
+                    >
+                        <i class="fab fa-google-plus" aria-hidden="true"></i><span>Share on Google+</span>
+                    </a>
+                </li>
+            
+        </ul>
+    </div>
+
+
+            
+        </div>
+        
+
+
+<div id="about">
+    <div id="about-card">
+        <div id="about-btn-close">
+            <i class="fa fa-times"></i>
+        </div>
+        
+            <h4 id="about-card-name">John Doe</h4>
+        
+            <div id="about-card-bio"><p>author.bio</p>
+</div>
+        
+        
+            <div id="about-card-job">
+                <i class="fa fa-briefcase"></i>
+                <br/>
+                <p>author.job</p>
+
+            </div>
+        
+        
+    </div>
+</div>
+
+        
+        
+<div id="cover" style="background-image:url('/assets/images/cover.jpg');"></div>
+        <!--SCRIPTS-->
+
+<script src="/assets/js/script-akgy1kkmfssyzznzlvk9mjwcvnsn87aqalldnf43rojvlib0s8vpmeb5mayw.min.js"></script>
+
+<!--SCRIPTS END-->
+
+
+    
+
+
+
+
+    </body>
+</html>

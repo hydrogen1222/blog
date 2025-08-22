@@ -1,0 +1,754 @@
+
+<!DOCTYPE html>
+<html lang="en">
+    
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="generator" content="Hexo">
+    <title>以p(1x1)Cu(111)为例分析表面弛豫的结果 - Hexo</title>
+    <meta name="author" content="John Doe">
+    
+    
+    
+    <script type="application/ld+json">{"@context":"http://schema.org","@type":"BlogPosting","author":{"@type":"Person","name":"John Doe","sameAs":["https://github.com/","http://stackoverflow.com/users","https://twitter.com/","https://facebook.com/","https://plus.google.com/","https://www.linkedin.com/profile/","mailto"]},"articleBody":"本文其实没啥新的内容，只是对上两节的一个总结分析\r\n在表面弛豫前（slab模型优化计算前）\r\n12345678910111213SYSTEM = p(1x1)Cu(111)1.0        2.5701000690         0.0000000000         0.0000000000       -1.2850500345         2.2257719501         0.0000000000        0.0000000000         0.0000000000        21.2954006195   Cu    4Selective DynamicsDirect     0.000000000         0.000000000         0.000000000 F F F     0.666670000         0.333330000         0.098540000 F F F     0.333330000         0.666670000         0.197080000 T T T     0.000000000         0.000000000         0.295620000 T T T\r\n优化计算后\r\n1234567891011121314151617181920212223242526272829303132SYSTEM = p(1x1)Cu(111)1.0        2.5701000690         0.0000000000         0.0000000000       -1.2850500345         2.2257719501         0.0000000000        0.0000000000         0.0000000000        21.2954006195   Cu    4Selective DynamicsDirect     0.000000000         0.000000000         0.000000000 F F F     0.666670000         0.333330000         0.098540000 F F F     0.333330000         0.666670000         0.197080000 T T T     0.000000000         0.000000000         0.295620000 T T T[ctan@baifq-hpc141 primitive-slab-opt-1]$ cat CONTCARCONTCAR\\(1\\1\\1)   1.00000000000000     2.5701000690000000    0.0000000000000000    0.0000000000000000    -1.2850500345000000    2.2257719501000000    0.0000000000000000     0.0000000000000000    0.0000000000000000   21.2954006195000005  Cu/0e71e558f37               4Selective dynamicsDirect  0.0000000000000000  0.0000000000000000  0.0000000000000000   F   F   F  0.6666700000000034  0.3333299999999966  0.0985399999999998   F   F   F  0.3333311322281505  0.6666688677718494  0.1972481653092927   T   T   T -0.0000004145140272  0.0000004145140272  0.2951613337135311   T   T   T  0.00000000E+00  0.00000000E+00  0.00000000E+00  0.00000000E+00  0.00000000E+00  0.00000000E+00  0.00000000E+00  0.00000000E+00  0.00000000E+00  0.00000000E+00  0.00000000E+00  0.00000000E+00\r\n工作站离线状态下numpy on\r\npython2地安装\r\n这两个文件中的坐标都是分数坐标，不太利于分析位置变化，需要将分数坐标转化为笛卡尔坐标，使用大师兄的脚本来进行转换，\r\n用的是python2\r\n123456789101112131415161718192021222324252627282930313233343536373839404142434445464748495051525354555657585960616263646566676869707172737475767778798081828384858687888990919293949596979899100101102103104105106107108109110111112113114115116117118119120121122123124125126127128129130131132133134135136137138139140141142143144145146147148149150151152153154155156157158159160161162163164165166167168169#!/usr/bin/env python# -*- coding: utf-8 -*-#Convert direc coordiation to cartesian Writen By Qiang and Xu Nan&quot;&quot;&quot;The right input way to run this script is :       python dire2cart.py CONTCAR 3 CONTCAR will be converted from Direct to Cartesian and 3 layers will be fixed.  If you do not want to fix layers and keep the same as before, run command:    python dire2cat.py CONTCAR    &quot;&quot;&quot;import sysimport osimport numpy as np print &#x27;Please read the head part of this script and get more information!&#x27;print &quot;&quot;&quot;####################################                                 ##for VASP 5.2 or higher versions  ##                                 ####################################&quot;&quot;&quot;if len(sys.argv) &lt;= 1:    print(&#x27;\\n&#x27; + &#x27; Warning! &#x27; * 3 + &#x27;\\n&#x27;)    print(&#x27;You did not select the inputfile to be converted. \\n By defalut, we are going to convert your CONTCAR.\\n&#x27;)        if not os.path.isfile(&quot;POSCAR&quot;) and not os.path.isfile(&quot;CONTCAR&quot;):        print(&quot;Error:&quot; * 3 + &quot;\\n Can not find neither POSCAR nor CONTCAR!!\\n&quot;)        exit()    else:        if os.path.isfile(&quot;CONTCAR&quot;):            script = sys.argv[0]            file_to_be_converted = &quot;CONTCAR&quot;            print &quot;\\n Convertion starts........\\n&quot;            else:            script = sys.argv[0]            file_to_be_converted = &quot;POSCAR&quot;            print &quot;\\n There is no CONTCAR in your directory. \\n \\n POSCAR Convertion starts........\\n&quot;            if len(sys.argv) == 2:    print(&quot;\\n%s Convertion starts......&quot; %sys.argv[1])     script, file_to_be_converted = sys.argv[:2]else:    print(&quot;\\n%s Convertion starts......\\n&quot; %sys.argv[1])     script, file_to_be_converted, fixedlayer = sys.argv[:3]    fixedlayer = int(fixedlayer)def get_infor():    f = open(file_to_be_converted, &#x27;r&#x27;)    lines = f.readlines()    f.close()    num_atoms = sum([int(x) for x in lines[6].split()])    if lines[7][0]  == &#x27;S&#x27; or lines[7][0]  == &#x27;s&#x27;:  # # With Selected T T T, coordination starts from line 9        start_num = 9        if lines[8][0]  == &#x27;D&#x27; or lines[8][0]  == &#x27;d&#x27;:            is_direct = True         else:            is_direct = False    else:         start_num = 8        print &#x27;----------------------------------------------------&#x27;        print &#x27;Pay Attetion! There is no TTT in  %s   &#x27; %(file_to_be_converted)        print &#x27;----------------------------------------------------&#x27;        if  lines[7][0]  == &#x27;D&#x27; or lines[7][0]  == &#x27;d&#x27;:            is_direct = True         else:            is_direct = False    a = []    b = []    c = []    if is_direct:                 for i in np.arange(2,5):            line = [float(i) for i in lines[i].strip().split()]            a.append(line[0])            b.append(line[1])            c.append(line[2])        vector = np.array([a,b,c])    else:         vector = np.array([[1, 0 , 0], [0, 1, 0], [0, 0, 1]])    return vector, lines, start_num, num_atoms, is_directdef determinelayers(z_cartesian):    threshold = 0.5      seq = sorted(z_cartesian)    min = seq[0]    layerscount = &#123;&#125;    sets = [min]    for j in range(len(seq)):        if abs(seq[j]-min) &gt;= threshold:            min = seq[j]            sets.append(min)    for i in range(1,len(sets)+1):        layerscount[i] = []                    for k in range(len(z_cartesian)):               if abs(z_cartesian[k]-sets[i-1]) &lt;= threshold:                layerscount[i].append(k)    return layerscountdef convert():    x_cartesian = []    y_cartesian = []    z_cartesian = []    tf = []    for i in range(start_num, num_atoms + start_num):        line_data =  [float(ele) for ele in lines[i].split()[0:3]]        line_data = np.array([line_data])        x, y, z = [sum(k) for k in line_data * vector ]             x_cartesian.append(x)        y_cartesian.append(y)        z_cartesian.append(z)                 if start_num == 9 : # if  T T T exist, the start_num will be 9                    tf.append((lines[i].split()[3:]))        else:            tf.append(&#x27; &#x27;)   # if there is no T T T, use space instead.     layerscount =determinelayers(z_cartesian)        file_out = open(file_to_be_converted+&#x27;_C&#x27;, &#x27;w&#x27;)    for i in range(0,7):        file_out.write(lines[i].rstrip() + &#x27;\\n&#x27;)  # first 7 lines are kept the same         print &#x27;\\n Find %s layers!&#x27; * 3 %(len(layerscount), len(layerscount), len(layerscount))        if len(sys.argv) &gt;= 3:  # This means that the nuber for fixing layers is given by the user.        file_out.write(&#x27;Selective\\n&#x27;)          file_out.write(&#x27;Cartesian&#x27; + &#x27;\\n&#x27;)         for i in range(1,len(layerscount)+1):            if i &lt;= fixedlayer:                 for j in layerscount[i]:                    tf[j] = [&#x27;F&#x27;,&#x27;F&#x27;,&#x27;F&#x27;]            else:                for k in layerscount[i]:                    tf[k] = [&#x27;T&#x27;,&#x27;T&#x27;,&#x27;T&#x27;]                        else:        if start_num == 9:  # 9 means there are T T T or F F F in the file            file_out.write(&#x27;Selective\\n&#x27;)            file_out.write(&#x27;Cartesian&#x27; + &#x27;\\n&#x27;)                else:            file_out.write(&#x27;Cartesian&#x27; + &#x27;\\n&#x27;)         for i in range(0,len(x_cartesian)):        file_out.write(&quot;\\t%+-3.10f   %+-3.10f   %+-3.10f  %s\\n&quot; %(x_cartesian[i], y_cartesian[i], z_cartesian[i], &#x27; &#x27;.join(tf[i])))            file_out.close()    vector, lines, start_num, num_atoms, is_direct = get_infor()if is_direct :     print &quot;\\n%s has Direct Coordinates, Contersion starts.... &quot;  %(file_to_be_converted)    convert()else:    print &quot;\\n%s has Cartesian Coordinates Already! We are going to fix layers only.&quot;  %(file_to_be_converted)    convert()    print &#x27;-----------------------------------------------------\\n&#x27;print &#x27;\\n %s with Cartesian Coordiates is named as  %s_C\\n&#x27; %(file_to_be_converted, file_to_be_converted)print &#x27;-----------------------------------------------------\\n&#x27;\r\n脚本会调用到numpy库，然而集群上并没有连接互联网，所以没有办法通过pip2 install numpy来安装，只能手动上传.whl文件或者源码编译等。\r\n进入python2环境，输入import pip;print(pip.pep425tags.get_supported())来查看支持的.whl文件版本\r\n123456[ctan@baifq-hpc141 primitive-slab-opt-1]$ python2Python 2.7.18 (default, Oct 23 2023, 20:01:03)[GCC 8.5.0 20210514 (Red Hat 8.5.0-18)] on linux2Type &quot;help&quot;, &quot;copyright&quot;, &quot;credits&quot; or &quot;license&quot; for more information.&gt;&gt;&gt; import pip;print(pip.pep425tags.get_supported())[(&#x27;cp27&#x27;, &#x27;cp27mu&#x27;, &#x27;manylinux1_x86_64&#x27;), (&#x27;cp27&#x27;, &#x27;cp27mu&#x27;, &#x27;linux_x86_64&#x27;), (&#x27;cp27&#x27;, &#x27;none&#x27;, &#x27;manylinux1_x86_64&#x27;), (&#x27;cp27&#x27;, &#x27;none&#x27;, &#x27;linux_x86_64&#x27;), (&#x27;py2&#x27;, &#x27;none&#x27;, &#x27;manylinux1_x86_64&#x27;), (&#x27;py2&#x27;, &#x27;none&#x27;, &#x27;linux_x86_64&#x27;), (&#x27;cp27&#x27;, &#x27;none&#x27;, &#x27;any&#x27;), (&#x27;cp2&#x27;, &#x27;none&#x27;, &#x27;any&#x27;), (&#x27;py27&#x27;, &#x27;none&#x27;, &#x27;any&#x27;), (&#x27;py2&#x27;, &#x27;none&#x27;, &#x27;any&#x27;), (&#x27;py26&#x27;, &#x27;none&#x27;, &#x27;any&#x27;), (&#x27;py25&#x27;, &#x27;none&#x27;, &#x27;any&#x27;), (&#x27;py24&#x27;, &#x27;none&#x27;, &#x27;any&#x27;), (&#x27;py23&#x27;, &#x27;none&#x27;, &#x27;any&#x27;), (&#x27;py22&#x27;, &#x27;none&#x27;, &#x27;any&#x27;), (&#x27;py21&#x27;, &#x27;none&#x27;, &#x27;any&#x27;), (&#x27;py20&#x27;, &#x27;none&#x27;, &#x27;any&#x27;)]\r\n这里下载的是numpy-1.16.5-cp27-cp27mu-manylinux1_x86_64.whl（不可下载过高版本的numpy，它支持python2的最后一个版本似乎是1.16.6）\r\n然后安装，由于我不在sudoer中，没有root权限，所以需要手动指定安装目录\r\n1pip2 install --prefix=~/python2/numpy_installation numpy-1.16.5-cp27-cp27mu-manylinux1_x86_64.whl\r\n然后添加环境变量，注意numpy库在/lib64/python2.7/site-packages目录中的\r\n1export PYTHONPATH=/home/ctan/python2/numpy_installation/lib64/python2.7/site-packages:$PYTHONPATH\r\nok啦，以上是题外话，安装完numpy之后就可以运行脚本了，将POSCAR和CONTCAR的坐标从分数坐标转换为笛卡尔坐标\r\nPOSCAR\r\n1234567891011121314[ctan@baifq-hpc141 primitive-slab-opt-1]$ cat POSCAR_CCONTCAR\\(1\\1\\1)1.0        2.5701000690         0.0000000000         0.0000000000       -1.2850500345         2.2257719501         0.0000000000        0.0000000000         0.0000000000        21.2954006195   Cu    4SelectiveCartesian        +0.0000000000   +0.0000000000   +0.0000000000  F F F        +1.2850628850   +0.7419165641   +2.0984487770  F F F        -0.0000128505   +1.4838553860   +4.1968975541  T T T        +0.0000000000   +0.0000000000   +6.2953463311  T T T\r\nCONTCAR_C\r\n1234567891011121314[ctan@baifq-hpc141 primitive-slab-opt-1]$ cat CONTCAR_CCONTCAR\\(1\\1\\1)   1.00000000000000     2.5701000690000000    0.0000000000000000    0.0000000000000000    -1.2850500345000000    2.2257719501000000    0.0000000000000000     0.0000000000000000    0.0000000000000000   21.2954006195000005  Cu/0e71e558f37               4SelectiveCartesian        +0.0000000000   +0.0000000000   +0.0000000000  F F F        +1.2850628850   +0.7419165641   +2.0984487770  F F F        -0.0000084856   +1.4838528659   +4.2004787017  T T T        -0.0000015980   +0.0000009226   +6.2855788488  T T T\r\n\r\nAlright, I’m back.\r\n突然想起昨天球磨的样品今天结束了，连忙赶回实验室取出来装进样品管里等待封管。\r\nBy the\r\nway，我真是和鱼一样，记忆只有七秒、、、😅。师兄教的球磨罐和球珠的洗涤方法忘记下来了，今天不出意外地给忘了😂。汲取教训，每次出实验室后都更加努力地总结和复盘，仔细回想每一个实验细节\r\n\r\n优化前后对比\r\nAlright，扯远了，分析一下顶层和亚顶层优化前后地结构变化吧：\r\n\r\nPOSCAR: (+6.2953463311) - (+4.1968975541) =\r\n2.0984487769999998\r\nCONTCAR: (+6.2855788488) - (+4.2004787017) =\r\n2.0851001471000004\r\n\r\n前后变化了：(2.0851001471000004-2.0984487769999998)/2.0984487769999998\r\n= -0.006361189296735172\r\n可以看到，表层原子向体相收缩\r\n能量变化\r\n123456[ctan@baifq-hpc141 primitive-slab-opt-1]$ grep &#x27;  without&#x27; OUTCAR  energy  without entropy=      -13.96941183  energy(sigma-&gt;0) =      -13.97673168  energy  without entropy=      -13.96945528  energy(sigma-&gt;0) =      -13.97676958  energy  without entropy=      -13.97006413  energy(sigma-&gt;0) =      -13.97726241  energy  without entropy=      -13.97020643  energy(sigma-&gt;0) =      -13.97735554  energy  without entropy=      -13.97017969  energy(sigma-&gt;0) =      -13.97735013\r\n能量从-13.97673168变化为-13.97735013，降低了0.000618449999999271 eV，即弛豫过程是放热，刚切开的表面不稳定，表层原子向体相收缩后，体系能量降低，变得更稳定\r\n小Tips：可以使用python环境便捷地进行基本运算\r\n\r\n\r\npython环境下进行基本运算\r\n\r\n","dateCreated":"2025-04-27T21:21:00+08:00","dateModified":"2025-04-28T17:40:44+08:00","datePublished":"2025-04-27T21:21:00+08:00","description":"","headline":"以p(1x1)Cu(111)为例分析表面弛豫的结果","image":[],"mainEntityOfPage":{"@type":"WebPage","@id":"http://example.com/2025/04/27/%E7%A7%91%E7%A0%94/VASP/Starry%20Sky/%E4%BB%A5p(1x1)Cu(111)%E4%B8%BA%E4%BE%8B%E5%88%86%E6%9E%90%E8%A1%A8%E9%9D%A2%E5%BC%9B%E8%B1%AB%E7%9A%84%E7%BB%93%E6%9E%9C/"},"publisher":{"@type":"Organization","name":"John Doe","sameAs":["https://github.com/","http://stackoverflow.com/users","https://twitter.com/","https://facebook.com/","https://plus.google.com/","https://www.linkedin.com/profile/","mailto"]},"url":"http://example.com/2025/04/27/%E7%A7%91%E7%A0%94/VASP/Starry%20Sky/%E4%BB%A5p(1x1)Cu(111)%E4%B8%BA%E4%BE%8B%E5%88%86%E6%9E%90%E8%A1%A8%E9%9D%A2%E5%BC%9B%E8%B1%AB%E7%9A%84%E7%BB%93%E6%9E%9C/","keywords":"化学, 科研"}</script>
+    <meta name="description" content="本文其实没啥新的内容，只是对上两节的一个总结分析 在表面弛豫前（slab模型优化计算前） 12345678910111213SYSTEM &#x3D; p(1x1)Cu(111)1.0        2.5701000690         0.0000000000         0.0000000000       -1.2850500345         2.2257719501">
+<meta property="og:type" content="blog">
+<meta property="og:title" content="以p(1x1)Cu(111)为例分析表面弛豫的结果">
+<meta property="og:url" content="http://example.com/2025/04/27/%E7%A7%91%E7%A0%94/VASP/Starry%20Sky/%E4%BB%A5p(1x1)Cu(111)%E4%B8%BA%E4%BE%8B%E5%88%86%E6%9E%90%E8%A1%A8%E9%9D%A2%E5%BC%9B%E8%B1%AB%E7%9A%84%E7%BB%93%E6%9E%9C/index.html">
+<meta property="og:site_name" content="Hexo">
+<meta property="og:description" content="本文其实没啥新的内容，只是对上两节的一个总结分析 在表面弛豫前（slab模型优化计算前） 12345678910111213SYSTEM &#x3D; p(1x1)Cu(111)1.0        2.5701000690         0.0000000000         0.0000000000       -1.2850500345         2.2257719501">
+<meta property="og:locale" content="en_US">
+<meta property="article:published_time" content="2025-04-27T13:21:00.000Z">
+<meta property="article:modified_time" content="2025-04-28T09:40:44.000Z">
+<meta property="article:author" content="John Doe">
+<meta property="article:tag" content="化学">
+<meta property="article:tag" content="科研">
+<meta name="twitter:card" content="summary">
+    
+    
+        
+    
+    
+    
+    
+    
+    <!--STYLES-->
+    
+<link rel="stylesheet" href="/assets/css/all.css">
+
+    
+<link rel="stylesheet" href="/assets/css/jquery.fancybox.css">
+
+    
+<link rel="stylesheet" href="/assets/css/thumbs.css">
+
+    
+<link rel="stylesheet" href="/assets/css/tranquilpeak.css">
+
+    <!--STYLES END-->
+    
+
+    
+
+    
+        
+    
+
+
+
+
+<script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+<script>
+  MathJax = {
+    tex: {
+      inlineMath: [['$', '$'], ['\\(', '\\)']],
+      displayMath: [['$$', '$$'], ['\\[', '\\]']],
+      tags: 'ams'
+    },
+    svg: {
+      fontCache: 'global'
+    }
+  };
+</script>
+
+
+
+
+
+<!-- hexo injector head_end start -->
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.12.0/dist/katex.min.css">
+
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/hexo-math@4.0.0/dist/style.css">
+<!-- hexo injector head_end end --></head>
+
+    <body>
+        <div id="blog">
+            <!-- Define author's picture -->
+
+
+    
+
+<header id="header" data-behavior="4">
+    <i id="btn-open-sidebar" class="fa fa-lg fa-bars"></i>
+    <div class="header-title">
+        <a
+            class="header-title-link"
+            href="/"
+            aria-label=""
+        >
+            Hexo
+        </a>
+    </div>
+    
+        
+            <a
+                class="header-right-picture "
+                href="#about"
+                aria-label="Open the link: /#about"
+            >
+        
+        
+        </a>
+    
+</header>
+
+            <!-- Define author's picture -->
+
+
+<nav id="sidebar" data-behavior="4">
+    <div class="sidebar-container">
+        
+        
+            <ul class="sidebar-buttons">
+            
+                <li class="sidebar-button">
+                    
+                        <a
+                            class="sidebar-button-link "
+                            href="/"
+                            
+                            rel="noopener"
+                            title="Home"
+                        >
+                        <i class="sidebar-button-icon fa fa-home" aria-hidden="true"></i>
+                        <span class="sidebar-button-desc">Home</span>
+                    </a>
+            </li>
+            
+                <li class="sidebar-button">
+                    
+                        <a
+                            class="sidebar-button-link "
+                            href="/all-categories"
+                            
+                            rel="noopener"
+                            title="Categories"
+                        >
+                        <i class="sidebar-button-icon fa fa-bookmark" aria-hidden="true"></i>
+                        <span class="sidebar-button-desc">Categories</span>
+                    </a>
+            </li>
+            
+                <li class="sidebar-button">
+                    
+                        <a
+                            class="sidebar-button-link "
+                            href="/all-tags"
+                            
+                            rel="noopener"
+                            title="Tags"
+                        >
+                        <i class="sidebar-button-icon fa fa-tags" aria-hidden="true"></i>
+                        <span class="sidebar-button-desc">Tags</span>
+                    </a>
+            </li>
+            
+                <li class="sidebar-button">
+                    
+                        <a
+                            class="sidebar-button-link "
+                            href="/all-archives"
+                            
+                            rel="noopener"
+                            title="Archives"
+                        >
+                        <i class="sidebar-button-icon fa fa-archive" aria-hidden="true"></i>
+                        <span class="sidebar-button-desc">Archives</span>
+                    </a>
+            </li>
+            
+                <li class="sidebar-button">
+                    
+                        <a
+                            class="sidebar-button-link open-algolia-search"
+                            href="#search"
+                            
+                            rel="noopener"
+                            title="Search"
+                        >
+                        <i class="sidebar-button-icon fa fa-search" aria-hidden="true"></i>
+                        <span class="sidebar-button-desc">Search</span>
+                    </a>
+            </li>
+            
+                <li class="sidebar-button">
+                    
+                        <a
+                            class="sidebar-button-link "
+                            href="#about"
+                            
+                            rel="noopener"
+                            title="About"
+                        >
+                        <i class="sidebar-button-icon fa fa-question" aria-hidden="true"></i>
+                        <span class="sidebar-button-desc">About</span>
+                    </a>
+            </li>
+            
+        </ul>
+        
+            <ul class="sidebar-buttons">
+            
+                <li class="sidebar-button">
+                    
+                        <a
+                            class="sidebar-button-link "
+                            href="https://github.com/"
+                            
+                                target="_blank"
+                            
+                            rel="noopener"
+                            title="GitHub"
+                        >
+                        <i class="sidebar-button-icon fab fa-github" aria-hidden="true"></i>
+                        <span class="sidebar-button-desc">GitHub</span>
+                    </a>
+            </li>
+            
+                <li class="sidebar-button">
+                    
+                        <a
+                            class="sidebar-button-link "
+                            href="http://stackoverflow.com/users"
+                            
+                                target="_blank"
+                            
+                            rel="noopener"
+                            title="Stack Overflow"
+                        >
+                        <i class="sidebar-button-icon fab fa-stack-overflow" aria-hidden="true"></i>
+                        <span class="sidebar-button-desc">Stack Overflow</span>
+                    </a>
+            </li>
+            
+                <li class="sidebar-button">
+                    
+                        <a
+                            class="sidebar-button-link "
+                            href="https://twitter.com/"
+                            
+                                target="_blank"
+                            
+                            rel="noopener"
+                            title="Twitter"
+                        >
+                        <i class="sidebar-button-icon fab fa-twitter" aria-hidden="true"></i>
+                        <span class="sidebar-button-desc">Twitter</span>
+                    </a>
+            </li>
+            
+                <li class="sidebar-button">
+                    
+                        <a
+                            class="sidebar-button-link "
+                            href="https://facebook.com/"
+                            
+                                target="_blank"
+                            
+                            rel="noopener"
+                            title="Facebook"
+                        >
+                        <i class="sidebar-button-icon fab fa-facebook" aria-hidden="true"></i>
+                        <span class="sidebar-button-desc">Facebook</span>
+                    </a>
+            </li>
+            
+                <li class="sidebar-button">
+                    
+                        <a
+                            class="sidebar-button-link "
+                            href="https://plus.google.com/"
+                            
+                                target="_blank"
+                            
+                            rel="noopener"
+                            title="Google +"
+                        >
+                        <i class="sidebar-button-icon fab fa-google-plus" aria-hidden="true"></i>
+                        <span class="sidebar-button-desc">Google +</span>
+                    </a>
+            </li>
+            
+                <li class="sidebar-button">
+                    
+                        <a
+                            class="sidebar-button-link "
+                            href="https://www.linkedin.com/profile/"
+                            
+                                target="_blank"
+                            
+                            rel="noopener"
+                            title="LinkedIn"
+                        >
+                        <i class="sidebar-button-icon fab fa-linkedin" aria-hidden="true"></i>
+                        <span class="sidebar-button-desc">LinkedIn</span>
+                    </a>
+            </li>
+            
+                <li class="sidebar-button">
+                    
+                        <a
+                            class="sidebar-button-link "
+                            href="/mailto"
+                            
+                            rel="noopener"
+                            title="Mail"
+                        >
+                        <i class="sidebar-button-icon fa fa-envelope" aria-hidden="true"></i>
+                        <span class="sidebar-button-desc">Mail</span>
+                    </a>
+            </li>
+            
+        </ul>
+        
+            <ul class="sidebar-buttons">
+            
+                <li class="sidebar-button">
+                    
+                        <a
+                            class="sidebar-button-link "
+                            href="/atom.xml"
+                            
+                            rel="noopener"
+                            title="RSS"
+                        >
+                        <i class="sidebar-button-icon fa fa-rss" aria-hidden="true"></i>
+                        <span class="sidebar-button-desc">RSS</span>
+                    </a>
+            </li>
+            
+        </ul>
+        
+    </div>
+</nav>
+
+            
+            <div id="main" data-behavior="4"
+                 class="
+                        hasCoverMetaIn
+                        ">
+                
+<article class="post">
+    
+    
+        <div class="post-header main-content-wrap text-left">
+    
+        <h1 class="post-title">
+            以p(1x1)Cu(111)为例分析表面弛豫的结果
+        </h1>
+    
+    
+        <div class="post-meta">
+    <time datetime="2025-04-27T21:21:00+08:00">
+	
+		    Apr 27, 2025
+    	
+    </time>
+    
+        <span>in </span>
+        
+    <a class="category-link" href="/all-categories/%E4%BB%8E%E9%9B%B6%E5%BC%80%E5%A7%8B%E7%9A%84%E7%A7%91%E7%A0%94%E4%B9%8B%E6%97%85/">从零开始的科研之旅</a>, <a class="category-link" href="/all-categories/%E4%BB%8E%E9%9B%B6%E5%BC%80%E5%A7%8B%E7%9A%84%E7%A7%91%E7%A0%94%E4%B9%8B%E6%97%85/VASP/">VASP</a>
+
+
+    
+</div>
+
+    
+</div>
+
+    
+    <div class="post-content markdown">
+        <div class="main-content-wrap">
+            <p>本文其实没啥新的内容，只是对上两节的一个总结分析</p>
+<p>在表面弛豫前（slab模型优化计算前）</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line">SYSTEM = p(1x1)Cu(111)</span><br><span class="line">1.0</span><br><span class="line">        2.5701000690         0.0000000000         0.0000000000</span><br><span class="line">       -1.2850500345         2.2257719501         0.0000000000</span><br><span class="line">        0.0000000000         0.0000000000        21.2954006195</span><br><span class="line">   Cu</span><br><span class="line">    4</span><br><span class="line">Selective Dynamics</span><br><span class="line">Direct</span><br><span class="line">     0.000000000         0.000000000         0.000000000 F F F</span><br><span class="line">     0.666670000         0.333330000         0.098540000 F F F</span><br><span class="line">     0.333330000         0.666670000         0.197080000 T T T</span><br><span class="line">     0.000000000         0.000000000         0.295620000 T T T</span><br></pre></td></tr></table></figure>
+<p>优化计算后</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br></pre></td><td class="code"><pre><span class="line">SYSTEM = p(1x1)Cu(111)</span><br><span class="line">1.0</span><br><span class="line">        2.5701000690         0.0000000000         0.0000000000</span><br><span class="line">       -1.2850500345         2.2257719501         0.0000000000</span><br><span class="line">        0.0000000000         0.0000000000        21.2954006195</span><br><span class="line">   Cu</span><br><span class="line">    4</span><br><span class="line">Selective Dynamics</span><br><span class="line">Direct</span><br><span class="line">     0.000000000         0.000000000         0.000000000 F F F</span><br><span class="line">     0.666670000         0.333330000         0.098540000 F F F</span><br><span class="line">     0.333330000         0.666670000         0.197080000 T T T</span><br><span class="line">     0.000000000         0.000000000         0.295620000 T T T</span><br><span class="line">[ctan@baifq-hpc141 primitive-slab-opt-1]$ cat CONTCAR</span><br><span class="line">CONTCAR\(1\1\1)</span><br><span class="line">   1.00000000000000</span><br><span class="line">     2.5701000690000000    0.0000000000000000    0.0000000000000000</span><br><span class="line">    -1.2850500345000000    2.2257719501000000    0.0000000000000000</span><br><span class="line">     0.0000000000000000    0.0000000000000000   21.2954006195000005</span><br><span class="line">  Cu/0e71e558f37</span><br><span class="line">               4</span><br><span class="line">Selective dynamics</span><br><span class="line">Direct</span><br><span class="line">  0.0000000000000000  0.0000000000000000  0.0000000000000000   F   F   F</span><br><span class="line">  0.6666700000000034  0.3333299999999966  0.0985399999999998   F   F   F</span><br><span class="line">  0.3333311322281505  0.6666688677718494  0.1972481653092927   T   T   T</span><br><span class="line"> -0.0000004145140272  0.0000004145140272  0.2951613337135311   T   T   T</span><br><span class="line"></span><br><span class="line">  0.00000000E+00  0.00000000E+00  0.00000000E+00</span><br><span class="line">  0.00000000E+00  0.00000000E+00  0.00000000E+00</span><br><span class="line">  0.00000000E+00  0.00000000E+00  0.00000000E+00</span><br><span class="line">  0.00000000E+00  0.00000000E+00  0.00000000E+00</span><br></pre></td></tr></table></figure>
+<h2 id="工作站离线状态下numpy-on-python2地安装">工作站离线状态下numpy on
+python2地安装</h2>
+<p>这两个文件中的坐标都是分数坐标，不太利于分析位置变化，需要将分数坐标转化为笛卡尔坐标，使用大师兄的脚本来进行转换，</p>
+<p>用的是<code>python2</code></p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br><span class="line">89</span><br><span class="line">90</span><br><span class="line">91</span><br><span class="line">92</span><br><span class="line">93</span><br><span class="line">94</span><br><span class="line">95</span><br><span class="line">96</span><br><span class="line">97</span><br><span class="line">98</span><br><span class="line">99</span><br><span class="line">100</span><br><span class="line">101</span><br><span class="line">102</span><br><span class="line">103</span><br><span class="line">104</span><br><span class="line">105</span><br><span class="line">106</span><br><span class="line">107</span><br><span class="line">108</span><br><span class="line">109</span><br><span class="line">110</span><br><span class="line">111</span><br><span class="line">112</span><br><span class="line">113</span><br><span class="line">114</span><br><span class="line">115</span><br><span class="line">116</span><br><span class="line">117</span><br><span class="line">118</span><br><span class="line">119</span><br><span class="line">120</span><br><span class="line">121</span><br><span class="line">122</span><br><span class="line">123</span><br><span class="line">124</span><br><span class="line">125</span><br><span class="line">126</span><br><span class="line">127</span><br><span class="line">128</span><br><span class="line">129</span><br><span class="line">130</span><br><span class="line">131</span><br><span class="line">132</span><br><span class="line">133</span><br><span class="line">134</span><br><span class="line">135</span><br><span class="line">136</span><br><span class="line">137</span><br><span class="line">138</span><br><span class="line">139</span><br><span class="line">140</span><br><span class="line">141</span><br><span class="line">142</span><br><span class="line">143</span><br><span class="line">144</span><br><span class="line">145</span><br><span class="line">146</span><br><span class="line">147</span><br><span class="line">148</span><br><span class="line">149</span><br><span class="line">150</span><br><span class="line">151</span><br><span class="line">152</span><br><span class="line">153</span><br><span class="line">154</span><br><span class="line">155</span><br><span class="line">156</span><br><span class="line">157</span><br><span class="line">158</span><br><span class="line">159</span><br><span class="line">160</span><br><span class="line">161</span><br><span class="line">162</span><br><span class="line">163</span><br><span class="line">164</span><br><span class="line">165</span><br><span class="line">166</span><br><span class="line">167</span><br><span class="line">168</span><br><span class="line">169</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">#!/usr/bin/env python</span></span><br><span class="line"><span class="comment"># -*- coding: utf-8 -*-</span></span><br><span class="line"><span class="comment">#Convert direc coordiation to cartesian Writen By Qiang and Xu Nan</span></span><br><span class="line"><span class="string">&quot;&quot;&quot;</span></span><br><span class="line"><span class="string">The right input way to run this script is : </span></span><br><span class="line"><span class="string">      </span></span><br><span class="line"><span class="string">python dire2cart.py CONTCAR 3 </span></span><br><span class="line"><span class="string"></span></span><br><span class="line"><span class="string">CONTCAR will be converted from Direct to Cartesian and 3 layers will be fixed.  </span></span><br><span class="line"><span class="string"></span></span><br><span class="line"><span class="string">If you do not want to fix layers and keep the same as before, run command:</span></span><br><span class="line"><span class="string">    </span></span><br><span class="line"><span class="string">python dire2cat.py CONTCAR    </span></span><br><span class="line"><span class="string"></span></span><br><span class="line"><span class="string">&quot;&quot;&quot;</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> sys</span><br><span class="line"><span class="keyword">import</span> os</span><br><span class="line"><span class="keyword">import</span> numpy <span class="keyword">as</span> np </span><br><span class="line"></span><br><span class="line"><span class="built_in">print</span> <span class="string">&#x27;Please read the head part of this script and get more information!&#x27;</span></span><br><span class="line"><span class="built_in">print</span> <span class="string">&quot;&quot;&quot;</span></span><br><span class="line"><span class="string">###################################</span></span><br><span class="line"><span class="string">#                                 #</span></span><br><span class="line"><span class="string">#for VASP 5.2 or higher versions  #</span></span><br><span class="line"><span class="string">#                                 #</span></span><br><span class="line"><span class="string">###################################</span></span><br><span class="line"><span class="string">&quot;&quot;&quot;</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">if</span> <span class="built_in">len</span>(sys.argv) &lt;= <span class="number">1</span>:</span><br><span class="line">    <span class="built_in">print</span>(<span class="string">&#x27;\n&#x27;</span> + <span class="string">&#x27; Warning! &#x27;</span> * <span class="number">3</span> + <span class="string">&#x27;\n&#x27;</span>)</span><br><span class="line">    <span class="built_in">print</span>(<span class="string">&#x27;You did not select the inputfile to be converted. \n By defalut, we are going to convert your CONTCAR.\n&#x27;</span>)</span><br><span class="line">    </span><br><span class="line">    <span class="keyword">if</span> <span class="keyword">not</span> os.path.isfile(<span class="string">&quot;POSCAR&quot;</span>) <span class="keyword">and</span> <span class="keyword">not</span> os.path.isfile(<span class="string">&quot;CONTCAR&quot;</span>):</span><br><span class="line">        <span class="built_in">print</span>(<span class="string">&quot;Error:&quot;</span> * <span class="number">3</span> + <span class="string">&quot;\n Can not find neither POSCAR nor CONTCAR!!\n&quot;</span>)</span><br><span class="line">        exit()</span><br><span class="line">    <span class="keyword">else</span>:</span><br><span class="line">        <span class="keyword">if</span> os.path.isfile(<span class="string">&quot;CONTCAR&quot;</span>):</span><br><span class="line">            script = sys.argv[<span class="number">0</span>]</span><br><span class="line">            file_to_be_converted = <span class="string">&quot;CONTCAR&quot;</span></span><br><span class="line">            <span class="built_in">print</span> <span class="string">&quot;\n Convertion starts........\n&quot;</span></span><br><span class="line">    </span><br><span class="line">        <span class="keyword">else</span>:</span><br><span class="line">            script = sys.argv[<span class="number">0</span>]</span><br><span class="line">            file_to_be_converted = <span class="string">&quot;POSCAR&quot;</span></span><br><span class="line">            <span class="built_in">print</span> <span class="string">&quot;\n There is no CONTCAR in your directory. \n \n POSCAR Convertion starts........\n&quot;</span></span><br><span class="line">            </span><br><span class="line"><span class="keyword">if</span> <span class="built_in">len</span>(sys.argv) == <span class="number">2</span>:</span><br><span class="line">    <span class="built_in">print</span>(<span class="string">&quot;\n%s Convertion starts......&quot;</span> %sys.argv[<span class="number">1</span>]) </span><br><span class="line">    script, file_to_be_converted = sys.argv[:<span class="number">2</span>]</span><br><span class="line"><span class="keyword">else</span>:</span><br><span class="line">    <span class="built_in">print</span>(<span class="string">&quot;\n%s Convertion starts......\n&quot;</span> %sys.argv[<span class="number">1</span>]) </span><br><span class="line">    script, file_to_be_converted, fixedlayer = sys.argv[:<span class="number">3</span>]</span><br><span class="line">    fixedlayer = <span class="built_in">int</span>(fixedlayer)</span><br><span class="line"></span><br><span class="line"><span class="keyword">def</span> <span class="title function_">get_infor</span>():</span><br><span class="line">    f = <span class="built_in">open</span>(file_to_be_converted, <span class="string">&#x27;r&#x27;</span>)</span><br><span class="line">    lines = f.readlines()</span><br><span class="line">    f.close()</span><br><span class="line">    num_atoms = <span class="built_in">sum</span>([<span class="built_in">int</span>(x) <span class="keyword">for</span> x <span class="keyword">in</span> lines[<span class="number">6</span>].split()])</span><br><span class="line">    <span class="keyword">if</span> lines[<span class="number">7</span>][<span class="number">0</span>]  == <span class="string">&#x27;S&#x27;</span> <span class="keyword">or</span> lines[<span class="number">7</span>][<span class="number">0</span>]  == <span class="string">&#x27;s&#x27;</span>:  <span class="comment"># # With Selected T T T, coordination starts from line 9</span></span><br><span class="line">        start_num = <span class="number">9</span></span><br><span class="line">        <span class="keyword">if</span> lines[<span class="number">8</span>][<span class="number">0</span>]  == <span class="string">&#x27;D&#x27;</span> <span class="keyword">or</span> lines[<span class="number">8</span>][<span class="number">0</span>]  == <span class="string">&#x27;d&#x27;</span>:</span><br><span class="line">            is_direct = <span class="literal">True</span> </span><br><span class="line">        <span class="keyword">else</span>:</span><br><span class="line">            is_direct = <span class="literal">False</span></span><br><span class="line">    <span class="keyword">else</span>: </span><br><span class="line">        start_num = <span class="number">8</span></span><br><span class="line">        <span class="built_in">print</span> <span class="string">&#x27;----------------------------------------------------&#x27;</span></span><br><span class="line">        <span class="built_in">print</span> <span class="string">&#x27;Pay Attetion! There is no TTT in  %s   &#x27;</span> %(file_to_be_converted)</span><br><span class="line">        <span class="built_in">print</span> <span class="string">&#x27;----------------------------------------------------&#x27;</span></span><br><span class="line">        <span class="keyword">if</span>  lines[<span class="number">7</span>][<span class="number">0</span>]  == <span class="string">&#x27;D&#x27;</span> <span class="keyword">or</span> lines[<span class="number">7</span>][<span class="number">0</span>]  == <span class="string">&#x27;d&#x27;</span>:</span><br><span class="line">            is_direct = <span class="literal">True</span> </span><br><span class="line">        <span class="keyword">else</span>:</span><br><span class="line">            is_direct = <span class="literal">False</span></span><br><span class="line">    a = []</span><br><span class="line">    b = []</span><br><span class="line">    c = []</span><br><span class="line">    <span class="keyword">if</span> is_direct:         </span><br><span class="line">        <span class="keyword">for</span> i <span class="keyword">in</span> np.arange(<span class="number">2</span>,<span class="number">5</span>):</span><br><span class="line">            line = [<span class="built_in">float</span>(i) <span class="keyword">for</span> i <span class="keyword">in</span> lines[i].strip().split()]</span><br><span class="line">            a.append(line[<span class="number">0</span>])</span><br><span class="line">            b.append(line[<span class="number">1</span>])</span><br><span class="line">            c.append(line[<span class="number">2</span>])</span><br><span class="line">        vector = np.array([a,b,c])</span><br><span class="line">    <span class="keyword">else</span>: </span><br><span class="line">        vector = np.array([[<span class="number">1</span>, <span class="number">0</span> , <span class="number">0</span>], [<span class="number">0</span>, <span class="number">1</span>, <span class="number">0</span>], [<span class="number">0</span>, <span class="number">0</span>, <span class="number">1</span>]])</span><br><span class="line">    <span class="keyword">return</span> vector, lines, start_num, num_atoms, is_direct</span><br><span class="line"></span><br><span class="line"><span class="keyword">def</span> <span class="title function_">determinelayers</span>(<span class="params">z_cartesian</span>):</span><br><span class="line">    threshold = <span class="number">0.5</span>  </span><br><span class="line">    seq = <span class="built_in">sorted</span>(z_cartesian)</span><br><span class="line">    <span class="built_in">min</span> = seq[<span class="number">0</span>]</span><br><span class="line">    layerscount = &#123;&#125;</span><br><span class="line">    sets = [<span class="built_in">min</span>]</span><br><span class="line">    <span class="keyword">for</span> j <span class="keyword">in</span> <span class="built_in">range</span>(<span class="built_in">len</span>(seq)):</span><br><span class="line">        <span class="keyword">if</span> <span class="built_in">abs</span>(seq[j]-<span class="built_in">min</span>) &gt;= threshold:</span><br><span class="line">            <span class="built_in">min</span> = seq[j]</span><br><span class="line">            sets.append(<span class="built_in">min</span>)</span><br><span class="line"></span><br><span class="line">    <span class="keyword">for</span> i <span class="keyword">in</span> <span class="built_in">range</span>(<span class="number">1</span>,<span class="built_in">len</span>(sets)+<span class="number">1</span>):</span><br><span class="line">        layerscount[i] = []            </span><br><span class="line">        <span class="keyword">for</span> k <span class="keyword">in</span> <span class="built_in">range</span>(<span class="built_in">len</span>(z_cartesian)):   </span><br><span class="line">            <span class="keyword">if</span> <span class="built_in">abs</span>(z_cartesian[k]-sets[i-<span class="number">1</span>]) &lt;= threshold:</span><br><span class="line">                layerscount[i].append(k)</span><br><span class="line"></span><br><span class="line">    <span class="keyword">return</span> layerscount</span><br><span class="line"></span><br><span class="line"><span class="keyword">def</span> <span class="title function_">convert</span>():</span><br><span class="line">    x_cartesian = []</span><br><span class="line">    y_cartesian = []</span><br><span class="line">    z_cartesian = []</span><br><span class="line">    tf = []</span><br><span class="line">    <span class="keyword">for</span> i <span class="keyword">in</span> <span class="built_in">range</span>(start_num, num_atoms + start_num):</span><br><span class="line">        line_data =  [<span class="built_in">float</span>(ele) <span class="keyword">for</span> ele <span class="keyword">in</span> lines[i].split()[<span class="number">0</span>:<span class="number">3</span>]]</span><br><span class="line">        line_data = np.array([line_data])</span><br><span class="line">        x, y, z = [<span class="built_in">sum</span>(k) <span class="keyword">for</span> k <span class="keyword">in</span> line_data * vector ]     </span><br><span class="line">        x_cartesian.append(x)</span><br><span class="line">        y_cartesian.append(y)</span><br><span class="line">        z_cartesian.append(z)</span><br><span class="line">         </span><br><span class="line">        <span class="keyword">if</span> start_num == <span class="number">9</span> : <span class="comment"># if  T T T exist, the start_num will be 9        </span></span><br><span class="line">            tf.append((lines[i].split()[<span class="number">3</span>:]))</span><br><span class="line">        <span class="keyword">else</span>:</span><br><span class="line">            tf.append(<span class="string">&#x27; &#x27;</span>)   <span class="comment"># if there is no T T T, use space instead. </span></span><br><span class="line"></span><br><span class="line">    layerscount =determinelayers(z_cartesian)</span><br><span class="line">    </span><br><span class="line">    file_out = <span class="built_in">open</span>(file_to_be_converted+<span class="string">&#x27;_C&#x27;</span>, <span class="string">&#x27;w&#x27;</span>)</span><br><span class="line">    <span class="keyword">for</span> i <span class="keyword">in</span> <span class="built_in">range</span>(<span class="number">0</span>,<span class="number">7</span>):</span><br><span class="line">        file_out.write(lines[i].rstrip() + <span class="string">&#x27;\n&#x27;</span>)  <span class="comment"># first 7 lines are kept the same </span></span><br><span class="line">    </span><br><span class="line">    <span class="built_in">print</span> <span class="string">&#x27;\n Find %s layers!&#x27;</span> * <span class="number">3</span> %(<span class="built_in">len</span>(layerscount), <span class="built_in">len</span>(layerscount), <span class="built_in">len</span>(layerscount))</span><br><span class="line">    </span><br><span class="line">    <span class="keyword">if</span> <span class="built_in">len</span>(sys.argv) &gt;= <span class="number">3</span>:  <span class="comment"># This means that the nuber for fixing layers is given by the user.</span></span><br><span class="line">        file_out.write(<span class="string">&#x27;Selective\n&#x27;</span>)  </span><br><span class="line">        file_out.write(<span class="string">&#x27;Cartesian&#x27;</span> + <span class="string">&#x27;\n&#x27;</span>) </span><br><span class="line">        <span class="keyword">for</span> i <span class="keyword">in</span> <span class="built_in">range</span>(<span class="number">1</span>,<span class="built_in">len</span>(layerscount)+<span class="number">1</span>):</span><br><span class="line">            <span class="keyword">if</span> i &lt;= fixedlayer: </span><br><span class="line">                <span class="keyword">for</span> j <span class="keyword">in</span> layerscount[i]:</span><br><span class="line">                    tf[j] = [<span class="string">&#x27;F&#x27;</span>,<span class="string">&#x27;F&#x27;</span>,<span class="string">&#x27;F&#x27;</span>]</span><br><span class="line">            <span class="keyword">else</span>:</span><br><span class="line">                <span class="keyword">for</span> k <span class="keyword">in</span> layerscount[i]:</span><br><span class="line">                    tf[k] = [<span class="string">&#x27;T&#x27;</span>,<span class="string">&#x27;T&#x27;</span>,<span class="string">&#x27;T&#x27;</span>]                    </span><br><span class="line">    <span class="keyword">else</span>:</span><br><span class="line">        <span class="keyword">if</span> start_num == <span class="number">9</span>:  <span class="comment"># 9 means there are T T T or F F F in the file</span></span><br><span class="line">            file_out.write(<span class="string">&#x27;Selective\n&#x27;</span>)</span><br><span class="line">            file_out.write(<span class="string">&#x27;Cartesian&#x27;</span> + <span class="string">&#x27;\n&#x27;</span>)        </span><br><span class="line">        <span class="keyword">else</span>:</span><br><span class="line">            file_out.write(<span class="string">&#x27;Cartesian&#x27;</span> + <span class="string">&#x27;\n&#x27;</span>) </span><br><span class="line">    </span><br><span class="line">    <span class="keyword">for</span> i <span class="keyword">in</span> <span class="built_in">range</span>(<span class="number">0</span>,<span class="built_in">len</span>(x_cartesian)):</span><br><span class="line">        file_out.write(<span class="string">&quot;\t%+-3.10f   %+-3.10f   %+-3.10f  %s\n&quot;</span> %(x_cartesian[i], y_cartesian[i], z_cartesian[i], <span class="string">&#x27; &#x27;</span>.join(tf[i])))</span><br><span class="line">        </span><br><span class="line">    file_out.close()</span><br><span class="line">    </span><br><span class="line">vector, lines, start_num, num_atoms, is_direct = get_infor()</span><br><span class="line"></span><br><span class="line"><span class="keyword">if</span> is_direct : </span><br><span class="line">    <span class="built_in">print</span> <span class="string">&quot;\n%s has Direct Coordinates, Contersion starts.... &quot;</span>  %(file_to_be_converted)</span><br><span class="line">    convert()</span><br><span class="line"><span class="keyword">else</span>:</span><br><span class="line">    <span class="built_in">print</span> <span class="string">&quot;\n%s has Cartesian Coordinates Already! We are going to fix layers only.&quot;</span>  %(file_to_be_converted)</span><br><span class="line">    convert()</span><br><span class="line">    </span><br><span class="line"><span class="built_in">print</span> <span class="string">&#x27;-----------------------------------------------------\n&#x27;</span></span><br><span class="line"><span class="built_in">print</span> <span class="string">&#x27;\n %s with Cartesian Coordiates is named as  %s_C\n&#x27;</span> %(file_to_be_converted, file_to_be_converted)</span><br><span class="line"><span class="built_in">print</span> <span class="string">&#x27;-----------------------------------------------------\n&#x27;</span></span><br><span class="line"></span><br></pre></td></tr></table></figure>
+<p>脚本会调用到<code>numpy</code>库，然而集群上并没有连接互联网，所以没有办法通过<code>pip2 install numpy</code>来安装，只能手动上传<code>.whl</code>文件或者源码编译等。</p>
+<p>进入<code>python2</code>环境，输入<code>import pip;print(pip.pep425tags.get_supported())</code>来查看支持的<code>.whl</code>文件版本</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">[ctan@baifq-hpc141 primitive-slab-opt-<span class="number">1</span>]$ python2</span><br><span class="line">Python <span class="number">2.7</span><span class="number">.18</span> (default, Oct <span class="number">23</span> <span class="number">2023</span>, <span class="number">20</span>:01:03)</span><br><span class="line">[GCC <span class="number">8.5</span><span class="number">.0</span> <span class="number">20210514</span> (Red Hat <span class="number">8.5</span><span class="number">.0</span>-<span class="number">18</span>)] on linux2</span><br><span class="line"><span class="type">Type</span> <span class="string">&quot;help&quot;</span>, <span class="string">&quot;copyright&quot;</span>, <span class="string">&quot;credits&quot;</span> <span class="keyword">or</span> <span class="string">&quot;license&quot;</span> <span class="keyword">for</span> more information.</span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span><span class="keyword">import</span> pip;<span class="built_in">print</span>(pip.pep425tags.get_supported())</span><br><span class="line">[(<span class="string">&#x27;cp27&#x27;</span>, <span class="string">&#x27;cp27mu&#x27;</span>, <span class="string">&#x27;manylinux1_x86_64&#x27;</span>), (<span class="string">&#x27;cp27&#x27;</span>, <span class="string">&#x27;cp27mu&#x27;</span>, <span class="string">&#x27;linux_x86_64&#x27;</span>), (<span class="string">&#x27;cp27&#x27;</span>, <span class="string">&#x27;none&#x27;</span>, <span class="string">&#x27;manylinux1_x86_64&#x27;</span>), (<span class="string">&#x27;cp27&#x27;</span>, <span class="string">&#x27;none&#x27;</span>, <span class="string">&#x27;linux_x86_64&#x27;</span>), (<span class="string">&#x27;py2&#x27;</span>, <span class="string">&#x27;none&#x27;</span>, <span class="string">&#x27;manylinux1_x86_64&#x27;</span>), (<span class="string">&#x27;py2&#x27;</span>, <span class="string">&#x27;none&#x27;</span>, <span class="string">&#x27;linux_x86_64&#x27;</span>), (<span class="string">&#x27;cp27&#x27;</span>, <span class="string">&#x27;none&#x27;</span>, <span class="string">&#x27;any&#x27;</span>), (<span class="string">&#x27;cp2&#x27;</span>, <span class="string">&#x27;none&#x27;</span>, <span class="string">&#x27;any&#x27;</span>), (<span class="string">&#x27;py27&#x27;</span>, <span class="string">&#x27;none&#x27;</span>, <span class="string">&#x27;any&#x27;</span>), (<span class="string">&#x27;py2&#x27;</span>, <span class="string">&#x27;none&#x27;</span>, <span class="string">&#x27;any&#x27;</span>), (<span class="string">&#x27;py26&#x27;</span>, <span class="string">&#x27;none&#x27;</span>, <span class="string">&#x27;any&#x27;</span>), (<span class="string">&#x27;py25&#x27;</span>, <span class="string">&#x27;none&#x27;</span>, <span class="string">&#x27;any&#x27;</span>), (<span class="string">&#x27;py24&#x27;</span>, <span class="string">&#x27;none&#x27;</span>, <span class="string">&#x27;any&#x27;</span>), (<span class="string">&#x27;py23&#x27;</span>, <span class="string">&#x27;none&#x27;</span>, <span class="string">&#x27;any&#x27;</span>), (<span class="string">&#x27;py22&#x27;</span>, <span class="string">&#x27;none&#x27;</span>, <span class="string">&#x27;any&#x27;</span>), (<span class="string">&#x27;py21&#x27;</span>, <span class="string">&#x27;none&#x27;</span>, <span class="string">&#x27;any&#x27;</span>), (<span class="string">&#x27;py20&#x27;</span>, <span class="string">&#x27;none&#x27;</span>, <span class="string">&#x27;any&#x27;</span>)]</span><br></pre></td></tr></table></figure>
+<p>这里下载的是<code>numpy-1.16.5-cp27-cp27mu-manylinux1_x86_64.whl</code>（不可下载过高版本的<code>numpy</code>，它支持<code>python2</code>的最后一个版本似乎是<code>1.16.6</code>）</p>
+<p>然后安装，由于我不在<code>sudoer</code>中，没有<code>root</code>权限，所以需要手动指定安装目录</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">pip2 install --prefix=~/python2/numpy_installation numpy-1.16.5-cp27-cp27mu-manylinux1_x86_64.whl</span><br></pre></td></tr></table></figure>
+<p>然后添加环境变量，注意<code>numpy</code>库在<code>/lib64/python2.7/site-packages</code>目录中的</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">export</span> PYTHONPATH=/home/ctan/python2/numpy_installation/lib64/python2.7/site-packages:<span class="variable">$PYTHONPATH</span></span><br></pre></td></tr></table></figure>
+<p>ok啦，以上是题外话，安装完<code>numpy</code>之后就可以运行脚本了，将<code>POSCAR</code>和<code>CONTCAR</code>的坐标从分数坐标转换为笛卡尔坐标</p>
+<p><code>POSCAR</code></p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line">[ctan@baifq-hpc141 primitive-slab-opt-1]$ <span class="built_in">cat</span> POSCAR_C</span><br><span class="line">CONTCAR\(1\1\1)</span><br><span class="line">1.0</span><br><span class="line">        2.5701000690         0.0000000000         0.0000000000</span><br><span class="line">       -1.2850500345         2.2257719501         0.0000000000</span><br><span class="line">        0.0000000000         0.0000000000        21.2954006195</span><br><span class="line">   Cu</span><br><span class="line">    4</span><br><span class="line">Selective</span><br><span class="line">Cartesian</span><br><span class="line">        +0.0000000000   +0.0000000000   +0.0000000000  F F F</span><br><span class="line">        +1.2850628850   +0.7419165641   +2.0984487770  F F F</span><br><span class="line">        -0.0000128505   +1.4838553860   +4.1968975541  T T T</span><br><span class="line">        +0.0000000000   +0.0000000000   +6.2953463311  T T T</span><br></pre></td></tr></table></figure>
+<p><code>CONTCAR_C</code></p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line">[ctan@baifq-hpc141 primitive-slab-opt-1]$ <span class="built_in">cat</span> CONTCAR_C</span><br><span class="line">CONTCAR\(1\1\1)</span><br><span class="line">   1.00000000000000</span><br><span class="line">     2.5701000690000000    0.0000000000000000    0.0000000000000000</span><br><span class="line">    -1.2850500345000000    2.2257719501000000    0.0000000000000000</span><br><span class="line">     0.0000000000000000    0.0000000000000000   21.2954006195000005</span><br><span class="line">  Cu/0e71e558f37</span><br><span class="line">               4</span><br><span class="line">Selective</span><br><span class="line">Cartesian</span><br><span class="line">        +0.0000000000   +0.0000000000   +0.0000000000  F F F</span><br><span class="line">        +1.2850628850   +0.7419165641   +2.0984487770  F F F</span><br><span class="line">        -0.0000084856   +1.4838528659   +4.2004787017  T T T</span><br><span class="line">        -0.0000015980   +0.0000009226   +6.2855788488  T T T</span><br></pre></td></tr></table></figure>
+<blockquote>
+<p>Alright, I’m back.
+突然想起昨天球磨的样品今天结束了，连忙赶回实验室取出来装进样品管里等待封管。</p>
+<p>By the
+way，我真是和鱼一样，记忆只有七秒、、、😅。师兄教的球磨罐和球珠的洗涤方法忘记下来了，今天不出意外地给忘了😂。汲取教训，每次出实验室后都更加努力地总结和复盘，仔细回想每一个实验细节</p>
+</blockquote>
+<h2 id="优化前后对比">优化前后对比</h2>
+<p>Alright，扯远了，分析一下顶层和亚顶层优化前后地结构变化吧：</p>
+<ul>
+<li><code>POSCAR</code>: (+6.2953463311) - (+4.1968975541) =
+2.0984487769999998</li>
+<li><code>CONTCAR</code>: (+6.2855788488) - (+4.2004787017) =
+2.0851001471000004</li>
+</ul>
+<p>前后变化了：(2.0851001471000004-2.0984487769999998)/2.0984487769999998
+= -0.006361189296735172</p>
+<p>可以看到，表层原子向体相收缩</p>
+<p>能量变化</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">[ctan@baifq-hpc141 primitive-slab-opt-1]$ grep <span class="string">&#x27;  without&#x27;</span> OUTCAR</span><br><span class="line">  energy  without entropy=      -13.96941183  energy(sigma-&gt;0) =      -13.97673168</span><br><span class="line">  energy  without entropy=      -13.96945528  energy(sigma-&gt;0) =      -13.97676958</span><br><span class="line">  energy  without entropy=      -13.97006413  energy(sigma-&gt;0) =      -13.97726241</span><br><span class="line">  energy  without entropy=      -13.97020643  energy(sigma-&gt;0) =      -13.97735554</span><br><span class="line">  energy  without entropy=      -13.97017969  energy(sigma-&gt;0) =      -13.97735013</span><br></pre></td></tr></table></figure>
+<p>能量从<code>-13.97673168</code>变化为<code>-13.97735013</code>，降低了<code>0.000618449999999271 eV</code>，即弛豫过程是放热，刚切开的表面不稳定，表层原子向体相收缩后，体系能量降低，变得更稳定</p>
+<p>小Tips：可以使用python环境便捷地进行基本运算</p>
+<figure>
+<img
+src="./%E4%BB%A5p(1x1)Cu(111)%E4%B8%BA%E4%BE%8B%E5%88%86%E6%9E%90%E8%A1%A8%E9%9D%A2%E5%BC%9B%E8%B1%AB%E7%9A%84%E7%BB%93%E6%9E%9C/image-20250428174029792.png"
+alt="python环境下进行基本运算" />
+<figcaption aria-hidden="true">python环境下进行基本运算</figcaption>
+</figure>
+
+            
+
+
+        </div>
+    </div>
+    <div id="post-footer" class="post-footer main-content-wrap">
+        
+            <div class="post-footer-tags">
+                <span class="text-color-light text-small">TAGGED IN</span><br/>
+                
+    <a class="tag tag--primary tag--small t-none-link" href="/all-tags/%E5%8C%96%E5%AD%A6/" rel="tag">化学</a> <a class="tag tag--primary tag--small t-none-link" href="/all-tags/%E7%A7%91%E7%A0%94/" rel="tag">科研</a>
+
+            </div>
+        
+        
+            <div class="post-actions-wrap">
+    <nav>
+        <ul class="post-actions post-action-nav">
+            <li class="post-action">
+                
+                    
+                <a
+                    class="post-action-btn btn btn--default tooltip--top"
+                    href="/2025/04/29/%E7%A7%91%E7%A0%94/VASP/Starry%20Sky/POTCAR%E8%B5%9D%E5%8A%BF%E7%9A%84%E9%80%89%E5%8F%96/"
+                    data-tooltip="POTCAR赝势的选取"
+                    aria-label="PREVIOUS: POTCAR赝势的选取"
+                >
+                    
+                        <i class="fa fa-angle-left" aria-hidden="true"></i>
+                        <span class="hide-xs hide-sm text-small icon-ml">PREVIOUS</span>
+                    </a>
+            </li>
+            <li class="post-action">
+                
+                    
+                <a
+                    class="post-action-btn btn btn--default tooltip--top"
+                    href="/2025/04/27/%E7%A7%91%E7%A0%94/VASP/Starry%20Sky/Cu(111)%E6%99%B6%E9%9D%A2%E7%9A%84%E4%BC%98%E5%8C%96%E8%AE%A1%E7%AE%97/"
+                    data-tooltip="p(1x1)Cu(111)的优化计算"
+                    aria-label="NEXT: p(1x1)Cu(111)的优化计算"
+                >
+                    
+                        <span class="hide-xs hide-sm text-small icon-mr">NEXT</span>
+                        <i class="fa fa-angle-right" aria-hidden="true"></i>
+                    </a>
+            </li>
+        </ul>
+    </nav>
+    <ul class="post-actions post-action-share">
+        <li class="post-action hide-lg hide-md hide-sm">
+            <a
+                class="post-action-btn btn btn--default btn-open-shareoptions"
+                href="#btn-open-shareoptions"
+                aria-label="Share this post"
+            >
+                <i class="fa fa-share-alt" aria-hidden="true"></i>
+            </a>
+        </li>
+        
+            
+            
+            <li class="post-action hide-xs">
+                <a
+                    class="post-action-btn btn btn--default"
+                    target="new" href="https://www.facebook.com/sharer/sharer.php?u=http://example.com/2025/04/27/%E7%A7%91%E7%A0%94/VASP/Starry%20Sky/%E4%BB%A5p(1x1)Cu(111)%E4%B8%BA%E4%BE%8B%E5%88%86%E6%9E%90%E8%A1%A8%E9%9D%A2%E5%BC%9B%E8%B1%AB%E7%9A%84%E7%BB%93%E6%9E%9C/"
+                    title="Share on Facebook"
+                    aria-label="Share on Facebook"
+                >
+                    <i class="fab fa-facebook" aria-hidden="true"></i>
+                </a>
+            </li>
+        
+            
+            
+            <li class="post-action hide-xs">
+                <a
+                    class="post-action-btn btn btn--default"
+                    target="new" href="https://twitter.com/intent/tweet?text=http://example.com/2025/04/27/%E7%A7%91%E7%A0%94/VASP/Starry%20Sky/%E4%BB%A5p(1x1)Cu(111)%E4%B8%BA%E4%BE%8B%E5%88%86%E6%9E%90%E8%A1%A8%E9%9D%A2%E5%BC%9B%E8%B1%AB%E7%9A%84%E7%BB%93%E6%9E%9C/"
+                    title="Share on Twitter"
+                    aria-label="Share on Twitter"
+                >
+                    <i class="fab fa-twitter" aria-hidden="true"></i>
+                </a>
+            </li>
+        
+            
+            
+            <li class="post-action hide-xs">
+                <a
+                    class="post-action-btn btn btn--default"
+                    target="new" href="https://plus.google.com/share?url=http://example.com/2025/04/27/%E7%A7%91%E7%A0%94/VASP/Starry%20Sky/%E4%BB%A5p(1x1)Cu(111)%E4%B8%BA%E4%BE%8B%E5%88%86%E6%9E%90%E8%A1%A8%E9%9D%A2%E5%BC%9B%E8%B1%AB%E7%9A%84%E7%BB%93%E6%9E%9C/"
+                    title="Share on Google+"
+                    aria-label="Share on Google+"
+                >
+                    <i class="fab fa-google-plus" aria-hidden="true"></i>
+                </a>
+            </li>
+        
+        
+            
+        
+        <li class="post-action">
+            
+                <a class="post-action-btn btn btn--default" href="#" aria-label="Back to top">
+            
+                <i class="fa fa-list" aria-hidden="true"></i>
+            </a>
+        </li>
+    </ul>
+</div>
+
+
+        
+        
+            
+        
+    </div>
+</article>
+
+
+
+                <footer id="footer" class="main-content-wrap">
+    <span class="copyrights">
+        Copyrights &copy; 2025 John Doe. All Rights Reserved.
+    </span>
+</footer>
+
+            </div>
+            
+                <div id="bottom-bar" class="post-bottom-bar" data-behavior="4">
+                    <div class="post-actions-wrap">
+    <nav>
+        <ul class="post-actions post-action-nav">
+            <li class="post-action">
+                
+                    
+                <a
+                    class="post-action-btn btn btn--default tooltip--top"
+                    href="/2025/04/29/%E7%A7%91%E7%A0%94/VASP/Starry%20Sky/POTCAR%E8%B5%9D%E5%8A%BF%E7%9A%84%E9%80%89%E5%8F%96/"
+                    data-tooltip="POTCAR赝势的选取"
+                    aria-label="PREVIOUS: POTCAR赝势的选取"
+                >
+                    
+                        <i class="fa fa-angle-left" aria-hidden="true"></i>
+                        <span class="hide-xs hide-sm text-small icon-ml">PREVIOUS</span>
+                    </a>
+            </li>
+            <li class="post-action">
+                
+                    
+                <a
+                    class="post-action-btn btn btn--default tooltip--top"
+                    href="/2025/04/27/%E7%A7%91%E7%A0%94/VASP/Starry%20Sky/Cu(111)%E6%99%B6%E9%9D%A2%E7%9A%84%E4%BC%98%E5%8C%96%E8%AE%A1%E7%AE%97/"
+                    data-tooltip="p(1x1)Cu(111)的优化计算"
+                    aria-label="NEXT: p(1x1)Cu(111)的优化计算"
+                >
+                    
+                        <span class="hide-xs hide-sm text-small icon-mr">NEXT</span>
+                        <i class="fa fa-angle-right" aria-hidden="true"></i>
+                    </a>
+            </li>
+        </ul>
+    </nav>
+    <ul class="post-actions post-action-share">
+        <li class="post-action hide-lg hide-md hide-sm">
+            <a
+                class="post-action-btn btn btn--default btn-open-shareoptions"
+                href="#btn-open-shareoptions"
+                aria-label="Share this post"
+            >
+                <i class="fa fa-share-alt" aria-hidden="true"></i>
+            </a>
+        </li>
+        
+            
+            
+            <li class="post-action hide-xs">
+                <a
+                    class="post-action-btn btn btn--default"
+                    target="new" href="https://www.facebook.com/sharer/sharer.php?u=http://example.com/2025/04/27/%E7%A7%91%E7%A0%94/VASP/Starry%20Sky/%E4%BB%A5p(1x1)Cu(111)%E4%B8%BA%E4%BE%8B%E5%88%86%E6%9E%90%E8%A1%A8%E9%9D%A2%E5%BC%9B%E8%B1%AB%E7%9A%84%E7%BB%93%E6%9E%9C/"
+                    title="Share on Facebook"
+                    aria-label="Share on Facebook"
+                >
+                    <i class="fab fa-facebook" aria-hidden="true"></i>
+                </a>
+            </li>
+        
+            
+            
+            <li class="post-action hide-xs">
+                <a
+                    class="post-action-btn btn btn--default"
+                    target="new" href="https://twitter.com/intent/tweet?text=http://example.com/2025/04/27/%E7%A7%91%E7%A0%94/VASP/Starry%20Sky/%E4%BB%A5p(1x1)Cu(111)%E4%B8%BA%E4%BE%8B%E5%88%86%E6%9E%90%E8%A1%A8%E9%9D%A2%E5%BC%9B%E8%B1%AB%E7%9A%84%E7%BB%93%E6%9E%9C/"
+                    title="Share on Twitter"
+                    aria-label="Share on Twitter"
+                >
+                    <i class="fab fa-twitter" aria-hidden="true"></i>
+                </a>
+            </li>
+        
+            
+            
+            <li class="post-action hide-xs">
+                <a
+                    class="post-action-btn btn btn--default"
+                    target="new" href="https://plus.google.com/share?url=http://example.com/2025/04/27/%E7%A7%91%E7%A0%94/VASP/Starry%20Sky/%E4%BB%A5p(1x1)Cu(111)%E4%B8%BA%E4%BE%8B%E5%88%86%E6%9E%90%E8%A1%A8%E9%9D%A2%E5%BC%9B%E8%B1%AB%E7%9A%84%E7%BB%93%E6%9E%9C/"
+                    title="Share on Google+"
+                    aria-label="Share on Google+"
+                >
+                    <i class="fab fa-google-plus" aria-hidden="true"></i>
+                </a>
+            </li>
+        
+        
+            
+        
+        <li class="post-action">
+            
+                <a class="post-action-btn btn btn--default" href="#" aria-label="Back to top">
+            
+                <i class="fa fa-list" aria-hidden="true"></i>
+            </a>
+        </li>
+    </ul>
+</div>
+
+
+                </div>
+                
+    <div id="share-options-bar" class="share-options-bar" data-behavior="4">
+        <i id="btn-close-shareoptions" class="fa fa-times"></i>
+        <ul class="share-options">
+            
+                
+                
+                <li class="share-option">
+                    <a
+                        class="share-option-btn"
+                        target="new"
+                        href="https://www.facebook.com/sharer/sharer.php?u=http://example.com/2025/04/27/%E7%A7%91%E7%A0%94/VASP/Starry%20Sky/%E4%BB%A5p(1x1)Cu(111)%E4%B8%BA%E4%BE%8B%E5%88%86%E6%9E%90%E8%A1%A8%E9%9D%A2%E5%BC%9B%E8%B1%AB%E7%9A%84%E7%BB%93%E6%9E%9C/"
+                        aria-label="Share on Facebook"
+                    >
+                        <i class="fab fa-facebook" aria-hidden="true"></i><span>Share on Facebook</span>
+                    </a>
+                </li>
+            
+                
+                
+                <li class="share-option">
+                    <a
+                        class="share-option-btn"
+                        target="new"
+                        href="https://twitter.com/intent/tweet?text=http://example.com/2025/04/27/%E7%A7%91%E7%A0%94/VASP/Starry%20Sky/%E4%BB%A5p(1x1)Cu(111)%E4%B8%BA%E4%BE%8B%E5%88%86%E6%9E%90%E8%A1%A8%E9%9D%A2%E5%BC%9B%E8%B1%AB%E7%9A%84%E7%BB%93%E6%9E%9C/"
+                        aria-label="Share on Twitter"
+                    >
+                        <i class="fab fa-twitter" aria-hidden="true"></i><span>Share on Twitter</span>
+                    </a>
+                </li>
+            
+                
+                
+                <li class="share-option">
+                    <a
+                        class="share-option-btn"
+                        target="new"
+                        href="https://plus.google.com/share?url=http://example.com/2025/04/27/%E7%A7%91%E7%A0%94/VASP/Starry%20Sky/%E4%BB%A5p(1x1)Cu(111)%E4%B8%BA%E4%BE%8B%E5%88%86%E6%9E%90%E8%A1%A8%E9%9D%A2%E5%BC%9B%E8%B1%AB%E7%9A%84%E7%BB%93%E6%9E%9C/"
+                        aria-label="Share on Google+"
+                    >
+                        <i class="fab fa-google-plus" aria-hidden="true"></i><span>Share on Google+</span>
+                    </a>
+                </li>
+            
+        </ul>
+    </div>
+
+
+            
+        </div>
+        
+
+
+<div id="about">
+    <div id="about-card">
+        <div id="about-btn-close">
+            <i class="fa fa-times"></i>
+        </div>
+        
+            <h4 id="about-card-name">John Doe</h4>
+        
+            <div id="about-card-bio"><p>author.bio</p>
+</div>
+        
+        
+            <div id="about-card-job">
+                <i class="fa fa-briefcase"></i>
+                <br/>
+                <p>author.job</p>
+
+            </div>
+        
+        
+    </div>
+</div>
+
+        
+        
+<div id="cover" style="background-image:url('/assets/images/cover.jpg');"></div>
+        <!--SCRIPTS-->
+
+<script src="/assets/js/script-akgy1kkmfssyzznzlvk9mjwcvnsn87aqalldnf43rojvlib0s8vpmeb5mayw.min.js"></script>
+
+<!--SCRIPTS END-->
+
+
+    
+
+
+
+
+    </body>
+</html>

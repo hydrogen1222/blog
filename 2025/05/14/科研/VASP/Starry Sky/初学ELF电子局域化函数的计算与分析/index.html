@@ -1,0 +1,830 @@
+
+<!DOCTYPE html>
+<html lang="en">
+    
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="generator" content="Hexo">
+    <title>初学ELF电子定域化函数的计算与分析 - Hexo</title>
+    <meta name="author" content="John Doe">
+    
+    
+    
+    <script type="application/ld+json">{"@context":"http://schema.org","@type":"BlogPosting","author":{"@type":"Person","name":"John Doe","sameAs":["https://github.com/","http://stackoverflow.com/users","https://twitter.com/","https://facebook.com/","https://plus.google.com/","https://www.linkedin.com/profile/","mailto"]},"articleBody":"本文仅为学习记录，并非教程\r\n这次记录文主要侧重于应用，参考了Sob老师的博文和网络上的各大教程\r\n以FCC\r\nCu为例进行ELF计算与分析\r\n采用FCC面心立方最密堆积的铜单胞，使用vasp计算，先进行结构优化，确认收敛后进行ELF计算\r\n123456789101112131415161718192021222324252627282930313233343536373839Global ParametersISTART =  1            (Read existing wavefunction, if there)ISPIN  =  2            (Non-Spin polarised DFT)MAGMOM = 4*0.6# ICHARG =  11         (Non-self-consistent: GGA/LDA band structures)LREAL  = .FALSE.       (Projection operators: automatic) ENCUT  =  530        (Cut-off energy for plane wave basis set, in eV)# PREC   =  Accurate   (Precision level: Normal or Accurate, set Accurate when perform structure lattice relaxation calculation)LWAVE  = .TRUE.        (Write WAVECAR or not)LCHARG = .TRUE.        (Write CHGCAR or not)ADDGRID= .TRUE.        (Increase grid, helps GGA convergence)LASPH  = .TRUE.        (Give more accurate total energies and band structure calculations)PREC   = Accurate      (Accurate strictly avoids any aliasing or wrap around errors)# LVTOT  = .TRUE.      (Write total electrostatic potential into LOCPOT or not)# LVHAR  = .TRUE.      (Write ionic + Hartree electrostatic potential into LOCPOT or not)# NELECT =             (No. of electrons: charged cells, be careful)# LPLANE = .TRUE.      (Real space distribution, supercells)# NWRITE = 2           (Medium-level output)# KPAR   = 2           (Divides k-grid into separate groups)# NGXF    = 300        (FFT grid mesh density for nice charge/potential plots)# NGYF    = 300        (FFT grid mesh density for nice charge/potential plots)# NGZF    = 300        (FFT grid mesh density for nice charge/potential plots)Electronic RelaxationISMEAR =  1            (Gaussian smearing, metals:1)SIGMA  =  0.2         (Smearing value in eV, metals:0.2)NELM   =  90           (Max electronic SCF steps)NELMIN =  6            (Min electronic SCF steps)EDIFF  =  1E-08        (SCF energy convergence, in eV)# GGA  =  PS           (PBEsol exchange-correlation)Ionic RelaxationNSW    =  0         (Max ionic steps)IBRION =  -1            (Algorithm: 0-MD, 1-Quasi-New, 2-CG)ISIF   =  2            (Stress/relaxation: 2-Ions, 3-Shape/Ions/V, 4-Shape/Ions)EDIFFG = -2E-02        (Ionic convergence, eV/AA)# ISYM =  2            (Symmetry: 0=none, 2=GGA, 3=hybrids)LELF = .TRUE.NPAR = 1\r\n在优化完的结构上进行自洽计算，添加LELF = .TRUE.这个参数，确保ELFCAR文件输出\r\n官方wiki还提到必须显示开启NPAR = 1，然而网上的各大教程都没有提到这一点\r\n\r\nIf LELF is set, NPAR=1 has to be set\r\nexplicitely in the INCAR file in\r\naddition\r\n\r\n且有一篇讨论帖：https://wiki.vasp.at/forum/viewtopic.php?t=20020\r\n不过我自己尝试的时候发现超算平台上添加NPAR = 1会报错，而在自己电脑上则不会报错，有点迷、、、\r\n用Vesta载入ELFCAR文件\r\n先设置一下等值面数值\r\nIsosurface\r\nLevel（等值面水平）是一个关键参数，用于控制可视化电子局域化程度的阈值，VESTA会绘制出ELF等于该值的等值面（isosurface），直观展示电子局域化程度高于该阈值的区\r\nProperties-Isosurfaces-Isosurfaces\r\nlevel，设置完后可以按以下Tab键就会自动保存应用\r\n\r\n\r\n等值面数值设置\r\n\r\n这里如果设置0.75的话啥也看不到，因为铜单胞中存在着金属键，并没有很强的局域化电子，而是均匀分布的电子气\r\n高定域性通常出现在共价作用区域、孤对电子区域、原子内核及壳层结构区域\r\n\r\n然后就可以查看ELF图了\r\n首先是3D的图\r\n左上角-Edit-Lattice\r\nplanes，新建一个图，根据想查看的面的来设置米勒指数hlk，以及设置距离d\r\n\r\n\r\n3D的ELF图\r\n\r\n然后是2D的图\r\n左上角-Utilities-2D Data Display-Slice即可\r\n\r\n\r\n同一个截面的2D图和3D图\r\n\r\n\r\n\r\n001,1xd的二维截面ELF图\r\n\r\n可以看到，顶点Cu与顶点Cu原子之间、顶点Cu和面心Cu之间的电子的局域化程度比较高并且没有明显的偏向偏离\r\n接下来看一下一维时的电子定域化情况\r\n左上角-Utilities-Line profile即可\r\n\r\n首先棱上的情况\r\n\r\n\r\n\r\n边长上的ELF图\r\n\r\n\r\nCu和Cu两原子中间存在均匀的非零的电子局域函数，虽然不足0.5但分布平坦，这是金属键合的特征\r\n\r\n两个铜原子的ELF(r)值相近\r\n\r\n面对角线上的情况\r\n\r\n\r\n\r\n面对角线\r\n\r\n三个铜原子的ELF(r)值相近\r\n离子晶体CsF\r\n再看一下离子键的情况，以CsF为例\r\n\r\n\r\nCsF的ELF图\r\n\r\n氟和铯之间出现深蓝色，这说明在这个区域电子的分布较为离域化，即氟和铯之间不存在共用电子，键的类型偏向离子键\r\n再看看对角线上的电荷分布\r\n\r\n\r\n对角线上的一维ELF图\r\n\r\n两端为铯中间为氟，可以看到氟和铯ELF(r)值差别较大\r\n共价晶体——硅\r\n\r\n\r\n101截面的ELF图\r\n\r\n如箭头所指，硅原子和硅原子之间有较强的电子定域化作用，键的类型为共价键\r\n如下图，体对角线上的ELF图也能很好证明，Si-Si之间的区域电子化定域程度极高，呈现明显的尖峰\r\n\r\n\r\n对角线上的ELF图\r\n\r\n共价晶体——灰锡\r\n我仍记得高中时课本讲的一个稍微有些特殊的例子——灰锡，灰锡是一个共价晶体\r\n\r\n\r\n灰锡101晶面的ELF图\r\n\r\n可以看到，灰锡与晶体硅结构上类似，Sn($\\frac{1}{4},\\frac{1}{4},\\frac{1}{4}$)与Sn(0,0,0)与以及Sn(0.5,0.5,0)成键，Sn($\\frac{3}{4},\\frac{3}{4},\\frac{1}{4}$)与Sn(0.5,0.5,0)和Sn(1,1,0)成键。成键电子局域化程度较高，为共价电子\r\n","dateCreated":"2025-05-14T15:40:00+08:00","dateModified":"2025-05-17T20:45:08+08:00","datePublished":"2025-05-14T15:40:00+08:00","description":"","headline":"初学ELF电子定域化函数的计算与分析","image":[],"mainEntityOfPage":{"@type":"WebPage","@id":"http://example.com/2025/05/14/%E7%A7%91%E7%A0%94/VASP/Starry%20Sky/%E5%88%9D%E5%AD%A6ELF%E7%94%B5%E5%AD%90%E5%B1%80%E5%9F%9F%E5%8C%96%E5%87%BD%E6%95%B0%E7%9A%84%E8%AE%A1%E7%AE%97%E4%B8%8E%E5%88%86%E6%9E%90/"},"publisher":{"@type":"Organization","name":"John Doe","sameAs":["https://github.com/","http://stackoverflow.com/users","https://twitter.com/","https://facebook.com/","https://plus.google.com/","https://www.linkedin.com/profile/","mailto"]},"url":"http://example.com/2025/05/14/%E7%A7%91%E7%A0%94/VASP/Starry%20Sky/%E5%88%9D%E5%AD%A6ELF%E7%94%B5%E5%AD%90%E5%B1%80%E5%9F%9F%E5%8C%96%E5%87%BD%E6%95%B0%E7%9A%84%E8%AE%A1%E7%AE%97%E4%B8%8E%E5%88%86%E6%9E%90/","keywords":"化学, 科研"}</script>
+    <meta name="description" content="本文仅为学习记录，并非教程 这次记录文主要侧重于应用，参考了Sob老师的博文和网络上的各大教程 以FCC Cu为例进行ELF计算与分析 采用FCC面心立方最密堆积的铜单胞，使用vasp计算，先进行结构优化，确认收敛后进行ELF计算 123456789101112131415161718192021222324252627282930313233343536373839Global Par">
+<meta property="og:type" content="blog">
+<meta property="og:title" content="初学ELF电子定域化函数的计算与分析">
+<meta property="og:url" content="http://example.com/2025/05/14/%E7%A7%91%E7%A0%94/VASP/Starry%20Sky/%E5%88%9D%E5%AD%A6ELF%E7%94%B5%E5%AD%90%E5%B1%80%E5%9F%9F%E5%8C%96%E5%87%BD%E6%95%B0%E7%9A%84%E8%AE%A1%E7%AE%97%E4%B8%8E%E5%88%86%E6%9E%90/index.html">
+<meta property="og:site_name" content="Hexo">
+<meta property="og:description" content="本文仅为学习记录，并非教程 这次记录文主要侧重于应用，参考了Sob老师的博文和网络上的各大教程 以FCC Cu为例进行ELF计算与分析 采用FCC面心立方最密堆积的铜单胞，使用vasp计算，先进行结构优化，确认收敛后进行ELF计算 123456789101112131415161718192021222324252627282930313233343536373839Global Par">
+<meta property="og:locale" content="en_US">
+<meta property="article:published_time" content="2025-05-14T07:40:00.000Z">
+<meta property="article:modified_time" content="2025-05-17T12:45:08.000Z">
+<meta property="article:author" content="John Doe">
+<meta property="article:tag" content="化学">
+<meta property="article:tag" content="科研">
+<meta name="twitter:card" content="summary">
+    
+    
+        
+    
+    
+    
+    
+    
+    <!--STYLES-->
+    
+<link rel="stylesheet" href="/assets/css/all.css">
+
+    
+<link rel="stylesheet" href="/assets/css/jquery.fancybox.css">
+
+    
+<link rel="stylesheet" href="/assets/css/thumbs.css">
+
+    
+<link rel="stylesheet" href="/assets/css/tranquilpeak.css">
+
+    <!--STYLES END-->
+    
+
+    
+
+    
+        
+    
+
+
+
+
+<script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+<script>
+  MathJax = {
+    tex: {
+      inlineMath: [['$', '$'], ['\\(', '\\)']],
+      displayMath: [['$$', '$$'], ['\\[', '\\]']],
+      tags: 'ams'
+    },
+    svg: {
+      fontCache: 'global'
+    }
+  };
+</script>
+
+
+
+
+
+<!-- hexo injector head_end start -->
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.12.0/dist/katex.min.css">
+
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/hexo-math@4.0.0/dist/style.css">
+<!-- hexo injector head_end end --></head>
+
+    <body>
+        <div id="blog">
+            <!-- Define author's picture -->
+
+
+    
+
+<header id="header" data-behavior="4">
+    <i id="btn-open-sidebar" class="fa fa-lg fa-bars"></i>
+    <div class="header-title">
+        <a
+            class="header-title-link"
+            href="/"
+            aria-label=""
+        >
+            Hexo
+        </a>
+    </div>
+    
+        
+            <a
+                class="header-right-picture "
+                href="#about"
+                aria-label="Open the link: /#about"
+            >
+        
+        
+        </a>
+    
+</header>
+
+            <!-- Define author's picture -->
+
+
+<nav id="sidebar" data-behavior="4">
+    <div class="sidebar-container">
+        
+        
+            <ul class="sidebar-buttons">
+            
+                <li class="sidebar-button">
+                    
+                        <a
+                            class="sidebar-button-link "
+                            href="/"
+                            
+                            rel="noopener"
+                            title="Home"
+                        >
+                        <i class="sidebar-button-icon fa fa-home" aria-hidden="true"></i>
+                        <span class="sidebar-button-desc">Home</span>
+                    </a>
+            </li>
+            
+                <li class="sidebar-button">
+                    
+                        <a
+                            class="sidebar-button-link "
+                            href="/all-categories"
+                            
+                            rel="noopener"
+                            title="Categories"
+                        >
+                        <i class="sidebar-button-icon fa fa-bookmark" aria-hidden="true"></i>
+                        <span class="sidebar-button-desc">Categories</span>
+                    </a>
+            </li>
+            
+                <li class="sidebar-button">
+                    
+                        <a
+                            class="sidebar-button-link "
+                            href="/all-tags"
+                            
+                            rel="noopener"
+                            title="Tags"
+                        >
+                        <i class="sidebar-button-icon fa fa-tags" aria-hidden="true"></i>
+                        <span class="sidebar-button-desc">Tags</span>
+                    </a>
+            </li>
+            
+                <li class="sidebar-button">
+                    
+                        <a
+                            class="sidebar-button-link "
+                            href="/all-archives"
+                            
+                            rel="noopener"
+                            title="Archives"
+                        >
+                        <i class="sidebar-button-icon fa fa-archive" aria-hidden="true"></i>
+                        <span class="sidebar-button-desc">Archives</span>
+                    </a>
+            </li>
+            
+                <li class="sidebar-button">
+                    
+                        <a
+                            class="sidebar-button-link open-algolia-search"
+                            href="#search"
+                            
+                            rel="noopener"
+                            title="Search"
+                        >
+                        <i class="sidebar-button-icon fa fa-search" aria-hidden="true"></i>
+                        <span class="sidebar-button-desc">Search</span>
+                    </a>
+            </li>
+            
+                <li class="sidebar-button">
+                    
+                        <a
+                            class="sidebar-button-link "
+                            href="#about"
+                            
+                            rel="noopener"
+                            title="About"
+                        >
+                        <i class="sidebar-button-icon fa fa-question" aria-hidden="true"></i>
+                        <span class="sidebar-button-desc">About</span>
+                    </a>
+            </li>
+            
+        </ul>
+        
+            <ul class="sidebar-buttons">
+            
+                <li class="sidebar-button">
+                    
+                        <a
+                            class="sidebar-button-link "
+                            href="https://github.com/"
+                            
+                                target="_blank"
+                            
+                            rel="noopener"
+                            title="GitHub"
+                        >
+                        <i class="sidebar-button-icon fab fa-github" aria-hidden="true"></i>
+                        <span class="sidebar-button-desc">GitHub</span>
+                    </a>
+            </li>
+            
+                <li class="sidebar-button">
+                    
+                        <a
+                            class="sidebar-button-link "
+                            href="http://stackoverflow.com/users"
+                            
+                                target="_blank"
+                            
+                            rel="noopener"
+                            title="Stack Overflow"
+                        >
+                        <i class="sidebar-button-icon fab fa-stack-overflow" aria-hidden="true"></i>
+                        <span class="sidebar-button-desc">Stack Overflow</span>
+                    </a>
+            </li>
+            
+                <li class="sidebar-button">
+                    
+                        <a
+                            class="sidebar-button-link "
+                            href="https://twitter.com/"
+                            
+                                target="_blank"
+                            
+                            rel="noopener"
+                            title="Twitter"
+                        >
+                        <i class="sidebar-button-icon fab fa-twitter" aria-hidden="true"></i>
+                        <span class="sidebar-button-desc">Twitter</span>
+                    </a>
+            </li>
+            
+                <li class="sidebar-button">
+                    
+                        <a
+                            class="sidebar-button-link "
+                            href="https://facebook.com/"
+                            
+                                target="_blank"
+                            
+                            rel="noopener"
+                            title="Facebook"
+                        >
+                        <i class="sidebar-button-icon fab fa-facebook" aria-hidden="true"></i>
+                        <span class="sidebar-button-desc">Facebook</span>
+                    </a>
+            </li>
+            
+                <li class="sidebar-button">
+                    
+                        <a
+                            class="sidebar-button-link "
+                            href="https://plus.google.com/"
+                            
+                                target="_blank"
+                            
+                            rel="noopener"
+                            title="Google +"
+                        >
+                        <i class="sidebar-button-icon fab fa-google-plus" aria-hidden="true"></i>
+                        <span class="sidebar-button-desc">Google +</span>
+                    </a>
+            </li>
+            
+                <li class="sidebar-button">
+                    
+                        <a
+                            class="sidebar-button-link "
+                            href="https://www.linkedin.com/profile/"
+                            
+                                target="_blank"
+                            
+                            rel="noopener"
+                            title="LinkedIn"
+                        >
+                        <i class="sidebar-button-icon fab fa-linkedin" aria-hidden="true"></i>
+                        <span class="sidebar-button-desc">LinkedIn</span>
+                    </a>
+            </li>
+            
+                <li class="sidebar-button">
+                    
+                        <a
+                            class="sidebar-button-link "
+                            href="/mailto"
+                            
+                            rel="noopener"
+                            title="Mail"
+                        >
+                        <i class="sidebar-button-icon fa fa-envelope" aria-hidden="true"></i>
+                        <span class="sidebar-button-desc">Mail</span>
+                    </a>
+            </li>
+            
+        </ul>
+        
+            <ul class="sidebar-buttons">
+            
+                <li class="sidebar-button">
+                    
+                        <a
+                            class="sidebar-button-link "
+                            href="/atom.xml"
+                            
+                            rel="noopener"
+                            title="RSS"
+                        >
+                        <i class="sidebar-button-icon fa fa-rss" aria-hidden="true"></i>
+                        <span class="sidebar-button-desc">RSS</span>
+                    </a>
+            </li>
+            
+        </ul>
+        
+    </div>
+</nav>
+
+            
+            <div id="main" data-behavior="4"
+                 class="
+                        hasCoverMetaIn
+                        ">
+                
+<article class="post">
+    
+    
+        <div class="post-header main-content-wrap text-left">
+    
+        <h1 class="post-title">
+            初学ELF电子定域化函数的计算与分析
+        </h1>
+    
+    
+        <div class="post-meta">
+    <time datetime="2025-05-14T15:40:00+08:00">
+	
+		    May 14, 2025
+    	
+    </time>
+    
+        <span>in </span>
+        
+    <a class="category-link" href="/all-categories/%E4%BB%8E%E9%9B%B6%E5%BC%80%E5%A7%8B%E7%9A%84%E7%A7%91%E7%A0%94%E4%B9%8B%E6%97%85/">从零开始的科研之旅</a>, <a class="category-link" href="/all-categories/%E4%BB%8E%E9%9B%B6%E5%BC%80%E5%A7%8B%E7%9A%84%E7%A7%91%E7%A0%94%E4%B9%8B%E6%97%85/VASP/">VASP</a>
+
+
+    
+</div>
+
+    
+</div>
+
+    
+    <div class="post-content markdown">
+        <div class="main-content-wrap">
+            <p><strong>本文仅为学习记录，并非教程</strong></p>
+<p>这次记录文主要侧重于应用，参考了Sob老师的博文和网络上的各大教程</p>
+<h2 id="以fcc-cu为例进行elf计算与分析">以FCC
+Cu为例进行ELF计算与分析</h2>
+<p>采用FCC面心立方最密堆积的铜单胞，使用vasp计算，先进行结构优化，确认收敛后进行ELF计算</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br></pre></td><td class="code"><pre><span class="line">Global Parameters</span><br><span class="line">ISTART =  1            (Read existing wavefunction, if there)</span><br><span class="line">ISPIN  =  2            (Non-Spin polarised DFT)</span><br><span class="line">MAGMOM = 4*0.6</span><br><span class="line"># ICHARG =  11         (Non-self-consistent: GGA/LDA band structures)</span><br><span class="line">LREAL  = .FALSE.       (Projection operators: automatic)</span><br><span class="line"> ENCUT  =  530        (Cut-off energy for plane wave basis set, in eV)</span><br><span class="line"># PREC   =  Accurate   (Precision level: Normal or Accurate, set Accurate when perform structure lattice relaxation calculation)</span><br><span class="line">LWAVE  = .TRUE.        (Write WAVECAR or not)</span><br><span class="line">LCHARG = .TRUE.        (Write CHGCAR or not)</span><br><span class="line">ADDGRID= .TRUE.        (Increase grid, helps GGA convergence)</span><br><span class="line">LASPH  = .TRUE.        (Give more accurate total energies and band structure calculations)</span><br><span class="line">PREC   = Accurate      (Accurate strictly avoids any aliasing or wrap around errors)</span><br><span class="line"># LVTOT  = .TRUE.      (Write total electrostatic potential into LOCPOT or not)</span><br><span class="line"># LVHAR  = .TRUE.      (Write ionic + Hartree electrostatic potential into LOCPOT or not)</span><br><span class="line"># NELECT =             (No. of electrons: charged cells, be careful)</span><br><span class="line"># LPLANE = .TRUE.      (Real space distribution, supercells)</span><br><span class="line"># NWRITE = 2           (Medium-level output)</span><br><span class="line"># KPAR   = 2           (Divides k-grid into separate groups)</span><br><span class="line"># NGXF    = 300        (FFT grid mesh density for nice charge/potential plots)</span><br><span class="line"># NGYF    = 300        (FFT grid mesh density for nice charge/potential plots)</span><br><span class="line"># NGZF    = 300        (FFT grid mesh density for nice charge/potential plots)</span><br><span class="line"></span><br><span class="line">Electronic Relaxation</span><br><span class="line">ISMEAR =  1            (Gaussian smearing, metals:1)</span><br><span class="line">SIGMA  =  0.2         (Smearing value in eV, metals:0.2)</span><br><span class="line">NELM   =  90           (Max electronic SCF steps)</span><br><span class="line">NELMIN =  6            (Min electronic SCF steps)</span><br><span class="line">EDIFF  =  1E-08        (SCF energy convergence, in eV)</span><br><span class="line"># GGA  =  PS           (PBEsol exchange-correlation)</span><br><span class="line"></span><br><span class="line">Ionic Relaxation</span><br><span class="line">NSW    =  0         (Max ionic steps)</span><br><span class="line">IBRION =  -1            (Algorithm: 0-MD, 1-Quasi-New, 2-CG)</span><br><span class="line">ISIF   =  2            (Stress/relaxation: 2-Ions, 3-Shape/Ions/V, 4-Shape/Ions)</span><br><span class="line">EDIFFG = -2E-02        (Ionic convergence, eV/AA)</span><br><span class="line"># ISYM =  2            (Symmetry: 0=none, 2=GGA, 3=hybrids)</span><br><span class="line">LELF = .TRUE.</span><br><span class="line">NPAR = 1</span><br></pre></td></tr></table></figure>
+<p>在优化完的结构上进行自洽计算，添加<code>LELF = .TRUE.</code>这个参数，确保<code>ELFCAR</code>文件输出</p>
+<p><strong>官方wiki还提到必须显示开启<code>NPAR = 1</code></strong>，然而网上的各大教程都没有提到这一点</p>
+<blockquote>
+<p>If LELF is set, <a
+target="_blank" rel="noopener" href="https://www.vasp.at/wiki/index.php/NPAR">NPAR</a>=1 has to be set
+explicitely in the <a
+target="_blank" rel="noopener" href="https://www.vasp.at/wiki/index.php/INCAR">INCAR</a> file in
+addition</p>
+</blockquote>
+<p>且有一篇讨论帖：https://wiki.vasp.at/forum/viewtopic.php?t=20020</p>
+<p>不过我自己尝试的时候发现超算平台上添加<code>NPAR = 1</code>会报错，而在自己电脑上则不会报错，有点迷、、、</p>
+<p>用<code>Vesta</code>载入<code>ELFCAR</code>文件</p>
+<h3 id="先设置一下等值面数值"><strong>先设置一下等值面数值</strong></h3>
+<p><strong>Isosurface
+Level</strong>（等值面水平）是一个关键参数，用于控制可视化电子局域化程度的阈值，VESTA会绘制出ELF等于该值的等值面（isosurface），直观展示电子局域化程度高于该阈值的区</p>
+<p>Properties-Isosurfaces-Isosurfaces
+level，设置完后可以按以下<code>Tab</code>键就会自动保存应用</p>
+<figure>
+<img
+src="./%E5%88%9D%E5%AD%A6ELF%E7%94%B5%E5%AD%90%E5%B1%80%E5%9F%9F%E5%8C%96%E5%87%BD%E6%95%B0%E7%9A%84%E8%AE%A1%E7%AE%97%E4%B8%8E%E5%88%86%E6%9E%90/image-20250514162641866.png"
+alt="等值面数值设置" />
+<figcaption aria-hidden="true">等值面数值设置</figcaption>
+</figure>
+<p>这里如果设置0.75的话啥也看不到，因为铜单胞中存在着金属键，并没有很强的局域化电子，而是均匀分布的电子气</p>
+<p><strong>高定域性通常出现在共价作用区域、孤对电子区域、原子内核及壳层结构区域
+</strong></p>
+<h3 id="然后就可以查看elf图了">然后就可以查看ELF图了</h3>
+<h4 id="首先是3d的图">首先是<strong>3D的图</strong></h4>
+<p>左上角-Edit-Lattice
+planes，新建一个图，根据想查看的面的来设置米勒指数hlk，以及设置距离d</p>
+<figure>
+<img
+src="./%E5%88%9D%E5%AD%A6ELF%E7%94%B5%E5%AD%90%E5%B1%80%E5%9F%9F%E5%8C%96%E5%87%BD%E6%95%B0%E7%9A%84%E8%AE%A1%E7%AE%97%E4%B8%8E%E5%88%86%E6%9E%90/image-20250514162858714.png"
+alt="3D的ELF图" />
+<figcaption aria-hidden="true">3D的ELF图</figcaption>
+</figure>
+<h4 id="然后是2d的图">然后是<strong>2D的图</strong></h4>
+<p>左上角-Utilities-2D Data Display-Slice即可</p>
+<figure>
+<img
+src="./%E5%88%9D%E5%AD%A6ELF%E7%94%B5%E5%AD%90%E5%B1%80%E5%9F%9F%E5%8C%96%E5%87%BD%E6%95%B0%E7%9A%84%E8%AE%A1%E7%AE%97%E4%B8%8E%E5%88%86%E6%9E%90/image-20250514163149938.png"
+alt="同一个截面的2D图和3D图" />
+<figcaption aria-hidden="true">同一个截面的2D图和3D图</figcaption>
+</figure>
+<figure>
+<img
+src="./%E5%88%9D%E5%AD%A6ELF%E7%94%B5%E5%AD%90%E5%B1%80%E5%9F%9F%E5%8C%96%E5%87%BD%E6%95%B0%E7%9A%84%E8%AE%A1%E7%AE%97%E4%B8%8E%E5%88%86%E6%9E%90/ELFCAR.png"
+alt="001,1xd的二维截面ELF图" />
+<figcaption aria-hidden="true">001,1xd的二维截面ELF图</figcaption>
+</figure>
+<p>可以看到，顶点Cu与顶点Cu原子之间、顶点Cu和面心Cu之间的电子的局域化程度比较高并且没有明显的偏向偏离</p>
+<h4
+id="接下来看一下一维时的电子定域化情况"><strong>接下来看一下一维时的电子定域化情况</strong></h4>
+<p>左上角-Utilities-Line profile即可</p>
+<ul>
+<li>首先棱上的情况</li>
+</ul>
+<figure>
+<img
+src="./%E5%88%9D%E5%AD%A6ELF%E7%94%B5%E5%AD%90%E5%B1%80%E5%9F%9F%E5%8C%96%E5%87%BD%E6%95%B0%E7%9A%84%E8%AE%A1%E7%AE%97%E4%B8%8E%E5%88%86%E6%9E%90/image-20250514165646920.png"
+alt="边长上的ELF图" />
+<figcaption aria-hidden="true">边长上的ELF图</figcaption>
+</figure>
+<blockquote>
+<p>Cu和Cu两原子中间存在均匀的非零的电子局域函数，虽然不足0.5但分布平坦，这是金属键合的特征</p>
+</blockquote>
+<p><strong>两个铜原子的ELF(r)值相近</strong></p>
+<ul>
+<li>面对角线上的情况</li>
+</ul>
+<figure>
+<img
+src="./%E5%88%9D%E5%AD%A6ELF%E7%94%B5%E5%AD%90%E5%B1%80%E5%9F%9F%E5%8C%96%E5%87%BD%E6%95%B0%E7%9A%84%E8%AE%A1%E7%AE%97%E4%B8%8E%E5%88%86%E6%9E%90/image-20250514170323442.png"
+alt="面对角线" />
+<figcaption aria-hidden="true">面对角线</figcaption>
+</figure>
+<p><strong>三个铜原子的ELF(r)值相近</strong></p>
+<h2 id="离子晶体csf">离子晶体CsF</h2>
+<p>再看一下离子键的情况，以CsF为例</p>
+<figure>
+<img
+src="./%E5%88%9D%E5%AD%A6ELF%E7%94%B5%E5%AD%90%E5%B1%80%E5%9F%9F%E5%8C%96%E5%87%BD%E6%95%B0%E7%9A%84%E8%AE%A1%E7%AE%97%E4%B8%8E%E5%88%86%E6%9E%90/image-20250514173537672.png"
+alt="CsF的ELF图" />
+<figcaption aria-hidden="true">CsF的ELF图</figcaption>
+</figure>
+<p>氟和铯之间出现深蓝色，这说明在这个区域电子的分布较为离域化，即氟和铯之间不存在共用电子，键的类型偏向离子键</p>
+<p>再看看对角线上的电荷分布</p>
+<figure>
+<img
+src="./%E5%88%9D%E5%AD%A6ELF%E7%94%B5%E5%AD%90%E5%B1%80%E5%9F%9F%E5%8C%96%E5%87%BD%E6%95%B0%E7%9A%84%E8%AE%A1%E7%AE%97%E4%B8%8E%E5%88%86%E6%9E%90/image-20250514174030053.png"
+alt="对角线上的一维ELF图" />
+<figcaption aria-hidden="true">对角线上的一维ELF图</figcaption>
+</figure>
+<p>两端为铯中间为氟，可以看到氟和铯ELF(r)值差别较大</p>
+<h2 id="共价晶体硅">共价晶体——硅</h2>
+<figure>
+<img
+src="./%E5%88%9D%E5%AD%A6ELF%E7%94%B5%E5%AD%90%E5%B1%80%E5%9F%9F%E5%8C%96%E5%87%BD%E6%95%B0%E7%9A%84%E8%AE%A1%E7%AE%97%E4%B8%8E%E5%88%86%E6%9E%90/image-20250514175250902.png"
+alt="101截面的ELF图" />
+<figcaption aria-hidden="true">101截面的ELF图</figcaption>
+</figure>
+<p>如箭头所指，硅原子和硅原子之间有较强的电子定域化作用，键的类型为共价键</p>
+<p>如下图，体对角线上的ELF图也能很好证明，Si-Si之间的区域电子化定域程度极高，呈现明显的尖峰</p>
+<figure>
+<img
+src="./%E5%88%9D%E5%AD%A6ELF%E7%94%B5%E5%AD%90%E5%B1%80%E5%9F%9F%E5%8C%96%E5%87%BD%E6%95%B0%E7%9A%84%E8%AE%A1%E7%AE%97%E4%B8%8E%E5%88%86%E6%9E%90/image-20250514180004023.png"
+alt="对角线上的ELF图" />
+<figcaption aria-hidden="true">对角线上的ELF图</figcaption>
+</figure>
+<h2 id="共价晶体灰锡">共价晶体——灰锡</h2>
+<p>我仍记得高中时课本讲的一个稍微有些特殊的例子——灰锡，灰锡是一个<strong>共价晶体</strong></p>
+<figure>
+<img
+src="./%E5%88%9D%E5%AD%A6ELF%E7%94%B5%E5%AD%90%E5%B1%80%E5%9F%9F%E5%8C%96%E5%87%BD%E6%95%B0%E7%9A%84%E8%AE%A1%E7%AE%97%E4%B8%8E%E5%88%86%E6%9E%90/image-20250514191631604.png"
+alt="灰锡101晶面的ELF图" />
+<figcaption aria-hidden="true">灰锡101晶面的ELF图</figcaption>
+</figure>
+<p>可以看到，灰锡与晶体硅结构上类似，Sn(<span
+class="math inline">$\frac{1}{4},\frac{1}{4},\frac{1}{4}$</span>)与Sn(0,0,0)与以及Sn(0.5,0.5,0)成键，Sn(<span
+class="math inline">$\frac{3}{4},\frac{3}{4},\frac{1}{4}$</span>)与Sn(0.5,0.5,0)和Sn(1,1,0)成键。成键电子局域化程度较高，为共价电子</p>
+
+            
+
+
+        </div>
+    </div>
+    <div id="post-footer" class="post-footer main-content-wrap">
+        
+            <div class="post-footer-tags">
+                <span class="text-color-light text-small">TAGGED IN</span><br/>
+                
+    <a class="tag tag--primary tag--small t-none-link" href="/all-tags/%E5%8C%96%E5%AD%A6/" rel="tag">化学</a> <a class="tag tag--primary tag--small t-none-link" href="/all-tags/%E7%A7%91%E7%A0%94/" rel="tag">科研</a>
+
+            </div>
+        
+        
+            <div class="post-actions-wrap">
+    <nav>
+        <ul class="post-actions post-action-nav">
+            <li class="post-action">
+                
+                    
+                <a
+                    class="post-action-btn btn btn--default tooltip--top"
+                    href="/2025/05/17/%E7%A7%91%E7%A0%94/first%20stage/%E6%8E%BA%E6%9D%82%E8%B4%A8%E9%87%8F%E8%AE%A1%E7%AE%97/"
+                    data-tooltip="掺杂质量计算的python脚本"
+                    aria-label="PREVIOUS: 掺杂质量计算的python脚本"
+                >
+                    
+                        <i class="fa fa-angle-left" aria-hidden="true"></i>
+                        <span class="hide-xs hide-sm text-small icon-ml">PREVIOUS</span>
+                    </a>
+            </li>
+            <li class="post-action">
+                
+                    
+                <a
+                    class="post-action-btn btn btn--default tooltip--top"
+                    href="/2025/05/12/%E7%A7%91%E7%A0%94/VASP/2025-04-21-2025%E5%B9%B44%E6%9C%88Intel%E5%B9%B3%E5%8F%B0VASP.6.4.3%E7%9A%84%E7%BC%96%E8%AF%91%E5%AE%89%E8%A3%85/"
+                    data-tooltip="2025年5月Intel平台VASP.6.4.3的编译安装"
+                    aria-label="NEXT: 2025年5月Intel平台VASP.6.4.3的编译安装"
+                >
+                    
+                        <span class="hide-xs hide-sm text-small icon-mr">NEXT</span>
+                        <i class="fa fa-angle-right" aria-hidden="true"></i>
+                    </a>
+            </li>
+        </ul>
+    </nav>
+    <ul class="post-actions post-action-share">
+        <li class="post-action hide-lg hide-md hide-sm">
+            <a
+                class="post-action-btn btn btn--default btn-open-shareoptions"
+                href="#btn-open-shareoptions"
+                aria-label="Share this post"
+            >
+                <i class="fa fa-share-alt" aria-hidden="true"></i>
+            </a>
+        </li>
+        
+            
+            
+            <li class="post-action hide-xs">
+                <a
+                    class="post-action-btn btn btn--default"
+                    target="new" href="https://www.facebook.com/sharer/sharer.php?u=http://example.com/2025/05/14/%E7%A7%91%E7%A0%94/VASP/Starry%20Sky/%E5%88%9D%E5%AD%A6ELF%E7%94%B5%E5%AD%90%E5%B1%80%E5%9F%9F%E5%8C%96%E5%87%BD%E6%95%B0%E7%9A%84%E8%AE%A1%E7%AE%97%E4%B8%8E%E5%88%86%E6%9E%90/"
+                    title="Share on Facebook"
+                    aria-label="Share on Facebook"
+                >
+                    <i class="fab fa-facebook" aria-hidden="true"></i>
+                </a>
+            </li>
+        
+            
+            
+            <li class="post-action hide-xs">
+                <a
+                    class="post-action-btn btn btn--default"
+                    target="new" href="https://twitter.com/intent/tweet?text=http://example.com/2025/05/14/%E7%A7%91%E7%A0%94/VASP/Starry%20Sky/%E5%88%9D%E5%AD%A6ELF%E7%94%B5%E5%AD%90%E5%B1%80%E5%9F%9F%E5%8C%96%E5%87%BD%E6%95%B0%E7%9A%84%E8%AE%A1%E7%AE%97%E4%B8%8E%E5%88%86%E6%9E%90/"
+                    title="Share on Twitter"
+                    aria-label="Share on Twitter"
+                >
+                    <i class="fab fa-twitter" aria-hidden="true"></i>
+                </a>
+            </li>
+        
+            
+            
+            <li class="post-action hide-xs">
+                <a
+                    class="post-action-btn btn btn--default"
+                    target="new" href="https://plus.google.com/share?url=http://example.com/2025/05/14/%E7%A7%91%E7%A0%94/VASP/Starry%20Sky/%E5%88%9D%E5%AD%A6ELF%E7%94%B5%E5%AD%90%E5%B1%80%E5%9F%9F%E5%8C%96%E5%87%BD%E6%95%B0%E7%9A%84%E8%AE%A1%E7%AE%97%E4%B8%8E%E5%88%86%E6%9E%90/"
+                    title="Share on Google+"
+                    aria-label="Share on Google+"
+                >
+                    <i class="fab fa-google-plus" aria-hidden="true"></i>
+                </a>
+            </li>
+        
+        
+            
+        
+        <li class="post-action">
+            
+                <a class="post-action-btn btn btn--default" href="#" aria-label="Back to top">
+            
+                <i class="fa fa-list" aria-hidden="true"></i>
+            </a>
+        </li>
+    </ul>
+</div>
+
+
+        
+        
+            
+        
+    </div>
+</article>
+
+
+
+                <footer id="footer" class="main-content-wrap">
+    <span class="copyrights">
+        Copyrights &copy; 2025 John Doe. All Rights Reserved.
+    </span>
+</footer>
+
+            </div>
+            
+                <div id="bottom-bar" class="post-bottom-bar" data-behavior="4">
+                    <div class="post-actions-wrap">
+    <nav>
+        <ul class="post-actions post-action-nav">
+            <li class="post-action">
+                
+                    
+                <a
+                    class="post-action-btn btn btn--default tooltip--top"
+                    href="/2025/05/17/%E7%A7%91%E7%A0%94/first%20stage/%E6%8E%BA%E6%9D%82%E8%B4%A8%E9%87%8F%E8%AE%A1%E7%AE%97/"
+                    data-tooltip="掺杂质量计算的python脚本"
+                    aria-label="PREVIOUS: 掺杂质量计算的python脚本"
+                >
+                    
+                        <i class="fa fa-angle-left" aria-hidden="true"></i>
+                        <span class="hide-xs hide-sm text-small icon-ml">PREVIOUS</span>
+                    </a>
+            </li>
+            <li class="post-action">
+                
+                    
+                <a
+                    class="post-action-btn btn btn--default tooltip--top"
+                    href="/2025/05/12/%E7%A7%91%E7%A0%94/VASP/2025-04-21-2025%E5%B9%B44%E6%9C%88Intel%E5%B9%B3%E5%8F%B0VASP.6.4.3%E7%9A%84%E7%BC%96%E8%AF%91%E5%AE%89%E8%A3%85/"
+                    data-tooltip="2025年5月Intel平台VASP.6.4.3的编译安装"
+                    aria-label="NEXT: 2025年5月Intel平台VASP.6.4.3的编译安装"
+                >
+                    
+                        <span class="hide-xs hide-sm text-small icon-mr">NEXT</span>
+                        <i class="fa fa-angle-right" aria-hidden="true"></i>
+                    </a>
+            </li>
+        </ul>
+    </nav>
+    <ul class="post-actions post-action-share">
+        <li class="post-action hide-lg hide-md hide-sm">
+            <a
+                class="post-action-btn btn btn--default btn-open-shareoptions"
+                href="#btn-open-shareoptions"
+                aria-label="Share this post"
+            >
+                <i class="fa fa-share-alt" aria-hidden="true"></i>
+            </a>
+        </li>
+        
+            
+            
+            <li class="post-action hide-xs">
+                <a
+                    class="post-action-btn btn btn--default"
+                    target="new" href="https://www.facebook.com/sharer/sharer.php?u=http://example.com/2025/05/14/%E7%A7%91%E7%A0%94/VASP/Starry%20Sky/%E5%88%9D%E5%AD%A6ELF%E7%94%B5%E5%AD%90%E5%B1%80%E5%9F%9F%E5%8C%96%E5%87%BD%E6%95%B0%E7%9A%84%E8%AE%A1%E7%AE%97%E4%B8%8E%E5%88%86%E6%9E%90/"
+                    title="Share on Facebook"
+                    aria-label="Share on Facebook"
+                >
+                    <i class="fab fa-facebook" aria-hidden="true"></i>
+                </a>
+            </li>
+        
+            
+            
+            <li class="post-action hide-xs">
+                <a
+                    class="post-action-btn btn btn--default"
+                    target="new" href="https://twitter.com/intent/tweet?text=http://example.com/2025/05/14/%E7%A7%91%E7%A0%94/VASP/Starry%20Sky/%E5%88%9D%E5%AD%A6ELF%E7%94%B5%E5%AD%90%E5%B1%80%E5%9F%9F%E5%8C%96%E5%87%BD%E6%95%B0%E7%9A%84%E8%AE%A1%E7%AE%97%E4%B8%8E%E5%88%86%E6%9E%90/"
+                    title="Share on Twitter"
+                    aria-label="Share on Twitter"
+                >
+                    <i class="fab fa-twitter" aria-hidden="true"></i>
+                </a>
+            </li>
+        
+            
+            
+            <li class="post-action hide-xs">
+                <a
+                    class="post-action-btn btn btn--default"
+                    target="new" href="https://plus.google.com/share?url=http://example.com/2025/05/14/%E7%A7%91%E7%A0%94/VASP/Starry%20Sky/%E5%88%9D%E5%AD%A6ELF%E7%94%B5%E5%AD%90%E5%B1%80%E5%9F%9F%E5%8C%96%E5%87%BD%E6%95%B0%E7%9A%84%E8%AE%A1%E7%AE%97%E4%B8%8E%E5%88%86%E6%9E%90/"
+                    title="Share on Google+"
+                    aria-label="Share on Google+"
+                >
+                    <i class="fab fa-google-plus" aria-hidden="true"></i>
+                </a>
+            </li>
+        
+        
+            
+        
+        <li class="post-action">
+            
+                <a class="post-action-btn btn btn--default" href="#" aria-label="Back to top">
+            
+                <i class="fa fa-list" aria-hidden="true"></i>
+            </a>
+        </li>
+    </ul>
+</div>
+
+
+                </div>
+                
+    <div id="share-options-bar" class="share-options-bar" data-behavior="4">
+        <i id="btn-close-shareoptions" class="fa fa-times"></i>
+        <ul class="share-options">
+            
+                
+                
+                <li class="share-option">
+                    <a
+                        class="share-option-btn"
+                        target="new"
+                        href="https://www.facebook.com/sharer/sharer.php?u=http://example.com/2025/05/14/%E7%A7%91%E7%A0%94/VASP/Starry%20Sky/%E5%88%9D%E5%AD%A6ELF%E7%94%B5%E5%AD%90%E5%B1%80%E5%9F%9F%E5%8C%96%E5%87%BD%E6%95%B0%E7%9A%84%E8%AE%A1%E7%AE%97%E4%B8%8E%E5%88%86%E6%9E%90/"
+                        aria-label="Share on Facebook"
+                    >
+                        <i class="fab fa-facebook" aria-hidden="true"></i><span>Share on Facebook</span>
+                    </a>
+                </li>
+            
+                
+                
+                <li class="share-option">
+                    <a
+                        class="share-option-btn"
+                        target="new"
+                        href="https://twitter.com/intent/tweet?text=http://example.com/2025/05/14/%E7%A7%91%E7%A0%94/VASP/Starry%20Sky/%E5%88%9D%E5%AD%A6ELF%E7%94%B5%E5%AD%90%E5%B1%80%E5%9F%9F%E5%8C%96%E5%87%BD%E6%95%B0%E7%9A%84%E8%AE%A1%E7%AE%97%E4%B8%8E%E5%88%86%E6%9E%90/"
+                        aria-label="Share on Twitter"
+                    >
+                        <i class="fab fa-twitter" aria-hidden="true"></i><span>Share on Twitter</span>
+                    </a>
+                </li>
+            
+                
+                
+                <li class="share-option">
+                    <a
+                        class="share-option-btn"
+                        target="new"
+                        href="https://plus.google.com/share?url=http://example.com/2025/05/14/%E7%A7%91%E7%A0%94/VASP/Starry%20Sky/%E5%88%9D%E5%AD%A6ELF%E7%94%B5%E5%AD%90%E5%B1%80%E5%9F%9F%E5%8C%96%E5%87%BD%E6%95%B0%E7%9A%84%E8%AE%A1%E7%AE%97%E4%B8%8E%E5%88%86%E6%9E%90/"
+                        aria-label="Share on Google+"
+                    >
+                        <i class="fab fa-google-plus" aria-hidden="true"></i><span>Share on Google+</span>
+                    </a>
+                </li>
+            
+        </ul>
+    </div>
+
+
+            
+        </div>
+        
+
+
+<div id="about">
+    <div id="about-card">
+        <div id="about-btn-close">
+            <i class="fa fa-times"></i>
+        </div>
+        
+            <h4 id="about-card-name">John Doe</h4>
+        
+            <div id="about-card-bio"><p>author.bio</p>
+</div>
+        
+        
+            <div id="about-card-job">
+                <i class="fa fa-briefcase"></i>
+                <br/>
+                <p>author.job</p>
+
+            </div>
+        
+        
+    </div>
+</div>
+
+        
+        
+<div id="cover" style="background-image:url('/assets/images/cover.jpg');"></div>
+        <!--SCRIPTS-->
+
+<script src="/assets/js/script-akgy1kkmfssyzznzlvk9mjwcvnsn87aqalldnf43rojvlib0s8vpmeb5mayw.min.js"></script>
+
+<!--SCRIPTS END-->
+
+
+    
+
+
+
+
+    </body>
+</html>

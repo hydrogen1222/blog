@@ -1,0 +1,835 @@
+
+<!DOCTYPE html>
+<html lang="en">
+    
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="generator" content="Hexo">
+    <title>表面能的计算 - Hexo</title>
+    <meta name="author" content="John Doe">
+    
+    
+    
+    <script type="application/ld+json">{"@context":"http://schema.org","@type":"BlogPosting","author":{"@type":"Person","name":"John Doe","sameAs":["https://github.com/","http://stackoverflow.com/users","https://twitter.com/","https://facebook.com/","https://plus.google.com/","https://www.linkedin.com/profile/","mailto"]},"articleBody":"关于表面能\r\n根据VASP官方手册Hands on Session III，表面能的定义如下，大师兄的文章也提到了这个定义(\r\nNanoscale,\r\n2017, 9, 13089–13094) $$\r\n\\sigma=\\sigma^{unrelax}+E^{relax}=\\dfrac{1}{2}(E_{surf}-N_{atoms}\\cdot\r\nE_{bulk})+E^{relax}\r\n$$\r\n$$\r\n\\gamma_s=\\dfrac{1}{2A}(E_{surf}^{unrelax}-N\\cdot\r\nE_{bulk})+\\dfrac{1}{A}(E_{surf}^{relax}-E_{surf}^{unrelax})\r\n$$\r\n其中，弛豫能量被定义为： Erelax = Esurfrelax − Esurfunrelax\r\n\r\n手册的公式和大师兄文章中公式的区别在于表面积A，表面能应当除以表面积，所以后者更合理一些\r\nEbulk为体相中单个原子的能量，所以N ⋅ Ebulk为这个体相的能量，即为OUTCAR直接读出的能量\r\n\r\n关于表面积A的计算\r\n这部分有些难理解，涉及到一点高等数学和线性代数🤕\r\n表面积可通过晶格基矢量的叉积确定，在POSCAR或CONTCAR文件中，晶格基矢量通常以三行的形式定义\r\n对于面积的计算，可设一组不共线的基矢量为a1 = (a11, a12, 0), a2 = (a21, a22, 0)\r\n下面这张图应该挺形象\r\n\r\n\r\nhttps://zhuanlan.zhihu.com/p/359975221\r\n\r\na⃗ × b⃗ = (0, 0, a11 × a22 − a12 × a21)\r\n面积为外积模乘以缩放银子 实际面积 = s2 ⋅ |a11a22 − a12a21|\r\nPS：对于三维的体积 体积 = s3 ⋅ |a1 ⋅ (a2 × a3)|\r\np(1x1)Cu(111)的表面能\r\n前面已经算得差不多了\r\nslab模型的能量信息\r\n123456[ctan@baifq-hpc141 primitive-slab-opt-1]$ grep &#x27;  without&#x27; OUTCAR  energy  without entropy=      -13.96941183  energy(sigma-&gt;0) =      -13.97673168  energy  without entropy=      -13.96945528  energy(sigma-&gt;0) =      -13.97676958  energy  without entropy=      -13.97006413  energy(sigma-&gt;0) =      -13.97726241  energy  without entropy=      -13.97020643  energy(sigma-&gt;0) =      -13.97735554  energy  without entropy=      -13.97017969  energy(sigma-&gt;0) =      -13.97735013\r\nslab模型优化后的结构信息\r\n123456789101112131415161718CONTCAR\\(1\\1\\1)   1.00000000000000     2.5701000690000000    0.0000000000000000    0.0000000000000000    -1.2850500345000000    2.2257719501000000    0.0000000000000000     0.0000000000000000    0.0000000000000000   21.2954006195000005  Cu/0e71e558f37               4Selective dynamicsDirect  0.0000000000000000  0.0000000000000000  0.0000000000000000   F   F   F  0.6666700000000034  0.3333299999999966  0.0985399999999998   F   F   F  0.3333311322281505  0.6666688677718494  0.1972481653092927   T   T   T -0.0000004145140272  0.0000004145140272  0.2951613337135311   T   T   T  0.00000000E+00  0.00000000E+00  0.00000000E+00  0.00000000E+00  0.00000000E+00  0.00000000E+00  0.00000000E+00  0.00000000E+00  0.00000000E+00  0.00000000E+00  0.00000000E+00  0.00000000E+00\r\nbulk模型的能量信息\r\n1234[ctan@baifq-hpc141 primitive-slab-opt-1]$ grep &#x27;  without&#x27; ../bulk-calc/OUTCAR  energy  without entropy=      -14.90258332  energy(sigma-&gt;0) =      -14.90537746  energy  without entropy=      -14.90568039  energy(sigma-&gt;0) =      -14.90844732  energy  without entropy=      -14.90859467  energy(sigma-&gt;0) =      -14.91129762\r\n\r\nA = 2.570100069 * 2.2257719501 − 0.0000000000000000 * (−1.2850500345) = 5.720456642530275\r\nÅ2\r\nEsurfunrelax = −13.9767\r\neV\r\nEbulk ⋅ N = −14.9112\r\neV\r\nEsurfacerelax = −13.9773\r\neV\r\n\r\n所以表面能γs = 0.08158\r\neV/Å2 ,又1 eV/Å2=16.0218 J/m2，所以表面能γs= 1.3070\r\nJ/m2\r\nc(1x1)Cu(111)的表面能\r\n之前大师兄提到过，对于面心立方最密堆积的形式，slab模型的建立可以使用原胞也可以使用单胞，那么接下来看看用单胞计算表面能吧\r\nc(1x1)Cu(111)优化计算的能量信息：\r\n12345678910111213141516171819[ctan@baifq-hpc141 conventional-slab-opt]$ grep &#x27;  without&#x27; OUTCAR  energy  without entropy=      -55.94972046  energy(sigma-&gt;0) =      -55.94434499  energy  without entropy=      -55.94997517  energy(sigma-&gt;0) =      -55.94458201  energy  without entropy=      -55.95396000  energy(sigma-&gt;0) =      -55.94820485  energy  without entropy=      -55.95519341  energy(sigma-&gt;0) =      -55.94928561  energy  without entropy=      -55.95554732  energy(sigma-&gt;0) =      -55.94959634  energy  without entropy=      -55.95713778  energy(sigma-&gt;0) =      -55.95095507  energy  without entropy=      -55.95788514  energy(sigma-&gt;0) =      -55.95158140  energy  without entropy=      -55.95893404  energy(sigma-&gt;0) =      -55.95242747  energy  without entropy=      -55.95963672  energy(sigma-&gt;0) =      -55.95296199  energy  without entropy=      -55.96031694  energy(sigma-&gt;0) =      -55.95340564  energy  without entropy=      -55.96050719  energy(sigma-&gt;0) =      -55.95349958  energy  without entropy=      -55.96053048  energy(sigma-&gt;0) =      -55.95316488  energy  without entropy=      -55.96067995  energy(sigma-&gt;0) =      -55.95346716  energy  without entropy=      -55.96069855  energy(sigma-&gt;0) =      -55.95356576  energy  without entropy=      -55.96051601  energy(sigma-&gt;0) =      -55.95360396  energy  without entropy=      -55.96050802  energy(sigma-&gt;0) =      -55.95361124  energy  without entropy=      -55.96041586  energy(sigma-&gt;0) =      -55.95360050  energy  without entropy=      -55.96018279  energy(sigma-&gt;0) =      -55.95347398\r\n结构信息：\r\n123456789101112131415161718192021222324252627282930313233343536373839404142[ctan@baifq-hpc141 conventional-slab-opt]$ cat CONTCARCONTCAR\\(1\\1\\1)   1.00000000000000     5.1402001381000000    0.0000000000000000    0.0000000000000000    -2.5701000690000000    4.4515439000999999    0.0000000000000000     0.0000000000000000    0.0000000000000000   21.2954006195000005  Cu/0e71e558f37              16Direct  0.0000006270807907 -0.0000006270807907  0.0011656342599333  0.6666672048402060  0.3333327951597896  0.0988195745854847  0.3333327951597896  0.6666672048402060  0.1968004254145135 -0.0000006270807907  0.0000006270807907  0.2944543657400676  0.0000006270807907  0.4999993729192098  0.0011656342599333  0.6666672048402060  0.8333327951597940  0.0988195745854847  0.3333327951597896  0.1666672048402087  0.1968004254145135 -0.0000006270807907  0.5000006270807924  0.2944543657400676  0.5000006270807924  0.4999993729192098  0.0011656342599333  0.1666672048402087  0.8333327951597940  0.0988195745854847  0.8333327951597940  0.1666672048402087  0.1968004254145135  0.4999993729192098  0.5000006270807924  0.2944543657400676  0.5000006270807924 -0.0000006270807907  0.0011656342599333  0.1666672048402087  0.3333327951597896  0.0988195745854847  0.8333327951597940  0.6666672048402060  0.1968004254145135  0.4999993729192098  0.0000006270807907  0.2944543657400676  0.00000000E+00  0.00000000E+00  0.00000000E+00  0.00000000E+00  0.00000000E+00  0.00000000E+00  0.00000000E+00  0.00000000E+00  0.00000000E+00  0.00000000E+00  0.00000000E+00  0.00000000E+00  0.00000000E+00  0.00000000E+00  0.00000000E+00  0.00000000E+00  0.00000000E+00  0.00000000E+00  0.00000000E+00  0.00000000E+00  0.00000000E+00  0.00000000E+00  0.00000000E+00  0.00000000E+00  0.00000000E+00  0.00000000E+00  0.00000000E+00  0.00000000E+00  0.00000000E+00  0.00000000E+00  0.00000000E+00  0.00000000E+00  0.00000000E+00  0.00000000E+00  0.00000000E+00  0.00000000E+00  0.00000000E+00  0.00000000E+00  0.00000000E+00  0.00000000E+00  0.00000000E+00  0.00000000E+00  0.00000000E+00  0.00000000E+00  0.00000000E+00  0.00000000E+00  0.00000000E+00  0.00000000E+00\r\nCu(111)的体相能量：\r\n1234[ctan@baifq-hpc141 conventional-slab-opt]$ grep &#x27;  without&#x27; ../bulk-calc/OUTCAR  energy  without entropy=      -14.90258332  energy(sigma-&gt;0) =      -14.90537746  energy  without entropy=      -14.90568039  energy(sigma-&gt;0) =      -14.90844732  energy  without entropy=      -14.90859467  energy(sigma-&gt;0) =      -14.91129762\r\n\r\n表面积A=5.1402001381000000 * 4.4515439000999999 = 22.8818\r\nÅ2\r\nEsurfunrelax\r\n= -55.9443 eV\r\nN ⋅ Ebulk\r\n= -59.6452 eV\r\n\r\nN指的是slab模型中的原子个数而非bulk中的原子个数\r\n\r\nEsurfrelax\r\n= -55.9535 eV\r\n\r\n计算得表面能γs=0.08047\r\neV/Å2 = 1.2892 J/m2\r\n这与p(1x1)Cu(111)计算所得的表面能有一定的差距，目前现阶段我还无法解决这个问题🤔😵‍💫\r\np(1x1)Ni(100)的表面能\r\n这个例子来自于vasp官方的手册Hands on Session III\r\n123456789101112general:SYSTEM = clean Ni(100) surfaceISTART = 0 ; ICHARG=2ENCUT = 270ISMEAR = 2 ; SIGMA = 0.2spin:ISPIN=2MAGMOM = 5*1dynamic:IBRION = 1NSW = 100POTIM = 0.2\r\n有个疑惑的点是手册中的INCAR没有加上偶极矫正，我在自己算的时候加上了偶极矫正\r\n12345678910111213141516171819System = Nickel-slab-optISMEAR = 1ISTART = 0ICHARG = 2SIGMA = 0.05ENCUT = 360ALGO = NormalISPIN = 2MAGMOM = 5*1NSW = 200NELM = 200EDIFF = 1E-6EDIFFG = -0.01IDIPOL = 3LDIPOL = .TRUE.LWAVE = .FALSE.LCHARG = .FALSE.IBRION = 1POTIM = 0.05\r\n体相能量信息：\r\n1234[ctan@baifq-hpc141 primitive-opt]$ grep &#x27;  without&#x27; ../bulk/OUTCAR  energy  without entropy=      -21.88865316  energy(sigma-&gt;0) =      -21.88759144  energy  without entropy=      -21.88930785  energy(sigma-&gt;0) =      -21.88825056  energy  without entropy=      -21.89056178  energy(sigma-&gt;0) =      -21.88952707\r\n弛豫与未弛豫的slab模型的能量信息：\r\n12345678[ctan@baifq-hpc141 primitive-opt]$ grep &#x27;  without&#x27; OUTCAR  energy  without entropy=      -25.97155386  energy(sigma-&gt;0) =      -25.97291371  energy  without entropy=      -25.97233802  energy(sigma-&gt;0) =      -25.97366730  energy  without entropy=      -25.97412653  energy(sigma-&gt;0) =      -25.97534340  energy  without entropy=      -25.97511519  energy(sigma-&gt;0) =      -25.97602399  energy  without entropy=      -25.97516432  energy(sigma-&gt;0) =      -25.97619350  energy  without entropy=      -25.97516747  energy(sigma-&gt;0) =      -25.97619463  energy  without entropy=      -25.97517140  energy(sigma-&gt;0) =      -25.97620156\r\n优化后的结构：\r\n12345678910111213141516171819CONTCAR\\(1\\0\\0)   1.00000000000000     2.4846000671000001    0.0000000000000000    0.0000000000000000    -1.2423000336000001    2.1517267763999999    0.0000000000000000     0.0000000000000000    0.0000000000000000   18.7047996521000002  Ni_pv/368cd815               5Direct  0.6666685456044492  0.3333314543955508  0.0005454007373249  0.0000003831810720 -0.0000003831810720  0.1078816295897802  0.3333305745814666  0.6666694254185335  0.2169200598414882  0.6666681017676376  0.3333318982323624  0.3259932620996842  0.0000023948653782 -0.0000023948653782  0.4332496477317282  0.00000000E+00  0.00000000E+00  0.00000000E+00  0.00000000E+00  0.00000000E+00  0.00000000E+00  0.00000000E+00  0.00000000E+00  0.00000000E+00  0.00000000E+00  0.00000000E+00  0.00000000E+00  0.00000000E+00  0.00000000E+00  0.00000000E+00\r\n\r\n表面积A=2.4846000671000001*2.1517267763999999=5.346180493024307\r\neV\r\nEsurfunrelax\r\n= -25.97291371 eV\r\nEsurfrelax\r\n= -25.97620156 eV\r\nN ⋅ Ebulk\r\n= -21.88952707 eV\r\n\r\n表面能 γs = 0.1293\r\neV/Å2 = 2.0715 J/m2\r\n小结\r\n\r\n本节主要是联系表面能的计算\r\nNi(100)表面能的计算选用的赝势为Ni_sv赝势\r\n\r\n","dateCreated":"2025-04-29T21:40:00+08:00","dateModified":"2025-04-29T21:39:45+08:00","datePublished":"2025-04-29T21:40:00+08:00","description":"","headline":"表面能的计算","image":[],"mainEntityOfPage":{"@type":"WebPage","@id":"http://example.com/2025/04/29/%E7%A7%91%E7%A0%94/VASP/Starry%20Sky/%E8%A1%A8%E9%9D%A2%E8%83%BD%E7%9A%84%E8%AE%A1%E7%AE%97/"},"publisher":{"@type":"Organization","name":"John Doe","sameAs":["https://github.com/","http://stackoverflow.com/users","https://twitter.com/","https://facebook.com/","https://plus.google.com/","https://www.linkedin.com/profile/","mailto"]},"url":"http://example.com/2025/04/29/%E7%A7%91%E7%A0%94/VASP/Starry%20Sky/%E8%A1%A8%E9%9D%A2%E8%83%BD%E7%9A%84%E8%AE%A1%E7%AE%97/","keywords":"化学, 科研"}</script>
+    <meta name="description" content="关于表面能 根据VASP官方手册Hands on Session III，表面能的定义如下，大师兄的文章也提到了这个定义( Nanoscale, 2017, 9, 13089–13094) $$ \sigma&#x3D;\sigma^{unrelax}+E^{relax}&#x3D;\dfrac{1}{2}(E_{surf}-N_{atoms}\cdot E_{bulk})+E^{relax} $$ $">
+<meta property="og:type" content="blog">
+<meta property="og:title" content="表面能的计算">
+<meta property="og:url" content="http://example.com/2025/04/29/%E7%A7%91%E7%A0%94/VASP/Starry%20Sky/%E8%A1%A8%E9%9D%A2%E8%83%BD%E7%9A%84%E8%AE%A1%E7%AE%97/index.html">
+<meta property="og:site_name" content="Hexo">
+<meta property="og:description" content="关于表面能 根据VASP官方手册Hands on Session III，表面能的定义如下，大师兄的文章也提到了这个定义( Nanoscale, 2017, 9, 13089–13094) $$ \sigma&#x3D;\sigma^{unrelax}+E^{relax}&#x3D;\dfrac{1}{2}(E_{surf}-N_{atoms}\cdot E_{bulk})+E^{relax} $$ $">
+<meta property="og:locale" content="en_US">
+<meta property="article:published_time" content="2025-04-29T13:40:00.000Z">
+<meta property="article:modified_time" content="2025-04-29T13:39:45.000Z">
+<meta property="article:author" content="John Doe">
+<meta property="article:tag" content="化学">
+<meta property="article:tag" content="科研">
+<meta name="twitter:card" content="summary">
+    
+    
+        
+    
+    
+    
+    
+    
+    <!--STYLES-->
+    
+<link rel="stylesheet" href="/assets/css/all.css">
+
+    
+<link rel="stylesheet" href="/assets/css/jquery.fancybox.css">
+
+    
+<link rel="stylesheet" href="/assets/css/thumbs.css">
+
+    
+<link rel="stylesheet" href="/assets/css/tranquilpeak.css">
+
+    <!--STYLES END-->
+    
+
+    
+
+    
+        
+    
+
+
+
+
+<script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+<script>
+  MathJax = {
+    tex: {
+      inlineMath: [['$', '$'], ['\\(', '\\)']],
+      displayMath: [['$$', '$$'], ['\\[', '\\]']],
+      tags: 'ams'
+    },
+    svg: {
+      fontCache: 'global'
+    }
+  };
+</script>
+
+
+
+
+
+<!-- hexo injector head_end start -->
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.12.0/dist/katex.min.css">
+
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/hexo-math@4.0.0/dist/style.css">
+<!-- hexo injector head_end end --></head>
+
+    <body>
+        <div id="blog">
+            <!-- Define author's picture -->
+
+
+    
+
+<header id="header" data-behavior="4">
+    <i id="btn-open-sidebar" class="fa fa-lg fa-bars"></i>
+    <div class="header-title">
+        <a
+            class="header-title-link"
+            href="/"
+            aria-label=""
+        >
+            Hexo
+        </a>
+    </div>
+    
+        
+            <a
+                class="header-right-picture "
+                href="#about"
+                aria-label="Open the link: /#about"
+            >
+        
+        
+        </a>
+    
+</header>
+
+            <!-- Define author's picture -->
+
+
+<nav id="sidebar" data-behavior="4">
+    <div class="sidebar-container">
+        
+        
+            <ul class="sidebar-buttons">
+            
+                <li class="sidebar-button">
+                    
+                        <a
+                            class="sidebar-button-link "
+                            href="/"
+                            
+                            rel="noopener"
+                            title="Home"
+                        >
+                        <i class="sidebar-button-icon fa fa-home" aria-hidden="true"></i>
+                        <span class="sidebar-button-desc">Home</span>
+                    </a>
+            </li>
+            
+                <li class="sidebar-button">
+                    
+                        <a
+                            class="sidebar-button-link "
+                            href="/all-categories"
+                            
+                            rel="noopener"
+                            title="Categories"
+                        >
+                        <i class="sidebar-button-icon fa fa-bookmark" aria-hidden="true"></i>
+                        <span class="sidebar-button-desc">Categories</span>
+                    </a>
+            </li>
+            
+                <li class="sidebar-button">
+                    
+                        <a
+                            class="sidebar-button-link "
+                            href="/all-tags"
+                            
+                            rel="noopener"
+                            title="Tags"
+                        >
+                        <i class="sidebar-button-icon fa fa-tags" aria-hidden="true"></i>
+                        <span class="sidebar-button-desc">Tags</span>
+                    </a>
+            </li>
+            
+                <li class="sidebar-button">
+                    
+                        <a
+                            class="sidebar-button-link "
+                            href="/all-archives"
+                            
+                            rel="noopener"
+                            title="Archives"
+                        >
+                        <i class="sidebar-button-icon fa fa-archive" aria-hidden="true"></i>
+                        <span class="sidebar-button-desc">Archives</span>
+                    </a>
+            </li>
+            
+                <li class="sidebar-button">
+                    
+                        <a
+                            class="sidebar-button-link open-algolia-search"
+                            href="#search"
+                            
+                            rel="noopener"
+                            title="Search"
+                        >
+                        <i class="sidebar-button-icon fa fa-search" aria-hidden="true"></i>
+                        <span class="sidebar-button-desc">Search</span>
+                    </a>
+            </li>
+            
+                <li class="sidebar-button">
+                    
+                        <a
+                            class="sidebar-button-link "
+                            href="#about"
+                            
+                            rel="noopener"
+                            title="About"
+                        >
+                        <i class="sidebar-button-icon fa fa-question" aria-hidden="true"></i>
+                        <span class="sidebar-button-desc">About</span>
+                    </a>
+            </li>
+            
+        </ul>
+        
+            <ul class="sidebar-buttons">
+            
+                <li class="sidebar-button">
+                    
+                        <a
+                            class="sidebar-button-link "
+                            href="https://github.com/"
+                            
+                                target="_blank"
+                            
+                            rel="noopener"
+                            title="GitHub"
+                        >
+                        <i class="sidebar-button-icon fab fa-github" aria-hidden="true"></i>
+                        <span class="sidebar-button-desc">GitHub</span>
+                    </a>
+            </li>
+            
+                <li class="sidebar-button">
+                    
+                        <a
+                            class="sidebar-button-link "
+                            href="http://stackoverflow.com/users"
+                            
+                                target="_blank"
+                            
+                            rel="noopener"
+                            title="Stack Overflow"
+                        >
+                        <i class="sidebar-button-icon fab fa-stack-overflow" aria-hidden="true"></i>
+                        <span class="sidebar-button-desc">Stack Overflow</span>
+                    </a>
+            </li>
+            
+                <li class="sidebar-button">
+                    
+                        <a
+                            class="sidebar-button-link "
+                            href="https://twitter.com/"
+                            
+                                target="_blank"
+                            
+                            rel="noopener"
+                            title="Twitter"
+                        >
+                        <i class="sidebar-button-icon fab fa-twitter" aria-hidden="true"></i>
+                        <span class="sidebar-button-desc">Twitter</span>
+                    </a>
+            </li>
+            
+                <li class="sidebar-button">
+                    
+                        <a
+                            class="sidebar-button-link "
+                            href="https://facebook.com/"
+                            
+                                target="_blank"
+                            
+                            rel="noopener"
+                            title="Facebook"
+                        >
+                        <i class="sidebar-button-icon fab fa-facebook" aria-hidden="true"></i>
+                        <span class="sidebar-button-desc">Facebook</span>
+                    </a>
+            </li>
+            
+                <li class="sidebar-button">
+                    
+                        <a
+                            class="sidebar-button-link "
+                            href="https://plus.google.com/"
+                            
+                                target="_blank"
+                            
+                            rel="noopener"
+                            title="Google +"
+                        >
+                        <i class="sidebar-button-icon fab fa-google-plus" aria-hidden="true"></i>
+                        <span class="sidebar-button-desc">Google +</span>
+                    </a>
+            </li>
+            
+                <li class="sidebar-button">
+                    
+                        <a
+                            class="sidebar-button-link "
+                            href="https://www.linkedin.com/profile/"
+                            
+                                target="_blank"
+                            
+                            rel="noopener"
+                            title="LinkedIn"
+                        >
+                        <i class="sidebar-button-icon fab fa-linkedin" aria-hidden="true"></i>
+                        <span class="sidebar-button-desc">LinkedIn</span>
+                    </a>
+            </li>
+            
+                <li class="sidebar-button">
+                    
+                        <a
+                            class="sidebar-button-link "
+                            href="/mailto"
+                            
+                            rel="noopener"
+                            title="Mail"
+                        >
+                        <i class="sidebar-button-icon fa fa-envelope" aria-hidden="true"></i>
+                        <span class="sidebar-button-desc">Mail</span>
+                    </a>
+            </li>
+            
+        </ul>
+        
+            <ul class="sidebar-buttons">
+            
+                <li class="sidebar-button">
+                    
+                        <a
+                            class="sidebar-button-link "
+                            href="/atom.xml"
+                            
+                            rel="noopener"
+                            title="RSS"
+                        >
+                        <i class="sidebar-button-icon fa fa-rss" aria-hidden="true"></i>
+                        <span class="sidebar-button-desc">RSS</span>
+                    </a>
+            </li>
+            
+        </ul>
+        
+    </div>
+</nav>
+
+            
+            <div id="main" data-behavior="4"
+                 class="
+                        hasCoverMetaIn
+                        ">
+                
+<article class="post">
+    
+    
+        <div class="post-header main-content-wrap text-left">
+    
+        <h1 class="post-title">
+            表面能的计算
+        </h1>
+    
+    
+        <div class="post-meta">
+    <time datetime="2025-04-29T21:40:00+08:00">
+	
+		    Apr 29, 2025
+    	
+    </time>
+    
+        <span>in </span>
+        
+    <a class="category-link" href="/all-categories/%E4%BB%8E%E9%9B%B6%E5%BC%80%E5%A7%8B%E7%9A%84%E7%A7%91%E7%A0%94%E4%B9%8B%E6%97%85/">从零开始的科研之旅</a>, <a class="category-link" href="/all-categories/%E4%BB%8E%E9%9B%B6%E5%BC%80%E5%A7%8B%E7%9A%84%E7%A7%91%E7%A0%94%E4%B9%8B%E6%97%85/VASP/">VASP</a>
+
+
+    
+</div>
+
+    
+</div>
+
+    
+    <div class="post-content markdown">
+        <div class="main-content-wrap">
+            <h2 id="关于表面能">关于表面能</h2>
+<p>根据VASP官方手册<code>Hands on Session III</code>，表面能的定义如下，大师兄的文章也提到了这个定义(
+<a
+target="_blank" rel="noopener" href="https://pubs.rsc.org/en/content/articlelanding/2017/nr/c7nr03889e">Nanoscale,
+2017, 9, 13089–13094</a>) <span class="math display">$$
+\sigma=\sigma^{unrelax}+E^{relax}=\dfrac{1}{2}(E_{surf}-N_{atoms}\cdot
+E_{bulk})+E^{relax}
+$$</span></p>
+<p><span class="math display">$$
+\gamma_s=\dfrac{1}{2A}(E_{surf}^{unrelax}-N\cdot
+E_{bulk})+\dfrac{1}{A}(E_{surf}^{relax}-E_{surf}^{unrelax})
+$$</span></p>
+<p>其中，弛豫能量被定义为： <span
+class="math display"><em>E</em><sup><em>r</em><em>e</em><em>l</em><em>a</em><em>x</em></sup> = <em>E</em><sub><em>s</em><em>u</em><em>r</em><em>f</em></sub><sup><em>r</em><em>e</em><em>l</em><em>a</em><em>x</em></sup> − <em>E</em><sub><em>s</em><em>u</em><em>r</em><em>f</em></sub><sup><em>u</em><em>n</em><em>r</em><em>e</em><em>l</em><em>a</em><em>x</em></sup></span></p>
+<ul>
+<li>手册的公式和大师兄文章中公式的区别在于表面积A，表面能应当除以表面积，所以后者更合理一些</li>
+<li><span
+class="math inline"><em>E</em><sub><em>b</em><em>u</em><em>l</em><em>k</em></sub></span>为体相中单个原子的能量，所以<span
+class="math inline"><em>N</em> ⋅ <em>E</em><sub><em>b</em><em>u</em><em>l</em><em>k</em></sub></span>为这个体相的能量，即为<code>OUTCAR</code>直接读出的能量</li>
+</ul>
+<h2 id="关于表面积a的计算">关于表面积A的计算</h2>
+<p>这部分有些难理解，涉及到一点<code>高等数学</code>和<code>线性代数</code>🤕</p>
+<p><strong>表面积可通过晶格基矢量的叉积确定</strong>，在POSCAR或CONTCAR文件中，晶格基矢量通常以三行的形式定义</p>
+<p>对于面积的计算，可设一组不共线的基矢量为<span
+class="math inline"><strong>a</strong><sub><strong>1</strong></sub> = (<em>a</em><sub>11</sub>, <em>a</em><sub>12</sub>, 0), <strong>a</strong><sub><strong>2</strong></sub> = (<em>a</em><sub>21</sub>, <em>a</em><sub>22</sub>, 0)</span></p>
+<p>下面这张图应该挺形象</p>
+<figure>
+<img
+src="./%E8%A1%A8%E9%9D%A2%E8%83%BD%E7%9A%84%E8%AE%A1%E7%AE%97/%E5%90%91%E9%87%8F%E5%A4%96%E7%A7%AF.jpg"
+alt="https://zhuanlan.zhihu.com/p/359975221" />
+<figcaption
+aria-hidden="true">https://zhuanlan.zhihu.com/p/359975221</figcaption>
+</figure>
+<p><span
+class="math inline"><em>a⃗</em> × <em>b⃗</em> = (0, 0, <em>a</em><sub>11</sub> × <em>a</em><sub>22</sub> − <em>a</em><sub>12</sub> × <em>a</em><sub>21</sub>)</span></p>
+<p>面积为外积模乘以缩放银子 <span
+class="math display"><em>实</em><em>际</em><em>面</em><em>积</em> = <em>s</em><sup>2</sup> ⋅ |<em>a</em><sub>11</sub><em>a</em><sub>22</sub> − <em>a</em><sub>12</sub><em>a</em><sub>21</sub>|</span>
+PS：对于三维的体积 <span
+class="math display"><em>体</em><em>积</em> = <em>s</em><sup>3</sup> ⋅ |<strong>a</strong><sub><strong>1</strong></sub> ⋅ (<strong>a</strong><sub><strong>2</strong></sub> <strong>×</strong> <strong>a</strong><sub><strong>3</strong></sub>)|</span></p>
+<h2 id="p1x1cu111的表面能">p(1x1)Cu(111)的表面能</h2>
+<p>前面已经算得差不多了</p>
+<p>slab模型的能量信息</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">[ctan@baifq-hpc141 primitive-slab-opt-1]$ grep <span class="string">&#x27;  without&#x27;</span> OUTCAR</span><br><span class="line">  energy  without entropy=      -13.96941183  energy(sigma-&gt;0) =      -13.97673168</span><br><span class="line">  energy  without entropy=      -13.96945528  energy(sigma-&gt;0) =      -13.97676958</span><br><span class="line">  energy  without entropy=      -13.97006413  energy(sigma-&gt;0) =      -13.97726241</span><br><span class="line">  energy  without entropy=      -13.97020643  energy(sigma-&gt;0) =      -13.97735554</span><br><span class="line">  energy  without entropy=      -13.97017969  energy(sigma-&gt;0) =      -13.97735013</span><br></pre></td></tr></table></figure>
+<p>slab模型优化后的结构信息</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line">CONTCAR\(1\1\1)</span><br><span class="line">   1.00000000000000</span><br><span class="line">     2.5701000690000000    0.0000000000000000    0.0000000000000000</span><br><span class="line">    -1.2850500345000000    2.2257719501000000    0.0000000000000000</span><br><span class="line">     0.0000000000000000    0.0000000000000000   21.2954006195000005</span><br><span class="line">  Cu/0e71e558f37</span><br><span class="line">               4</span><br><span class="line">Selective dynamics</span><br><span class="line">Direct</span><br><span class="line">  0.0000000000000000  0.0000000000000000  0.0000000000000000   F   F   F</span><br><span class="line">  0.6666700000000034  0.3333299999999966  0.0985399999999998   F   F   F</span><br><span class="line">  0.3333311322281505  0.6666688677718494  0.1972481653092927   T   T   T</span><br><span class="line"> -0.0000004145140272  0.0000004145140272  0.2951613337135311   T   T   T</span><br><span class="line"></span><br><span class="line">  0.00000000E+00  0.00000000E+00  0.00000000E+00</span><br><span class="line">  0.00000000E+00  0.00000000E+00  0.00000000E+00</span><br><span class="line">  0.00000000E+00  0.00000000E+00  0.00000000E+00</span><br><span class="line">  0.00000000E+00  0.00000000E+00  0.00000000E+00</span><br></pre></td></tr></table></figure>
+<p>bulk模型的能量信息</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">[ctan@baifq-hpc141 primitive-slab-opt-1]$ grep <span class="string">&#x27;  without&#x27;</span> ../bulk-calc/OUTCAR</span><br><span class="line">  energy  without entropy=      -14.90258332  energy(sigma-&gt;0) =      -14.90537746</span><br><span class="line">  energy  without entropy=      -14.90568039  energy(sigma-&gt;0) =      -14.90844732</span><br><span class="line">  energy  without entropy=      -14.90859467  energy(sigma-&gt;0) =      -14.91129762</span><br></pre></td></tr></table></figure>
+<ul>
+<li><span
+class="math inline"><em>A</em> = 2.570100069 * 2.2257719501 − 0.0000000000000000 * (−1.2850500345) = 5.720456642530275</span>
+Å<span class="math inline"><sup>2</sup></span></li>
+<li><span
+class="math inline"><em>E</em><sub><em>s</em><em>u</em><em>r</em><em>f</em></sub><sup><em>u</em><em>n</em><em>r</em><em>e</em><em>l</em><em>a</em><em>x</em></sup> = −13.9767</span>
+eV</li>
+<li><span
+class="math inline"><em>E</em><sub><em>b</em><em>u</em><em>l</em><em>k</em></sub> ⋅ <em>N</em> = −14.9112</span>
+eV</li>
+<li><span
+class="math inline"><em>E</em><sub><em>s</em><em>u</em><em>r</em><em>f</em><em>a</em><em>c</em><em>e</em></sub><sup><em>r</em><em>e</em><em>l</em><em>a</em><em>x</em></sup> = −13.9773</span>
+eV</li>
+</ul>
+<p>所以表面能<span
+class="math inline"><em>γ</em><sub><em>s</em></sub></span> = 0.08158
+eV/Å<span class="math inline"><sup>2</sup></span> ,又1 eV/Å<span
+class="math inline"><sup>2</sup></span>=16.0218 J/m<span
+class="math inline"><sup>2</sup></span>，所以表面能<span
+class="math inline"><em>γ</em><sub><em>s</em></sub>=</span> 1.3070
+J/m<span class="math inline"><sup>2</sup></span></p>
+<h2 id="c1x1cu111的表面能">c(1x1)Cu(111)的表面能</h2>
+<p>之前大师兄提到过，对于面心立方最密堆积的形式，slab模型的建立可以使用原胞也可以使用单胞，那么接下来看看用单胞计算表面能吧</p>
+<p>c(1x1)Cu(111)优化计算的能量信息：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><span class="line">[ctan@baifq-hpc141 conventional-slab-opt]$ grep <span class="string">&#x27;  without&#x27;</span> OUTCAR</span><br><span class="line">  energy  without entropy=      -55.94972046  energy(sigma-&gt;0) =      -55.94434499</span><br><span class="line">  energy  without entropy=      -55.94997517  energy(sigma-&gt;0) =      -55.94458201</span><br><span class="line">  energy  without entropy=      -55.95396000  energy(sigma-&gt;0) =      -55.94820485</span><br><span class="line">  energy  without entropy=      -55.95519341  energy(sigma-&gt;0) =      -55.94928561</span><br><span class="line">  energy  without entropy=      -55.95554732  energy(sigma-&gt;0) =      -55.94959634</span><br><span class="line">  energy  without entropy=      -55.95713778  energy(sigma-&gt;0) =      -55.95095507</span><br><span class="line">  energy  without entropy=      -55.95788514  energy(sigma-&gt;0) =      -55.95158140</span><br><span class="line">  energy  without entropy=      -55.95893404  energy(sigma-&gt;0) =      -55.95242747</span><br><span class="line">  energy  without entropy=      -55.95963672  energy(sigma-&gt;0) =      -55.95296199</span><br><span class="line">  energy  without entropy=      -55.96031694  energy(sigma-&gt;0) =      -55.95340564</span><br><span class="line">  energy  without entropy=      -55.96050719  energy(sigma-&gt;0) =      -55.95349958</span><br><span class="line">  energy  without entropy=      -55.96053048  energy(sigma-&gt;0) =      -55.95316488</span><br><span class="line">  energy  without entropy=      -55.96067995  energy(sigma-&gt;0) =      -55.95346716</span><br><span class="line">  energy  without entropy=      -55.96069855  energy(sigma-&gt;0) =      -55.95356576</span><br><span class="line">  energy  without entropy=      -55.96051601  energy(sigma-&gt;0) =      -55.95360396</span><br><span class="line">  energy  without entropy=      -55.96050802  energy(sigma-&gt;0) =      -55.95361124</span><br><span class="line">  energy  without entropy=      -55.96041586  energy(sigma-&gt;0) =      -55.95360050</span><br><span class="line">  energy  without entropy=      -55.96018279  energy(sigma-&gt;0) =      -55.95347398</span><br></pre></td></tr></table></figure>
+<p>结构信息：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br></pre></td><td class="code"><pre><span class="line">[ctan@baifq-hpc141 conventional-slab-opt]$ <span class="built_in">cat</span> CONTCAR</span><br><span class="line">CONTCAR\(1\1\1)</span><br><span class="line">   1.00000000000000</span><br><span class="line">     5.1402001381000000    0.0000000000000000    0.0000000000000000</span><br><span class="line">    -2.5701000690000000    4.4515439000999999    0.0000000000000000</span><br><span class="line">     0.0000000000000000    0.0000000000000000   21.2954006195000005</span><br><span class="line">  Cu/0e71e558f37</span><br><span class="line">              16</span><br><span class="line">Direct</span><br><span class="line">  0.0000006270807907 -0.0000006270807907  0.0011656342599333</span><br><span class="line">  0.6666672048402060  0.3333327951597896  0.0988195745854847</span><br><span class="line">  0.3333327951597896  0.6666672048402060  0.1968004254145135</span><br><span class="line"> -0.0000006270807907  0.0000006270807907  0.2944543657400676</span><br><span class="line">  0.0000006270807907  0.4999993729192098  0.0011656342599333</span><br><span class="line">  0.6666672048402060  0.8333327951597940  0.0988195745854847</span><br><span class="line">  0.3333327951597896  0.1666672048402087  0.1968004254145135</span><br><span class="line"> -0.0000006270807907  0.5000006270807924  0.2944543657400676</span><br><span class="line">  0.5000006270807924  0.4999993729192098  0.0011656342599333</span><br><span class="line">  0.1666672048402087  0.8333327951597940  0.0988195745854847</span><br><span class="line">  0.8333327951597940  0.1666672048402087  0.1968004254145135</span><br><span class="line">  0.4999993729192098  0.5000006270807924  0.2944543657400676</span><br><span class="line">  0.5000006270807924 -0.0000006270807907  0.0011656342599333</span><br><span class="line">  0.1666672048402087  0.3333327951597896  0.0988195745854847</span><br><span class="line">  0.8333327951597940  0.6666672048402060  0.1968004254145135</span><br><span class="line">  0.4999993729192098  0.0000006270807907  0.2944543657400676</span><br><span class="line"></span><br><span class="line">  0.00000000E+00  0.00000000E+00  0.00000000E+00</span><br><span class="line">  0.00000000E+00  0.00000000E+00  0.00000000E+00</span><br><span class="line">  0.00000000E+00  0.00000000E+00  0.00000000E+00</span><br><span class="line">  0.00000000E+00  0.00000000E+00  0.00000000E+00</span><br><span class="line">  0.00000000E+00  0.00000000E+00  0.00000000E+00</span><br><span class="line">  0.00000000E+00  0.00000000E+00  0.00000000E+00</span><br><span class="line">  0.00000000E+00  0.00000000E+00  0.00000000E+00</span><br><span class="line">  0.00000000E+00  0.00000000E+00  0.00000000E+00</span><br><span class="line">  0.00000000E+00  0.00000000E+00  0.00000000E+00</span><br><span class="line">  0.00000000E+00  0.00000000E+00  0.00000000E+00</span><br><span class="line">  0.00000000E+00  0.00000000E+00  0.00000000E+00</span><br><span class="line">  0.00000000E+00  0.00000000E+00  0.00000000E+00</span><br><span class="line">  0.00000000E+00  0.00000000E+00  0.00000000E+00</span><br><span class="line">  0.00000000E+00  0.00000000E+00  0.00000000E+00</span><br><span class="line">  0.00000000E+00  0.00000000E+00  0.00000000E+00</span><br><span class="line">  0.00000000E+00  0.00000000E+00  0.00000000E+00</span><br></pre></td></tr></table></figure>
+<p>Cu(111)的体相能量：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">[ctan@baifq-hpc141 conventional-slab-opt]$ grep <span class="string">&#x27;  without&#x27;</span> ../bulk-calc/OUTCAR</span><br><span class="line">  energy  without entropy=      -14.90258332  energy(sigma-&gt;0) =      -14.90537746</span><br><span class="line">  energy  without entropy=      -14.90568039  energy(sigma-&gt;0) =      -14.90844732</span><br><span class="line">  energy  without entropy=      -14.90859467  energy(sigma-&gt;0) =      -14.91129762</span><br></pre></td></tr></table></figure>
+<ul>
+<li>表面积A=<span
+class="math inline">5.1402001381000000 * 4.4515439000999999 = 22.8818</span>
+Å<span class="math inline"><sup>2</sup></span></li>
+<li><span
+class="math inline"><em>E</em><sub><em>s</em><em>u</em><em>r</em><em>f</em></sub><sup><em>u</em><em>n</em><em>r</em><em>e</em><em>l</em><em>a</em><em>x</em></sup></span>
+= -55.9443 eV</li>
+<li><span
+class="math inline"><em>N</em> ⋅ <em>E</em><sub><em>b</em><em>u</em><em>l</em><em>k</em></sub></span>
+= -59.6452 eV
+<ul>
+<li><strong>N指的是slab模型中的原子个数而非bulk中的原子个数</strong></li>
+</ul></li>
+<li><span
+class="math inline"><em>E</em><sub><em>s</em><em>u</em><em>r</em><em>f</em></sub><sup><em>r</em><em>e</em><em>l</em><em>a</em><em>x</em></sup></span>
+= -55.9535 eV</li>
+</ul>
+<p>计算得表面能<span
+class="math inline"><em>γ</em><sub><em>s</em></sub></span>=0.08047
+eV/Å<span class="math inline"><sup>2</sup></span> = 1.2892 J/m<span
+class="math inline"><sup>2</sup></span></p>
+<p>这与p(1x1)Cu(111)计算所得的表面能有一定的差距，目前现阶段我还无法解决这个问题🤔😵‍💫</p>
+<h2 id="p1x1ni100的表面能">p(1x1)Ni(100)的表面能</h2>
+<p>这个例子来自于vasp官方的手册<code>Hands on Session III</code></p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line">general:</span><br><span class="line">SYSTEM = clean Ni(100) surface</span><br><span class="line">ISTART = 0 ; ICHARG=2</span><br><span class="line">ENCUT = 270</span><br><span class="line">ISMEAR = 2 ; SIGMA = 0.2</span><br><span class="line">spin:</span><br><span class="line">ISPIN=2</span><br><span class="line">MAGMOM = 5*1</span><br><span class="line">dynamic:</span><br><span class="line">IBRION = 1</span><br><span class="line">NSW = 100</span><br><span class="line">POTIM = 0.2</span><br></pre></td></tr></table></figure>
+<p>有个疑惑的点是手册中的<code>INCAR</code>没有加上偶极矫正，我在自己算的时候加上了偶极矫正</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><span class="line">System = Nickel-slab-opt</span><br><span class="line">ISMEAR = 1</span><br><span class="line">ISTART = 0</span><br><span class="line">ICHARG = 2</span><br><span class="line">SIGMA = 0.05</span><br><span class="line">ENCUT = 360</span><br><span class="line">ALGO = Normal</span><br><span class="line">ISPIN = 2</span><br><span class="line">MAGMOM = 5*1</span><br><span class="line">NSW = 200</span><br><span class="line">NELM = 200</span><br><span class="line">EDIFF = 1E-6</span><br><span class="line">EDIFFG = -0.01</span><br><span class="line">IDIPOL = 3</span><br><span class="line">LDIPOL = .TRUE.</span><br><span class="line">LWAVE = .FALSE.</span><br><span class="line">LCHARG = .FALSE.</span><br><span class="line">IBRION = 1</span><br><span class="line">POTIM = 0.05</span><br></pre></td></tr></table></figure>
+<p>体相能量信息：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">[ctan@baifq-hpc141 primitive-opt]$ grep <span class="string">&#x27;  without&#x27;</span> ../bulk/OUTCAR</span><br><span class="line">  energy  without entropy=      -21.88865316  energy(sigma-&gt;0) =      -21.88759144</span><br><span class="line">  energy  without entropy=      -21.88930785  energy(sigma-&gt;0) =      -21.88825056</span><br><span class="line">  energy  without entropy=      -21.89056178  energy(sigma-&gt;0) =      -21.88952707</span><br></pre></td></tr></table></figure>
+<p>弛豫与未弛豫的slab模型的能量信息：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">[ctan@baifq-hpc141 primitive-opt]$ grep <span class="string">&#x27;  without&#x27;</span> OUTCAR</span><br><span class="line">  energy  without entropy=      -25.97155386  energy(sigma-&gt;0) =      -25.97291371</span><br><span class="line">  energy  without entropy=      -25.97233802  energy(sigma-&gt;0) =      -25.97366730</span><br><span class="line">  energy  without entropy=      -25.97412653  energy(sigma-&gt;0) =      -25.97534340</span><br><span class="line">  energy  without entropy=      -25.97511519  energy(sigma-&gt;0) =      -25.97602399</span><br><span class="line">  energy  without entropy=      -25.97516432  energy(sigma-&gt;0) =      -25.97619350</span><br><span class="line">  energy  without entropy=      -25.97516747  energy(sigma-&gt;0) =      -25.97619463</span><br><span class="line">  energy  without entropy=      -25.97517140  energy(sigma-&gt;0) =      -25.97620156</span><br></pre></td></tr></table></figure>
+<p>优化后的结构：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><span class="line">CONTCAR\(1\0\0)</span><br><span class="line">   1.00000000000000</span><br><span class="line">     2.4846000671000001    0.0000000000000000    0.0000000000000000</span><br><span class="line">    -1.2423000336000001    2.1517267763999999    0.0000000000000000</span><br><span class="line">     0.0000000000000000    0.0000000000000000   18.7047996521000002</span><br><span class="line">  Ni_pv/368cd815</span><br><span class="line">               5</span><br><span class="line">Direct</span><br><span class="line">  0.6666685456044492  0.3333314543955508  0.0005454007373249</span><br><span class="line">  0.0000003831810720 -0.0000003831810720  0.1078816295897802</span><br><span class="line">  0.3333305745814666  0.6666694254185335  0.2169200598414882</span><br><span class="line">  0.6666681017676376  0.3333318982323624  0.3259932620996842</span><br><span class="line">  0.0000023948653782 -0.0000023948653782  0.4332496477317282</span><br><span class="line"></span><br><span class="line">  0.00000000E+00  0.00000000E+00  0.00000000E+00</span><br><span class="line">  0.00000000E+00  0.00000000E+00  0.00000000E+00</span><br><span class="line">  0.00000000E+00  0.00000000E+00  0.00000000E+00</span><br><span class="line">  0.00000000E+00  0.00000000E+00  0.00000000E+00</span><br><span class="line">  0.00000000E+00  0.00000000E+00  0.00000000E+00</span><br></pre></td></tr></table></figure>
+<ul>
+<li>表面积A=2.4846000671000001*2.1517267763999999=5.346180493024307
+eV</li>
+<li><span
+class="math inline"><em>E</em><sub><em>s</em><em>u</em><em>r</em><em>f</em></sub><sup><em>u</em><em>n</em><em>r</em><em>e</em><em>l</em><em>a</em><em>x</em></sup></span>
+= -25.97291371 eV</li>
+<li><span
+class="math inline"><em>E</em><sub><em>s</em><em>u</em><em>r</em><em>f</em></sub><sup><em>r</em><em>e</em><em>l</em><em>a</em><em>x</em></sup></span>
+= -25.97620156 eV</li>
+<li><span
+class="math inline"><em>N</em> ⋅ <em>E</em><sub><em>b</em><em>u</em><em>l</em><em>k</em></sub></span>
+= -21.88952707 eV</li>
+</ul>
+<p>表面能 <span
+class="math inline"><em>γ</em><sub><em>s</em></sub></span> = 0.1293
+eV/Å<span class="math inline"><sup>2</sup></span> = 2.0715 J/m<span
+class="math inline"><sup>2</sup></span></p>
+<h2 id="小结">小结</h2>
+<ul>
+<li>本节主要是联系表面能的计算</li>
+<li>Ni(100)表面能的计算选用的赝势为Ni_sv赝势</li>
+</ul>
+
+            
+
+
+        </div>
+    </div>
+    <div id="post-footer" class="post-footer main-content-wrap">
+        
+            <div class="post-footer-tags">
+                <span class="text-color-light text-small">TAGGED IN</span><br/>
+                
+    <a class="tag tag--primary tag--small t-none-link" href="/all-tags/%E5%8C%96%E5%AD%A6/" rel="tag">化学</a> <a class="tag tag--primary tag--small t-none-link" href="/all-tags/%E7%A7%91%E7%A0%94/" rel="tag">科研</a>
+
+            </div>
+        
+        
+            <div class="post-actions-wrap">
+    <nav>
+        <ul class="post-actions post-action-nav">
+            <li class="post-action">
+                
+                    
+                <a
+                    class="post-action-btn btn btn--default tooltip--top"
+                    href="/2025/04/29/%E7%A7%91%E7%A0%94/VASP/Starry%20Sky/%E6%88%AA%E6%96%AD%E8%83%BDENCUT%E7%9A%84%E9%80%89%E5%8F%96/"
+                    data-tooltip="截断能ENCUT的选取"
+                    aria-label="PREVIOUS: 截断能ENCUT的选取"
+                >
+                    
+                        <i class="fa fa-angle-left" aria-hidden="true"></i>
+                        <span class="hide-xs hide-sm text-small icon-ml">PREVIOUS</span>
+                    </a>
+            </li>
+            <li class="post-action">
+                
+                    
+                <a
+                    class="post-action-btn btn btn--default tooltip--top"
+                    href="/2025/04/29/%E7%A7%91%E7%A0%94/VASP/Starry%20Sky/POTCAR%E8%B5%9D%E5%8A%BF%E7%9A%84%E9%80%89%E5%8F%96/"
+                    data-tooltip="POTCAR赝势的选取"
+                    aria-label="NEXT: POTCAR赝势的选取"
+                >
+                    
+                        <span class="hide-xs hide-sm text-small icon-mr">NEXT</span>
+                        <i class="fa fa-angle-right" aria-hidden="true"></i>
+                    </a>
+            </li>
+        </ul>
+    </nav>
+    <ul class="post-actions post-action-share">
+        <li class="post-action hide-lg hide-md hide-sm">
+            <a
+                class="post-action-btn btn btn--default btn-open-shareoptions"
+                href="#btn-open-shareoptions"
+                aria-label="Share this post"
+            >
+                <i class="fa fa-share-alt" aria-hidden="true"></i>
+            </a>
+        </li>
+        
+            
+            
+            <li class="post-action hide-xs">
+                <a
+                    class="post-action-btn btn btn--default"
+                    target="new" href="https://www.facebook.com/sharer/sharer.php?u=http://example.com/2025/04/29/%E7%A7%91%E7%A0%94/VASP/Starry%20Sky/%E8%A1%A8%E9%9D%A2%E8%83%BD%E7%9A%84%E8%AE%A1%E7%AE%97/"
+                    title="Share on Facebook"
+                    aria-label="Share on Facebook"
+                >
+                    <i class="fab fa-facebook" aria-hidden="true"></i>
+                </a>
+            </li>
+        
+            
+            
+            <li class="post-action hide-xs">
+                <a
+                    class="post-action-btn btn btn--default"
+                    target="new" href="https://twitter.com/intent/tweet?text=http://example.com/2025/04/29/%E7%A7%91%E7%A0%94/VASP/Starry%20Sky/%E8%A1%A8%E9%9D%A2%E8%83%BD%E7%9A%84%E8%AE%A1%E7%AE%97/"
+                    title="Share on Twitter"
+                    aria-label="Share on Twitter"
+                >
+                    <i class="fab fa-twitter" aria-hidden="true"></i>
+                </a>
+            </li>
+        
+            
+            
+            <li class="post-action hide-xs">
+                <a
+                    class="post-action-btn btn btn--default"
+                    target="new" href="https://plus.google.com/share?url=http://example.com/2025/04/29/%E7%A7%91%E7%A0%94/VASP/Starry%20Sky/%E8%A1%A8%E9%9D%A2%E8%83%BD%E7%9A%84%E8%AE%A1%E7%AE%97/"
+                    title="Share on Google+"
+                    aria-label="Share on Google+"
+                >
+                    <i class="fab fa-google-plus" aria-hidden="true"></i>
+                </a>
+            </li>
+        
+        
+            
+        
+        <li class="post-action">
+            
+                <a class="post-action-btn btn btn--default" href="#" aria-label="Back to top">
+            
+                <i class="fa fa-list" aria-hidden="true"></i>
+            </a>
+        </li>
+    </ul>
+</div>
+
+
+        
+        
+            
+        
+    </div>
+</article>
+
+
+
+                <footer id="footer" class="main-content-wrap">
+    <span class="copyrights">
+        Copyrights &copy; 2025 John Doe. All Rights Reserved.
+    </span>
+</footer>
+
+            </div>
+            
+                <div id="bottom-bar" class="post-bottom-bar" data-behavior="4">
+                    <div class="post-actions-wrap">
+    <nav>
+        <ul class="post-actions post-action-nav">
+            <li class="post-action">
+                
+                    
+                <a
+                    class="post-action-btn btn btn--default tooltip--top"
+                    href="/2025/04/29/%E7%A7%91%E7%A0%94/VASP/Starry%20Sky/%E6%88%AA%E6%96%AD%E8%83%BDENCUT%E7%9A%84%E9%80%89%E5%8F%96/"
+                    data-tooltip="截断能ENCUT的选取"
+                    aria-label="PREVIOUS: 截断能ENCUT的选取"
+                >
+                    
+                        <i class="fa fa-angle-left" aria-hidden="true"></i>
+                        <span class="hide-xs hide-sm text-small icon-ml">PREVIOUS</span>
+                    </a>
+            </li>
+            <li class="post-action">
+                
+                    
+                <a
+                    class="post-action-btn btn btn--default tooltip--top"
+                    href="/2025/04/29/%E7%A7%91%E7%A0%94/VASP/Starry%20Sky/POTCAR%E8%B5%9D%E5%8A%BF%E7%9A%84%E9%80%89%E5%8F%96/"
+                    data-tooltip="POTCAR赝势的选取"
+                    aria-label="NEXT: POTCAR赝势的选取"
+                >
+                    
+                        <span class="hide-xs hide-sm text-small icon-mr">NEXT</span>
+                        <i class="fa fa-angle-right" aria-hidden="true"></i>
+                    </a>
+            </li>
+        </ul>
+    </nav>
+    <ul class="post-actions post-action-share">
+        <li class="post-action hide-lg hide-md hide-sm">
+            <a
+                class="post-action-btn btn btn--default btn-open-shareoptions"
+                href="#btn-open-shareoptions"
+                aria-label="Share this post"
+            >
+                <i class="fa fa-share-alt" aria-hidden="true"></i>
+            </a>
+        </li>
+        
+            
+            
+            <li class="post-action hide-xs">
+                <a
+                    class="post-action-btn btn btn--default"
+                    target="new" href="https://www.facebook.com/sharer/sharer.php?u=http://example.com/2025/04/29/%E7%A7%91%E7%A0%94/VASP/Starry%20Sky/%E8%A1%A8%E9%9D%A2%E8%83%BD%E7%9A%84%E8%AE%A1%E7%AE%97/"
+                    title="Share on Facebook"
+                    aria-label="Share on Facebook"
+                >
+                    <i class="fab fa-facebook" aria-hidden="true"></i>
+                </a>
+            </li>
+        
+            
+            
+            <li class="post-action hide-xs">
+                <a
+                    class="post-action-btn btn btn--default"
+                    target="new" href="https://twitter.com/intent/tweet?text=http://example.com/2025/04/29/%E7%A7%91%E7%A0%94/VASP/Starry%20Sky/%E8%A1%A8%E9%9D%A2%E8%83%BD%E7%9A%84%E8%AE%A1%E7%AE%97/"
+                    title="Share on Twitter"
+                    aria-label="Share on Twitter"
+                >
+                    <i class="fab fa-twitter" aria-hidden="true"></i>
+                </a>
+            </li>
+        
+            
+            
+            <li class="post-action hide-xs">
+                <a
+                    class="post-action-btn btn btn--default"
+                    target="new" href="https://plus.google.com/share?url=http://example.com/2025/04/29/%E7%A7%91%E7%A0%94/VASP/Starry%20Sky/%E8%A1%A8%E9%9D%A2%E8%83%BD%E7%9A%84%E8%AE%A1%E7%AE%97/"
+                    title="Share on Google+"
+                    aria-label="Share on Google+"
+                >
+                    <i class="fab fa-google-plus" aria-hidden="true"></i>
+                </a>
+            </li>
+        
+        
+            
+        
+        <li class="post-action">
+            
+                <a class="post-action-btn btn btn--default" href="#" aria-label="Back to top">
+            
+                <i class="fa fa-list" aria-hidden="true"></i>
+            </a>
+        </li>
+    </ul>
+</div>
+
+
+                </div>
+                
+    <div id="share-options-bar" class="share-options-bar" data-behavior="4">
+        <i id="btn-close-shareoptions" class="fa fa-times"></i>
+        <ul class="share-options">
+            
+                
+                
+                <li class="share-option">
+                    <a
+                        class="share-option-btn"
+                        target="new"
+                        href="https://www.facebook.com/sharer/sharer.php?u=http://example.com/2025/04/29/%E7%A7%91%E7%A0%94/VASP/Starry%20Sky/%E8%A1%A8%E9%9D%A2%E8%83%BD%E7%9A%84%E8%AE%A1%E7%AE%97/"
+                        aria-label="Share on Facebook"
+                    >
+                        <i class="fab fa-facebook" aria-hidden="true"></i><span>Share on Facebook</span>
+                    </a>
+                </li>
+            
+                
+                
+                <li class="share-option">
+                    <a
+                        class="share-option-btn"
+                        target="new"
+                        href="https://twitter.com/intent/tweet?text=http://example.com/2025/04/29/%E7%A7%91%E7%A0%94/VASP/Starry%20Sky/%E8%A1%A8%E9%9D%A2%E8%83%BD%E7%9A%84%E8%AE%A1%E7%AE%97/"
+                        aria-label="Share on Twitter"
+                    >
+                        <i class="fab fa-twitter" aria-hidden="true"></i><span>Share on Twitter</span>
+                    </a>
+                </li>
+            
+                
+                
+                <li class="share-option">
+                    <a
+                        class="share-option-btn"
+                        target="new"
+                        href="https://plus.google.com/share?url=http://example.com/2025/04/29/%E7%A7%91%E7%A0%94/VASP/Starry%20Sky/%E8%A1%A8%E9%9D%A2%E8%83%BD%E7%9A%84%E8%AE%A1%E7%AE%97/"
+                        aria-label="Share on Google+"
+                    >
+                        <i class="fab fa-google-plus" aria-hidden="true"></i><span>Share on Google+</span>
+                    </a>
+                </li>
+            
+        </ul>
+    </div>
+
+
+            
+        </div>
+        
+
+
+<div id="about">
+    <div id="about-card">
+        <div id="about-btn-close">
+            <i class="fa fa-times"></i>
+        </div>
+        
+            <h4 id="about-card-name">John Doe</h4>
+        
+            <div id="about-card-bio"><p>author.bio</p>
+</div>
+        
+        
+            <div id="about-card-job">
+                <i class="fa fa-briefcase"></i>
+                <br/>
+                <p>author.job</p>
+
+            </div>
+        
+        
+    </div>
+</div>
+
+        
+        
+<div id="cover" style="background-image:url('/assets/images/cover.jpg');"></div>
+        <!--SCRIPTS-->
+
+<script src="/assets/js/script-akgy1kkmfssyzznzlvk9mjwcvnsn87aqalldnf43rojvlib0s8vpmeb5mayw.min.js"></script>
+
+<!--SCRIPTS END-->
+
+
+    
+
+
+
+
+    </body>
+</html>

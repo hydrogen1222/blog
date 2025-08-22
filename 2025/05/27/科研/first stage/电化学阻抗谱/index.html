@@ -1,0 +1,1327 @@
+
+<!DOCTYPE html>
+<html lang="en">
+    
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="generator" content="Hexo">
+    <title>从零开始的电化学阻抗谱原理 - Hexo</title>
+    <meta name="author" content="John Doe">
+    
+    
+    
+    <script type="application/ld+json">{"@context":"http://schema.org","@type":"BlogPosting","author":{"@type":"Person","name":"John Doe","sameAs":["https://github.com/","http://stackoverflow.com/users","https://twitter.com/","https://facebook.com/","https://plus.google.com/","https://www.linkedin.com/profile/","mailto"]},"articleBody":"什么是电化学阻抗谱？\r\n有一种叫做黑箱的未知特性系统。可采用一系列测量方法，通过施加输入信号并检测输出响应来探查黑箱。例如，假设将黑箱置于暗室中，然后施加特定波长的光照。若观察到响应信号（如电流），则可判定箱内物质具有光活性。输入与输出之间的关系称为“传递函数”，阻抗谱是传递函数的一种特例。\r\n阻抗：电路中电阻、电感、电容对交流电个阻碍作用个统称。阻抗是一个复数，实部称为电阻，虚部称为电抗。电化学过程主要涉及电荷在电极和电解质界面上的传输和存储。例如，电极表面的双电层效应会形成双电层电容，电解质中的离子扩散也会导致电容行为。这些机制使电容成为电化学系统中主要的电抗元件。\r\n相比之下，电感通常与磁场的变化相关，比如电流通过线圈时产生的磁场。然而，在常规的电化学系统中，磁场变化通常不显著，因此电感的影响非常小，通常电化学系统中考虑电阻、容抗而不考虑感抗。\r\n电化学阻抗谱（EIS）通过施加交流电压（或电流）并测量产生的电流（或电压），能够研究电极和电化学池的电化学特性，利用等效电路进行分析，可以确定与电极电化学反应相关的重要参数，如电荷转移电阻、双电层电容和Warburg阻抗\r\n阻抗的复数表达形式\r\n交流电（AC）电路中的电流、电压以及阻抗通常使用复数来表示，主要原因有两个：\r\n\r\n交流信号（以及许多其他正弦波现象）具有一个幅值和一个相位，它们分别与复数的模和幅角非常相似\r\n复数的基本运算，如加法、减法、乘法和除法，更容易执行和编程\r\n\r\n注意：\r\n\r\n因为符号i\r\n在交流电路中用于表示电流，这里我们用j作为虚数单位，即j2 = −1\r\n符号 ℜe代表复数的实部\r\n\r\n预备知识\r\n复数的标准形式 Z = a + bj\r\n复数的模 $$\r\n\\lvert Z \\rvert =\\sqrt {a^2+b^2}\r\n$$\r\n欧拉公式 eix = cos x + isin x\r\n复数的指数形式 Z = rejθ = rcos θ + rjsin θ\r\n取实数部分： ℜe(rejθ) = rcos θ\r\n单变量复函数f(t)的导数的实部等于f(t)的实部的导数，证明如下：\r\n$$ $$\r\n**复函数$f(t)$的不定积分的实部等于$f(t)$的实部的不定积分，证明如下**\r\n$$ $$\r\n复数形式的阻抗\r\n\r\n电压源\r\n\r\nv(t) = V0cos (ωt) = ℜe(V0cos (ωt) + V0jsin (ωt)) = ℜe(V0ejωt)\r\n\r\n电阻\r\n\r\n对于如下图的交变电路\r\n\r\n\r\n交变电路中的电阻\r\n\r\n定义ZR = R，那么电流$i=\\Re e(\\dfrac{V_R}{R})$或$I=\\dfrac{V_R}{Z_R}$\r\n\r\n电容\r\n\r\n\r\n\r\n交变电路中的电容\r\n\r\n电容上电流的定义为：$I=C(\\dfrac{d\r\nv(t)}{dt})$，则有如下推导： $$\r\n\\begin{align}\r\nv(t)=&amp;\\dfrac{1}{C}\\int i dt\\\\\r\nv(t)=&amp;V_0\\cos (\\omega t)=\\Re e(V_0e^{j\\omega t})\\\\\r\n\\Re e(V_0e^{j\\omega t})=&amp;\\dfrac{1}{C}\\int idt\\\\\r\n\\dfrac{d}{dt}(\\Re e(V_0e^{j\\omega\r\nt}))=&amp;\\dfrac{d}{dt}(\\dfrac{1}{C}\\int idt)\\\\\r\n\\Re e(j\\omega V_0e^{j\\omega t})=&amp;\\dfrac{1}{C}i\\\\\r\ni=&amp;\\Re e(j\\omega CV_0e^{j\\omega t})\r\n\\end{align}\r\n$$ 电容器C两端的电压为VC = V0ejωt，那么电容对电流的阻碍作用$Z_C=\\dfrac{1}{j\\omega C}=-\\dfrac{j}{\\omega\r\nC}$\r\n与电阻的阻抗（电阻）ZR不同，电容的阻抗（容抗）ZC是一个纯虚数\r\n\r\n电感\r\n\r\n在电化学系统中，电感并不常见\r\n\r\n\r\n交变电路中的电感\r\n\r\n电感L上的电流i和电压v(t)之间的关系为：$v(t)=L\\dfrac{di}{dt}$，则有： $$\r\n\\begin{align}\r\n\\Re e(V_0e^{j\\omega t})=&amp;L\\dfrac{di}{dt}\\\\\r\n\\int \\Re e(V_0e^{j\\omega t})=&amp;\\int L\\dfrac{di}{dt}dt\\\\\r\n\\Re e(\\dfrac{1}{j\\omega}V_0e^{j\\omega t})=&amp;Li\\\\\r\ni=&amp;\\Re e(\\dfrac{1}{j\\omega L}V_0e^{j\\omega t})\r\n\\end{align}\r\n$$ 电感的对电流的阻碍作用为：ZL = jωL，类似的，电感的阻抗（感抗）也是一个纯虚数\r\n交变电路中的电阻和电容\r\n电压源为：E(t) = E0sin (ωt)\r\n电容表现出与电阻相似的行为，即电压与电流的幅值比恒定，但电流相位相对于外加电压存在-90°偏移:$I=E_0\\omega C\\sin(\\omega\r\nt-\\dfrac{\\pi}{2})$\r\n\r\n\r\n施加的正弦电压E(t)与(a)电阻和(b)电容中产生的电流(t)之间的关系。\r\n\r\n电阻和电容的电流响应可用两个参数表征：\r\n\r\n阻抗模量|Z|\r\n\r\n电阻：|ZR|恒定\r\n电容：$\\lvert Z_C \\rvert=\\dfrac{1}\\omega\r\nC{}$\r\n\r\n电压与电流之间的相位差θ\r\n\r\n电阻：θ = 0∘\r\n电容：θ = −90∘\r\n\r\n\r\n使用阻抗表达式Z = |Z|(cos θ + sin θ)，在交流测量中可以统一处理这两种电路元件\r\n电阻和电容的串联电路比较简单，而并联的情况稍复杂，讨论一下：\r\n\r\n\r\n施加正弦电压E(t)与并联RC电路响应电流(t)的关系。总电流是流经电阻R(t)和电容C(t)的电流之和\r\n\r\n总阻抗： $$\r\n\\begin{align}\r\n\\dfrac{1}{Z}=&amp;\\dfrac{1}{Z'}+\\dfrac{1}{Z''}\\\\\r\n=&amp;\\dfrac{1}{R}+j\\omega C\\\\\r\nZ=&amp;\\dfrac{1}{\\dfrac{1}{R}+j\\omega C}\\\\\r\n=&amp;\\dfrac{R}{1+(\\omega CR)^2}-\\dfrac{\\omega CR^2 j}{1+(\\omega\r\nCR)^2}\\\\\r\n\\lvert Z \\rvert=&amp;\\sqrt{Z'^2+Z''^2}\\\\\r\n=&amp;\\dfrac{R}{\\sqrt{1+(\\omega CR)^2}}\r\n\\end{align}\r\n$$ 总结一下串联和并联 RC 电路的复阻抗特性：\r\n\r\n\r\n\r\n\r\n\r\n\r\n\r\n\r\n\r\n\r\n\r\n\r\nZ = Z′ + jZ″\r\nZ′ = |Z|cos θ\r\nZ″ = |Z|sin θ\r\n$\\lvert Z \\rvert\r\n=\\sqrt{Z'^2+Z''^2}$\r\n$\\theta=\\tan^{-1}\\dfrac{Z''}{Z'}$\r\n\r\n\r\n\r\n\r\n串联RC电路\r\n$R-\\dfrac{j}{\\omega C}$\r\nR\r\n$-\\dfrac{1}{\\omega C}$\r\n$\\sqrt{R^2+\\dfrac{1}{\\omega^2C^2}}$\r\n$\\tan^{-1}(-\\dfrac{1}{\\omega\r\nRC})$\r\n\r\n\r\n并联RC电路\r\n$(\\dfrac{1}{R}-\\dfrac{\\omega\r\nC}{j})^{-1}$\r\n$\\dfrac{R}{(\\omega RC)^2+1}$\r\n$\\dfrac{-\\omega R^2C}{(\\omega\r\nRC)^2+1}$\r\n$\\dfrac{1}{\\sqrt{\\dfrac{1}{R^2}+\\omega^2C^2}}$\r\ntan−1(ωRC)\r\n\r\n\r\n\r\n阻抗的图解\r\n如上所述，阻抗Z既可用阻抗模值|Z(ω)|和相位角θ(ω)表示，也可用阻抗的实部Z′(ω)和虚部Z″(ω)表示，分别对应两种图：Bode图和Nyquist图\r\n\r\n\r\n(a)串联与(b)并联 RC\r\n电路的波特图。虚线标示频率 f = 1/(2πRC)处相位角θ =\r\n−45°的位置。\r\n\r\n\r\n\r\n(a)串联与(b)并联 RC\r\n电路的Nyquist图。虚线标示频率\r\nf=1/(2πRC)对应的相位角θ=-45°位置。\r\n\r\n串联RC电路的阻抗是ZR与ZC之和。因此在高频区，由于ZR ≫ ZC\r\n，电路阻抗等于电阻R；而在低频区，由于ZR ≪ ZC\r\n，阻抗等于ZC\r\n。如Bode图所示，串联RC电路在高频区表现为电阻特性（|Z|与频率无关，相位角θ为\r\n0°），在低频区表现为电容特性（|Z|与频率成反比，相位角θ为−90°）。Nyquist图中，串联\r\nRC 电路的阻抗轨迹为一条从实轴垂直延伸的直线，与实轴交点的值等于\r\nR。该电路的时间常数为RC，意味着当频率$ω=\\dfrac{1}{RC}$时，|ZR| = |ZC|且相位角θ = −45°\r\n并联RC电路的阻抗Z通过公式$\\frac{1}{Z}=\\frac{1}{Z_R}+\\frac{1}{Z_C}$计算。因此，并联\r\nRC 电路，阻抗较小的电路元件特性会显现。在高频区，并联RC电路的Z 等于ZC\r\n；而在低频区则等于ZR，这与串联RC电路的情况相反。在并联\r\nRC 电路的Nyquist图中，阻抗轨迹 Z 呈现为半圆形，圆弧直径等于\r\nR。该电路的时间常数τ = RC，与串联电路相同。当频率$\\omega =\\frac{1}{RC}$时，|ZR| = |ZC|且相位角θ = −45°，此时对应Nyquist图中圆弧的顶点。\r\n与Bode图相比，Nyquist图更适合通过轨迹形状来辨识电路结构。但需指出的是，当两个并联\r\nRC\r\n电路的时间常数相近时，即便其电阻和电容值不同，它们的半圆也难以区分。如下图所示，当两个并联\r\nRC\r\n电路的时间常数仅相差10倍时，可观察到由两段圆弧重叠形成的畸变半圆。只有当时间常数差异达到\r\n100\r\n倍以上时，两段圆弧才能被清晰区分。因此在构建等效电路时，仅依Nyquist图并不可取，必须验证该等效电路能否合理解释目标电化学现象中的每个基本过程\r\n\r\n\r\n不同电容值 C 下的电路Nyquist图：(a) C=0.2\r\n毫法，(b) 1 毫法，(c) 5 毫法，(d) 10 毫法。两个并联 RC\r\n电路的时间常数比分别为：(a) 250，(b) 50，(c) 10，(d) 5。\r\n\r\n下面列举一些常见的电路模型以及相应的Nyquist、Bode图吧\r\n\r\n\r\nimages_large_tg2c00070_0008\r\n\r\n\r\n电感的Nyquist图在第四象限\r\n“电阻等价于点”\r\n“电容等价于垂直线”\r\n\r\n\r\n\r\nimages_large_tg2c00070_0009\r\n\r\n\r\n电容和电阻的并联反映到Nyquist图上即为一个半圆弧\r\n有几个电阻-电容并联电路就有可能出现几个半圆弧\r\n电阻$\\rm{R}_0$+电阻-电容并联电路就等价于将半圆弧向右平移$\\rm{R_0}$个单位\r\n\r\n\r\n\r\nimages_large_tg2c00070_001\r\n\r\n定义法拉第阻抗Zf = Rct + ZW\r\n\r\n上图左侧为理想高频部分，此时电荷转移电阻Rct很大，阻抗由电荷转移主导\r\n上图右侧为理想低频部分，此时“电容断路（电容特性：通高频阻低频）”，阻抗由物质扩散主导（溶液离子扩散、固体电解质中离子扩散等等）\r\n如果是一个频率非常广泛的、既包含高频又包含低频的电化学阻抗测试，那么Nyquist图中可能同时出现高频部分的半圆弧和低频部分的直线，如下图所示\r\n\r\n\r\n\r\nimages_large_tg2c00070_0014\r\n\r\n电极的等效电路\r\n在电化学阻抗谱（EIS）中，电极的电化学行为通常由包含电阻和电容的等效电路表示。其中，Randles\r\n电路常被用作电极的等效电路模型\r\n\r\n\r\nRandles的Nyquist图\r\n\r\n\r\n定义法拉第阻抗Zf = Rct + ZW\r\n溶液电阻Rs：即使使用参比电极，IR降也不可忽略。电解质传导过程中涉及的电阻称为溶液电阻（Rs ），\r\n可通过Nyquist奎斯特图中高频极限处与实轴的交点获得\r\n电荷转移电阻Rct：当过电位较大时，电极发生极化，过电位与电流之间呈现指数依赖，而当电极电位接近平衡电位时，过电位与电流的指数关系可简化为线性关系。因此，在极低过电位区域（&lt;10\r\nmV）内，电极表现为电阻特性，其电阻值称为电荷转移电阻，对应于Nyquist奎斯特图中半圆的直径。由于电荷转移电阻的概念仅适用于获得线性关系的极小过电位区域，因此电化学阻抗谱中的电压振幅通常设置为≤10\r\nmV。\r\n双电层电容Cdl：电极与电解质界面处的电双层类似于电容器，虽然无法直接从Nyquist图中确定Cdl\r\n的数值，但如果确定了Rct\r\n，则可通过以下关系式利用圆弧顶点频率对应并联电路的时间常数计算出Cdl\r\n：τ = Rct × Cdl\r\nWurburg阻抗：源于电解液中活性物质的扩散过程。在半无限扩散条件下，ZW可通过以下方程表示：\r\n\r\n$$\r\nZ_W=\\dfrac{RT}{n^2F^2Ac\\sqrt{D}}\\cdot\\dfrac{1}{\\sqrt{\\omega}}\\cdot\\dfrac{1-j}{\\sqrt{2}}\r\n$$\r\n其中，n为反应中转移的电子数，A\r\n为电极的几何面积，c为活性物质的浓度，D为扩散系数。Wurburg阻抗可用一个电容器与电阻器无限级联的电路表示。在Wurburg阻抗中，Z’和-Z’‘相等，因此在Nyquist图中可观察到一条斜率为-45°的直线。通过绘制\r\nZ’和\r\nZ’’随ω变化的关系曲线，可从两条平行直线的斜率确定扩散系数。值得注意的是，该式源自能斯特方程中浓度电势依赖项($\\dfrac{\\partial E}{\\partial\r\nc}$)。对于不符合能斯特方程的电极（如发生固态扩散的电极），必须考虑($\\dfrac{\\partial E}{\\partial\r\nc}$)项才能计算扩散系数\r\n如下图所示，当扩散系数 D\r\n增大时，活性物质能快速响应电极表面浓度变化而迅速补充至电极界面。因此较大的\r\nD 值会导致ZW值减小。反之，ZW随D值减小而增大，从而使直线向低频方向移动。最终在Bode图中，ZW的线性区会与并联RC电路引起的|Z|变化区域重叠。这一现象在下下图（😛）所示的Nyquist图中更为明显：当\r\nD 值较大时，-45°斜率的直线与圆弧可清晰区分；但随着 D\r\n值减小，圆弧与直线开始重叠。这种重叠现象表明活性物质的扩散速度低于电荷转移反应的时间常数，本质上意味着扩散过程成为速率控制步骤。\r\n\r\n\r\n不同 RT/(n2F2AcD^0.5 )值下\r\nRandles电路的 Bode 图：(a) 1, (b) 10, (c) 100, (d) 300 Ω s\r\n−0.5\r\n\r\n\r\n\r\n不同 RT/(n2F2AcD^0.5 )值下\r\nRandles电路的Nyquist图：(a) 1, (b) 10, (c) 100, (d) 300 Ω·s\r\n−0.5\r\n\r\n一个性能良好的固态电解质材料，其离子电导率应当较大，扩散系数D应当较大，那么Nyquist图应当接近于a或b的形貌\r\n从理想电极到真实电极——常相位元件CPE\r\nCPE被定义为： $$\r\nZ_{CPE}=\\dfrac{1}{Y_O(j\\omega)^n}\r\n$$\r\nθ = 90∘(1 − n)\r\n其中θ是与理想情况（φ=90°）的相位偏差，n 是从 0 到 1\r\n的常数，定义了与理想行为的偏差\r\n\r\n\r\n\r\n\r\n\r\n\r\n\r\n\r\n\r\nn\r\n相位角φ（理想行为）\r\n与理想行为的偏差θ\r\n阻抗方程\r\n\r\n\r\n\r\n\r\n1\r\n90\r\n0\r\n$Z(\\omega)=\\dfrac{1}{j\\omega\r\n\\rm{C_{dl}}}$\r\n\r\n\r\n0.9\r\n81\r\n9\r\n$Z_{\\omega}=\\dfrac{1}{Y_O(j\\omega)^{0.9}}$\r\n\r\n\r\n0.8\r\n72\r\n18\r\n$Z_{\\omega}=\\dfrac{1}{Y_O(j\\omega)^{0.8}}$\r\n\r\n\r\n0\r\n0\r\n90\r\n$Z_{\\omega}=\\dfrac{1}{Y_O(j\\omega)^{0}}=\\dfrac{1}{Y_O}=R$\r\n\r\n\r\n0.5\r\n45\r\n45\r\n$Z(\\omega)=\\dfrac{1}{Y_O}\\sqrt{j\\omega}$\r\n\r\n\r\n\r\n两个极端情况：\r\n\r\nn=1，CPE表现为理想电容器\r\nn=0，CPE 表现为电阻器\r\nn=0.5，$Z(\\omega)=\\dfrac{1}{Y_O}\\sqrt{j\\omega}$，即等价于\r\nWarburg 阻抗\r\n\r\n用传输线模型来直观理解扩散阻抗\r\nWarburg阻抗是一个复杂的元素，它表示氧化还原物质向电极表面的质量传递，并被描绘为奈奎斯特图的低频范围上的-45°线。这种行为是指化学物质的时间相关（非稳态）半无限扩散，如下图A所示，在电极/电解质界面处存在单个边界，距离\r\nx=0。朝向本体溶液，并且在静止条件下，扩散层扩展到由电化学电池的尺寸限定的无限长度（x→∞），同时浓度梯度随时间下降。\r\n将扩散层视为由无数个 “电阻（Rd）-\r\n电容（Cd）”\r\n单元串联，其中：\r\n\r\nRd：单位长度的扩散电阻（反映扩散阻力）\r\nCd：单位长度的\r\n“化学电容”（反映浓度存储能力）\r\n半无限扩散——无限长传输线，阻抗为Warburg直线\r\n有限扩散——有限长传输线，末端接电阻（投射）或电容（反射）\r\n\r\n当有限扩散区对扩散物质可渗透时，随着时间和电流流过电化学电池，建立了稳态浓度梯度（dC/dx=常数）。这是透射或可渗透边界的情况。\r\n当有限扩散区在一段时间后对扩散物质不渗透时，电荷转移是不可能的，并且扩散物质的浓度梯度变为零（dC/dx=0）。这是反射或不渗透边界的情况\r\n\r\n\r\n\r\n\r\nA）电化学电池的半无限区，（B）半无限区的传输线（TL）描述，（C）t&lt;td\r\n跨度处的有限边界扩散，（D）透射，和（E）t&gt;td\r\n处的反射边界\r\n\r\n==具有透射边界的有限长度线性扩散的典型例子包括固体氧化物或聚合物膜燃料电池，和旋转盘电极实验中的扩散层==\r\n固态电解质的阻抗谱分析\r\n以陶瓷固态电解质为例，假设其仅存在单离子传输而不具有电子导电性\r\n在极高频率区域（&gt;1 MHz）的阻抗数据对于通过 EIS\r\n测量分析固体电解质至关重要，这与其它材料的 EIS\r\n分析存在显著差异。若某固体电解质的体相离子电导率为10−4S ⋅ cm−1\r\n，且离子迁移相关电容为10−11F ⋅ cm−2\r\n，则对应1/(2π × τ)（τ：时间常数）的特征频率约为∼107Hz（10\r\nMHz）。若未对该频率区域采取特殊防护措施进行EIS测量，高频区的阻抗数据将会缺失，仅能观测到部分圆弧。在此情况下，EIS数据中包含的来自电缆和电池的电子电阻分量无法消除。此外，由晶粒内部电阻和晶界电阻构成的离子电阻也无法分离，从而导致固体电解质重要信息的丢失。\r\n由于大多数陶瓷固体电解质是由不同尺寸和取向的晶粒聚集而成的多晶材料，除了晶粒内部电阻外，离子在晶粒间界面处的传输电阻对离子电导率具有重要影响。晶粒内部电阻$R_{\\rm{gi}}$\r\n（又称体电阻）是材料固有的离子传输阻力。因此，若测试样品不含孔隙，通过晶粒内部电阻倒数计算得到的体离子电导率等于该固体电解质单晶的离子电导率。晶界电阻$R_{\\rm{gb}}$\r\n表示离子穿越晶粒间界面（晶界）及/或位于晶界的化学组成不同微相时所受的传输阻力。下图展示了陶瓷固体电解质的等效电路及Nyquist图，该电路由两个串联的并联\r\nRC 回路构成：一个电阻对应$R_{\\rm{gi}}$\r\n，另一个对应$R_{\\rm{gb}}$\r\n。由于两个并联RC电路具有不同的时间常数（τ = R × C），电化学阻抗谱能够分别测定这两个电阻值。\r\n\r\n\r\n由两个并联RC电路组成的固体电解质等效电路，分别对应晶粒内部与晶界的串联连接。(b)是根据(a)所示等效电路计算得出的固体电解质典型Nyquist图。需注意，为简化起见图中省略了电极响应部分。\r\n\r\n由于开发和改进陶瓷固体电解质最有效的方法是通过降低$\\rm{R_{gb}}$\r\n使离子电导率接近单晶水平，因此分离$\\rm{R_{gi}}$ 和$\\rm{R_{gb}}$\r\n并分别评估它们至关重要。要通过高频区半圆直径确定$\\rm{R_{gi}}$\r\n，应通过增加电解质厚度、减小电极面积或降低测量温度来降低特征频率。然而这些方法存在局限性，例如当电极面积小于样品几何面积时会干扰样品中的电流分布，因此需要测量直至高频区的阻抗数据。本文介绍了我们测量固体电解质高达\r\n100 MHz 高频阻抗的方法。\r\n在固体电解质的电化学阻抗谱（EIS）测量中，通常采用电极/电解质/电极的三明治结构组件。这种配置的优势在于能够实现简单的两端测量（注：设备与电极之间需连接两根电压线和两根电流线，共计四根电缆）。采用电极/电解质/电极结构进行EIS测量时，电极材料的选择至关重要。电极材料需满足以下必要条件：能够构建稳定界面且不与电解质发生化学反应，同时具备足够的电子导电性。金或铂等贵金属常被用作阻塞电极，某些情况下也会采用能与移动离子发生可逆反应的可逆电极。圆盘状固体电解质样品通常通过粉末压片成型，必要时还需进行煅烧处理。\r\n样品的相对密度最好大于 90%，理想情况下应超过 95%。\r\n在电极涂覆工艺中，有两个关键因素会影响固体电解质的阻抗测量结果。其一是电极厚度：过薄的电极可能导致阻抗数据偏离原始值，进而造成对固体电解质离子传输行为的误判。其二是固体电解质的表面状态，该因素会显著影响阻抗测量。本节将详细阐述这两个因素如何影响阻抗数据。\r\n下图展示了不同电极厚度及固体电解质表面是否抛光处理的氟离子导体Nyquist图。所有情况下均采用溅射法沉积直径为7mm\r\n的铂电极。阻抗测试使用 Keysight E4990A\r\n阻抗分析仪在室温空气环境下完成。所有Nyquist图均呈现两个特征：由晶粒内部与晶界电阻（具有相近时间常数）形成的畸变弧线（两个半圆弧融合），以及低频区对应阻塞电极与固体电解质界面电容特性的直线段。不同电极厚度的Nyquist图存在显著差异：对于\r\n200 nm 厚电极（图\r\n2a），离子传输电阻（晶粒内部与晶界电阻）形成的阻抗弧起始于坐标原点；而\r\n50 nm 薄电极（图\r\n2b）的阻抗弧则发生水平偏移，且由阻抗弧外推得到的高频极限阻抗值偏离原点。\r\n这种因电极厚度不同而产生的差异可归因于样品中的电流分布；对于较薄的电极，其横向电阻不容忽视\r\n\r\n\r\n采用铂电极的氟离子传导固体电解质的Nyquist图：(a) 200\r\n纳米厚度电极，(b) 50 纳米厚度电极。(c) 样品表面抛光后 50\r\n纳米铂电极的Nyquist图。右侧为放大视图以便观察。圆圈表示测量值，虚线表示拟合曲线。\r\n\r\n如上图，当样品经 2000 目砂纸抛光并沉积 50\r\n纳米铂电极后，所得阻抗弧严重偏离原点。这表明抛光过程引入了除离子传输过程之外的额外电阻。此外，抛光样品的离子传导过程对应阻抗弧略有扩大，直线斜率趋于平缓。这种斜率变化反映了抛光前后样品阻塞行为的差异：抛光样品在&lt;1\r\nMHz\r\n频率区间出现与阻塞行为重叠的寄生电阻。固态电解质抛光前后的阻抗行为变化归因于抛光过程中（为去除煅烧样品表面偏析层而进行的）样品表面劣化。\r\n为消除电缆电感对高频测量的干扰，设备与电解池（样品）之间的连接电缆应尽可能缩短。建议采用特性阻抗为\r\n50Ω的同轴电缆，并将其紧贴样品安装。此外，必须合理设置电流回流路径。对于高达\r\n100MHz\r\n的高频测量，需确保电缆不会引起相位差畸变。在进行高频测量前，应对系统进行开路/短路/负载校准\r\n离子电导率的计算\r\n$$\r\n\\sigma'(\\omega)=\\dfrac{L}{S}\\times\\dfrac{Z'(\\omega)}{\\vert Z'(\\omega)\r\n\\rvert ^2}\r\n$$\r\n对于使用固态电解质模具进行电化学阻抗谱测试的情况，离子电导率的计算公式为：\r\n$$\r\n\\sigma =\\dfrac{L}{S\\times R}\r\n$$ 其中L为固态电解质pellet圆片厚度，S为圆片pellet的面积，R为电阻（Nyquist图拐点处的横坐标）\r\n实战演练——以$\\rm{Li_{5.5}PS_{4.5}Cl_{1.5}}$的电化学阻抗谱图为例\r\n\r\n\r\n之前测的阻抗偶\r\n\r\n这是之前测试的图，简单画了一下，2Tons（249MPa）压力下的测试结果。可以看到，这与常见的阻抗谱差别非常大，并没有出现超高频的半圆弧，只出现了低频的扩散部分和中高频的拐点。这是收阻抗仪的最高频率所限，使用的阻抗仪最高频只能达到约1MHz左右，对于10mS/cm的固态电解质，想要完整的测出半圆弧可能需要100MHz甚至更高的频率\r\n\r\n\r\nimage-20250612163437996\r\n\r\n\r\n由于设备频率上限较低，只能得到粒子抵抗和粒界阻抗的总值\r\n活化能分析中无法判断随温度变化特性值发生变化的是粒子阻抗还是粒界阻抗\r\n在通过变温方式尝试分离粒子阻抗和粒界阻抗时，可控温度范围有限，且无法对变温引起的参数条件变化进行校正\r\n\r\n==此外，交变电流源的最高频率不等于最高有效频率==，有效的最高频率常常受限于测试端子类型和连线长度，在进行变温控制的时候，==夹具及导线材料的介电常数因为温度变化而变化，如果不及时矫正阻抗会使结果产生较大偏离==\r\n\r\n\r\nimage-20250612164042178\r\n\r\n下图展示了超高有效频率下的LLTO型固态电解质的阻抗谱\r\n\r\n\r\nimage-20250612164142858\r\n\r\n参考资料\r\n\r\nLazanas, A. Ch.; Prodromidis, M. I. Electrochemical Impedance\r\nSpectroscopy─a Tutorial. ACS Meas. Sci. Au 2023, 3 (3), 162–193.\r\nhttps://doi.org/10.1021/acsmeasuresciau.2c00070.\r\nLazanas, A. Ch.; Prodromidis, M. I. Correction to “Electrochemical\r\nImpedance Spectroscopy─a Tutorial.” ACS Meas. Sci. Au 2025, 5 (1),\r\n156–156. https://doi.org/10.1021/acsmeasuresciau.5c00007.\r\nAriyoshi, K.; Mineshige, A.; Takeno, M.; Fukutsuka, T.; Abe, T.;\r\nUchida, S.; Siroma, Z. Electrochemical Impedance Spectroscopy Part 2:\r\nApplications. Electrochemistry 2022, 90 (10), 102008–102008.\r\nhttps://doi.org/10.5796/electrochemistry.22-66080.\r\nAriyoshi, K.; Siroma, Z.; Mineshige, A.; Takeno, M.; Fukutsuka, T.;\r\nAbe, T.; Uchida, S. Electrochemical Impedance Spectroscopy Part 1:\r\nFundamentals. Electrochemistry 2022, 90 (10), 102007–102007.\r\nhttps://doi.org/10.5796/electrochemistry.22-66071.\r\nHu, W.; Peng, Y.; Wei, Y.; Yang, Y. Application of Electrochemical\r\nImpedance Spectroscopy to Degradation and Aging Research of Lithium-Ion\r\nBatteries. J. Phys. Chem. C 2023, 127 (9), 4465–4495.\r\nhttps://doi.org/10.1021/acs.jpcc.3c00033.\r\n\r\n","dateCreated":"2025-05-27T20:13:00+08:00","dateModified":"2025-06-12T16:43:06+08:00","datePublished":"2025-05-27T20:13:00+08:00","description":"","headline":"从零开始的电化学阻抗谱原理","image":[],"mainEntityOfPage":{"@type":"WebPage","@id":"http://example.com/2025/05/27/%E7%A7%91%E7%A0%94/first%20stage/%E7%94%B5%E5%8C%96%E5%AD%A6%E9%98%BB%E6%8A%97%E8%B0%B1/"},"publisher":{"@type":"Organization","name":"John Doe","sameAs":["https://github.com/","http://stackoverflow.com/users","https://twitter.com/","https://facebook.com/","https://plus.google.com/","https://www.linkedin.com/profile/","mailto"]},"url":"http://example.com/2025/05/27/%E7%A7%91%E7%A0%94/first%20stage/%E7%94%B5%E5%8C%96%E5%AD%A6%E9%98%BB%E6%8A%97%E8%B0%B1/","keywords":"化学, 科研"}</script>
+    <meta name="description" content="什么是电化学阻抗谱？ 有一种叫做黑箱的未知特性系统。可采用一系列测量方法，通过施加输入信号并检测输出响应来探查黑箱。例如，假设将黑箱置于暗室中，然后施加特定波长的光照。若观察到响应信号（如电流），则可判定箱内物质具有光活性。输入与输出之间的关系称为“传递函数”，阻抗谱是传递函数的一种特例。 阻抗：电路中电阻、电感、电容对交流电个阻碍作用个统称。阻抗是一个复数，实部称为电阻，虚部称为电抗。电化学">
+<meta property="og:type" content="blog">
+<meta property="og:title" content="从零开始的电化学阻抗谱原理">
+<meta property="og:url" content="http://example.com/2025/05/27/%E7%A7%91%E7%A0%94/first%20stage/%E7%94%B5%E5%8C%96%E5%AD%A6%E9%98%BB%E6%8A%97%E8%B0%B1/index.html">
+<meta property="og:site_name" content="Hexo">
+<meta property="og:description" content="什么是电化学阻抗谱？ 有一种叫做黑箱的未知特性系统。可采用一系列测量方法，通过施加输入信号并检测输出响应来探查黑箱。例如，假设将黑箱置于暗室中，然后施加特定波长的光照。若观察到响应信号（如电流），则可判定箱内物质具有光活性。输入与输出之间的关系称为“传递函数”，阻抗谱是传递函数的一种特例。 阻抗：电路中电阻、电感、电容对交流电个阻碍作用个统称。阻抗是一个复数，实部称为电阻，虚部称为电抗。电化学">
+<meta property="og:locale" content="en_US">
+<meta property="article:published_time" content="2025-05-27T12:13:00.000Z">
+<meta property="article:modified_time" content="2025-06-12T08:43:06.000Z">
+<meta property="article:author" content="John Doe">
+<meta property="article:tag" content="化学">
+<meta property="article:tag" content="科研">
+<meta name="twitter:card" content="summary">
+    
+    
+        
+    
+    
+    
+    
+    
+    <!--STYLES-->
+    
+<link rel="stylesheet" href="/assets/css/all.css">
+
+    
+<link rel="stylesheet" href="/assets/css/jquery.fancybox.css">
+
+    
+<link rel="stylesheet" href="/assets/css/thumbs.css">
+
+    
+<link rel="stylesheet" href="/assets/css/tranquilpeak.css">
+
+    <!--STYLES END-->
+    
+
+    
+
+    
+        
+    
+
+
+
+
+<script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+<script>
+  MathJax = {
+    tex: {
+      inlineMath: [['$', '$'], ['\\(', '\\)']],
+      displayMath: [['$$', '$$'], ['\\[', '\\]']],
+      tags: 'ams'
+    },
+    svg: {
+      fontCache: 'global'
+    }
+  };
+</script>
+
+
+
+
+
+<!-- hexo injector head_end start -->
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.12.0/dist/katex.min.css">
+
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/hexo-math@4.0.0/dist/style.css">
+<!-- hexo injector head_end end --></head>
+
+    <body>
+        <div id="blog">
+            <!-- Define author's picture -->
+
+
+    
+
+<header id="header" data-behavior="4">
+    <i id="btn-open-sidebar" class="fa fa-lg fa-bars"></i>
+    <div class="header-title">
+        <a
+            class="header-title-link"
+            href="/"
+            aria-label=""
+        >
+            Hexo
+        </a>
+    </div>
+    
+        
+            <a
+                class="header-right-picture "
+                href="#about"
+                aria-label="Open the link: /#about"
+            >
+        
+        
+        </a>
+    
+</header>
+
+            <!-- Define author's picture -->
+
+
+<nav id="sidebar" data-behavior="4">
+    <div class="sidebar-container">
+        
+        
+            <ul class="sidebar-buttons">
+            
+                <li class="sidebar-button">
+                    
+                        <a
+                            class="sidebar-button-link "
+                            href="/"
+                            
+                            rel="noopener"
+                            title="Home"
+                        >
+                        <i class="sidebar-button-icon fa fa-home" aria-hidden="true"></i>
+                        <span class="sidebar-button-desc">Home</span>
+                    </a>
+            </li>
+            
+                <li class="sidebar-button">
+                    
+                        <a
+                            class="sidebar-button-link "
+                            href="/all-categories"
+                            
+                            rel="noopener"
+                            title="Categories"
+                        >
+                        <i class="sidebar-button-icon fa fa-bookmark" aria-hidden="true"></i>
+                        <span class="sidebar-button-desc">Categories</span>
+                    </a>
+            </li>
+            
+                <li class="sidebar-button">
+                    
+                        <a
+                            class="sidebar-button-link "
+                            href="/all-tags"
+                            
+                            rel="noopener"
+                            title="Tags"
+                        >
+                        <i class="sidebar-button-icon fa fa-tags" aria-hidden="true"></i>
+                        <span class="sidebar-button-desc">Tags</span>
+                    </a>
+            </li>
+            
+                <li class="sidebar-button">
+                    
+                        <a
+                            class="sidebar-button-link "
+                            href="/all-archives"
+                            
+                            rel="noopener"
+                            title="Archives"
+                        >
+                        <i class="sidebar-button-icon fa fa-archive" aria-hidden="true"></i>
+                        <span class="sidebar-button-desc">Archives</span>
+                    </a>
+            </li>
+            
+                <li class="sidebar-button">
+                    
+                        <a
+                            class="sidebar-button-link open-algolia-search"
+                            href="#search"
+                            
+                            rel="noopener"
+                            title="Search"
+                        >
+                        <i class="sidebar-button-icon fa fa-search" aria-hidden="true"></i>
+                        <span class="sidebar-button-desc">Search</span>
+                    </a>
+            </li>
+            
+                <li class="sidebar-button">
+                    
+                        <a
+                            class="sidebar-button-link "
+                            href="#about"
+                            
+                            rel="noopener"
+                            title="About"
+                        >
+                        <i class="sidebar-button-icon fa fa-question" aria-hidden="true"></i>
+                        <span class="sidebar-button-desc">About</span>
+                    </a>
+            </li>
+            
+        </ul>
+        
+            <ul class="sidebar-buttons">
+            
+                <li class="sidebar-button">
+                    
+                        <a
+                            class="sidebar-button-link "
+                            href="https://github.com/"
+                            
+                                target="_blank"
+                            
+                            rel="noopener"
+                            title="GitHub"
+                        >
+                        <i class="sidebar-button-icon fab fa-github" aria-hidden="true"></i>
+                        <span class="sidebar-button-desc">GitHub</span>
+                    </a>
+            </li>
+            
+                <li class="sidebar-button">
+                    
+                        <a
+                            class="sidebar-button-link "
+                            href="http://stackoverflow.com/users"
+                            
+                                target="_blank"
+                            
+                            rel="noopener"
+                            title="Stack Overflow"
+                        >
+                        <i class="sidebar-button-icon fab fa-stack-overflow" aria-hidden="true"></i>
+                        <span class="sidebar-button-desc">Stack Overflow</span>
+                    </a>
+            </li>
+            
+                <li class="sidebar-button">
+                    
+                        <a
+                            class="sidebar-button-link "
+                            href="https://twitter.com/"
+                            
+                                target="_blank"
+                            
+                            rel="noopener"
+                            title="Twitter"
+                        >
+                        <i class="sidebar-button-icon fab fa-twitter" aria-hidden="true"></i>
+                        <span class="sidebar-button-desc">Twitter</span>
+                    </a>
+            </li>
+            
+                <li class="sidebar-button">
+                    
+                        <a
+                            class="sidebar-button-link "
+                            href="https://facebook.com/"
+                            
+                                target="_blank"
+                            
+                            rel="noopener"
+                            title="Facebook"
+                        >
+                        <i class="sidebar-button-icon fab fa-facebook" aria-hidden="true"></i>
+                        <span class="sidebar-button-desc">Facebook</span>
+                    </a>
+            </li>
+            
+                <li class="sidebar-button">
+                    
+                        <a
+                            class="sidebar-button-link "
+                            href="https://plus.google.com/"
+                            
+                                target="_blank"
+                            
+                            rel="noopener"
+                            title="Google +"
+                        >
+                        <i class="sidebar-button-icon fab fa-google-plus" aria-hidden="true"></i>
+                        <span class="sidebar-button-desc">Google +</span>
+                    </a>
+            </li>
+            
+                <li class="sidebar-button">
+                    
+                        <a
+                            class="sidebar-button-link "
+                            href="https://www.linkedin.com/profile/"
+                            
+                                target="_blank"
+                            
+                            rel="noopener"
+                            title="LinkedIn"
+                        >
+                        <i class="sidebar-button-icon fab fa-linkedin" aria-hidden="true"></i>
+                        <span class="sidebar-button-desc">LinkedIn</span>
+                    </a>
+            </li>
+            
+                <li class="sidebar-button">
+                    
+                        <a
+                            class="sidebar-button-link "
+                            href="/mailto"
+                            
+                            rel="noopener"
+                            title="Mail"
+                        >
+                        <i class="sidebar-button-icon fa fa-envelope" aria-hidden="true"></i>
+                        <span class="sidebar-button-desc">Mail</span>
+                    </a>
+            </li>
+            
+        </ul>
+        
+            <ul class="sidebar-buttons">
+            
+                <li class="sidebar-button">
+                    
+                        <a
+                            class="sidebar-button-link "
+                            href="/atom.xml"
+                            
+                            rel="noopener"
+                            title="RSS"
+                        >
+                        <i class="sidebar-button-icon fa fa-rss" aria-hidden="true"></i>
+                        <span class="sidebar-button-desc">RSS</span>
+                    </a>
+            </li>
+            
+        </ul>
+        
+    </div>
+</nav>
+
+            
+            <div id="main" data-behavior="4"
+                 class="
+                        hasCoverMetaIn
+                        ">
+                
+<article class="post">
+    
+    
+        <div class="post-header main-content-wrap text-left">
+    
+        <h1 class="post-title">
+            从零开始的电化学阻抗谱原理
+        </h1>
+    
+    
+        <div class="post-meta">
+    <time datetime="2025-05-27T20:13:00+08:00">
+	
+		    May 27, 2025
+    	
+    </time>
+    
+        <span>in </span>
+        
+    <a class="category-link" href="/all-categories/%E4%BB%8E%E9%9B%B6%E5%BC%80%E5%A7%8B%E7%9A%84%E7%A7%91%E7%A0%94%E4%B9%8B%E6%97%85/">从零开始的科研之旅</a>, <a class="category-link" href="/all-categories/%E4%BB%8E%E9%9B%B6%E5%BC%80%E5%A7%8B%E7%9A%84%E7%A7%91%E7%A0%94%E4%B9%8B%E6%97%85/first-stage/">first stage</a>
+
+
+    
+</div>
+
+    
+</div>
+
+    
+    <div class="post-content markdown">
+        <div class="main-content-wrap">
+            <h2 id="什么是电化学阻抗谱">什么是电化学阻抗谱？</h2>
+<p>有一种叫做<strong>黑箱</strong>的未知特性系统。可采用一系列测量方法，通过施加输入信号并检测输出响应来探查黑箱。例如，假设将黑箱置于暗室中，然后施加特定波长的光照。若观察到响应信号（如电流），则可判定箱内物质具有光活性。输入与输出之间的关系称为“传递函数”，阻抗谱是传递函数的一种特例。</p>
+<p>阻抗：电路中电阻、电感、电容对交流电个阻碍作用个统称。阻抗是一个复数，实部称为电阻，虚部称为电抗。电化学过程主要涉及电荷在电极和电解质界面上的传输和存储。例如，电极表面的双电层效应会形成双电层电容，电解质中的离子扩散也会导致电容行为。这些机制使电容成为电化学系统中主要的电抗元件。
+相比之下，电感通常与磁场的变化相关，比如电流通过线圈时产生的磁场。然而，在常规的电化学系统中，磁场变化通常不显著，因此电感的影响非常小，通常电化学系统中考虑电阻、容抗而不考虑感抗。</p>
+<p>电化学阻抗谱（EIS）通过施加交流电压（或电流）并测量产生的电流（或电压），能够研究电极和电化学池的电化学特性，利用等效电路进行分析，可以确定与电极电化学反应相关的重要参数，如电荷转移电阻、双电层电容和Warburg阻抗</p>
+<h2 id="阻抗的复数表达形式">阻抗的复数表达形式</h2>
+<p>交流电（AC）电路中的电流、电压以及阻抗通常使用复数来表示，主要原因有两个：</p>
+<ol type="1">
+<li>交流信号（以及许多其他正弦波现象）具有一个幅值和一个相位，它们分别与复数的模和幅角非常相似</li>
+<li>复数的基本运算，如加法、减法、乘法和除法，更容易执行和编程</li>
+</ol>
+<p><strong>注意：</strong></p>
+<ul>
+<li>因为符号<span class="math inline"><em>i</em></span>
+在交流电路中用于表示电流，这里我们用<span
+class="math inline"><em>j</em></span>作为虚数单位，即<span
+class="math inline"><em>j</em><sup>2</sup> = −1</span></li>
+<li>符号 <span class="math inline">ℜ<em>e</em></span>代表复数的实部</li>
+</ul>
+<h3 id="预备知识">预备知识</h3>
+<p><strong>复数的标准形式</strong> <span
+class="math display"><em>Z</em> = <em>a</em> + <em>b</em><em>j</em></span>
+<strong>复数的模</strong> <span class="math display">$$
+\lvert Z \rvert =\sqrt {a^2+b^2}
+$$</span></p>
+<p><strong>欧拉公式</strong> <span
+class="math display"><em>e</em><sup><em>i</em><em>x</em></sup> = cos <em>x</em> + <em>i</em>sin <em>x</em></span>
+<strong>复数的指数形式</strong> <span
+class="math display"><em>Z</em> = <em>r</em><em>e</em><sup><em>j</em><em>θ</em></sup> = <em>r</em>cos <em>θ</em> + <em>r</em><em>j</em>sin <em>θ</em></span>
+<strong>取实数部分：</strong> <span
+class="math display">ℜ<em>e</em>(<em>r</em><em>e</em><sup><em>j</em><em>θ</em></sup>) = <em>r</em>cos <em>θ</em></span></p>
+<p><strong>单变量复函数<span
+class="math inline"><em>f</em>(<em>t</em>)</span>的导数的实部等于<span
+class="math inline"><em>f</em>(<em>t</em>)</span>的实部的导数，证明如下：</strong>
+$$ <span class="math display">$$
+**复函数$f(t)$的不定积分的实部等于$f(t)$的实部的不定积分，证明如下**
+$$</span> $$</p>
+<h3 id="复数形式的阻抗">复数形式的阻抗</h3>
+<ul>
+<li><strong>电压源</strong></li>
+</ul>
+<p><span
+class="math display"><em>v</em>(<em>t</em>) = <em>V</em><sub>0</sub>cos (<em>ω</em><em>t</em>) = ℜ<em>e</em>(<em>V</em><sub>0</sub>cos (<em>ω</em><em>t</em>) + <em>V</em><sub>0</sub><em>j</em>sin (<em>ω</em><em>t</em>)) = ℜ<em>e</em>(<em>V</em><sub>0</sub><em>e</em><sup><em>j</em><em>ω</em><em>t</em></sup>)</span></p>
+<ul>
+<li><strong>电阻</strong></li>
+</ul>
+<p>对于如下图的交变电路</p>
+<figure>
+<img
+src="./%E7%94%B5%E5%8C%96%E5%AD%A6%E9%98%BB%E6%8A%97%E8%B0%B1/resistor-circuit.png"
+alt="交变电路中的电阻" />
+<figcaption aria-hidden="true">交变电路中的电阻</figcaption>
+</figure>
+<p>定义<span
+class="math inline"><em>Z</em><sub><em>R</em></sub> = <em>R</em></span>，那么电流<span
+class="math inline">$i=\Re e(\dfrac{V_R}{R})$</span>或<span
+class="math inline">$I=\dfrac{V_R}{Z_R}$</span></p>
+<ul>
+<li><strong>电容</strong></li>
+</ul>
+<figure>
+<img
+src="./%E7%94%B5%E5%8C%96%E5%AD%A6%E9%98%BB%E6%8A%97%E8%B0%B1/capacitor-circuit.png"
+alt="交变电路中的电容" />
+<figcaption aria-hidden="true">交变电路中的电容</figcaption>
+</figure>
+<p>电容上电流的定义为：<span class="math inline">$I=C(\dfrac{d
+v(t)}{dt})$</span>，则有如下推导： <span class="math display">$$
+\begin{align}
+v(t)=&amp;\dfrac{1}{C}\int i dt\\
+v(t)=&amp;V_0\cos (\omega t)=\Re e(V_0e^{j\omega t})\\
+\Re e(V_0e^{j\omega t})=&amp;\dfrac{1}{C}\int idt\\
+\dfrac{d}{dt}(\Re e(V_0e^{j\omega
+t}))=&amp;\dfrac{d}{dt}(\dfrac{1}{C}\int idt)\\
+\Re e(j\omega V_0e^{j\omega t})=&amp;\dfrac{1}{C}i\\
+i=&amp;\Re e(j\omega CV_0e^{j\omega t})
+\end{align}
+$$</span> 电容器C两端的电压为<span
+class="math inline"><em>V</em><sub><em>C</em></sub> = <em>V</em><sub>0</sub><em>e</em><sup><em>j</em><em>ω</em><em>t</em></sup></span>，那么电容对电流的阻碍作用<span
+class="math inline">$Z_C=\dfrac{1}{j\omega C}=-\dfrac{j}{\omega
+C}$</span></p>
+<p><strong>与电阻的阻抗（电阻）<span
+class="math inline"><em>Z</em><sub><em>R</em></sub></span>不同，电容的阻抗（容抗）<span
+class="math inline"><em>Z</em><sub><em>C</em></sub></span>是一个纯虚数</strong></p>
+<ul>
+<li>电感</li>
+</ul>
+<p><strong>在电化学系统中，电感并不常见</strong></p>
+<figure>
+<img
+src="./%E7%94%B5%E5%8C%96%E5%AD%A6%E9%98%BB%E6%8A%97%E8%B0%B1/inductor-circuit.png"
+alt="交变电路中的电感" />
+<figcaption aria-hidden="true">交变电路中的电感</figcaption>
+</figure>
+<p><strong>电感<span class="math inline"><em>L</em></span>上的电流<span
+class="math inline"><em>i</em></span>和电压<span
+class="math inline"><em>v</em>(<em>t</em>)</span>之间的关系为：</strong><span
+class="math inline">$v(t)=L\dfrac{di}{dt}$</span>，则有： <span
+class="math display">$$
+\begin{align}
+\Re e(V_0e^{j\omega t})=&amp;L\dfrac{di}{dt}\\
+\int \Re e(V_0e^{j\omega t})=&amp;\int L\dfrac{di}{dt}dt\\
+\Re e(\dfrac{1}{j\omega}V_0e^{j\omega t})=&amp;Li\\
+i=&amp;\Re e(\dfrac{1}{j\omega L}V_0e^{j\omega t})
+\end{align}
+$$</span> 电感的对电流的阻碍作用为：<span
+class="math inline"><em>Z</em><sub><em>L</em></sub> = <em>j</em><em>ω</em><em>L</em></span>，<strong>类似的，电感的阻抗（感抗）也是一个纯虚数</strong></p>
+<h2 id="交变电路中的电阻和电容">交变电路中的电阻和电容</h2>
+<p><strong>电压源为：<span
+class="math inline"><em>E</em>(<em>t</em>) = <em>E</em><sub>0</sub>sin (<em>ω</em><em>t</em>)</span></strong></p>
+<p>电容表现出与电阻相似的行为，即电压与电流的幅值比恒定，但电流相位相对于外加电压存在-90°偏移:<span
+class="math inline">$I=E_0\omega C\sin(\omega
+t-\dfrac{\pi}{2})$</span></p>
+<figure>
+<img
+src="./%E7%94%B5%E5%8C%96%E5%AD%A6%E9%98%BB%E6%8A%97%E8%B0%B1/22-66071fig01RGB.jpg"
+alt="施加的正弦电压E(t)与(a)电阻和(b)电容中产生的电流(t)之间的关系。" />
+<figcaption
+aria-hidden="true">施加的正弦电压E(t)与(a)电阻和(b)电容中产生的电流(t)之间的关系。</figcaption>
+</figure>
+<p>电阻和电容的电流响应可用两个参数表征：</p>
+<ul>
+<li>阻抗模量<span class="math inline">|<em>Z</em>|</span>
+<ul>
+<li>电阻：<span
+class="math inline">|<em>Z</em><sub><em>R</em></sub>|</span>恒定</li>
+<li>电容：<span class="math inline">$\lvert Z_C \rvert=\dfrac{1}\omega
+C{}$</span></li>
+</ul></li>
+<li>电压与电流之间的相位差<span class="math inline"><em>θ</em></span>
+<ul>
+<li>电阻：<span
+class="math inline"><em>θ</em> = 0<sup>∘</sup></span></li>
+<li>电容：<span
+class="math inline"><em>θ</em> = −90<sup>∘</sup></span></li>
+</ul></li>
+</ul>
+<p><strong>使用阻抗表达式<span
+class="math inline"><em>Z</em> = |<em>Z</em>|(cos <em>θ</em> + sin <em>θ</em>)</span>，在交流测量中可以统一处理这两种电路元件</strong></p>
+<p>电阻和电容的串联电路比较简单，而并联的情况稍复杂，讨论一下：</p>
+<figure>
+<img
+src="./%E7%94%B5%E5%8C%96%E5%AD%A6%E9%98%BB%E6%8A%97%E8%B0%B1/22-66071fig02RGB.jpg"
+alt="施加正弦电压E(t)与并联RC电路响应电流(t)的关系。总电流是流经电阻R(t)和电容C(t)的电流之和" />
+<figcaption
+aria-hidden="true">施加正弦电压E(t)与并联RC电路响应电流(t)的关系。总电流是流经电阻R(t)和电容C(t)的电流之和</figcaption>
+</figure>
+<p>总阻抗： <span class="math display">$$
+\begin{align}
+\dfrac{1}{Z}=&amp;\dfrac{1}{Z'}+\dfrac{1}{Z''}\\
+=&amp;\dfrac{1}{R}+j\omega C\\
+Z=&amp;\dfrac{1}{\dfrac{1}{R}+j\omega C}\\
+=&amp;\dfrac{R}{1+(\omega CR)^2}-\dfrac{\omega CR^2 j}{1+(\omega
+CR)^2}\\
+\lvert Z \rvert=&amp;\sqrt{Z'^2+Z''^2}\\
+=&amp;\dfrac{R}{\sqrt{1+(\omega CR)^2}}
+\end{align}
+$$</span> <strong>总结一下串联和并联 RC 电路的复阻抗特性：</strong></p>
+<table>
+<colgroup>
+<col style="width: 4%" />
+<col style="width: 20%" />
+<col style="width: 15%" />
+<col style="width: 19%" />
+<col style="width: 22%" />
+<col style="width: 16%" />
+</colgroup>
+<thead>
+<tr>
+<th></th>
+<th><span
+class="math inline"><em>Z</em> = <em>Z</em><sup>′</sup> + <em>j</em><em>Z</em><sup>″</sup></span></th>
+<th><span
+class="math inline"><em>Z</em><sup>′</sup> = |<em>Z</em>|cos <em>θ</em></span></th>
+<th><span
+class="math inline"><em>Z</em><sup>″</sup> = |<em>Z</em>|sin <em>θ</em></span></th>
+<th><span class="math inline">$\lvert Z \rvert
+=\sqrt{Z'^2+Z''^2}$</span></th>
+<th><span
+class="math inline">$\theta=\tan^{-1}\dfrac{Z''}{Z'}$</span></th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>串联RC电路</td>
+<td><span class="math inline">$R-\dfrac{j}{\omega C}$</span></td>
+<td><span class="math inline"><em>R</em></span></td>
+<td><span class="math inline">$-\dfrac{1}{\omega C}$</span></td>
+<td><span
+class="math inline">$\sqrt{R^2+\dfrac{1}{\omega^2C^2}}$</span></td>
+<td><span class="math inline">$\tan^{-1}(-\dfrac{1}{\omega
+RC})$</span></td>
+</tr>
+<tr>
+<td>并联RC电路</td>
+<td><span class="math inline">$(\dfrac{1}{R}-\dfrac{\omega
+C}{j})^{-1}$</span></td>
+<td><span class="math inline">$\dfrac{R}{(\omega RC)^2+1}$</span></td>
+<td><span class="math inline">$\dfrac{-\omega R^2C}{(\omega
+RC)^2+1}$</span></td>
+<td><span
+class="math inline">$\dfrac{1}{\sqrt{\dfrac{1}{R^2}+\omega^2C^2}}$</span></td>
+<td><span
+class="math inline">tan<sup>−1</sup>(<em>ω</em><em>R</em><em>C</em>)</span></td>
+</tr>
+</tbody>
+</table>
+<h2 id="阻抗的图解">阻抗的图解</h2>
+<p>如上所述，阻抗<span
+class="math inline"><em>Z</em></span>既可用阻抗模值<span
+class="math inline">|<em>Z</em>(<em>ω</em>)|</span>和相位角<span
+class="math inline"><em>θ</em>(<em>ω</em>)</span>表示，也可用阻抗的实部<span
+class="math inline"><em>Z</em><sup>′</sup>(<em>ω</em>)</span>和虚部<span
+class="math inline"><em>Z</em><sup>″</sup>(<em>ω</em>)</span>表示，分别对应两种图：Bode图和Nyquist图</p>
+<figure>
+<img
+src="./%E7%94%B5%E5%8C%96%E5%AD%A6%E9%98%BB%E6%8A%97%E8%B0%B1/22-66071fig03.jpg"
+alt="(a)串联与(b)并联 RC 电路的波特图。虚线标示频率 f = 1/(2πRC)处相位角θ = −45°的位置。" />
+<figcaption aria-hidden="true">(a)串联与(b)并联 RC
+电路的波特图。虚线标示频率 f = 1/(2πRC)处相位角θ =
+−45°的位置。</figcaption>
+</figure>
+<figure>
+<img
+src="./%E7%94%B5%E5%8C%96%E5%AD%A6%E9%98%BB%E6%8A%97%E8%B0%B1/22-66071fig04.jpg"
+alt="(a)串联与(b)并联 RC 电路的Nyquist图。虚线标示频率 f=1/(2πRC)对应的相位角θ=-45°位置。" />
+<figcaption aria-hidden="true">(a)串联与(b)并联 RC
+电路的Nyquist图。虚线标示频率
+f=1/(2πRC)对应的相位角θ=-45°位置。</figcaption>
+</figure>
+<p>串联RC电路的阻抗是<span
+class="math inline"><em>Z</em><sub><em>R</em></sub></span>与<span
+class="math inline"><em>Z</em><sub><em>C</em></sub></span>之和。因此在高频区，由于<span
+class="math inline"><em>Z</em><sub><em>R</em></sub> ≫ <em>Z</em><sub><em>C</em></sub></span>
+，电路阻抗等于电阻R；而在低频区，由于<span
+class="math inline"><em>Z</em><sub><em>R</em></sub> ≪ <em>Z</em><sub><em>C</em></sub></span>
+，阻抗等于<span
+class="math inline"><em>Z</em><sub><em>C</em></sub></span>
+。如Bode图所示，串联RC电路在高频区表现为电阻特性（|Z|与频率无关，相位角θ为
+0°），在低频区表现为电容特性（|Z|与频率成反比，相位角θ为−90°）。Nyquist图中，串联
+RC 电路的阻抗轨迹为一条从实轴垂直延伸的直线，与实轴交点的值等于
+R。该电路的时间常数为RC，意味着当频率<span
+class="math inline">$ω=\dfrac{1}{RC}$</span>时，<span
+class="math inline">|<em>Z</em><sub><em>R</em></sub>| = |<em>Z</em><sub><em>C</em></sub>|</span>且相位角<span
+class="math inline"><em>θ</em> = −45°</span></p>
+<p>并联RC电路的阻抗Z通过公式<span
+class="math inline">$\frac{1}{Z}=\frac{1}{Z_R}+\frac{1}{Z_C}$</span>计算。因此，并联
+RC 电路，阻抗较小的电路元件特性会显现。在高频区，并联RC电路的Z 等于<span
+class="math inline"><em>Z</em><sub><em>C</em></sub></span>
+；而在低频区则等于<span
+class="math inline"><em>Z</em><sub><em>R</em></sub></span>，这与串联RC电路的情况相反。在并联
+RC 电路的Nyquist图中，阻抗轨迹 Z 呈现为半圆形，圆弧直径等于
+R。该电路的时间常数<span
+class="math inline"><em>τ</em> = <em>R</em><em>C</em></span>，与串联电路相同。当频率<span
+class="math inline">$\omega =\frac{1}{RC}$</span>时，<span
+class="math inline">|<em>Z</em><sub><em>R</em></sub>| = |<em>Z</em><sub><em>C</em></sub>|</span>且相位角<span
+class="math inline"><em>θ</em> = −45°</span>，此时对应Nyquist图中圆弧的顶点。</p>
+<p>与Bode图相比，Nyquist图更适合通过轨迹形状来辨识电路结构。但需指出的是，当两个并联
+RC
+电路的时间常数相近时，即便其电阻和电容值不同，它们的半圆也难以区分。如下图所示，当两个并联
+RC
+电路的时间常数仅相差10倍时，可观察到由两段圆弧重叠形成的畸变半圆。只有当时间常数差异达到
+100
+倍以上时，两段圆弧才能被清晰区分。因此在构建等效电路时，仅依Nyquist图并不可取，必须验证该等效电路能否合理解释目标电化学现象中的每个基本过程</p>
+<figure>
+<img
+src="./%E7%94%B5%E5%8C%96%E5%AD%A6%E9%98%BB%E6%8A%97%E8%B0%B1/22-66071fig06RGB.jpg"
+alt="不同电容值 C 下的电路Nyquist图：(a) C=0.2 毫法，(b) 1 毫法，(c) 5 毫法，(d) 10 毫法。两个并联 RC 电路的时间常数比分别为：(a) 250，(b) 50，(c) 10，(d) 5。" />
+<figcaption aria-hidden="true">不同电容值 C 下的电路Nyquist图：(a) C=0.2
+毫法，(b) 1 毫法，(c) 5 毫法，(d) 10 毫法。两个并联 RC
+电路的时间常数比分别为：(a) 250，(b) 50，(c) 10，(d) 5。</figcaption>
+</figure>
+<h3
+id="下面列举一些常见的电路模型以及相应的nyquistbode图吧">下面列举一些常见的电路模型以及相应的Nyquist、Bode图吧</h3>
+<figure>
+<img
+src="./%E7%94%B5%E5%8C%96%E5%AD%A6%E9%98%BB%E6%8A%97%E8%B0%B1/images_large_tg2c00070_0008.jpeg"
+alt="images_large_tg2c00070_0008" />
+<figcaption aria-hidden="true">images_large_tg2c00070_0008</figcaption>
+</figure>
+<ul>
+<li>电感的Nyquist图在第四象限</li>
+<li>“电阻等价于点”</li>
+<li>“电容等价于垂直线”</li>
+</ul>
+<figure>
+<img
+src="./%E7%94%B5%E5%8C%96%E5%AD%A6%E9%98%BB%E6%8A%97%E8%B0%B1/images_large_tg2c00070_0009.jpeg"
+alt="images_large_tg2c00070_0009" />
+<figcaption aria-hidden="true">images_large_tg2c00070_0009</figcaption>
+</figure>
+<ul>
+<li>电容和电阻的并联反映到Nyquist图上即为一个半圆弧</li>
+<li>有几个电阻-电容并联电路就有可能出现几个半圆弧</li>
+<li>电阻<span
+class="math inline">$\rm{R}_0$</span>+电阻-电容并联电路就等价于将半圆弧向右平移<span
+class="math inline">$\rm{R_0}$</span>个单位</li>
+</ul>
+<figure>
+<img
+src="./%E7%94%B5%E5%8C%96%E5%AD%A6%E9%98%BB%E6%8A%97%E8%B0%B1/images_large_tg2c00070_0013.jpeg"
+alt="images_large_tg2c00070_001" />
+<figcaption aria-hidden="true">images_large_tg2c00070_001</figcaption>
+</figure>
+<p>定义法拉第阻抗<span
+class="math inline"><em>Z</em><sub><em>f</em></sub> = <em>R</em><sub><em>c</em><em>t</em></sub> + <em>Z</em><sub><em>W</em></sub></span></p>
+<ul>
+<li>上图左侧为理想高频部分，此时电荷转移电阻<span
+class="math inline"><em>R</em><sub><em>c</em><em>t</em></sub></span>很大，阻抗由电荷转移主导</li>
+<li>上图右侧为理想低频部分，此时“电容断路（电容特性：通高频阻低频）”，阻抗由物质扩散主导（溶液离子扩散、固体电解质中离子扩散等等）</li>
+<li>如果是一个频率非常广泛的、既包含高频又包含低频的电化学阻抗测试，那么Nyquist图中可能同时出现高频部分的半圆弧和低频部分的直线，如下图所示</li>
+</ul>
+<figure>
+<img
+src="./%E7%94%B5%E5%8C%96%E5%AD%A6%E9%98%BB%E6%8A%97%E8%B0%B1/images_large_tg2c00070_0014.jpeg"
+alt="images_large_tg2c00070_0014" />
+<figcaption aria-hidden="true">images_large_tg2c00070_0014</figcaption>
+</figure>
+<h3 id="电极的等效电路">电极的等效电路</h3>
+<p>在电化学阻抗谱（EIS）中，电极的电化学行为通常由包含电阻和电容的等效电路表示。其中，Randles
+电路常被用作电极的等效电路模型</p>
+<figure>
+<img
+src="./%E7%94%B5%E5%8C%96%E5%AD%A6%E9%98%BB%E6%8A%97%E8%B0%B1/22-66071fig07.jpg"
+alt="Randles的Nyquist图" />
+<figcaption aria-hidden="true">Randles的Nyquist图</figcaption>
+</figure>
+<ul>
+<li>定义法拉第阻抗<span
+class="math inline"><em>Z</em><sub><em>f</em></sub> = <em>R</em><sub><em>c</em><em>t</em></sub> + <em>Z</em><sub><em>W</em></sub></span></li>
+<li>溶液电阻<span
+class="math inline"><em>R</em><sub><em>s</em></sub></span>：即使使用参比电极，IR降也不可忽略。电解质传导过程中涉及的电阻称为溶液电阻（<span
+class="math inline"><em>R</em><sub><em>s</em></sub></span> ），
+可通过Nyquist奎斯特图中高频极限处与实轴的交点获得</li>
+<li>电荷转移电阻<span
+class="math inline"><em>R</em><sub><em>c</em><em>t</em></sub></span>：当过电位较大时，电极发生极化，过电位与电流之间呈现指数依赖，而当电极电位接近平衡电位时，过电位与电流的指数关系可简化为线性关系。因此，在极低过电位区域（&lt;10
+mV）内，电极表现为电阻特性，其电阻值称为电荷转移电阻，对应于Nyquist奎斯特图中半圆的直径。由于电荷转移电阻的概念仅适用于获得线性关系的极小过电位区域，因此电化学阻抗谱中的电压振幅通常设置为≤10
+mV。</li>
+<li>双电层电容<span
+class="math inline"><em>C</em><sub><em>d</em><em>l</em></sub></span>：电极与电解质界面处的电双层类似于电容器，虽然无法直接从Nyquist图中确定<span
+class="math inline"><em>C</em><sub><em>d</em><em>l</em></sub></span>
+的数值，但如果确定了<span
+class="math inline"><em>R</em><sub><em>c</em><em>t</em></sub></span>
+，则可通过以下关系式利用圆弧顶点频率对应并联电路的时间常数计算出<span
+class="math inline"><em>C</em><sub><em>d</em><em>l</em></sub></span>
+：<span
+class="math inline"><em>τ</em> = <em>R</em><sub><em>c</em><em>t</em></sub> × <em>C</em><sub><em>d</em><em>l</em></sub></span></li>
+<li>Wurburg阻抗：源于电解液中活性物质的扩散过程。在半无限扩散条件下，<span
+class="math inline"><em>Z</em><sub><em>W</em></sub></span>可通过以下方程表示：</li>
+</ul>
+<p><span class="math display">$$
+Z_W=\dfrac{RT}{n^2F^2Ac\sqrt{D}}\cdot\dfrac{1}{\sqrt{\omega}}\cdot\dfrac{1-j}{\sqrt{2}}
+$$</span></p>
+<p>其中，n为反应中转移的电子数，A
+为电极的几何面积，c为活性物质的浓度，D为扩散系数。Wurburg阻抗可用一个电容器与电阻器无限级联的电路表示。在Wurburg阻抗中，Z’和-Z’‘相等，因此在Nyquist图中可观察到一条斜率为-45°的直线。通过绘制
+Z’和
+Z’’随ω变化的关系曲线，可从两条平行直线的斜率确定扩散系数。值得注意的是，该式源自能斯特方程中浓度电势依赖项(<span
+class="math inline">$\dfrac{\partial E}{\partial
+c}$</span>)。对于不符合能斯特方程的电极（如发生固态扩散的电极），必须考虑(<span
+class="math inline">$\dfrac{\partial E}{\partial
+c}$</span>)项才能计算扩散系数</p>
+<p>如下图所示，当扩散系数 D
+增大时，活性物质能快速响应电极表面浓度变化而迅速补充至电极界面。因此较大的
+D 值会导致<span
+class="math inline"><em>Z</em><sub><em>W</em></sub></span>值减小。反之，<span
+class="math inline"><em>Z</em><sub><em>W</em></sub></span>随D值减小而增大，从而使直线向低频方向移动。最终在Bode图中，<span
+class="math inline"><em>Z</em><sub><em>W</em></sub></span>的线性区会与并联RC电路引起的|Z|变化区域重叠。这一现象在下下图（😛）所示的Nyquist图中更为明显：当
+D 值较大时，-45°斜率的直线与圆弧可清晰区分；但随着 D
+值减小，圆弧与直线开始重叠。这种重叠现象表明活性物质的扩散速度低于电荷转移反应的时间常数，本质上意味着扩散过程成为速率控制步骤。</p>
+<figure>
+<img
+src="./%E7%94%B5%E5%8C%96%E5%AD%A6%E9%98%BB%E6%8A%97%E8%B0%B1/22-66071fig08RGB.jpg"
+alt="不同 RT/(n2F2AcD^0.5 )值下 Randles电路的 Bode 图：(a) 1, (b) 10, (c) 100, (d) 300 Ω s −0.5" />
+<figcaption aria-hidden="true">不同 RT/(n<sup>2F</sup>2AcD^0.5 )值下
+Randles电路的 Bode 图：(a) 1, (b) 10, (c) 100, (d) 300 Ω s
+−0.5</figcaption>
+</figure>
+<figure>
+<img
+src="./%E7%94%B5%E5%8C%96%E5%AD%A6%E9%98%BB%E6%8A%97%E8%B0%B1/22-66071fig09RGB.jpg"
+alt="不同 RT/(n2F2AcD^0.5 )值下 Randles电路的Nyquist图：(a) 1, (b) 10, (c) 100, (d) 300 Ω·s −0.5" />
+<figcaption aria-hidden="true">不同 RT/(n<sup>2F</sup>2AcD^0.5 )值下
+Randles电路的Nyquist图：(a) 1, (b) 10, (c) 100, (d) 300 Ω·s
+−0.5</figcaption>
+</figure>
+<p><strong>一个性能良好的固态电解质材料，其离子电导率应当较大，扩散系数D应当较大，那么Nyquist图应当接近于a或b的形貌</strong></p>
+<h3
+id="从理想电极到真实电极常相位元件cpe">从理想电极到真实电极——常相位元件CPE</h3>
+<p>CPE被定义为： <span class="math display">$$
+Z_{CPE}=\dfrac{1}{Y_O(j\omega)^n}
+$$</span></p>
+<p><span
+class="math display"><em>θ</em> = 90<sup>∘</sup>(1 − <em>n</em>)</span></p>
+<p>其中θ是与理想情况（φ=90°）的相位偏差，n 是从 0 到 1
+的常数，定义了与理想行为的偏差</p>
+<table>
+<colgroup>
+<col style="width: 4%" />
+<col style="width: 19%" />
+<col style="width: 17%" />
+<col style="width: 58%" />
+</colgroup>
+<thead>
+<tr>
+<th style="text-align: left;">n</th>
+<th style="text-align: left;">相位角φ（理想行为）</th>
+<th style="text-align: left;">与理想行为的偏差θ</th>
+<th style="text-align: left;">阻抗方程</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align: left;">1</td>
+<td style="text-align: left;">90</td>
+<td style="text-align: left;">0</td>
+<td style="text-align: left;"><span
+class="math inline">$Z(\omega)=\dfrac{1}{j\omega
+\rm{C_{dl}}}$</span></td>
+</tr>
+<tr>
+<td style="text-align: left;">0.9</td>
+<td style="text-align: left;">81</td>
+<td style="text-align: left;">9</td>
+<td style="text-align: left;"><span
+class="math inline">$Z_{\omega}=\dfrac{1}{Y_O(j\omega)^{0.9}}$</span></td>
+</tr>
+<tr>
+<td style="text-align: left;">0.8</td>
+<td style="text-align: left;">72</td>
+<td style="text-align: left;">18</td>
+<td style="text-align: left;"><span
+class="math inline">$Z_{\omega}=\dfrac{1}{Y_O(j\omega)^{0.8}}$</span></td>
+</tr>
+<tr>
+<td style="text-align: left;">0</td>
+<td style="text-align: left;">0</td>
+<td style="text-align: left;">90</td>
+<td style="text-align: left;"><span
+class="math inline">$Z_{\omega}=\dfrac{1}{Y_O(j\omega)^{0}}=\dfrac{1}{Y_O}=R$</span></td>
+</tr>
+<tr>
+<td style="text-align: left;">0.5</td>
+<td style="text-align: left;">45</td>
+<td style="text-align: left;">45</td>
+<td style="text-align: left;"><span
+class="math inline">$Z(\omega)=\dfrac{1}{Y_O}\sqrt{j\omega}$</span></td>
+</tr>
+</tbody>
+</table>
+<p>两个极端情况：</p>
+<ul>
+<li>n=1，CPE表现为理想电容器</li>
+<li>n=0，CPE 表现为电阻器</li>
+<li>n=0.5，<span
+class="math inline">$Z(\omega)=\dfrac{1}{Y_O}\sqrt{j\omega}$</span>，即等价于
+Warburg 阻抗</li>
+</ul>
+<h2
+id="用传输线模型来直观理解扩散阻抗">用传输线模型来直观理解扩散阻抗</h2>
+<p>Warburg阻抗是一个复杂的元素，它表示氧化还原物质向电极表面的质量传递，并被描绘为奈奎斯特图的低频范围上的-45°线。这种行为是指化学物质的时间相关（非稳态）半无限扩散，如下图A所示，在电极/电解质界面处存在单个边界，距离
+x=0。朝向本体溶液，并且在静止条件下，扩散层扩展到由电化学电池的尺寸限定的无限长度（x→∞），同时浓度梯度随时间下降。</p>
+<p>将扩散层视为由无数个 “电阻（<span
+class="math inline"><em>R</em><sub><em>d</em></sub></span>）-
+电容（<span
+class="math inline"><em>C</em><sub><em>d</em></sub></span>）”
+单元串联，其中：</p>
+<ul>
+<li><p><span
+class="math inline"><em>R</em><sub><em>d</em></sub></span>：单位长度的扩散电阻（反映扩散阻力）</p></li>
+<li><p><span
+class="math inline"><em>C</em><sub><em>d</em></sub></span>：单位长度的
+“化学电容”（反映浓度存储能力）</p></li>
+<li><p>半无限扩散——无限长传输线，阻抗为Warburg直线</p></li>
+<li><p>有限扩散——有限长传输线，末端接电阻（投射）或电容（反射）</p>
+<ul>
+<li>当有限扩散区对扩散物质可渗透时，随着时间和电流流过电化学电池，建立了稳态浓度梯度（dC/dx=常数）。这是透射或可渗透边界的情况。</li>
+<li>当有限扩散区在一段时间后对扩散物质不渗透时，电荷转移是不可能的，并且扩散物质的浓度梯度变为零（dC/dx=0）。这是反射或不渗透边界的情况</li>
+</ul></li>
+</ul>
+<figure>
+<img
+src="./%E7%94%B5%E5%8C%96%E5%AD%A6%E9%98%BB%E6%8A%97%E8%B0%B1/images_large_tg2c00070_0018.jpeg"
+alt="A）电化学电池的半无限区，（B）半无限区的传输线（TL）描述，（C）t&lt;td 跨度处的有限边界扩散，（D）透射，和（E）t&gt;td 处的反射边界" />
+<figcaption
+aria-hidden="true">A）电化学电池的半无限区，（B）半无限区的传输线（TL）描述，（C）t&lt;td
+跨度处的有限边界扩散，（D）透射，和（E）t&gt;td
+处的反射边界</figcaption>
+</figure>
+<p>==具有透射边界的有限长度线性扩散的典型例子包括固体氧化物或聚合物膜燃料电池，和旋转盘电极实验中的扩散层==</p>
+<h2 id="固态电解质的阻抗谱分析">固态电解质的阻抗谱分析</h2>
+<p>以陶瓷固态电解质为例，<strong>假设其仅存在单离子传输而不具有电子导电性</strong></p>
+<p><strong>在极高频率区域（&gt;1 MHz）的阻抗数据对于通过 EIS
+测量分析固体电解质至关重要</strong>，这与其它材料的 EIS
+分析存在显著差异。若某固体电解质的体相离子电导率为<span
+class="math inline">10<sup>−4</sup><em>S</em> ⋅ <em>c</em><em>m</em><sup>−1</sup></span>
+，且离子迁移相关电容为<span
+class="math inline">10<sup>−11</sup><em>F</em> ⋅ <em>c</em><em>m</em><sup>−2</sup></span>
+，则对应<span
+class="math inline">1/(2<em>π</em> × <em>τ</em>)</span>（<span
+class="math inline"><em>τ</em></span>：时间常数）的特征频率约为∼<span
+class="math inline">10<sup>7</sup></span>Hz（10
+MHz）。若未对该频率区域采取特殊防护措施进行EIS测量，高频区的阻抗数据将会缺失，仅能观测到部分圆弧。在此情况下，EIS数据中包含的来自电缆和电池的电子电阻分量无法消除。此外，由晶粒内部电阻和晶界电阻构成的离子电阻也无法分离，从而导致固体电解质重要信息的丢失。</p>
+<p>由于大多数陶瓷固体电解质是由不同尺寸和取向的晶粒聚集而成的多晶材料，除了晶粒内部电阻外，离子在晶粒间界面处的传输电阻对离子电导率具有重要影响。晶粒内部电阻<span
+class="math inline">$R_{\rm{gi}}$</span>
+（又称体电阻）是材料固有的离子传输阻力。因此，<strong>若测试样品不含孔隙，通过晶粒内部电阻倒数计算得到的体离子电导率等于该固体电解质单晶的离子电导率</strong>。晶界电阻<span
+class="math inline">$R_{\rm{gb}}$</span>
+表示离子穿越晶粒间界面（晶界）及/或位于晶界的化学组成不同微相时所受的传输阻力。下图展示了陶瓷固体电解质的等效电路及Nyquist图，该电路由两个串联的并联
+RC 回路构成：一个电阻对应<span class="math inline">$R_{\rm{gi}}$</span>
+，另一个对应<span class="math inline">$R_{\rm{gb}}$</span>
+。由于两个并联RC电路具有不同的时间常数<span
+class="math inline">（<em>τ</em> = <em>R</em> × <em>C</em>）</span>，电化学阻抗谱能够分别测定这两个电阻值。</p>
+<figure>
+<img
+src="./%E7%94%B5%E5%8C%96%E5%AD%A6%E9%98%BB%E6%8A%97%E8%B0%B1/22-66080fig01.jpg"
+alt="由两个并联RC电路组成的固体电解质等效电路，分别对应晶粒内部与晶界的串联连接。(b)是根据(a)所示等效电路计算得出的固体电解质典型Nyquist图。需注意，为简化起见图中省略了电极响应部分。" />
+<figcaption
+aria-hidden="true">由两个并联RC电路组成的固体电解质等效电路，分别对应晶粒内部与晶界的串联连接。(b)是根据(a)所示等效电路计算得出的固体电解质典型Nyquist图。需注意，为简化起见图中省略了电极响应部分。</figcaption>
+</figure>
+<p>由于开发和改进陶瓷固体电解质最有效的方法是通过降低<span
+class="math inline">$\rm{R_{gb}}$</span>
+使离子电导率接近单晶水平，因此分离<span
+class="math inline">$\rm{R_{gi}}$</span> 和<span
+class="math inline">$\rm{R_{gb}}$</span>
+并分别评估它们至关重要。要通过高频区半圆直径确定<span
+class="math inline">$\rm{R_{gi}}$</span>
+，应通过增加电解质厚度、减小电极面积或降低测量温度来降低特征频率。然而这些方法存在局限性，例如当电极面积小于样品几何面积时会干扰样品中的电流分布，因此需要测量直至高频区的阻抗数据。本文介绍了我们测量固体电解质高达
+100 MHz 高频阻抗的方法。</p>
+<p>在固体电解质的电化学阻抗谱（EIS）测量中，通常采用电极/电解质/电极的三明治结构组件。这种配置的优势在于能够实现简单的两端测量（<strong>注：设备与电极之间需连接两根电压线和两根电流线，共计四根电缆</strong>）。采用电极/电解质/电极结构进行EIS测量时，电极材料的选择至关重要。电极材料需满足以下必要条件：能够构建稳定界面且不与电解质发生化学反应，同时具备足够的电子导电性。金或铂等贵金属常被用作阻塞电极，某些情况下也会采用能与移动离子发生可逆反应的可逆电极。圆盘状固体电解质样品通常通过粉末压片成型，必要时还需进行煅烧处理。
+样品的相对密度最好大于 90%，理想情况下应超过 95%。</p>
+<p>在电极涂覆工艺中，有两个关键因素会影响固体电解质的阻抗测量结果。其一是电极厚度：过薄的电极可能导致阻抗数据偏离原始值，进而造成对固体电解质离子传输行为的误判。其二是固体电解质的表面状态，该因素会显著影响阻抗测量。本节将详细阐述这两个因素如何影响阻抗数据。</p>
+<p>下图展示了不同电极厚度及固体电解质表面是否抛光处理的氟离子导体Nyquist图。所有情况下均采用溅射法沉积直径为7mm
+的铂电极。阻抗测试使用 Keysight E4990A
+阻抗分析仪在室温空气环境下完成。所有Nyquist图均呈现两个特征：由晶粒内部与晶界电阻（具有相近时间常数）形成的畸变弧线（两个半圆弧融合），以及低频区对应阻塞电极与固体电解质界面电容特性的直线段。不同电极厚度的Nyquist图存在显著差异：对于
+200 nm 厚电极（图
+2a），离子传输电阻（晶粒内部与晶界电阻）形成的阻抗弧起始于坐标原点；而
+50 nm 薄电极（图
+2b）的阻抗弧则发生水平偏移，且由阻抗弧外推得到的高频极限阻抗值偏离原点。
+这种因电极厚度不同而产生的差异可归因于样品中的电流分布；对于较薄的电极，其横向电阻不容忽视</p>
+<figure>
+<img
+src="./%E7%94%B5%E5%8C%96%E5%AD%A6%E9%98%BB%E6%8A%97%E8%B0%B1/22-66080fig02RGB.jpg"
+alt="采用铂电极的氟离子传导固体电解质的Nyquist图：(a) 200 纳米厚度电极，(b) 50 纳米厚度电极。(c) 样品表面抛光后 50 纳米铂电极的Nyquist图。右侧为放大视图以便观察。圆圈表示测量值，虚线表示拟合曲线。" />
+<figcaption
+aria-hidden="true">采用铂电极的氟离子传导固体电解质的Nyquist图：(a) 200
+纳米厚度电极，(b) 50 纳米厚度电极。(c) 样品表面抛光后 50
+纳米铂电极的Nyquist图。右侧为放大视图以便观察。圆圈表示测量值，虚线表示拟合曲线。</figcaption>
+</figure>
+<p>如上图，当样品<strong>经 2000 目砂纸抛光并</strong>沉积 50
+纳米铂电极后，所得阻抗弧严重偏离原点。这表明抛光过程引入了除离子传输过程之外的额外电阻。此外，抛光样品的离子传导过程对应阻抗弧略有扩大，直线斜率趋于平缓。这种斜率变化反映了抛光前后样品阻塞行为的差异：抛光样品在&lt;1
+MHz
+频率区间出现与阻塞行为重叠的寄生电阻。<strong>固态电解质抛光前后的阻抗行为变化归因于抛光过程中（为去除煅烧样品表面偏析层而进行的）样品表面劣化</strong>。</p>
+<p>为消除电缆电感对高频测量的干扰，设备与电解池（样品）之间的连接电缆应尽可能缩短。建议采用特性阻抗为
+50Ω的同轴电缆，并将其紧贴样品安装。此外，必须合理设置电流回流路径。对于高达
+100MHz
+的高频测量，需确保电缆不会引起相位差畸变。在进行高频测量前，应对系统进行开路/短路/负载校准</p>
+<h2 id="离子电导率的计算">离子电导率的计算</h2>
+<p><span class="math display">$$
+\sigma'(\omega)=\dfrac{L}{S}\times\dfrac{Z'(\omega)}{\vert Z'(\omega)
+\rvert ^2}
+$$</span></p>
+<p>对于使用固态电解质模具进行电化学阻抗谱测试的情况，离子电导率的计算公式为：
+<span class="math display">$$
+\sigma =\dfrac{L}{S\times R}
+$$</span> 其中<span
+class="math inline"><em>L</em></span>为固态电解质pellet圆片厚度，<span
+class="math inline"><em>S</em></span>为圆片pellet的面积，<span
+class="math inline"><em>R</em></span>为电阻（Nyquist图拐点处的横坐标）</p>
+<h2
+id="实战演练以rmli_5.5ps_4.5cl_1.5的电化学阻抗谱图为例">实战演练——以<span
+class="math inline">$\rm{Li_{5.5}PS_{4.5}Cl_{1.5}}$</span>的电化学阻抗谱图为例</h2>
+<figure>
+<img
+src="./%E7%94%B5%E5%8C%96%E5%AD%A6%E9%98%BB%E6%8A%97%E8%B0%B1/TEST.png"
+alt="之前测的阻抗偶" />
+<figcaption aria-hidden="true">之前测的阻抗偶</figcaption>
+</figure>
+<p>这是之前测试的图，简单画了一下，2Tons（249MPa）压力下的测试结果。可以看到，这与常见的阻抗谱差别非常大，并没有出现超高频的半圆弧，只出现了低频的扩散部分和中高频的拐点。这是收阻抗仪的最高频率所限，使用的阻抗仪最高频只能达到约1MHz左右，对于10mS/cm的固态电解质，想要完整的测出半圆弧可能需要100MHz甚至更高的频率</p>
+<figure>
+<img
+src="./%E7%94%B5%E5%8C%96%E5%AD%A6%E9%98%BB%E6%8A%97%E8%B0%B1/image-20250612163437996.png"
+alt="image-20250612163437996" />
+<figcaption aria-hidden="true">image-20250612163437996</figcaption>
+</figure>
+<ul>
+<li>由于设备频率上限较低，只能得到粒子抵抗和粒界阻抗的总值</li>
+<li>活化能分析中无法判断随温度变化特性值发生变化的是粒子阻抗还是粒界阻抗</li>
+<li>在通过变温方式尝试分离粒子阻抗和粒界阻抗时，可控温度范围有限，且无法对变温引起的参数条件变化进行校正</li>
+</ul>
+<p>==此外，交变电流源的最高频率不等于最高有效频率==，有效的最高频率常常受限于测试端子类型和连线长度，在进行变温控制的时候，==夹具及导线材料的介电常数因为温度变化而变化，如果不及时矫正阻抗会使结果产生较大偏离==</p>
+<figure>
+<img
+src="./%E7%94%B5%E5%8C%96%E5%AD%A6%E9%98%BB%E6%8A%97%E8%B0%B1/image-20250612164042178.png"
+alt="image-20250612164042178" />
+<figcaption aria-hidden="true">image-20250612164042178</figcaption>
+</figure>
+<p>下图展示了超高有效频率下的LLTO型固态电解质的阻抗谱</p>
+<figure>
+<img
+src="./%E7%94%B5%E5%8C%96%E5%AD%A6%E9%98%BB%E6%8A%97%E8%B0%B1/image-20250612164142858.png"
+alt="image-20250612164142858" />
+<figcaption aria-hidden="true">image-20250612164142858</figcaption>
+</figure>
+<h2 id="参考资料">参考资料</h2>
+<ol type="1">
+<li>Lazanas, A. Ch.; Prodromidis, M. I. Electrochemical Impedance
+Spectroscopy─a Tutorial. ACS Meas. Sci. Au 2023, 3 (3), 162–193.
+https://doi.org/10.1021/acsmeasuresciau.2c00070.</li>
+<li>Lazanas, A. Ch.; Prodromidis, M. I. Correction to “Electrochemical
+Impedance Spectroscopy─a Tutorial.” ACS Meas. Sci. Au 2025, 5 (1),
+156–156. https://doi.org/10.1021/acsmeasuresciau.5c00007.</li>
+<li>Ariyoshi, K.; Mineshige, A.; Takeno, M.; Fukutsuka, T.; Abe, T.;
+Uchida, S.; Siroma, Z. Electrochemical Impedance Spectroscopy Part 2:
+Applications. Electrochemistry 2022, 90 (10), 102008–102008.
+https://doi.org/10.5796/electrochemistry.22-66080.</li>
+<li>Ariyoshi, K.; Siroma, Z.; Mineshige, A.; Takeno, M.; Fukutsuka, T.;
+Abe, T.; Uchida, S. Electrochemical Impedance Spectroscopy Part 1:
+Fundamentals. Electrochemistry 2022, 90 (10), 102007–102007.
+https://doi.org/10.5796/electrochemistry.22-66071.</li>
+<li>Hu, W.; Peng, Y.; Wei, Y.; Yang, Y. Application of Electrochemical
+Impedance Spectroscopy to Degradation and Aging Research of Lithium-Ion
+Batteries. J. Phys. Chem. C 2023, 127 (9), 4465–4495.
+https://doi.org/10.1021/acs.jpcc.3c00033.</li>
+</ol>
+
+            
+
+
+        </div>
+    </div>
+    <div id="post-footer" class="post-footer main-content-wrap">
+        
+            <div class="post-footer-tags">
+                <span class="text-color-light text-small">TAGGED IN</span><br/>
+                
+    <a class="tag tag--primary tag--small t-none-link" href="/all-tags/%E5%8C%96%E5%AD%A6/" rel="tag">化学</a> <a class="tag tag--primary tag--small t-none-link" href="/all-tags/%E7%A7%91%E7%A0%94/" rel="tag">科研</a>
+
+            </div>
+        
+        
+            <div class="post-actions-wrap">
+    <nav>
+        <ul class="post-actions post-action-nav">
+            <li class="post-action">
+                
+                    
+                <a
+                    class="post-action-btn btn btn--default tooltip--top"
+                    href="/2025/05/30/%E9%87%8F%E5%AD%90%E5%8C%96%E5%AD%A6/%E4%BD%BF%E7%94%A8Multiwfn+VMD%E7%BB%98%E5%88%B6%E5%88%86%E5%AD%90%E7%9A%84%E8%A1%A8%E9%9D%A2%E9%9D%99%E7%94%B5%E5%8A%BF%E5%9B%BE/"
+                    data-tooltip="使用Multiwfn+VMD绘制分子的表面静电势图(ESP)"
+                    aria-label="PREVIOUS: 使用Multiwfn+VMD绘制分子的表面静电势图(ESP)"
+                >
+                    
+                        <i class="fa fa-angle-left" aria-hidden="true"></i>
+                        <span class="hide-xs hide-sm text-small icon-ml">PREVIOUS</span>
+                    </a>
+            </li>
+            <li class="post-action">
+                
+                    
+                <a
+                    class="post-action-btn btn btn--default tooltip--top"
+                    href="/2025/05/25/%E7%A7%91%E7%A0%94/first%20stage/%E7%A7%91%E7%A0%94%E4%B8%AD%E7%9A%84%E9%97%AE%E9%A2%98/"
+                    data-tooltip="科研中的小问题"
+                    aria-label="NEXT: 科研中的小问题"
+                >
+                    
+                        <span class="hide-xs hide-sm text-small icon-mr">NEXT</span>
+                        <i class="fa fa-angle-right" aria-hidden="true"></i>
+                    </a>
+            </li>
+        </ul>
+    </nav>
+    <ul class="post-actions post-action-share">
+        <li class="post-action hide-lg hide-md hide-sm">
+            <a
+                class="post-action-btn btn btn--default btn-open-shareoptions"
+                href="#btn-open-shareoptions"
+                aria-label="Share this post"
+            >
+                <i class="fa fa-share-alt" aria-hidden="true"></i>
+            </a>
+        </li>
+        
+            
+            
+            <li class="post-action hide-xs">
+                <a
+                    class="post-action-btn btn btn--default"
+                    target="new" href="https://www.facebook.com/sharer/sharer.php?u=http://example.com/2025/05/27/%E7%A7%91%E7%A0%94/first%20stage/%E7%94%B5%E5%8C%96%E5%AD%A6%E9%98%BB%E6%8A%97%E8%B0%B1/"
+                    title="Share on Facebook"
+                    aria-label="Share on Facebook"
+                >
+                    <i class="fab fa-facebook" aria-hidden="true"></i>
+                </a>
+            </li>
+        
+            
+            
+            <li class="post-action hide-xs">
+                <a
+                    class="post-action-btn btn btn--default"
+                    target="new" href="https://twitter.com/intent/tweet?text=http://example.com/2025/05/27/%E7%A7%91%E7%A0%94/first%20stage/%E7%94%B5%E5%8C%96%E5%AD%A6%E9%98%BB%E6%8A%97%E8%B0%B1/"
+                    title="Share on Twitter"
+                    aria-label="Share on Twitter"
+                >
+                    <i class="fab fa-twitter" aria-hidden="true"></i>
+                </a>
+            </li>
+        
+            
+            
+            <li class="post-action hide-xs">
+                <a
+                    class="post-action-btn btn btn--default"
+                    target="new" href="https://plus.google.com/share?url=http://example.com/2025/05/27/%E7%A7%91%E7%A0%94/first%20stage/%E7%94%B5%E5%8C%96%E5%AD%A6%E9%98%BB%E6%8A%97%E8%B0%B1/"
+                    title="Share on Google+"
+                    aria-label="Share on Google+"
+                >
+                    <i class="fab fa-google-plus" aria-hidden="true"></i>
+                </a>
+            </li>
+        
+        
+            
+        
+        <li class="post-action">
+            
+                <a class="post-action-btn btn btn--default" href="#" aria-label="Back to top">
+            
+                <i class="fa fa-list" aria-hidden="true"></i>
+            </a>
+        </li>
+    </ul>
+</div>
+
+
+        
+        
+            
+        
+    </div>
+</article>
+
+
+
+                <footer id="footer" class="main-content-wrap">
+    <span class="copyrights">
+        Copyrights &copy; 2025 John Doe. All Rights Reserved.
+    </span>
+</footer>
+
+            </div>
+            
+                <div id="bottom-bar" class="post-bottom-bar" data-behavior="4">
+                    <div class="post-actions-wrap">
+    <nav>
+        <ul class="post-actions post-action-nav">
+            <li class="post-action">
+                
+                    
+                <a
+                    class="post-action-btn btn btn--default tooltip--top"
+                    href="/2025/05/30/%E9%87%8F%E5%AD%90%E5%8C%96%E5%AD%A6/%E4%BD%BF%E7%94%A8Multiwfn+VMD%E7%BB%98%E5%88%B6%E5%88%86%E5%AD%90%E7%9A%84%E8%A1%A8%E9%9D%A2%E9%9D%99%E7%94%B5%E5%8A%BF%E5%9B%BE/"
+                    data-tooltip="使用Multiwfn+VMD绘制分子的表面静电势图(ESP)"
+                    aria-label="PREVIOUS: 使用Multiwfn+VMD绘制分子的表面静电势图(ESP)"
+                >
+                    
+                        <i class="fa fa-angle-left" aria-hidden="true"></i>
+                        <span class="hide-xs hide-sm text-small icon-ml">PREVIOUS</span>
+                    </a>
+            </li>
+            <li class="post-action">
+                
+                    
+                <a
+                    class="post-action-btn btn btn--default tooltip--top"
+                    href="/2025/05/25/%E7%A7%91%E7%A0%94/first%20stage/%E7%A7%91%E7%A0%94%E4%B8%AD%E7%9A%84%E9%97%AE%E9%A2%98/"
+                    data-tooltip="科研中的小问题"
+                    aria-label="NEXT: 科研中的小问题"
+                >
+                    
+                        <span class="hide-xs hide-sm text-small icon-mr">NEXT</span>
+                        <i class="fa fa-angle-right" aria-hidden="true"></i>
+                    </a>
+            </li>
+        </ul>
+    </nav>
+    <ul class="post-actions post-action-share">
+        <li class="post-action hide-lg hide-md hide-sm">
+            <a
+                class="post-action-btn btn btn--default btn-open-shareoptions"
+                href="#btn-open-shareoptions"
+                aria-label="Share this post"
+            >
+                <i class="fa fa-share-alt" aria-hidden="true"></i>
+            </a>
+        </li>
+        
+            
+            
+            <li class="post-action hide-xs">
+                <a
+                    class="post-action-btn btn btn--default"
+                    target="new" href="https://www.facebook.com/sharer/sharer.php?u=http://example.com/2025/05/27/%E7%A7%91%E7%A0%94/first%20stage/%E7%94%B5%E5%8C%96%E5%AD%A6%E9%98%BB%E6%8A%97%E8%B0%B1/"
+                    title="Share on Facebook"
+                    aria-label="Share on Facebook"
+                >
+                    <i class="fab fa-facebook" aria-hidden="true"></i>
+                </a>
+            </li>
+        
+            
+            
+            <li class="post-action hide-xs">
+                <a
+                    class="post-action-btn btn btn--default"
+                    target="new" href="https://twitter.com/intent/tweet?text=http://example.com/2025/05/27/%E7%A7%91%E7%A0%94/first%20stage/%E7%94%B5%E5%8C%96%E5%AD%A6%E9%98%BB%E6%8A%97%E8%B0%B1/"
+                    title="Share on Twitter"
+                    aria-label="Share on Twitter"
+                >
+                    <i class="fab fa-twitter" aria-hidden="true"></i>
+                </a>
+            </li>
+        
+            
+            
+            <li class="post-action hide-xs">
+                <a
+                    class="post-action-btn btn btn--default"
+                    target="new" href="https://plus.google.com/share?url=http://example.com/2025/05/27/%E7%A7%91%E7%A0%94/first%20stage/%E7%94%B5%E5%8C%96%E5%AD%A6%E9%98%BB%E6%8A%97%E8%B0%B1/"
+                    title="Share on Google+"
+                    aria-label="Share on Google+"
+                >
+                    <i class="fab fa-google-plus" aria-hidden="true"></i>
+                </a>
+            </li>
+        
+        
+            
+        
+        <li class="post-action">
+            
+                <a class="post-action-btn btn btn--default" href="#" aria-label="Back to top">
+            
+                <i class="fa fa-list" aria-hidden="true"></i>
+            </a>
+        </li>
+    </ul>
+</div>
+
+
+                </div>
+                
+    <div id="share-options-bar" class="share-options-bar" data-behavior="4">
+        <i id="btn-close-shareoptions" class="fa fa-times"></i>
+        <ul class="share-options">
+            
+                
+                
+                <li class="share-option">
+                    <a
+                        class="share-option-btn"
+                        target="new"
+                        href="https://www.facebook.com/sharer/sharer.php?u=http://example.com/2025/05/27/%E7%A7%91%E7%A0%94/first%20stage/%E7%94%B5%E5%8C%96%E5%AD%A6%E9%98%BB%E6%8A%97%E8%B0%B1/"
+                        aria-label="Share on Facebook"
+                    >
+                        <i class="fab fa-facebook" aria-hidden="true"></i><span>Share on Facebook</span>
+                    </a>
+                </li>
+            
+                
+                
+                <li class="share-option">
+                    <a
+                        class="share-option-btn"
+                        target="new"
+                        href="https://twitter.com/intent/tweet?text=http://example.com/2025/05/27/%E7%A7%91%E7%A0%94/first%20stage/%E7%94%B5%E5%8C%96%E5%AD%A6%E9%98%BB%E6%8A%97%E8%B0%B1/"
+                        aria-label="Share on Twitter"
+                    >
+                        <i class="fab fa-twitter" aria-hidden="true"></i><span>Share on Twitter</span>
+                    </a>
+                </li>
+            
+                
+                
+                <li class="share-option">
+                    <a
+                        class="share-option-btn"
+                        target="new"
+                        href="https://plus.google.com/share?url=http://example.com/2025/05/27/%E7%A7%91%E7%A0%94/first%20stage/%E7%94%B5%E5%8C%96%E5%AD%A6%E9%98%BB%E6%8A%97%E8%B0%B1/"
+                        aria-label="Share on Google+"
+                    >
+                        <i class="fab fa-google-plus" aria-hidden="true"></i><span>Share on Google+</span>
+                    </a>
+                </li>
+            
+        </ul>
+    </div>
+
+
+            
+        </div>
+        
+
+
+<div id="about">
+    <div id="about-card">
+        <div id="about-btn-close">
+            <i class="fa fa-times"></i>
+        </div>
+        
+            <h4 id="about-card-name">John Doe</h4>
+        
+            <div id="about-card-bio"><p>author.bio</p>
+</div>
+        
+        
+            <div id="about-card-job">
+                <i class="fa fa-briefcase"></i>
+                <br/>
+                <p>author.job</p>
+
+            </div>
+        
+        
+    </div>
+</div>
+
+        
+        
+<div id="cover" style="background-image:url('/assets/images/cover.jpg');"></div>
+        <!--SCRIPTS-->
+
+<script src="/assets/js/script-akgy1kkmfssyzznzlvk9mjwcvnsn87aqalldnf43rojvlib0s8vpmeb5mayw.min.js"></script>
+
+<!--SCRIPTS END-->
+
+
+    
+
+
+
+
+    </body>
+</html>

@@ -1,0 +1,2868 @@
+
+<!DOCTYPE html>
+<html lang="en">
+    
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="generator" content="Hexo">
+    <title>Hexo</title>
+    <meta name="author" content="John Doe">
+    
+    
+    
+    <script type="application/ld+json">{"@context":"http://schema.org","@type":"Website","@id":"http://example.com","author":{"@type":"Person","name":"John Doe","sameAs":["https://github.com/","http://stackoverflow.com/users","https://twitter.com/","https://facebook.com/","https://plus.google.com/","https://www.linkedin.com/profile/","mailto"]},"name":"Hexo","description":"","url":"http://example.com"}</script>
+    <meta property="og:type" content="blog">
+<meta property="og:title" content="Hexo">
+<meta property="og:url" content="http://example.com/page/5/index.html">
+<meta property="og:site_name" content="Hexo">
+<meta property="og:locale" content="en_US">
+<meta property="article:author" content="John Doe">
+<meta name="twitter:card" content="summary">
+    
+    
+        
+    
+    
+    
+    
+    
+    <!--STYLES-->
+    
+<link rel="stylesheet" href="/assets/css/all.css">
+
+    
+<link rel="stylesheet" href="/assets/css/jquery.fancybox.css">
+
+    
+<link rel="stylesheet" href="/assets/css/thumbs.css">
+
+    
+<link rel="stylesheet" href="/assets/css/tranquilpeak.css">
+
+    <!--STYLES END-->
+    
+
+    
+
+    
+
+
+
+
+<script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+<script>
+  MathJax = {
+    tex: {
+      inlineMath: [['$', '$'], ['\\(', '\\)']],
+      displayMath: [['$$', '$$'], ['\\[', '\\]']],
+      tags: 'ams'
+    },
+    svg: {
+      fontCache: 'global'
+    }
+  };
+</script>
+
+
+
+
+
+<!-- hexo injector head_end start -->
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.12.0/dist/katex.min.css">
+
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/hexo-math@4.0.0/dist/style.css">
+<!-- hexo injector head_end end --></head>
+
+    <body>
+        <div id="blog">
+            <!-- Define author's picture -->
+
+
+    
+
+<header id="header" data-behavior="1">
+    <i id="btn-open-sidebar" class="fa fa-lg fa-bars"></i>
+    <div class="header-title">
+        <a
+            class="header-title-link"
+            href="/"
+            aria-label=""
+        >
+            Hexo
+        </a>
+    </div>
+    
+        
+            <a
+                class="header-right-picture "
+                href="#about"
+                aria-label="Open the link: /#about"
+            >
+        
+        
+        </a>
+    
+</header>
+
+            <!-- Define author's picture -->
+
+
+<nav id="sidebar" data-behavior="1">
+    <div class="sidebar-container">
+        
+        
+            <ul class="sidebar-buttons">
+            
+                <li class="sidebar-button">
+                    
+                        <a
+                            class="sidebar-button-link "
+                            href="/"
+                            
+                            rel="noopener"
+                            title="Home"
+                        >
+                        <i class="sidebar-button-icon fa fa-home" aria-hidden="true"></i>
+                        <span class="sidebar-button-desc">Home</span>
+                    </a>
+            </li>
+            
+                <li class="sidebar-button">
+                    
+                        <a
+                            class="sidebar-button-link "
+                            href="/all-categories"
+                            
+                            rel="noopener"
+                            title="Categories"
+                        >
+                        <i class="sidebar-button-icon fa fa-bookmark" aria-hidden="true"></i>
+                        <span class="sidebar-button-desc">Categories</span>
+                    </a>
+            </li>
+            
+                <li class="sidebar-button">
+                    
+                        <a
+                            class="sidebar-button-link "
+                            href="/all-tags"
+                            
+                            rel="noopener"
+                            title="Tags"
+                        >
+                        <i class="sidebar-button-icon fa fa-tags" aria-hidden="true"></i>
+                        <span class="sidebar-button-desc">Tags</span>
+                    </a>
+            </li>
+            
+                <li class="sidebar-button">
+                    
+                        <a
+                            class="sidebar-button-link "
+                            href="/all-archives"
+                            
+                            rel="noopener"
+                            title="Archives"
+                        >
+                        <i class="sidebar-button-icon fa fa-archive" aria-hidden="true"></i>
+                        <span class="sidebar-button-desc">Archives</span>
+                    </a>
+            </li>
+            
+                <li class="sidebar-button">
+                    
+                        <a
+                            class="sidebar-button-link open-algolia-search"
+                            href="#search"
+                            
+                            rel="noopener"
+                            title="Search"
+                        >
+                        <i class="sidebar-button-icon fa fa-search" aria-hidden="true"></i>
+                        <span class="sidebar-button-desc">Search</span>
+                    </a>
+            </li>
+            
+                <li class="sidebar-button">
+                    
+                        <a
+                            class="sidebar-button-link "
+                            href="#about"
+                            
+                            rel="noopener"
+                            title="About"
+                        >
+                        <i class="sidebar-button-icon fa fa-question" aria-hidden="true"></i>
+                        <span class="sidebar-button-desc">About</span>
+                    </a>
+            </li>
+            
+        </ul>
+        
+            <ul class="sidebar-buttons">
+            
+                <li class="sidebar-button">
+                    
+                        <a
+                            class="sidebar-button-link "
+                            href="https://github.com/"
+                            
+                                target="_blank"
+                            
+                            rel="noopener"
+                            title="GitHub"
+                        >
+                        <i class="sidebar-button-icon fab fa-github" aria-hidden="true"></i>
+                        <span class="sidebar-button-desc">GitHub</span>
+                    </a>
+            </li>
+            
+                <li class="sidebar-button">
+                    
+                        <a
+                            class="sidebar-button-link "
+                            href="http://stackoverflow.com/users"
+                            
+                                target="_blank"
+                            
+                            rel="noopener"
+                            title="Stack Overflow"
+                        >
+                        <i class="sidebar-button-icon fab fa-stack-overflow" aria-hidden="true"></i>
+                        <span class="sidebar-button-desc">Stack Overflow</span>
+                    </a>
+            </li>
+            
+                <li class="sidebar-button">
+                    
+                        <a
+                            class="sidebar-button-link "
+                            href="https://twitter.com/"
+                            
+                                target="_blank"
+                            
+                            rel="noopener"
+                            title="Twitter"
+                        >
+                        <i class="sidebar-button-icon fab fa-twitter" aria-hidden="true"></i>
+                        <span class="sidebar-button-desc">Twitter</span>
+                    </a>
+            </li>
+            
+                <li class="sidebar-button">
+                    
+                        <a
+                            class="sidebar-button-link "
+                            href="https://facebook.com/"
+                            
+                                target="_blank"
+                            
+                            rel="noopener"
+                            title="Facebook"
+                        >
+                        <i class="sidebar-button-icon fab fa-facebook" aria-hidden="true"></i>
+                        <span class="sidebar-button-desc">Facebook</span>
+                    </a>
+            </li>
+            
+                <li class="sidebar-button">
+                    
+                        <a
+                            class="sidebar-button-link "
+                            href="https://plus.google.com/"
+                            
+                                target="_blank"
+                            
+                            rel="noopener"
+                            title="Google +"
+                        >
+                        <i class="sidebar-button-icon fab fa-google-plus" aria-hidden="true"></i>
+                        <span class="sidebar-button-desc">Google +</span>
+                    </a>
+            </li>
+            
+                <li class="sidebar-button">
+                    
+                        <a
+                            class="sidebar-button-link "
+                            href="https://www.linkedin.com/profile/"
+                            
+                                target="_blank"
+                            
+                            rel="noopener"
+                            title="LinkedIn"
+                        >
+                        <i class="sidebar-button-icon fab fa-linkedin" aria-hidden="true"></i>
+                        <span class="sidebar-button-desc">LinkedIn</span>
+                    </a>
+            </li>
+            
+                <li class="sidebar-button">
+                    
+                        <a
+                            class="sidebar-button-link "
+                            href="/mailto"
+                            
+                            rel="noopener"
+                            title="Mail"
+                        >
+                        <i class="sidebar-button-icon fa fa-envelope" aria-hidden="true"></i>
+                        <span class="sidebar-button-desc">Mail</span>
+                    </a>
+            </li>
+            
+        </ul>
+        
+            <ul class="sidebar-buttons">
+            
+                <li class="sidebar-button">
+                    
+                        <a
+                            class="sidebar-button-link "
+                            href="/atom.xml"
+                            
+                            rel="noopener"
+                            title="RSS"
+                        >
+                        <i class="sidebar-button-icon fa fa-rss" aria-hidden="true"></i>
+                        <span class="sidebar-button-desc">RSS</span>
+                    </a>
+            </li>
+            
+        </ul>
+        
+    </div>
+</nav>
+
+            
+            <div id="main" data-behavior="1"
+                 class="
+                        hasCoverMetaIn
+                        ">
+                <section class="postShorten-group main-content-wrap">
+    
+    
+    <article class="postShorten postShorten--thumbnailimg-bottom">
+        <div class="postShorten-wrap">
+            
+            <div class="postShorten-header">
+                <h1 class="postShorten-title">
+                    
+                        <a
+                            class="link-unstyled"
+                            href="/2025/04/14/%E7%A7%91%E7%A0%94/VASP/Starry%20Sky/VASP%E4%B8%AD%E7%9A%84%E5%90%84%E7%A7%8D%E6%8A%A5%E9%94%99/"
+                            aria-label=": VASP中的各种报错"
+                        >
+                            VASP中的各种报错
+                        </a>
+                    
+                </h1>
+                <div class="postShorten-meta">
+    <time datetime="2025-04-14T16:40:00+08:00">
+	
+		    Apr 14, 2025
+    	
+    </time>
+    
+        <span>in </span>
+        
+    <a class="category-link" href="/all-categories/%E4%BB%8E%E9%9B%B6%E5%BC%80%E5%A7%8B%E7%9A%84%E7%A7%91%E7%A0%94%E4%B9%8B%E6%97%85/">从零开始的科研之旅</a>, <a class="category-link" href="/all-categories/%E4%BB%8E%E9%9B%B6%E5%BC%80%E5%A7%8B%E7%9A%84%E7%A7%91%E7%A0%94%E4%B9%8B%E6%97%85/VASP/">VASP</a>
+
+
+    
+</div>
+
+            </div>
+            
+                <div class="postShorten-content">
+                    <p>如题，记录一下在计算时遇到的各种报错</p>
+<h2 id="section">2025.05.14</h2>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line"> -----------------------------------------------------------------------------</span><br><span class="line">|                                                                             |</span><br><span class="line">|     EEEEEEE  RRRRRR   RRRRRR   OOOOOOO  RRRRRR      <span class="comment">###     ###     ###     |</span></span><br><span class="line">|     E        R     R  R     R  O     O  R     R     <span class="comment">###     ###     ###     |</span></span><br><span class="line">|     E        R     R  R     R  O     O  R     R     <span class="comment">###     ###     ###     |</span></span><br><span class="line">|     EEEEE    RRRRRR   RRRRRR   O     O  RRRRRR       <span class="comment">#       #       #      |</span></span><br><span class="line">|     E        R   R    R   R    O     O  R   R                               |</span><br><span class="line">|     E        R    R   R    R   O     O  R    R      <span class="comment">###     ###     ###     |</span></span><br><span class="line">|     EEEEEEE  R     R  R     R  OOOOOOO  R     R     <span class="comment">###     ###     ###     |</span></span><br><span class="line">|                                                                             |</span><br><span class="line">|     ERROR FEXCF: supplied exchange-correlation table                        |</span><br><span class="line">|      is too small, maximal index : 7355                                     |</span><br><span class="line">|                                                                             |</span><br><span class="line">|       ----&gt;  I REFUSE TO CONTINUE WITH THIS SICK JOB ... BYE!!! &lt;----       |</span><br><span class="line">|                                                                             |</span><br><span class="line"> -----------------------------------------------------------------------------</span><br></pre></td></tr></table></figure>
+<p>删除<code>NPAR = 1</code>参数</p>
+
+                    
+                        
+
+
+                    
+                    
+                        <p>
+                            <a
+                                href="/2025/04/14/%E7%A7%91%E7%A0%94/VASP/Starry%20Sky/VASP%E4%B8%AD%E7%9A%84%E5%90%84%E7%A7%8D%E6%8A%A5%E9%94%99/#post-footer"
+                                class="postShorten-excerpt_link link"
+                                aria-label=""
+                            >
+                                Comment and share
+                            </a>
+                        </p>
+                    
+                </div>
+            
+        </div>
+        
+    </article>
+    
+    
+    <article class="postShorten postShorten--thumbnailimg-bottom">
+        <div class="postShorten-wrap">
+            
+            <div class="postShorten-header">
+                <h1 class="postShorten-title">
+                    
+                        <a
+                            class="link-unstyled"
+                            href="/2025/04/14/%E7%A7%91%E7%A0%94/VASP/Starry%20Sky/Vasp-note/"
+                            aria-label=": VASP学习笔记"
+                        >
+                            VASP学习笔记
+                        </a>
+                    
+                </h1>
+                <div class="postShorten-meta">
+    <time datetime="2025-04-14T16:40:00+08:00">
+	
+		    Apr 14, 2025
+    	
+    </time>
+    
+        <span>in </span>
+        
+    <a class="category-link" href="/all-categories/%E4%BB%8E%E9%9B%B6%E5%BC%80%E5%A7%8B%E7%9A%84%E7%A7%91%E7%A0%94%E4%B9%8B%E6%97%85/">从零开始的科研之旅</a>, <a class="category-link" href="/all-categories/%E4%BB%8E%E9%9B%B6%E5%BC%80%E5%A7%8B%E7%9A%84%E7%A7%91%E7%A0%94%E4%B9%8B%E6%97%85/VASP/">VASP</a>
+
+
+    
+</div>
+
+            </div>
+            
+                <div class="postShorten-content">
+                    <p>记录一下维也纳第一性原理计算软件包（VASP）的学习过程，有点乱、、、</p>
+<p>计算一个体系会出现两种优化过程</p>
+<ul>
+<li>电子结构的优化
+<ul>
+<li>迭代求解薛定谔方程来获得体系能量极小值的一个过程</li>
+</ul></li>
+<li>几何结构的优化
+<ul>
+<li>在电子结构优化的结果上，获取原子的受力情况，然后根据受力情况，调节原子的位置，再进行电子结构优化，获取新的受力情况，然后再调节原子位置，一直重复这样的过程，直至找到体系势能面上一个极小值的过程</li>
+</ul></li>
+</ul>
+<p><code>OSICAR</code>用于记录优化过程的信息</p>
+<p>在<code>INCAR</code>中设置<code>ALGO</code>参数可以指定算法</p>
+<p><code>ZVAL</code>是<code>POTCAR</code>中对应元素的价电子</p>
+<p>查看K点的个数：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">grep irreducible OUTCAR</span><br></pre></td></tr></table></figure>
+<p>固体物理中，费米能级对应的是最高电子占据轨道的能量，也就是<code>HOMO</code></p>
+<p>以下情况需要考虑自旋极化</p>
+<ul>
+<li>单原子的计算</li>
+<li>O<span class="math inline"><sub>2</sub></span>
+分子(基态为三重态)</li>
+<li>自由基相关的计算</li>
+<li>含Fe,Co, Ni 的体系</li>
+<li>要计算的体系具有磁性：顺磁，铁磁，反铁磁等，要打开自旋极化。</li>
+<li>当关注体系的电子性质时，且自己不知道加或者不加的时候，建议加上</li>
+</ul>
+<p>EDIFF
+控制电子步（自洽）的收敛标准，在O原子的计算中，由于我们不需要优化，直接进行静态计算，完全由EDIFF控制计算的收敛情况</p>
+<p>EDIFFG控制离子步的收敛标准</p>
+<ul>
+<li>对于优化，我们可以使用力作为收敛标准，此时EDIFFG为负值。一般来说取值在-0.01到-0.05之间(-0.01对于力收敛来说已经是一个很严格的要求了)。</li>
+<li>当然，对于较大的体系，我们也可以使用能量作为标准：此时，EDIFFG
+为正值，一般取值范围在0.0001-0.001即可。</li>
+</ul>
+<p>单点计算、静态计算、自洽计算：几何结构计算前后不发生变化</p>
+<p><code>IRBION</code>优化分子结构</p>
+<p>一般来说，优化结构的时候有3个选择：</p>
+<ul>
+<li>IBRION=3：你的初始结构很差的时候；</li>
+<li>IBRION=2：共轭梯度算法，很可靠的一个选择，一般来说用它基本没什么问题。</li>
+<li>IBRION=1：用于小范围内稳定结构的搜索。</li>
+</ul>
+<p><code>CONTCAR</code>包含优化完之后的信息</p>
+<p>频率计算的作用</p>
+<ul>
+<li>确定结构是否稳定;</li>
+<li>看振动方式和大小，用来和实验对比，棋博士最新的文章就是一个非常好的例子;</li>
+<li>反应热，反应能垒，吸附能等的零点能矫正;</li>
+<li>确认过渡态(有一个振动的虚频)</li>
+<li>热力学中计算<code>entropy</code>，用于计算化学势，微观动力学中的指前因子和反应能垒。</li>
+</ul>
+<p>频率分析的关键参数</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">IBRION = 5 <span class="comment">#之前设置的2</span></span><br><span class="line">NFREE = 2 <span class="comment">#新加入的参数</span></span><br><span class="line">POTIM = 0.02 <span class="comment">#减小了数值</span></span><br></pre></td></tr></table></figure>
+<p><strong>怎么确定POSCAR中的原子？</strong>——比如乙醇中的羟基氢是POSCAR中的哪一个呢？？？</p>
+<p>晶胞&amp;&amp;原胞</p>
+<p>7种晶系与14种布拉维点阵：简单三六菱，单斜底，四方体</p>
+<p><code>NWRITE</code>用来控制输出文件的详细程度</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">NWRITE = 0 <span class="comment"># 最小输出</span></span><br><span class="line">NWRITE = 1 <span class="comment">#中等</span></span><br><span class="line">NWRITE = 2 <span class="comment">#详细输出</span></span><br></pre></td></tr></table></figure>
+<p><code>ISTART</code>用来初始化波函数</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">ISTART = 1 <span class="comment">#读取WAVECAR续算</span></span><br><span class="line">ISTART = 0 <span class="comment">#从零开始算</span></span><br></pre></td></tr></table></figure>
+<p>单纯从数据库中获取的结构，只能作为一个合理的初始值，与计算所得到的理论结构还有一定的差距，因此我们需要对该结构进行优化才可以获取稳定的晶格参数信息。有两个方法可以实现：</p>
+<ul>
+<li>1 Birch-Murnaghan状态方程拟合</li>
+<li>2 VASP计算中通过调节ISIF参数直接优化Bulk</li>
+</ul>
+<p>Birch-Murnaghan方程 <span class="math display">$$
+E(a)=E_0+\dfrac{9V_0B_0}{16}([(\frac{a_0}{a})^2-1]^3B_0^{'}+[(\dfrac{a_0}{a})-1]^2[6-4(\frac{a_0}{a})^2])
+$$</span></p>
+<p><span class="math display">$$
+(\dfrac{V_0}{V})^{\frac{2}{3}}=(\dfrac{a_0^3}{a_{actual}^3})^{\frac{2}{3}}=(\dfrac{a_0}{a_{actual}})^2
+$$</span></p>
+<p><span class="math display">$$
+x=\dfrac{1}{(a\times 2.8664)^2}
+$$</span></p>
+<blockquote>
+<p>a代表缩放系数，2.8664是晶胞参数</p>
+</blockquote>
+<p>除了用B-M方程拟合来确定晶格常数之外，还可以使用直接优化法确定晶格常数：ISIF
+= 3 + ENCUT</p>
+<ul>
+<li><code>ISIF=2</code>（默认）：优化原子位置</li>
+<li><code>ISIF=3</code>：优化原子位置 + 晶胞形状/体积。</li>
+</ul>
+<p>单点计算误区</p>
+<ul>
+<li>单点计算（<code>NSW=0</code> 或 <code>IBRION=-1</code>）时无需设置
+<code>ISIF=0</code>，因为离子已固定。</li>
+<li>错误设置 <code>ISIF=0</code>
+会禁用应力计算，可能导致后续分析缺失数据。</li>
+</ul>
+<p>为何需要增大 <code>ENCUT</code>？</p>
+<ul>
+<li>Pulay Stress：
+<ul>
+<li><strong>定义</strong>：当晶胞体积变化时，平面波基组不完整导致的应力误差。</li>
+<li><strong>后果</strong>：晶格优化结果不准确。</li>
+<li>解决方法
+<ol type="1">
+<li><strong>保持体积不变</strong>（BM 方程拟合法）</li>
+<li><strong>增大 <code>ENCUT</code></strong>（直接优化法）</li>
+</ol></li>
+</ul></li>
+<li>规则
+<ul>
+<li>设置 <code>ENCUT = 1.3 * max(ENMAX)</code>（<code>ENMAX</code> 取自
+<code>POTCAR</code>）</li>
+<li>示例：Fe 的 <code>ENMAX=267.882 eV</code> →
+<code>ENCUT=350 eV</code>（但文档设置为
+<code>600 eV</code>，更保守）</li>
+</ul></li>
+</ul>
+<p>DOS态密度计算需要使用更多的K点</p>
+<blockquote>
+<p>A high quality DOS requires usually very fine k-meshes.</p>
+</blockquote>
+<p><code>ISMEAR</code>的选择</p>
+<ul>
+<li>对于半导体和绝缘体体系，ISMEAR的值取绝对不能大于0， 一般用0；</li>
+<li>对所有体系，如果想获取更加精确能量的时候用-5，但这时候如果K点数目小于3，程序则会罢工；</li>
+<li>K 点少，半导体或者绝缘体，那么只能用 ISMEAR = 0；</li>
+<li>在DOS能带计算中，使用ISMEAR= -5 用于获取精确的信息。</li>
+<li>对于金属来说，ISMEAR的取值一般为&gt;=0 的数值（0,1,2）；</li>
+<li>保守地说，ISMEAR = 0 (Gaussian Smearing)
+可以满足大部分的体系（金属，导体，半导体，分子）；</li>
+<li>如果不知道怎么取ISMEAR，直接用0是一个很保险的做法。也可以测试不同的值对计算的影响，但是新手的话，即使测试完了，也不知道根据什么去判断对结果的影响。</li>
+</ul>
+<p>电子数的积分区间是从负无穷到费米能级</p>
+<h2 id="各种参数的作用">各种参数的作用</h2>
+<h3 id="istart确定是否读取-wavecar-文件">ISTART——确定是否读取 WAVECAR
+文件</h3>
+<p>ISTART = 0 | 1 |2 |3</p>
+<p>默认值</p>
+<ul>
+<li>如果存在WAVECAR则读取: ISTART = 1</li>
+<li>如果不存在WAVECAR，从头算: ISTART = 0</li>
+</ul>
+<p>ISTART = 2，读取WAVECAR，截断能原胞不发生改变</p>
+<h3 id="icharg确定-vasp-如何构造初始电荷密度">ICHARG——确定 VASP
+如何构造初始电荷密度</h3>
+<p>ICHARG = 0 | 1 |2 | 4 | 5</p>
+<ul>
+<li>ICHARG = 0，默认值，从初始波函数计算电荷密度</li>
+<li>ICHARG = 1，从 CHGCAR
+文件中读取电荷密度，并使用原子电荷密度的线性组合从旧位置（在 CHGCAR
+上）外推到新位置</li>
+<li>ICHARG = 2，默认值，以原子电荷密度的叠加为例</li>
+</ul>
+<h3 id="prec指定精度模式">PREC——指定精度模式</h3>
+<p>PREC = Normal | Single | SingleN | Accurate | Low | Medium | High</p>
+<ul>
+<li>PREC = Normal，默认</li>
+<li>PREC = Single</li>
+<li>PREC = SingleN</li>
+<li>PREC = Accurate</li>
+</ul>
+<h3
+id="lreal确定投影算子是在实空间还是在倒数空间中求值">LREAL——确定投影算子是在实空间还是在倒数空间中求值</h3>
+<p>LREAL = .FALSE. | Auto (or A) | On (or O) | .TRUE.</p>
+<ul>
+<li>LREAL = .FALSE. 默认值，倒数空间投影，小体系，精确</li>
+<li>LREAL=Auto
+在实空间中进行投影，全自动优化投影算子（几乎不需要用户干扰）</li>
+</ul>
+<h3
+id="algo指定电子最小化算法或选择-gw-计算类型的便捷选项">ALGO——指定电子最小化算法或选择
+GW 计算类型的便捷选项。</h3>
+<p>ALGO = Normal | VeryFast | Fast | Conjugate | All | Damped | Subrot |
+Eigenval | Exact | None | Nothing | CHI | G0W0 | GW0 | GW | scGW0 | scGW
+| G0W0R | GW0R | GWR | scGW0R | scGWR | ACFDT | RPA | ACFDTR | RPAR |
+BSE | TDHF</p>
+<p>默认值: Normal</p>
+<h3 id="encut指定以-ev-为单位设置的平面波基的能量截止">ENCUT——指定以 eV
+为单位设置的平面波基的能量截止</h3>
+<p>ENCUT = [real]</p>
+<p>默认为POTCAR中的ENMAX，但是官方==强烈建议==在 INCAR
+文件中始终手动指定能量截止
+ENCUT，以确保计算之间的准确性相同。否则，不同计算之间的默认 ENCUT
+可能会有所不同（例如，对于内聚能的计算），结果是无法比较总能量。</p>
+<h3 id="ismear能带展宽方法">ISMEAR——能带展宽方法</h3>
+<p>ISMEAR = -15 | -14 | -5 | -4 | -3 | -2 | -1 | 0 | [integer]&gt;0</p>
+<p>默认值：1</p>
+<p>ISMEAR 决定如何为每个轨道设置部分占据数 f<span
+class="math inline"><sub><em>n</em><em>k</em></sub></span> ,SIGMA
+以电子伏特(eV)为单位确定展宽的宽度</p>
+<p>以下是来自AI的比喻解释：</p>
+<hr />
+<h4
+id="ismear决定如何给电子打分"><strong>ISMEAR：决定如何给电子“打分”</strong></h4>
+<ul>
+<li><strong>问题</strong>：电子在能级上的分布是离散的（像楼梯台阶），但实际计算时需要用连续函数去“平滑”这些台阶。</li>
+<li><strong>ISMEAR</strong> 就是选择“平滑方式”的方法：
+<ul>
+<li><strong><code>ISMEAR = -5</code></strong>：采用Blöchl修正的四面体方法，无展宽，严格按台阶处理（绝对精确，但只适用于绝缘体/半导体，速度慢）</li>
+<li><strong><code>ISMEAR = 0</code></strong>：采用高斯展宽，用高斯函数“模糊”台阶边缘（适合半导体/绝缘体，平衡精度和速度）</li>
+<li><strong><code>ISMEAR = 1</code></strong>：默认值，用更复杂的函数模糊台阶（适合金属，容忍更多模糊，计算快）</li>
+</ul></li>
+</ul>
+<h4 id="sigma展宽的宽容度"><strong>2.
+SIGMA：展宽的“宽容度”</strong></h4>
+<ul>
+<li><strong>问题</strong>：<code>ISMEAR</code>
+选择用高斯函数模糊时，<strong>SIGMA
+决定模糊的程度</strong>（就像PS里“高斯模糊”的半径）</li>
+<li><strong>SIGMA
+越小</strong>：模糊范围越小，越接近真实台阶（精度高，但容易震荡，收敛难）</li>
+<li><strong>SIGMA
+越大</strong>：模糊范围越大，电子分布越平滑（容易收敛，但可能掩盖真实细节）</li>
+</ul>
+<h4
+id="到底怎么设置一句话总结"><strong>到底怎么设置？一句话总结</strong></h4>
+<table>
+<colgroup>
+<col style="width: 30%" />
+<col style="width: 20%" />
+<col style="width: 17%" />
+<col style="width: 32%" />
+</colgroup>
+<thead>
+<tr>
+<th><strong>体系类型</strong></th>
+<th><strong>推荐 ISMEAR</strong></th>
+<th><strong>推荐 SIGMA</strong></th>
+<th><strong>注意事项</strong></th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>绝缘体/半导体</strong>（原子、分子）</td>
+<td><code>0</code>（绝对不能大于零）</td>
+<td>0.05~0.1</td>
+<td>不要用 <code>ISMEAR=1</code>，会引入误差！</td>
+</tr>
+<tr>
+<td><strong>金属</strong></td>
+<td><code>1</code></td>
+<td>0.1~0.2</td>
+<td>SIGMA 太小会导致震荡！</td>
+</tr>
+<tr>
+<td><strong>能带/DOS计算</strong></td>
+<td><code>-5</code></td>
+<td>不用设置（不展宽）</td>
+<td>仅适用于绝缘体，且需要密集 K 点！</td>
+</tr>
+</tbody>
+</table>
+<ul>
+<li>保守地说，ISMEAR = 0 (Gaussian Smearing)
+可以满足大部分的体系（金属，导体，半导体，分子）；</li>
+<li>如果不知道怎么取ISMEAR，直接用0是一个很保险的做法。也可以测试不同的值对计算的影响，但是新手的话，即使测试完了，也不知道根据什么去判断对结果的影响。</li>
+</ul>
+<h3 id="常见错误"><strong>常见错误</strong></h3>
+<ol type="1">
+<li><strong>对绝缘体用 <code>ISMEAR=1</code></strong> →
+结果完全错误！</li>
+<li><strong>SIGMA 太大（比如 0.5）</strong> →
+电子分布过度平滑，能量不准。</li>
+<li><strong>对金属用 <code>ISMEAR=0</code></strong> → SCF
+难收敛，疯狂报错！</li>
+</ol>
+<hr />
+<h3 id="举个具体例子"><strong>举个具体例子</strong></h3>
+<p>假设你计算 <strong>硅（半导体）</strong>： -
+<strong>正确设置</strong>： <figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">ISMEAR = 0</span><br><span class="line">SIGMA = 0.05</span><br></pre></td></tr></table></figure> -
+<strong>错误设置</strong>：</p>
+<p><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">ISMEAR = 1   <span class="comment"># 会引入非物理的金属性！</span></span><br><span class="line">SIGMA = 0.5  <span class="comment"># 能量误差可能大到 1 eV！</span></span><br></pre></td></tr></table></figure></p>
+<hr />
+<h3 id="终极口诀"><strong>终极口诀</strong></h3>
+<ul>
+<li><strong>绝缘体/半导体</strong> → <code>ISMEAR=0</code> + 小
+SIGMA（0.05~0.1）</li>
+<li><strong>金属</strong> → <code>ISMEAR=1</code> + 稍大
+SIGMA（0.1~0.2）</li>
+<li><strong>画能带/DOS</strong> → <code>ISMEAR=-5</code>（别动
+SIGMA）</li>
+</ul>
+<h2
+id="ibrion确定在计算过程中晶体结构如何变化如何调整原子位置来寻找能量最低点">IBRION——确定在计算过程中晶体结构如何变化（如何调整原子位置来寻找能量最低点）</h2>
+<p>Default: IBRION = -1 for NSW=−1 or 0</p>
+<p>​ = 0 else</p>
+<ul>
+<li>无变化，IBRION = -1 （避免在 NSW&gt;0 时将 IBRION
+设置为-1，以防止相同结构被重新计算 NSW 次）</li>
+<li>分子动力学，IBRION = 0</li>
+<li>结构优化
+<ul>
+<li>准牛顿法， IRBION =1</li>
+<li>共轭梯度， IBRION =2</li>
+<li>阻尼分子动力学，IBRION = 3</li>
+</ul></li>
+<li>计算声子
+<ul>
+<li>IBRION=5 无对称性的有限差分</li>
+<li>IBRION=6 具有对称性的有限差分</li>
+<li>IBRION=7 无对称性微扰理论</li>
+<li>IBRION=8 具有对称性的微扰理论</li>
+</ul></li>
+<li>分析过渡态
+<ul>
+<li>IBRION = 40 内禀反应坐标计算</li>
+<li>IRBION = 44 改进的dimer方法</li>
+</ul></li>
+</ul>
+<h2 id="nsw描述离子步长的最大数量">NSW——描述离子步长的最大数量</h2>
+<p>NSW = [integer]</p>
+<p>Default: <strong>NSW</strong> = 0</p>
+<h2
+id="potim设置分子动力学中的时间步长或离子弛豫中的步长宽度">POTIM——设置分子动力学中的时间步长或离子弛豫中的步长宽度</h2>
+<p>IBRION确定了在计算过程中晶体结构如何变化，如何寻找最低点（“山谷”），POTIM就是“每次移动的距离”</p>
+<ul>
+<li>如果IBRION = 0，则必须设置POTIM
+<ul>
+<li>对于 IBRION=0，POTIM 给出了所有从头开始分子动力学运行的时间步长（以
+fs 为单位），因此必须提供它，否则 VASP 在启动后立即崩溃。</li>
+</ul></li>
+<li>如果IBRION = 1,2,3，默认值为0.5
+<ul>
+<li>对于 IBRION=1、2 和
+3，分别对应于使用拟牛顿算法、共轭梯度算法和阻尼分子动力学的离子弛豫，POTIM
+标签作为步长宽度的缩放常数。准牛顿算法对该参数的选择特别敏感</li>
+</ul></li>
+<li>如果IRBION = 5,6，默认值为0.015
+<ul>
+<li>对于 IBRION=5 和 6，使用有限差分方法进行声子计算，其中 POTIM 是计算
+Hessian 矩阵的每个离子位移的宽度。</li>
+</ul></li>
+</ul>
+<p><strong>POTIM 太大</strong> →
+跨步太大，可能跳过最低点（震荡不收敛）<strong>POTIM 太小</strong> →
+移动太慢，优化耗时</p>
+<h2
+id="ncore确定在单个轨道上工作的计算核心数量">NCORE——确定在单个轨道上工作的计算核心数量</h2>
+<p>默认值：NCORE = 1</p>
+<p>NCORE的设置可以优化计算资源，降低内存用量（但有可能降低计算速度），如果体系非常小那就可以不用设置，直接并行即可</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">mpirun -n <span class="string">&#x27;core numbers&#x27;</span> vasp</span><br></pre></td></tr></table></figure>
+<h2
+id="nfree根据-ibrionnfree-指定离子收敛运行历史中记住的步数或冻结声子计算中的离子位移数">NFREE——根据
+IBRION，NFREE
+指定离子收敛运行历史中记住的步数，或冻结声子计算中的离子位移数</h2>
+<h2 id="ldipol开启对势能和力的修正">LDIPOL——开启对势能和力的修正</h2>
+<p>LDIPOL 开启对势能和力的修正。可应用于具有净偶极矩的带电分子和平板</p>
+<p>LDIPOL = .TRUE. | .FALSE.</p>
+<p>默认值：LDIPOL = .FALSE.</p>
+<p>偶极子的存在与周期性边界条件相结合，会导致总能量随超胞大小的收敛速度缓慢。此外，有限尺寸误差会影响势能和力。通过在
+INCAR 文件中设置 LDIPOL=.TRUE. 可以抵消这种影响。对于
+LDIPOL=.TRUE.，会添加一个线性校正，对于带电的晶胞，会添加一个二次静电势到局部势中，以校正由周期性边界条件引入的误差。激活此标签时，==必须指定标签
+IDIPOL，也可以选择指定标签 DIPOL==</p>
+<p>这种模式的最大优点是力中的主导误差得到了修正，并且可以针对非对称平板评估功函数。缺点是向电子基态的收敛可能会==显著减慢==，也就是说，可能需要更多的电子迭代来获得所需的精度</p>
+<h2
+id="idipol开启对特定方向或所有方向的总能量的单极偶极和四极校正">IDIPOL——开启对特定方向或所有方向的总能量的单极/偶极和四极校正</h2>
+<p>IDIPOL = 1 | 2 | 3 | 4</p>
+<p>IDIPOL =
+1-3，仅分别沿第一、第二或第三晶格矢量方向计算偶极矩，<strong>此标志应用于平板计算，表面法线为设置
+IDIPOL 的方向，并可选择使用 DIPOL 标签指定平板的质心</strong></p>
+<p>IDIPOL =
+4，将计算所有方向上的全偶极矩，<strong>对孤立分子进行计算时使用此标志</strong></p>
+<h2 id="ispin控制自旋极化">ISPIN——控制自旋极化</h2>
+<p>ISPIN = 1 | 2</p>
+<p>默认：ISPIN = 1，执行非自旋极化计算</p>
+<p>ISPIN = 2，执行自旋极化计算（共线）</p>
+<p>对于非共线计算，忽略 ISPIN。在 VASP 6.5.0 中，如果 ISPIN = 2 且
+MAGMOM 与 LNONCOLLINEAR=.TRUE. ==结合使用==，计算将以错误消息退出</p>
+<h2 id="nelm最大电子步收敛">NELM——最大电子步收敛</h2>
+<p>默认值等于60</p>
+<h2
+id="lwave决定在运行结束时波函数是否写入-wavecar-文件">LWAVE——决定在运行结束时波函数是否写入
+WAVECAR 文件</h2>
+<p>LWAVE = [logical] 默认值：LWAVE = .NOT. LH5 | .TRUE.</p>
+<p>一般情况不开，文件巨大、、、</p>
+<figure>
+<img src="./Vasp-note/image-20250422173131346.png"
+alt="巨大的WAVECAR" />
+<figcaption aria-hidden="true">巨大的WAVECAR</figcaption>
+</figure>
+<h2
+id="lcharg决定是否写入电荷密度chgcar-chg">lCHARG——决定是否写入电荷密度(CHGCAR
+&amp; CHG)</h2>
+<p>LCHARG = .NOT.LH5 | .TRUE. 默认值：LCHARG = .NOT. LH5</p>
+<h2
+id="addgrid决定是否使用额外的辅助网格来评估增强电荷">ADDGRID——决定是否使用额外的辅助网格来评估增强电荷</h2>
+<p>ADDGRID = .TRUE. | .FALSE. 默认值：ADDGRID = .FALSE.</p>
+<p>==因此，我们建议进行细致的测试，以验证 ADDGRID
+是否按预期工作；请不要默认在所有计算中使用此标签！==</p>
+<h2
+id="laspath控制局域非球面性修正的参数">LASPATH——控制局域非球面性修正的参数</h2>
+<p>看不懂思密达、、、</p>
+<p>LASPH = .TRUE. | .FALSE.</p>
+<p>默认值：LASPH = .FALSE.</p>
+<ul>
+<li>开启 <code>LASPH = .TRUE.</code>
+<ul>
+<li>在计算交换关联能时，计入原子周围电子密度的
+<strong>非球面性贡献</strong>（如 d/f 轨道的非对称分布）。</li>
+<li>修正总能量、力和应力，尤其在强各向异性体系中影响显著。</li>
+<li>增加计算量（约10%-30%耗时），但对精度提升可能至关重要。</li>
+</ul></li>
+</ul>
+<h2
+id="lvhar确定局部势能v_ionicrv_hartree是否写入locpot文件">LVHAR——确定局部势能<span
+class="math inline"><em>V</em><sub><em>i</em><em>o</em><em>n</em><em>i</em><em>c</em></sub></span>(r)+<span
+class="math inline"><em>V</em><sub><em>h</em><em>a</em><em>r</em><em>t</em><em>r</em><em>e</em><em>e</em></sub></span>是否写入LOCPOT文件</h2>
+<p>默认值：LVHAR = .FALSE.</p>
+<h2
+id="lorbit选择一种投影到局部量子数lm上的方法并写入-procarproout-文件">LORBIT——选择一种投影到局部量子数(lm)上的方法，并写入
+PROCAR/PROOUT 文件</h2>
+<ul>
+<li><strong>作用</strong>：决定是否计算并输出原子轨道的投影波函数（投影到球谐函数或特定轨道），以及如何输出局域态密度（LDOS）。</li>
+<li><strong>输出文件</strong>：主要影响<code>PROCAR</code>和<code>DOSCAR</code>文件的内容（若<code>LORBIT</code>≥10还会生成<code>LOCPOT</code>等文件）</li>
+</ul>
+<table>
+<colgroup>
+<col style="width: 9%" />
+<col style="width: 90%" />
+</colgroup>
+<thead>
+<tr>
+<th>值</th>
+<th>功能说明</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>0</strong></td>
+<td><strong>默认值</strong>，不计算轨道投影（仅输出总能带和总态密度）。</td>
+</tr>
+<tr>
+<td><strong>1</strong></td>
+<td>计算原子轨道的投影（写入<code>PROCAR</code>），但不分解到具体轨道（如s/p/d）。</td>
+</tr>
+<tr>
+<td><strong>2</strong></td>
+<td>分解到轨道角动量（s/p/d/f）的投影，但不分磁量子数（如px/py/pz不分开）。</td>
+</tr>
+<tr>
+<td><strong>10</strong></td>
+<td>类似<code>LORBIT=1</code>，但额外输出<code>LOCPOT</code>文件（包含局域势信息）。</td>
+</tr>
+<tr>
+<td><strong>11</strong></td>
+<td>类似<code>LORBIT=2</code>，但额外输出<code>LOCPOT</code>文件。</td>
+</tr>
+<tr>
+<td><strong>12</strong></td>
+<td><strong>最常用</strong>：分解到磁量子数（如px/py/pz分开），适合详细轨道分析。</td>
+</tr>
+</tbody>
+</table>
+<h2
+id="lasph控制赝势计算中是否考虑非球面贡献">LASPH——控制赝势计算中是否考虑非球面贡献</h2>
+<p>主要影响<strong>交换关联势（XC
+Potential）</strong>和<strong>电荷密度（Charge
+Density）</strong>的计算精度</p>
+<p>默认值：LASPH = .FALSE.</p>
+<p><strong>作用</strong>：决定是否在计算中考虑电子密度和势场的<strong>非球对称部分</strong>（即角动量
+<code>l &gt; 0</code> 的贡献）。</p>
+<ul>
+<li>若<code>LASPH = .TRUE.</code>，VASP会计算电子密度和势场的高阶角动量分量（如
+<code>d, f</code> 轨道），提升精度。</li>
+<li>若<code>LASPH = .FALSE.</code>（默认值），仅考虑球对称部分（<code>l = 0</code>），计算更快但可能损失部分精度</li>
+</ul>
+<h2
+id="mdalgo指定分子动力学模拟算法">MDALGO——指定分子动力学模拟算法</h2>
+<p><strong>（当 IBRION = 0 且 VASP 使用-Dtbdyn
+编译时才启用）</strong></p>
+<p>MDALGO = 0 | 1 | 2 | 3 | 4 | 5 | 11 | 21 | 13</p>
+<table>
+<colgroup>
+<col style="width: 10%" />
+<col style="width: 24%" />
+<col style="width: 7%" />
+<col style="width: 57%" />
+</colgroup>
+<thead>
+<tr>
+<th>MDALGO 取值</th>
+<th>恒温器 / 模拟方式</th>
+<th>适用系综</th>
+<th>设置要点</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>0</td>
+<td>标准分子动力学</td>
+<td>NVE</td>
+<td>设置 IBRION=0、TEBEG、POTIM、NSW；MDALGO=0；SMASS=-3</td>
+</tr>
+<tr>
+<td>1</td>
+<td>安徒生恒温器</td>
+<td>NVT</td>
+<td>设置 IBRION=0、TEBEG、POTIM、NSW；MDALGO=1；选择合适的
+ANDERSEN_PROB</td>
+</tr>
+<tr>
+<td>2</td>
+<td>Nose-Hoover 恒温器</td>
+<td>NVT</td>
+<td>设置 IBRION=0、TEBEG、POTIM、NSW；MDALGO=2；选择合适的 SMASS</td>
+</tr>
+<tr>
+<td>3</td>
+<td>朗之万恒温器</td>
+<td>NVT、NpT</td>
+<td>NVT 模拟：设置 IBRION=0、TEBEG、POTIM、NSW；ISIF=2；MDALGO=3；在
+POSCAR 文件通过 LANGEVIN_GAMMA-tag 指定摩擦系数 NpT 模拟：设置
+IBRION=0、TEBEG、POTIM、NSW；ISIF=3；MDALGO=3；在 POSCAR 文件通过
+LANGEVIN_GAMMA-tag 指定摩擦系数；通过 LANGEVIN_GAMMA_L-tag
+指定晶格自由度摩擦系数；通过 PMASS-tag 设置晶格自由度质量；可通过
+PSTRESS-tag 定义外部压力</td>
+</tr>
+<tr>
+<td>4</td>
+<td>Nose Hoover chains 恒温器</td>
+<td>NVT</td>
+<td>设置 IBRION=0、TEBEG、POTIM、NSW；ISIF=2；MDALGO=4；选择 NHC_NCHAINS
+和 NHC_PERIOD</td>
+</tr>
+<tr>
+<td>5</td>
+<td>CSVR 恒温器</td>
+<td>NVT</td>
+<td>设置 IBRION=0、TEBEG、POTIM、NSW；ISIF=2；MDALGO=5；选择
+CSVR_PERIOD</td>
+</tr>
+<tr>
+<td>13</td>
+<td>多个安徒生恒温器</td>
+<td>-</td>
+<td>在 POSCAR 文件按顺序定义子系统原子位置；设置 NSUBSYS
+定义每个子系统的最后一个原子；设置 TSUBSYS
+定义每个子系统的模拟温度；设置 PSUBSYS
+定义每个子系统原子的碰撞概率（0≤PSUBSYS≤1）</td>
+</tr>
+</tbody>
+</table>
+<h2
+id="smass在从头算分子动力学运行期间控制速度">SMASS——在从头算分子动力学运行期间控制速度。</h2>
+<p>SMASS = -3 | -2 | -1 | [real] ≥ 0</p>
+<p>Default: <strong>SMASS</strong> = -3</p>
+<p>对于SMASS = -3，模拟了一个微正则系综（NVE系综）</p>
+<blockquote>
+<p><strong>Tip:</strong> To calculate an <a
+target="_blank" rel="noopener" href="https://www.vasp.at/wiki/index.php/NVE_ensemble">NVE ensemble</a>
+we instead recommend to use <code>MDALGO = 1</code> and
+<code>ANDERSEN_PROB = 0.0</code></p>
+</blockquote>
+<p>对于 SMASS =
+-2，初始速度保持恒定。这使得能够计算一组不同线性相关位置（例如冻结声子或具有不同键长的二聚体）的能量。</p>
+<p>注意：如果 SMASS = -2，实际采取的步数为 POTIM×（从 POSCAR
+文件读取的速度）。为避免歧义，请将 POTIM 设置为 1</p>
+<h2 id="ivdw参数控制范德华修正">IVDW参数——控制范德华修正</h2>
+<p>DFT中，标准的交换关联泛函（如PBE、LDA）无法准确描述范德华力，因此需要通过额外的修正方法来处理</p>
+<p>默认不启用范德华修正</p>
+<ul>
+<li><strong>IVDW = 0</strong>：不启用范德华修正（默认值）。</li>
+<li><strong>IVDW =
+1</strong>：启用<strong>DFT-D2</strong>方法（Grimme的DFT-D2修正）。</li>
+<li><strong>IVDW =
+10</strong>：启用<strong>DFT-D3</strong>方法（Grimme的DFT-D3修正，不带Becke-Johnson阻尼）。</li>
+<li><strong>IVDW =
+11</strong>：启用<strong>DFT-D3</strong>方法（带Becke-Johnson阻尼，即DFT-D3(BJ)）。</li>
+<li><strong>IVDW =
+12</strong>：启用<strong>DFT-D4</strong>方法（Grimme的DFT-D4修正）。</li>
+<li><strong>IVDW = 20</strong>：启用<strong>Tkatchenko-Scheffler
+(TS)</strong>方法。</li>
+<li><strong>IVDW = 21</strong>：启用<strong>Tkatchenko-Scheffler with
+self-consistent screening (TS-SCS)</strong>方法。</li>
+</ul>
+
+                    
+                        
+
+
+                    
+                    
+                        <p>
+                            <a
+                                href="/2025/04/14/%E7%A7%91%E7%A0%94/VASP/Starry%20Sky/Vasp-note/#post-footer"
+                                class="postShorten-excerpt_link link"
+                                aria-label=""
+                            >
+                                Comment and share
+                            </a>
+                        </p>
+                    
+                </div>
+            
+        </div>
+        
+    </article>
+    
+    
+    <article class="postShorten postShorten--thumbnailimg-bottom">
+        <div class="postShorten-wrap">
+            
+            <div class="postShorten-header">
+                <h1 class="postShorten-title">
+                    
+                        <a
+                            class="link-unstyled"
+                            href="/2025/04/13/Stormy%20English/The%20TED-Ed%20project/NASA%E2%80%99s%20first%20software%20engineer/"
+                            aria-label=": Rocks could save the world (Yes, rocks)"
+                        >
+                            Rocks could save the world (Yes, rocks)
+                        </a>
+                    
+                </h1>
+                <div class="postShorten-meta">
+    <time datetime="2025-04-13T20:44:31+08:00">
+	
+		    Apr 13, 2025
+    	
+    </time>
+    
+        <span>in </span>
+        
+    <a class="category-link" href="/all-categories/Stormy-English/">Stormy English</a>, <a class="category-link" href="/all-categories/Stormy-English/TED-Ed/">TED-Ed</a>
+
+
+    
+</div>
+
+            </div>
+            
+                <div class="postShorten-content">
+                    <h2
+id="nasas-first-software-engineer-margaret-hamilton---matt-porter-and-margaret-hamilton">NASA’s
+first software engineer: Margaret Hamilton - Matt Porter and Margaret
+Hamilton</h2>
+<p>At roughly 4 PM on July 20, 1969, <em>==mankind was just minutes away
+from landing on the surface of the moon==</em> .</p>
+<p>But before the astronauts began their final <em>==descent==</em> , an
+emergency alarm lit up.</p>
+<p>Something was <em>==overloading==</em> the computer and threatened to
+<em>==abort the landing==</em> .</p>
+<p>Back on Earth, Margaret Hamilton held her breath.</p>
+<p>She’d led the team developing the pioneering in-flight software, so
+she knew this mission <em>==had no room for error==</em> .</p>
+<p>But the <em>==nature==</em> of this last-second emergency would soon
+prove her software was working exactly as planned.</p>
+<p>Born 33 years earlier in Paoli, Indiana, Hamilton had always been
+<em>==inquisitive==</em> .</p>
+<p>In college, she studied mathematics and philosophy before taking a
+research position at the Massachusetts Institute of Technology to pay
+for grad school.</p>
+<p>Here, she encountered her first computer while developing software to
+support research into the new field of chaos theory.</p>
+<p>Next, at MIT’s Lincoln Laboratory, Hamilton developed software for
+America’s first <em>==air defense system==</em> to search for enemy
+aircraft.</p>
+<p>But when she heard that renowned engineer Charles Draper was looking
+for help sending mankind to the moon, she immediately joined his
+team.</p>
+<p>NASA <em>==looked to==</em> Draper and his group of over 400
+engineers to invent the first <em>==compact==</em> digital flight
+computer, the Apollo Guidance Computer.</p>
+<p>Using input from astronauts, this device would be responsible for
+guiding, navigating, and controlling the spacecraft.</p>
+<p>At a time when unreliable computers filled entire rooms, the AGC
+needed to operate without any errors and <em>==fit in one cubic foot of
+space==</em> .</p>
+<p>Draper divided the lab into two teams: one for designing hardware and
+one for developing software.</p>
+<p>Hamilton led the team that built the <em>==on-board==</em> flight
+software for <em>==both the Command and Lunar Modules==</em> .</p>
+<p>This work, for which she <em>==coined==</em> the term “software
+engineering,” was incredibly <em>==high stakes==</em> .</p>
+<p><em>==Human lives were on the line==</em> , so every program had to
+be perfect.</p>
+<p>Margaret’s software needed to quickly detect unexpected errors and
+recover from them in real time.</p>
+<p>But this kind of adaptable program was difficult to build, since
+early software could only process jobs in a <em>==predetermined==</em>
+order.</p>
+<p>To solve this problem, Margaret designed her program to be “
+<em>==asynchronous==</em> ,” meaning the software’s more important jobs
+would interrupt less important ones.</p>
+<p>Her team assigned every task a unique priority to ensure that each
+job occurred in the correct order and at the right time—regardless of
+any surprises.</p>
+<p>After this breakthrough, Margaret realized her software could help
+the astronauts work in an <em>==asynchronous==</em> environment as
+well.</p>
+<p>She designed <em>==Priority Displays==</em> that would interrupt
+astronauts’ regularly scheduled tasks to warn them of emergencies.</p>
+<p>The astronaut could then communicate with Mission Control to
+determine the best path forward.</p>
+<p>This marked the first time flight software communicated directly—and
+asynchronously—with a pilot.</p>
+<p>It was these <em>==fail-safes==</em> that triggered the alarms just
+before the lunar landing.</p>
+<p>Buzz Aldrin quickly realized his mistake—he’d
+<em>==inadvertently==</em> flipped the <em>==rendezvous==</em> radar
+switch.</p>
+<p>This radar would be essential on their journey home, but here it was
+using up vital computational resources.</p>
+<p>Fortunately, the Apollo Guidance Computer was well equipped to manage
+this.</p>
+<p>During the overload, the software restart programs allowed only the
+highest priority jobs to be processed—including the programs necessary
+for landing.</p>
+<p>The Priority Displays gave the astronauts a choice: to land or not to
+land.</p>
+<p>With minutes to spare, Mission Control gave the order.</p>
+<p>The Apollo 11 landing was about the astronauts, Mission Control,
+software, and hardware all working together as an integrated system of
+systems.</p>
+<p>Hamilton’s contributions were essential to the work of engineers and
+scientists inspired by President John F. Kennedy’s goal to reach the
+Moon.</p>
+<p>And her life-saving work <em>==went far beyond==</em> Apollo 11—no
+bugs were ever found in the in-flight software for any crewed Apollo
+missions.</p>
+<p>After her work on Apollo, Hamilton founded a company that uses its
+unique universal systems language to create breakthroughs for systems
+and software.</p>
+<p>In 2003, NASA honored her achievements with the largest financial
+award they’d ever given to an individual.</p>
+<p>And 47 years after her software first guided astronauts to the moon,
+Hamilton was awarded the Presidential Medal of Freedom for changing the
+way we think about technology. # Vocabulary, Phrases and Sentences</p>
+<table>
+<colgroup>
+<col style="width: 67%" />
+<col style="width: 17%" />
+<col style="width: 14%" />
+</colgroup>
+<thead>
+<tr>
+<th>Words</th>
+<th>Chinese Definition</th>
+<th>Phonetic Symbol</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>mankind was just minutes away from landing on the surface of the
+moon</td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td>descent</td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td>overload</td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td>abort the landing</td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td>had no room for error</td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td>nature</td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td>inquisitive</td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td>air defense system</td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td>look to</td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td>compact</td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td>fit in one cubic foot of space</td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td>on-board</td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td>both the Command and Lunar Modules</td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td>coin</td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td>high stake</td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td>Human lives were on the line</td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td>predetermined</td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td>asynchronous</td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td>priority display</td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td>fail-safe</td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td>inadvertently</td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td>rendezvous</td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td>went for beyond</td>
+<td></td>
+<td></td>
+</tr>
+</tbody>
+</table>
+<table>
+<colgroup>
+<col style="width: 43%" />
+<col style="width: 11%" />
+<col style="width: 45%" />
+</colgroup>
+<thead>
+<tr>
+<th>Words</th>
+<th>Chinese Definition</th>
+<th>Phonetic Symbol</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>mankind was just minutes away from landing on the surface of the
+moon</td>
+<td>人类距离登上月球表面只有几分钟了</td>
+<td>/ˈmæŋkaɪnd wəz dʒʌst ˈmɪnɪts əˈweɪ frəm ˈlændɪŋ ɒn ðə ˈsɜːfɪs ɒv ðə
+muːn/</td>
+</tr>
+<tr>
+<td>descent</td>
+<td>下降；降落；血统</td>
+<td>/ˈdiːsent/</td>
+</tr>
+<tr>
+<td>overload</td>
+<td>使超载；使负担过重</td>
+<td>/ˈəʊvələʊd/</td>
+</tr>
+<tr>
+<td>abort the landing</td>
+<td>中止着陆</td>
+<td>/əˈbɔːt ðə ˈlændɪŋ/</td>
+</tr>
+<tr>
+<td>had no room for error</td>
+<td>没有犯错的余地</td>
+<td>/ˈhæd nəʊ ruːm fɔːr ˈerə(r)/</td>
+</tr>
+<tr>
+<td>nature</td>
+<td>自然；本性；性质</td>
+<td>/ˈneɪtʃə(r)/</td>
+</tr>
+<tr>
+<td>inquisitive</td>
+<td>好奇的；好问的</td>
+<td>/ɪnˈkwɪzətɪv/</td>
+</tr>
+<tr>
+<td>air defense system</td>
+<td>防空系统</td>
+<td>/ˈeə(r) dɪˈfens ˈsɪstəm/</td>
+</tr>
+<tr>
+<td>look to</td>
+<td>指望；依靠；注意</td>
+<td>/ˈlʊk tuː/</td>
+</tr>
+<tr>
+<td>compact</td>
+<td>紧凑的；紧密的；简洁的</td>
+<td>/ˈkɒmpækt/</td>
+</tr>
+<tr>
+<td>fit in one cubic foot of space</td>
+<td>能装进一立方英尺的空间</td>
+<td>/ˈfɪt ɪn wʌn ˈkjuːbɪk fuːt ɒv speɪs/</td>
+</tr>
+<tr>
+<td>on-board</td>
+<td>在船上；在飞机上；在板上</td>
+<td>/ˈɒnˈbɔːd/</td>
+</tr>
+<tr>
+<td>both the Command and Lunar Modules</td>
+<td>指挥舱和登月舱</td>
+<td>/ˈbəʊθ ðə kəˈmɑːnd ænd ˈluːnə(r) ˈmɒdjuːlz/</td>
+</tr>
+<tr>
+<td>coin</td>
+<td>硬币；创造（新词语）</td>
+<td>/ˈkɔɪn/</td>
+</tr>
+<tr>
+<td>high stake</td>
+<td>高风险；高赌注</td>
+<td>/ˈhaɪ steɪk/</td>
+</tr>
+<tr>
+<td>Human lives were on the line</td>
+<td>人的生命危在旦夕</td>
+<td>/ˈhjuːmən laɪvz wəz ˈɒn ðə laɪn/</td>
+</tr>
+<tr>
+<td>predetermined</td>
+<td>预先确定的；预定的</td>
+<td>/ˈpriːdɪˈtɜːmɪnd/</td>
+</tr>
+<tr>
+<td>asynchronous</td>
+<td>异步的</td>
+<td>/ˈeɪsɪŋkrənəs/</td>
+</tr>
+<tr>
+<td>priority display</td>
+<td>优先级显示</td>
+<td>/ˈpraɪˈɒrəti dɪˈspleɪ/</td>
+</tr>
+<tr>
+<td>fail-safe</td>
+<td>故障安全的；自动防故障的</td>
+<td>/ˈfeɪlˈseɪf/</td>
+</tr>
+<tr>
+<td>inadvertently</td>
+<td>不经意地；无意中</td>
+<td>/ˌɪnədˈvɜːtəntli/</td>
+</tr>
+<tr>
+<td>rendezvous</td>
+<td>会合；约会地点</td>
+<td>/ˈrɒndɪvuː/</td>
+</tr>
+<tr>
+<td>went far beyond</td>
+<td>远远超出</td>
+<td></td>
+</tr>
+</tbody>
+</table>
+
+                    
+                        
+
+
+                    
+                    
+                        <p>
+                            <a
+                                href="/2025/04/13/Stormy%20English/The%20TED-Ed%20project/NASA%E2%80%99s%20first%20software%20engineer/#post-footer"
+                                class="postShorten-excerpt_link link"
+                                aria-label=""
+                            >
+                                Comment and share
+                            </a>
+                        </p>
+                    
+                </div>
+            
+        </div>
+        
+    </article>
+    
+    
+    <article class="postShorten postShorten--thumbnailimg-bottom">
+        <div class="postShorten-wrap">
+            
+            <div class="postShorten-header">
+                <h1 class="postShorten-title">
+                    
+                        <a
+                            class="link-unstyled"
+                            href="/2025/04/12/%E7%A7%91%E7%A0%94/first%20stage/%E7%94%B5%E6%B1%A0%E5%82%A8%E8%83%BD%E5%BE%AE%E4%B8%93%E4%B8%9A/"
+                            aria-label=": 电池储能微专业"
+                        >
+                            电池储能微专业
+                        </a>
+                    
+                </h1>
+                <div class="postShorten-meta">
+    <time datetime="2025-04-12T17:24:00+08:00">
+	
+		    Apr 12, 2025
+    	
+    </time>
+    
+        <span>in </span>
+        
+    <a class="category-link" href="/all-categories/%E4%BB%8E%E9%9B%B6%E5%BC%80%E5%A7%8B%E7%9A%84%E7%A7%91%E7%A0%94%E4%B9%8B%E6%97%85/">从零开始的科研之旅</a>, <a class="category-link" href="/all-categories/%E4%BB%8E%E9%9B%B6%E5%BC%80%E5%A7%8B%E7%9A%84%E7%A7%91%E7%A0%94%E4%B9%8B%E6%97%85/first-stage/">first stage</a>
+
+
+    
+</div>
+
+            </div>
+            
+                <div class="postShorten-content">
+                    <h2 id="相相变和相图">相、相变和相图</h2>
+<p>锂电池中的相？——有助于获得==晶体结构与组成==</p>
+<p>关注材料的e物相，包括晶体结构、化学组成、结晶度、固液态</p>
+<p>从电子自旋态来看，==3d电子常常具有自旋长程关联作用==，表现出不同的磁性状态</p>
+<p>==磁态来解释充放电过程中的异常情况==</p>
+<ul>
+<li>一级相变</li>
+<li>二级相变</li>
+</ul>
+<p>大部分固态相变属于一级相变，只有少部分属于二级相变</p>
+<p>显著平台——一级相变</p>
+<p>保持固溶体——二级相变</p>
+<p>NIPP钠电池正极</p>
+<p>前驱体的合成可能出现杂相</p>
+<h3
+id="温度和相组成是最重要的两个参量others高压磁场电场机械搅拌">温度和相组成是最重要的两个参量（others:高压、磁场、电场、机械搅拌）</h3>
+<h3
+id="高压法一级固相合成法制备偏铝酸锂">高压法一级固相合成法制备偏铝酸锂</h3>
+<p>==LiAlO<sub>2</sub>==具有较高化学稳定性和热吻星星</p>
+<p>==六方相R-3m==正极材料,<span
+class="math inline"><em>α</em> − <em>N</em><em>a</em><em>F</em><em>e</em><em>O</em><sub>2</sub></span>结构，相容性比较好，可用作包覆材料，包覆后形成固溶体很难表征</p>
+<h2
+id="高压limn2o4和li2mno3">高压LiMn<sub>2</sub>O<sub>4</sub>和Li<sub>2</sub>MnO<sub>3</sub></h2>
+<p>锂电正极非常关键的程序是——煅烧</p>
+<h3 id="电解质中的相变">电解质中的相变</h3>
+<p>目前主要采用液体电解质和聚合物胶体电解质（有机液体、固态）</p>
+<p>低温熔融盐：离子液体</p>
+<p>相转变型电解质</p>
+<p>当温度升高时，分子晶体中的位置有序可能出现三种情况：</p>
+<ol type="1">
+<li></li>
+<li>塑性晶体——长程有序，短程无序
+<ol type="1">
+<li>非离子型</li>
+<li>离子型</li>
+</ol></li>
+<li>液晶</li>
+</ol>
+<p>在T<sub>g</sub>之上的</p>
+<p>液态电解液的的运输：溶剂化效应与去溶剂化效应</p>
+<p>固态电解质尽量选软一点的，贴合得比较好</p>
+<p>NASCION（锂离子快离子导体）相变</p>
+<p>按照缺陷类型和相变机制可以将固态电解质分为三类</p>
+<ul>
+<li>点缺陷</li>
+<li>一级相变</li>
+<li>二级相变</li>
+</ul>
+<p>既可做正极材料又可作固态电解质</p>
+<p>固态电解质</p>
+<ul>
+<li>足够多的空位</li>
+<li>好的晶体结构</li>
+<li>协同传输效应</li>
+</ul>
+<p>负极材料的相变</p>
+<p>将锂插入层间可得到LiC24</p>
+<h2 id="极端条件下的低温电池">极端条件下的低温电池</h2>
+<h3 id="锂电池的工作原理">锂电池的工作原理</h3>
+<p>+：磷酸铁锂</p>
+<p>-：石墨</p>
+<ul>
+<li>锂离子从晶格中脱出</li>
+<li>溶剂化</li>
+<li>去溶剂化</li>
+<li>插层</li>
+</ul>
+<p>低温失活原理</p>
+<ul>
+<li>电解液凝固失活</li>
+<li>离子导电性降低</li>
+<li>界面去溶剂化减慢</li>
+<li>界面层和电极内部传输缓慢</li>
+</ul>
+<h3 id="解决">解决</h3>
+<p>电池结构优化—加热元件</p>
+<p>各种外部加热策略：</p>
+<ul>
+<li>基于空气</li>
+<li>基于液体</li>
+<li>基于PCM</li>
+<li>基于热管</li>
+<li>基于电阻元件</li>
+<li>基于帕尔贴效应</li>
+</ul>
+<p>各种内加热策略：</p>
+<ul>
+<li>直流加热</li>
+<li>交流加热</li>
+<li>脉冲电流加热</li>
+<li>混合电流加热</li>
+<li>自加热</li>
+</ul>
+<p>溶剂优化—凝固点</p>
+<ul>
+<li><p>降低液体凝固点</p></li>
+<li><p>液态气体电解液：常温气体、低温液体</p></li>
+</ul>
+<p>低温溶剂可能粘度比较大</p>
+<p>基本要求：</p>
+<ul>
+<li>液程足够宽</li>
+<li>低温下至少0.1 mS/cm</li>
+<li>稳定的工作电压&gt;4.5 V</li>
+</ul>
+<p>电解液优化方案：</p>
+<ul>
+<li>减小溶剂-溶剂相互作用</li>
+<li></li>
+</ul>
+<h2 id="钠离子电池">钠离子电池</h2>
+<p>经典文献：</p>
+<ul>
+<li><p>Time for lithium-ion alternative</p></li>
+<li><p>sodium is the lithium</p></li>
+<li><p>fundamentals,stauts and promise od sodoium-based</p></li>
+</ul>
+<p>能量密度雨锂离子电池有差距，<strong>原子质量</strong>比较大，<strong>原子半径</strong>更大造成能量密度低，钠离子<strong>迁移更慢</strong>导致功率密度低</p>
+<p>，<strong>相对标准电极电位更大</strong>，全电池电压较小</p>
+<ul>
+<li>单纯扩散脱出</li>
+<li>氧化还原机理</li>
+<li>金属</li>
+</ul>
+<p>体积比容量(mAh/cm)，比容量(mAh/g)</p>
+<p>液态钠离子电池：</p>
+<ul>
+<li><p>正极=磷酸烦呐+conductive additive</p></li>
+<li><p>隔膜：玻璃纤维</p></li>
+</ul>
+<p>全固态钠离子电池</p>
+<ul>
+<li>正极以后</li>
+<li>Na负极</li>
+<li>ISE电解质</li>
+</ul>
+<p>提升质量能量密度、提及能量密度，成本降低、安全更高</p>
+<p>问题：</p>
+<ul>
+<li>表面副反应</li>
+<li>接触“缝隙”</li>
+<li>体积膨胀加剧破碎</li>
+<li>电化学稳定性（电解质不稳定，充放电时发生反应）</li>
+</ul>
+<h3 id="固态电解质">固态电解质</h3>
+<p>关键性能指标</p>
+<ul>
+<li>Hugh ionic conductivity高离子电导率</li>
+<li>High stability化学稳定性与电化学稳定性</li>
+<li>High transference
+number离子迁移数（0.3-0.4商用锂离子电池，理想情况固态电解质阳离子迁移数=1，阴离子不动，消除浓差极化，聚合物固态电解质在两只之间）</li>
+<li>Good mechanical property好的机械性能</li>
+<li>Compatible interface界面相容性，不会发生界面反应</li>
+<li>比较低的电子电导率（&lt;10^-9，与离子电导率相差10-6数量级）</li>
+<li>宽的电化学窗口</li>
+<li>高的电化学阻抗High electronic resistance</li>
+</ul>
+<p>聚合物固态电解质</p>
+<p>无极固态电解质</p>
+<ul>
+<li><span class="math inline">$\rm{\beta-Al_2O_3}$</span></li>
+<li><strong>NASICON</strong>钠超离子导体</li>
+<li>硼氢化物</li>
+<li>Perovskite</li>
+<li>反式钙钛矿</li>
+<li>argyrodite
+<ul>
+<li>电化学窗口窄（S的性质所决定的）</li>
+</ul></li>
+<li>尖晶石相（Li,La,Zr,O）</li>
+</ul>
+<p>离子的体相传输机制</p>
+<ul>
+<li>间隙</li>
+<li>空位</li>
+<li>other</li>
+</ul>
+<p><strong>晶界</strong></p>
+<p>111生长&amp;110生长</p>
+<p>电流密度-电势梯度、浓度梯度：能斯特-普朗克方程 <span
+class="math display">$$
+\sigma_i=\dfrac{\sigma_o}{T}e^{-\dfrac{E_a}{RT}}
+$$</span> 离子电导率和温度、活化能的关系</p>
+<p>测阻抗谱计算材料在测</p>
+<p>什么样的材料是快离子导体呢（&gt;10mS/cm）</p>
+<ul>
+<li><p>多面体畸变（Jahn-Teller效应）</p></li>
+<li><p>配位环境决定，迁移到低能量位点（比如尖晶石结构）</p></li>
+<li><p>阴离子的旋转机制</p></li>
+<li><p>增大无序度（高熵材料）</p></li>
+</ul>
+<p>离子在晶界处的传输？</p>
+<h3 id="钠离子负极处">钠离子负极处</h3>
+<ul>
+<li>导电性，能带理论，费米面与导带的位置关系</li>
+<li>DFT给出SEI膜的稳定性，LiF&gt;LiCl&gt;Li2O</li>
+</ul>
+<p>有三种可能存在的界面</p>
+<ul>
+<li>Stable</li>
+<li>MCI（离子-电子混合导体）</li>
+<li>SEI</li>
+</ul>
+<p>金属的沉积性质</p>
+<ul>
+<li>Insufficient Contact</li>
+<li>Contamination Layers</li>
+<li>Grain Boundaries</li>
+<li>Surface Defects</li>
+</ul>
+<p>负极和界面的问题</p>
+<ul>
+<li>尖端效应导致锂枝晶沿着晶界很快长到电池对面</li>
+<li>造成死锂引起短路</li>
+</ul>
+<p>失效机制</p>
+<ul>
+<li>正极材料颗粒与固态电解质失去接触</li>
+</ul>
+<p><strong>储能电池与动力电池</strong></p>
+<p>350Wkh/kg——液态电池，固态电池不用隔膜（非活性物质）</p>
+<ul>
+<li><p>正极开裂，正极全固态电池中不同部位的力学性能不同，应变不同</p></li>
+<li><p>泊松比决定是否容易断裂</p></li>
+<li><p>力学均一性</p></li>
+<li><p>第二相结晶强化</p></li>
+</ul>
+
+                    
+                        
+
+
+                    
+                    
+                        <p>
+                            <a
+                                href="/2025/04/12/%E7%A7%91%E7%A0%94/first%20stage/%E7%94%B5%E6%B1%A0%E5%82%A8%E8%83%BD%E5%BE%AE%E4%B8%93%E4%B8%9A/#post-footer"
+                                class="postShorten-excerpt_link link"
+                                aria-label=""
+                            >
+                                Comment and share
+                            </a>
+                        </p>
+                    
+                </div>
+            
+        </div>
+        
+    </article>
+    
+    
+    <article class="postShorten postShorten--thumbnailimg-bottom">
+        <div class="postShorten-wrap">
+            
+            <div class="postShorten-header">
+                <h1 class="postShorten-title">
+                    
+                        <a
+                            class="link-unstyled"
+                            href="/2025/04/09/%E6%B2%89%E6%80%9D%E5%BD%95/Starry%20Sky/"
+                            aria-label=": Starry Sky"
+                        >
+                            Starry Sky
+                        </a>
+                    
+                </h1>
+                <div class="postShorten-meta">
+    <time datetime="2025-04-09T21:30:17+08:00">
+	
+		    Apr 09, 2025
+    	
+    </time>
+    
+        <span>in </span>
+        
+    <a class="category-link" href="/all-categories/%E6%B2%89%E6%80%9D%E5%BD%95/">沉思录</a>
+
+
+    
+</div>
+
+            </div>
+            
+                <div class="postShorten-content">
+                    <p>周三了，突然发现这学期的课好无聊，两门实验课。物理化学实验原理稍显复杂，并且放入的原理其实并没有特别重要，唯一需要操心的就是整个流程原理和数据分析。可能只有用Origin分析数据、联系的时候会稍稍提起一点兴趣吧，实验报告其他地方是一点都不想写，抄书真无聊~、、、</p>
+
+                    
+                        
+
+
+                    
+                    
+                        <p>
+                            <a
+                                href="/2025/04/09/%E6%B2%89%E6%80%9D%E5%BD%95/Starry%20Sky/#post-footer"
+                                class="postShorten-excerpt_link link"
+                                aria-label=""
+                            >
+                                Comment and share
+                            </a>
+                        </p>
+                    
+                </div>
+            
+        </div>
+        
+    </article>
+    
+    
+    <article class="postShorten postShorten--thumbnailimg-bottom">
+        <div class="postShorten-wrap">
+            
+            <div class="postShorten-header">
+                <h1 class="postShorten-title">
+                    
+                        <a
+                            class="link-unstyled"
+                            href="/2025/04/08/%E6%B2%89%E6%80%9D%E5%BD%95/Spring-Sundays/"
+                            aria-label=": Spring Sundays"
+                        >
+                            Spring Sundays
+                        </a>
+                    
+                </h1>
+                <div class="postShorten-meta">
+    <time datetime="2025-04-08T22:03:17+08:00">
+	
+		    Apr 08, 2025
+    	
+    </time>
+    
+        <span>in </span>
+        
+    <a class="category-link" href="/all-categories/%E6%B2%89%E6%80%9D%E5%BD%95/">沉思录</a>
+
+
+    
+</div>
+
+            </div>
+            
+                <div class="postShorten-content">
+                    <p>今天是周二，上午上完高分子物理后马不停蹄继续整理单原子的元素周期表以及参考文献，下午继续调整段落结构增加逻辑性、可读性，终于是改完了自己的文章，交给老师了，不知道后面会怎么样，应该不比有这次大修更痛苦了吧？</p>
+<p>接近十三天的爆肝大修，回头看寒假前完成的初稿写的和shit一样、、、</p>
+<p>这十几天英语啥的都荒废咯，TED、大西洋月刊都还没来得及读呢，就从明天整装待发吧！</p>
+
+                    
+                        
+
+
+                    
+                    
+                        <p>
+                            <a
+                                href="/2025/04/08/%E6%B2%89%E6%80%9D%E5%BD%95/Spring-Sundays/#post-footer"
+                                class="postShorten-excerpt_link link"
+                                aria-label=""
+                            >
+                                Comment and share
+                            </a>
+                        </p>
+                    
+                </div>
+            
+        </div>
+        
+    </article>
+    
+    
+    <article class="postShorten postShorten--thumbnailimg-bottom">
+        <div class="postShorten-wrap">
+            
+            <div class="postShorten-header">
+                <h1 class="postShorten-title">
+                    
+                        <a
+                            class="link-unstyled"
+                            href="/2025/04/08/%E6%B2%89%E6%80%9D%E5%BD%95/%E5%85%B3%E4%BA%8E%E6%B2%89%E6%80%9D%E5%BD%95/"
+                            aria-label=": 关于沉思录"
+                        >
+                            关于沉思录
+                        </a>
+                    
+                </h1>
+                <div class="postShorten-meta">
+    <time datetime="2025-04-08T22:03:17+08:00">
+	
+		    Apr 08, 2025
+    	
+    </time>
+    
+        <span>in </span>
+        
+    <a class="category-link" href="/all-categories/%E6%B2%89%E6%80%9D%E5%BD%95/">沉思录</a>
+
+
+    
+</div>
+
+            </div>
+            
+                <div class="postShorten-content">
+                    <p>这个部分类似于日记吧？“沉思录”这个标题来自于知乎上一个读博学长的日记，所以我也尝试在博客里写日记，尽量坚持下来吧哈哈，反正这里基本上没人（</p>
+
+                    
+                        
+
+
+                    
+                    
+                        <p>
+                            <a
+                                href="/2025/04/08/%E6%B2%89%E6%80%9D%E5%BD%95/%E5%85%B3%E4%BA%8E%E6%B2%89%E6%80%9D%E5%BD%95/#post-footer"
+                                class="postShorten-excerpt_link link"
+                                aria-label=""
+                            >
+                                Comment and share
+                            </a>
+                        </p>
+                    
+                </div>
+            
+        </div>
+        
+    </article>
+    
+    
+    <article class="postShorten postShorten--thumbnailimg-bottom">
+        <div class="postShorten-wrap">
+            
+            <div class="postShorten-header">
+                <h1 class="postShorten-title">
+                    
+                        <a
+                            class="link-unstyled"
+                            href="/2025/03/22/%E7%A7%91%E7%A0%94/first%20stage/%E5%85%B3%E4%BA%8E%E7%A9%BA%E4%BD%8D%E3%80%81%E7%A9%BA%E9%9A%99%E3%80%81%E9%97%B4%E9%9A%99%E7%9A%84%E7%AE%80%E5%8D%95%E8%AE%A8%E8%AE%BA/"
+                            aria-label=": 关于空位、空隙、间隙的简单讨论"
+                        >
+                            关于空位、空隙、间隙的简单讨论
+                        </a>
+                    
+                </h1>
+                <div class="postShorten-meta">
+    <time datetime="2025-03-22T16:40:40+08:00">
+	
+		    Mar 22, 2025
+    	
+    </time>
+    
+        <span>in </span>
+        
+    <a class="category-link" href="/all-categories/%E4%BB%8E%E9%9B%B6%E5%BC%80%E5%A7%8B%E7%9A%84%E7%A7%91%E7%A0%94%E4%B9%8B%E6%97%85/">从零开始的科研之旅</a>, <a class="category-link" href="/all-categories/%E4%BB%8E%E9%9B%B6%E5%BC%80%E5%A7%8B%E7%9A%84%E7%A7%91%E7%A0%94%E4%B9%8B%E6%97%85/first-stage/">first stage</a>
+
+
+    
+</div>
+
+            </div>
+            
+                <div class="postShorten-content">
+                    <h2 id="离子掺杂可形成空位vacancy">离子掺杂可形成空位(vacancy)</h2>
+<h3 id="阳离子空位的产生机制"><strong>1.
+阳离子空位的产生机制</strong></h3>
+<p>阳离子空位（即阳离子亚晶格中的空缺）通常由<strong>高价阳离子取代</strong>或<strong>低价阴离子取代</strong>引起，通过电荷补偿实现电中性。</p>
+<h4 id="高价阳离子掺杂-产生阳离子空位"><strong>(1) 高价阳离子掺杂 →
+产生阳离子空位</strong></h4>
+<p><strong>示例</strong>：在石榴石型电解质<span
+class="math inline">$\rm{Li_7La_3Zr_2O_{12}}$</span>（LLZO）中，Al³⁺取代Li⁺（Li⁺为+1价）：</p>
+<ul>
+<li>每个Al³⁺取代Li⁺时，引入+2额外正电荷（Al³⁺ - Li⁺ = +2）。</li>
+<li>为维持电中性，需<strong>移除2个Li⁺</strong>，形成2个Li⁺空位（化学式变为<span
+class="math inline">$\rm{Li_{7-2x}Al_xLa_3Zr_2O_{12}}$</span>）。</li>
+<li><strong>效果</strong>：Li⁺空位浓度增加，离子电导率提升</li>
+</ul>
+<h4 id="低价阴离子掺杂-产生阳离子空位"><strong>(2) 低价阴离子掺杂 →
+产生阳离子空位</strong></h4>
+<p><strong>示例</strong>：硫银锗矿Li₆PS₅Cl中，Cl⁻（-1价）取代S²⁻（-2价）：</p>
+<ul>
+<li>每个Cl⁻取代S²⁻时，<strong>减少1个负电荷</strong>（Cl⁻ - S²⁻ =
++1）。</li>
+<li>为维持电中性，需减少1个Li⁺（Li⁺为+1价），形成Li⁺空位（化学式变为Li₆₋ₓPS₅₋ₓCl₁₊ₓ）</li>
+</ul>
+<hr />
+<h3 id="阴离子空位的产生机制"><strong>2.
+阴离子空位的产生机制</strong></h3>
+<p>阴离子空位（阴离子亚晶格中的空缺）通常由<strong>高价阴离子掺杂</strong>或<strong>阳离子空位补偿</strong>引起。</p>
+<h4 id="低价阳离子掺杂-产生阴离子空位"><strong>(1) 低价阳离子掺杂 →
+产生阴离子空位</strong></h4>
+<p><strong>示例</strong>：在氧化锆（ZrO₂）中掺杂Y³⁺（取代Zr⁴⁺）：</p>
+<ul>
+<li>每个Y³⁺取代Zr⁴⁺时，引入-1电荷缺陷（Y³⁺ - Zr⁴⁺ = -1）。</li>
+<li>为维持电中性，需<strong>产生氧空位</strong>（每个O²⁻空缺贡献+2电荷），化学式为YₓZr₁₋ₓO₂₋ₓ/₂。</li>
+<li><strong>效果</strong>：氧空位促进O²⁻迁移（如钇稳定氧化锆YSZ用于燃料电池）。</li>
+</ul>
+<h4 id="阳离子空位补偿-产生阴离子空位"><strong>(2) 阳离子空位补偿 →
+产生阴离子空位</strong></h4>
+<p><strong>示例</strong>：在钙钛矿型氧化物中，Sr²⁺取代La³⁺（La₁₋ₓSrₓMnO₃）：</p>
+<ul>
+<li>每个Sr²⁺取代La³⁺时，引入<strong>-1电荷缺陷</strong>（Sr²⁺ - La³⁺ =
+-1）。</li>
+<li>补偿方式包括：
+<ul>
+<li><strong>阳离子空位</strong>（如La³⁺空缺，贡献+3电荷）；</li>
+<li><strong>阴离子空位</strong>（如O²⁻空缺，贡献+2电荷）。</li>
+</ul></li>
+<li>实际体系中常混合两种补偿机制。</li>
+</ul>
+<hr />
+<h3 id="快速判断掺杂与空位关系的法则"><strong>3.
+快速判断掺杂与空位关系的法则</strong></h3>
+<h4 id="电荷守恒法则"><strong>(1) 电荷守恒法则</strong></h4>
+<ul>
+<li><strong>总电荷平衡</strong>：取代离子与原离子的价态差需通过空位或间隙补偿。</li>
+<li><strong>经验公式</strong>：</li>
+</ul>
+<p><span
+class="math display"><em>Δ</em><em>q</em> = <em>z</em><sub>掺杂</sub> − <em>z</em><sub>原始</sub> = ∑(空位或间隙电荷贡献)</span></p>
+<h4 id="价态差与空位符号关系"><strong>(2)
+价态差与空位符号关系</strong></h4>
+<table>
+<colgroup>
+<col style="width: 32%" />
+<col style="width: 16%" />
+<col style="width: 36%" />
+<col style="width: 14%" />
+</colgroup>
+<thead>
+<tr>
+<th>掺杂类型</th>
+<th>价态差（Δq）</th>
+<th>补偿方式</th>
+<th>空位类型</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>高价阳离子→低价位点</strong></td>
+<td>Δq &gt; 0</td>
+<td>产生阳离子空位</td>
+<td>阳离子空位</td>
+</tr>
+<tr>
+<td><strong>低价阳离子→高价位点</strong></td>
+<td>Δq &lt; 0</td>
+<td>产生阳离子间隙或阴离子空位</td>
+<td>阴离子空位</td>
+</tr>
+<tr>
+<td><strong>高价阴离子→低价位点</strong></td>
+<td>Δq &gt; 0</td>
+<td>产生阴离子空位</td>
+<td>阴离子空位</td>
+</tr>
+<tr>
+<td><strong>低价阴离子→高价位点</strong></td>
+<td>Δq &lt; 0</td>
+<td>产生阴离子间隙或阳离子空位</td>
+<td>阳离子空位</td>
+</tr>
+</tbody>
+</table>
+<hr />
+<h3 id="典型材料体系对比"><strong>4. 典型材料体系对比</strong></h3>
+<table>
+<thead>
+<tr>
+<th>材料体系</th>
+<th>掺杂类型</th>
+<th>空位类型</th>
+<th>电导率提升机制</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>Li₅.₅PS₄.₅Cl₁.₅</strong></td>
+<td>Cl⁻取代S²⁻</td>
+<td>Li⁺空位</td>
+<td>降低Li⁺迁移能垒</td>
+</tr>
+<tr>
+<td><strong>LLZO（Al³⁺掺杂）</strong></td>
+<td>Al³⁺取代Li⁺</td>
+<td>Li⁺空位</td>
+<td>增加Li⁺迁移通道</td>
+</tr>
+<tr>
+<td><strong>YSZ（Y³⁺掺杂）</strong></td>
+<td>Y³⁺取代Zr⁴⁺</td>
+<td>O²⁻空位</td>
+<td>促进O²⁻离子迁移</td>
+</tr>
+<tr>
+<td><strong>La₀.₈Sr₀.₂MnO₃</strong></td>
+<td>Sr²⁺取代La³⁺</td>
+<td>O²⁻空位</td>
+<td>优化氧离子传输路径</td>
+</tr>
+</tbody>
+</table>
+<hr />
+<h3 id="总结与记忆技巧"><strong>5. 总结与记忆技巧</strong></h3>
+<ol type="1">
+<li><strong>“高价取代→产生同类型空位”</strong>：
+<ul>
+<li>高价阳离子取代低价阳离子 → 阳离子空位（如Al³⁺→Li⁺）。</li>
+<li>高价阴离子取代低价阴离子 →
+阴离子空位（如Cl⁻→S²⁻需结合电荷补偿）。</li>
+</ul></li>
+<li><strong>“低价取代→补偿方式多样”</strong>：
+<ul>
+<li>低价阳离子取代高价阳离子 → 阴离子空位或阳离子间隙。</li>
+<li>低价阴离子取代高价阴离子 → 阳离子空位或阴离子间隙。</li>
+</ul></li>
+<li><strong>实战验证</strong>：
+通过X射线衍射（XRD）精修确定空位浓度，或结合固态核磁（如⁷Li MAS
+NMR）分析局域Li⁺环境变化。</li>
+</ol>
+<p>在材料科学中，“空位”（Vacancy）、“间隙”（Interstitial）和“空隙”（孔洞/Void）是描述晶体缺陷的不同概念，它们对材料性能的影响截然不同。以下详细区分这三者，并结合硫银锗矿电解质的例子说明其作用：</p>
+<h2
+id="对vacancyinterstitialvoid的简单辨析">对Vacancy、Interstitial、Void的简单辨析</h2>
+<hr />
+<h3 id="空位vacancy"><strong>1. 空位（Vacancy）</strong></h3>
+<ul>
+<li><strong>定义</strong>：晶格中本应有原子/离子占据的位置缺失，形成的<strong>点缺陷</strong>。</li>
+<li><strong>形成原因</strong>：
+<ul>
+<li>热振动（所有材料在非绝对零度下均存在）；</li>
+<li>掺杂导致的电荷补偿（如Cl⁻取代S²⁻时产生Li⁺空位）。</li>
+</ul></li>
+<li><strong>对性能的影响</strong>：
+<ul>
+<li><strong>正面</strong>：空位可为离子迁移提供路径，提升离子电导率（如Li⁺空位促进传导）；</li>
+<li><strong>负面</strong>：过量空位可能降低结构稳定性。</li>
+</ul></li>
+<li><strong>示例</strong>：
+在Li₅.₅PS₄.₅Cl₁.₅中，Cl⁻取代S²⁻导致Li⁺空位，显著提升锂离子电导率。</li>
+</ul>
+<hr />
+<h3 id="间隙interstitial"><strong>2. 间隙（Interstitial）</strong></h3>
+<ul>
+<li><strong>定义</strong>：原子/离子占据晶格正常位置之外的<strong>间隙位置</strong>，形成的点缺陷。</li>
+<li><strong>形成原因</strong>：
+<ul>
+<li>小尺寸原子（如Li⁺、H⁺）易进入间隙；</li>
+<li>掺杂或非化学计量比设计（如过量Li引入间隙Li⁺）。</li>
+</ul></li>
+<li><strong>对性能的影响</strong>：
+<ul>
+<li><strong>正面</strong>：间隙离子可作为额外载流子（如Li₁₀GeP₂S₁₂中的间隙Li⁺提升电导率）；</li>
+<li><strong>负面</strong>：可能阻塞迁移通道或引发晶格畸变。</li>
+</ul></li>
+<li><strong>示例</strong>：
+在Li-rich材料中，间隙Li⁺可与空位协同形成“协同迁移机制”，进一步提升电导率。</li>
+</ul>
+<hr />
+<h3 id="空隙孔洞void"><strong>3. 空隙（孔洞/Void）</strong></h3>
+<ul>
+<li><strong>定义</strong>：材料中未被原子/离子占据的<strong>宏观或介观孔洞</strong>，属于<strong>体积缺陷</strong>。</li>
+<li><strong>形成原因</strong>：
+<ul>
+<li>合成工艺缺陷（如烧结不充分导致孔隙）；</li>
+<li>元素挥发或相分离（如硫化物电解质高温烧结时硫损失）。</li>
+</ul></li>
+<li><strong>对性能的影响</strong>：
+<ul>
+<li><strong>负面</strong>：
+<ul>
+<li>降低材料致密度，增加晶界电阻；</li>
+<li>孔洞处易成为枝晶生长的起点，引发电池短路。</li>
+</ul></li>
+<li><strong>正面</strong>：
+可控孔隙率可用于复合电解质设计（如聚合物填充孔洞改善界面接触）。</li>
+</ul></li>
+<li><strong>示例</strong>：
+传统烧结的Li₆PS₅Cl致密度仅~85%，而放电等离子烧结（SPS）可将其提升至95%，显著降低孔洞比例。</li>
+</ul>
+<hr />
+<h3 id="三者的核心区别总结"><strong>4. 三者的核心区别总结</strong></h3>
+<table>
+<colgroup>
+<col style="width: 20%" />
+<col style="width: 30%" />
+<col style="width: 25%" />
+<col style="width: 25%" />
+</colgroup>
+<thead>
+<tr>
+<th>特征</th>
+<th>空位（Vacancy）</th>
+<th>间隙（Interstitial）</th>
+<th>空隙（Void）</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>缺陷类型</strong></td>
+<td>点缺陷</td>
+<td>点缺陷</td>
+<td>体积缺陷</td>
+</tr>
+<tr>
+<td><strong>尺度</strong></td>
+<td>原子级别（Å尺度）</td>
+<td>原子级别（Å尺度）</td>
+<td>微观至宏观（nm~μm）</td>
+</tr>
+<tr>
+<td><strong>对传导的影响</strong></td>
+<td>提供迁移路径（关键）</td>
+<td>可能辅助或阻碍传导</td>
+<td>阻碍传导（增加电阻）</td>
+</tr>
+<tr>
+<td><strong>可控性</strong></td>
+<td>可通过掺杂精确调控</td>
+<td>需调节成分或合成条件</td>
+<td>依赖制备工艺优化</td>
+</tr>
+<tr>
+<td><strong>典型示例</strong></td>
+<td>Li₅.₅PS₄.₅Cl₁.₅中Li⁺空位</td>
+<td>Li₁₀GeP₂S₁₂中间隙Li⁺</td>
+<td>烧结不足的电解质孔洞</td>
+</tr>
+</tbody>
+</table>
+<hr />
+<h3 id="在硫银锗矿电解质中的实际意义"><strong>5.
+在硫银锗矿电解质中的实际意义</strong></h3>
+<ul>
+<li><strong>空位的必要性</strong>：Cl⁻掺杂引入的Li⁺空位是提升离子电导率的核心机制。</li>
+<li><strong>间隙的潜在价值</strong>：若在Li₅.₅PS₄.₅Cl₁.₅中引入少量间隙Li⁺，可能进一步优化传导路径（需避免阻塞通道）。</li>
+<li><strong>空隙的规避</strong>：通过<strong>液相烧结</strong>或<strong>高压烧结</strong>减少孔洞，确保致密化以降低晶界阻抗。</li>
+</ul>
+<hr />
+<h3 id="总结"><strong>总结</strong></h3>
+<ul>
+<li><strong>空位 ≠ 间隙 ≠
+空隙</strong>：三者分属不同尺度和类型的缺陷，作用机制迥异。</li>
+<li><strong>研究方向</strong>：
+<ul>
+<li>利用掺杂精准调控空位浓度（如Cl⁻/Br⁻共掺杂）；</li>
+<li>优化烧结工艺消除有害空隙；</li>
+<li>探索间隙离子的协同效应（如高熵设计）。</li>
+</ul></li>
+</ul>
+
+                    
+                        
+
+
+                    
+                    
+                        <p>
+                            <a
+                                href="/2025/03/22/%E7%A7%91%E7%A0%94/first%20stage/%E5%85%B3%E4%BA%8E%E7%A9%BA%E4%BD%8D%E3%80%81%E7%A9%BA%E9%9A%99%E3%80%81%E9%97%B4%E9%9A%99%E7%9A%84%E7%AE%80%E5%8D%95%E8%AE%A8%E8%AE%BA/#post-footer"
+                                class="postShorten-excerpt_link link"
+                                aria-label=""
+                            >
+                                Comment and share
+                            </a>
+                        </p>
+                    
+                </div>
+            
+        </div>
+        
+    </article>
+    
+    
+    <article class="postShorten postShorten--thumbnailimg-bottom">
+        <div class="postShorten-wrap">
+            
+            <div class="postShorten-header">
+                <h1 class="postShorten-title">
+                    
+                        <a
+                            class="link-unstyled"
+                            href="/2025/03/22/Stormy%20English/%E8%B5%96%E4%B8%96%E9%9B%84%E9%AB%98%E7%BA%A7%E7%BE%8E%E8%AF%AD%E6%95%99%E7%A8%8B/Lesson%207/"
+                            aria-label=": Lesson 7 The Delights of South Island"
+                        >
+                            Lesson 7 The Delights of South Island
+                        </a>
+                    
+                </h1>
+                <div class="postShorten-meta">
+    <time datetime="2025-03-22T11:06:37+08:00">
+	
+		    Mar 22, 2025
+    	
+    </time>
+    
+        <span>in </span>
+        
+    <a class="category-link" href="/all-categories/Stormy-English/">Stormy English</a>, <a class="category-link" href="/all-categories/Stormy-English/%E8%B5%96%E4%B8%96%E9%9B%84%E9%AB%98%E7%BA%A7%E7%BE%8E%E8%AF%AD/">赖世雄高级美语</a>
+
+
+    
+</div>
+
+            </div>
+            
+                <div class="postShorten-content">
+                    <h2 id="the-delights-of-south-island">The Delights of South Island</h2>
+<p>One of the odder coincidences of physical geography is the fact that
+there are two double islands, roughly the same size, positioned at each
+other’s antipodes, or farthest-distant point. The islands of England and
+Ireland in the Northern Hemisphere and the islands of North Island and
+South Island in the southern Hemisphere are just such a coincidence. The
+first two islands comprise the United Kingdom and the Republic of
+Ireland (or Eire), and the second two islands comprise New Zealand.
+Among these four islands, there can be no doubt that South Island is the
+least polluted and most spectacularly scenic of them all.</p>
+<p>There is much competition to make such a claim. The island of
+England, politically constituting England, Scotland, and Wales of the
+United Kingdom, is dotted with country villages set alongside rivers and
+lakes. There are not very tall but nonetheless rugged mountains in the
+north, and endless miles of rocky coastline that seem mystical. Ireland,
+too, is a paradise of greenery, with far fewer people than populous
+England and even more quaint villages scattered among its low-lying
+hills and forever green fields. North Island in New Zealand sports a
+balmy climate and the beaches to make use of it; one beach alone is more
+than 150 kilometers long and with relatively few people on its shores,
+one can pretend one is at the very end of the earth. Volcanoes, large
+lakes, and quickly flowing rivers traverse the land. Given the beauty of
+these three islands, what makes South Island so special?</p>
+<p>Plenty. For those who like mountains, South Island is sure to please.
+Mt. Cook at 3764 meters is its highest peak, with 16 others above 3000
+meters. Naturally, many local and foreign mountain climbers come here
+for the challenge of these Southern Alps. In addition, there is an
+extensive glacier system, endless forests, and innumerable lakes
+throughout this highland area. Some of the world’s best mountain scenery
+is available within the 500-kilometer long chain of the Southern
+Alps.</p>
+<p>Perhaps you prefer the sea? South Island is not only an island, but
+many tiny islets can be found off its coastline. Great deep-sea fishing,
+scuba diving, and snorkeling can be had, though the waters here are
+cooler than those of North Island. (Remember, in the Southern
+Hemisphere, as we go north, it gets warmer.)As fewer people live on
+South Island than on North Island, those who crave solitude and pristine
+beaches will be amazed at their luck here. With almost no heavy industry
+on South Island, the air, water, and land are all free of pollution. The
+Local seafood is therefore clean, plentiful, and never-ending.</p>
+<p>Do healthful climates interest you? South Island is the place to be.
+Its temperate climate sees little snow except in the highlands and
+mountainous areas. Like Ireland and England, there are no extremes of
+temperature, either. Summers are warm, not hot, and winters are brisk
+rather than freezing. The fresh air is sometimes humid from the abundant
+rainfall of this area. Every season invites the nature lover to get out
+and be active in the countryside.</p>
+<p>Of course, South Island is not for everyone. For those who need busy,
+crowded, noisy, and polluted cities, this Southern outpost will surely
+disappoint. For those who enjoy pressure and stress, South Island will
+leave them empty-handed. And for those who would rather stay at home or
+in an office in front of a computer screen or in the thumping,
+smoke-filled dance floors of discos, some of the world’s best natural
+scenery will never entice them away. For the rest of us, though, South
+Island is the world’s best kept secret. If Nature’s paradise sounds
+alluring, make a point of visiting South Island.</p>
+<p>One of the odder coincidences of physical geography is the fact that
+there are two double islands, roughly the same size, positioned at each
+other’s antipodes, or farthest-distant point. The islands of England and
+Ireland in the Northern Hemisphere and the islands of North Island and
+South Island in the southern Hemisphere are just such a coincidence. The
+first two islands comprise the United Kingdom and the Republic of
+Ireland (or Eire), and the second two islands comprise New Zealand.
+Among these four islands, there can be no doubt that South Island is the
+least polluted and most spectacularly scenic of them all.</p>
+<p>自然地理中一个较为奇特的巧合是，世界上存在着两组大小相近的双岛，它们分别位于彼此的对映点，也就是地球的两极。北半球的英格兰和爱尔兰群岛以及南半球的新西兰南北二岛就是这样的巧合。前两者构成了联合王国和爱尔兰共和国，后两者则组成了新西兰。在这四个岛屿中，南岛无疑是污染最少且风景最为秀丽的。</p>
+<p>对于谁才是风景最秀丽的岛屿，各方竞争激烈。政治上构成英国的英格兰岛，遍布着点缀在河流和湖泊之畔的乡村。北部有虽不高耸却崎岖的山脉，以及绵延无尽、神秘莫测的岩石海岸线。爱尔兰也是一片绿意盎然的乐土，人口远少于人口密集的英格兰，其低洼的丘陵和终年翠绿的田野间散布着更多古雅的村落。新西兰的北岛气候宜人，还有诸多可供享受的海滩；仅一个海滩就长达150多公里，而且海岸线上人相对较少，让人仿佛置身于世界尽头。岛上有火山、大湖泊和湍急的河流。鉴于这三个岛屿的美丽，那么南岛究竟有何特别之处呢？</p>
+<p>特别之处可多了。对于喜爱山脉的人来说，南岛绝对会让他们心满意足。库克山海拔3764米，是其最高峰，还有另外16座山峰海拔超过3000米。自然而然地，许多国内外的登山者都来到这里挑战南阿尔卑斯山脉。此外，这片高地地区还有广阔的冰川系统、无垠的森林和无数的湖泊。在长达500公里的南阿尔卑斯山脉中，能领略到一些世界上最棒的山地风光。</p>
+<p>或许你更喜欢大海？南岛不仅是一个岛屿，其海岸线外还有许多小岛屿。这里有绝佳的深海捕鱼、水肺潜水和浮潜条件，尽管这里的海水比北岛的海水更凉爽。（记住，在南半球，越往北走，气候越温暖。）由于南岛的人口比北岛少，那些渴望独处和纯净海滩的人会在这里惊喜地发现自己运气真好。南岛几乎没有重工业，空气、水和土地都没有污染。因此，当地的海鲜干净、丰富且源源不断。</p>
+<p>有益健康的气候吸引你吗？南岛就是这样的地方。除了高地和山区，这里气候温和，降雪很少。和爱尔兰、英格兰一样，这里也没有极端的气温。夏天温暖但不炎热，冬天凉爽但不寒冷。这片地区充沛的降雨有时会让新鲜空气变得湿润。每个季节都吸引着热爱大自然的人到户外去，在乡村尽情活动。</p>
+<p>当然，南岛并非适合所有人。对于那些需要繁忙、拥挤、嘈杂和污染城市的人来说，这个南方前哨肯定会让他们失望。对于那些喜欢压力和紧张的人来说，南岛也不会给他们带来满足感。而对于那些宁愿待在家里或办公室对着电脑屏幕，或者在迪斯科舞厅震耳欲聋、烟雾弥漫的舞池里的人来说，世界上一些最棒的自然风光永远无法吸引他们离开。然而，对于我们其余的人来说，南岛是世界上最隐秘的瑰宝。如果大自然的天堂听起来很诱人，一定要去游览一下南岛。</p>
+<p>自然地理中一个较为奇特的巧合是，世界上存在着两组大小相近的双岛，它们分别位于彼此的对映点，也就是地球的两极。北半球的英格兰和爱尔兰群岛以及南半球的新西兰南北二岛就是这样的巧合。前两者构成了联合王国和爱尔兰共和国，后两者则组成了新西兰。在这四个岛屿中，南岛无疑是污染最少且风景最为秀丽的。
+## Vocabulary &amp; Idioms - odder——奇怪的 - physical
+geography——自然地理学 - there are two double islands——有两对岛屿 -
+antipodes——对跖地 - hemisphere——半球 - be dotted with——点缀着 -
+rugged——崎岖的 - mystical——神秘的 - quaint——古雅的 - low-lying——低洼的 -
+balmy——温和的 - traverse——穿过 - Alps——阿尔卑斯山 - islet——小岛 -
+scuba——水肺 - snorkeling——潜水 - never-ending——永无止境的 -
+brisk——轻快的 - outpost——边远地区 - empty-handed空手 -
+thumping——砰砰响的 - entice——引诱 - make a point of +
+V-ing——必定，总是要做 - On the first day of each month I make a point of
+paying my rent in person.</p>
+
+                    
+                        
+
+
+                    
+                    
+                        <p>
+                            <a
+                                href="/2025/03/22/Stormy%20English/%E8%B5%96%E4%B8%96%E9%9B%84%E9%AB%98%E7%BA%A7%E7%BE%8E%E8%AF%AD%E6%95%99%E7%A8%8B/Lesson%207/#post-footer"
+                                class="postShorten-excerpt_link link"
+                                aria-label=""
+                            >
+                                Comment and share
+                            </a>
+                        </p>
+                    
+                </div>
+            
+        </div>
+        
+    </article>
+    
+    
+    <article class="postShorten postShorten--thumbnailimg-bottom">
+        <div class="postShorten-wrap">
+            
+            <div class="postShorten-header">
+                <h1 class="postShorten-title">
+                    
+                        <a
+                            class="link-unstyled"
+                            href="/2025/03/21/%E9%AB%98%E5%88%86%E5%AD%90%E7%89%A9%E7%90%86/%E9%AB%98%E7%89%A9%E7%AC%AC%E4%B8%89%E7%AB%A0/"
+                            aria-label=": 高分子溶液"
+                        >
+                            高分子溶液
+                        </a>
+                    
+                </h1>
+                <div class="postShorten-meta">
+    <time datetime="2025-03-21T20:48:29+08:00">
+	
+		    Mar 21, 2025
+    	
+    </time>
+    
+        <span>in </span>
+        
+    <a class="category-link" href="/all-categories/%E9%AB%98%E5%88%86%E5%AD%90%E7%89%A9%E7%90%86/">高分子物理</a>
+
+
+    
+</div>
+
+            </div>
+            
+                <div class="postShorten-content">
+                    <h1 id="高分子溶液">高分子溶液</h1>
+<p>溶液：溶质+溶剂</p>
+<ul>
+<li>气态溶液（混合气体）</li>
+<li>液态溶液</li>
+<li>固态溶液（如合金）</li>
+</ul>
+<p><strong>高分子溶液</strong>：高聚物以分子状态分散在溶剂中所形成的均相混合物，<strong>热力学上稳定</strong>的二元或多元体系</p>
+<ul>
+<li>未硫化的天然橡胶（生胶）+汽油，苯、甲苯</li>
+<li>HDPE+四氢萘</li>
+<li>聚乙烯醇+水</li>
+</ul>
+<p>高分子溶液的用途</p>
+<ul>
+<li>稀溶液（C&lt;1%）：例如分子量测定
+<ul>
+<li>热力学性质的研究</li>
+<li>动力学性质的研究（溶液的沉降，扩散，粘度等）</li>
+<li>高分子在溶液中的形态尺寸（柔顺性，支化情况
+等）研究其相互作用（包括高分子链段间，链段与溶剂分子间的相互作用）</li>
+<li>测量分子量，分子量分布，测定内聚能密度，计算 硫化胶的交联密度等</li>
+</ul></li>
+<li>浓溶液（C&gt;5%）：纺丝、油漆、胶粘剂、增塑</li>
+</ul>
+<figure>
+<img
+src="%E9%AB%98%E7%89%A9%E7%AC%AC%E4%B8%89%E7%AB%A0/image-20250321205656885.png"
+alt="浓溶液的用途" />
+<figcaption aria-hidden="true">浓溶液的用途</figcaption>
+</figure>
+<p>==浓溶液和稀溶液最本质的区别==：稀溶液中单个大分子链线团是孤立存在的，相互之间没有交叠；而在浓厚体系中，大分子链之间发生聚集和缠结。</p>
+<h2 id="高分子的溶解">高分子的溶解</h2>
+<h3 id="溶解过程">溶解过程</h3>
+<ul>
+<li>小分子溶解：溶质向溶剂中扩散</li>
+<li>高分子溶解：
+<ul>
+<li>线形无定形高分子
+<ul>
+<li>混合初期：单项扩散，溶胀</li>
+<li>混合后期：双向扩散，溶解</li>
+</ul></li>
+<li><figure>
+<img
+src="%E9%AB%98%E7%89%A9%E7%AC%AC%E4%B8%89%E7%AB%A0/image-20250321210055090.png"
+alt="先溶胀，后溶解" />
+<figcaption aria-hidden="true">先溶胀，后溶解</figcaption>
+</figure></li>
+<li>线形结晶高分子——先溶胀无定形区，在晶体熔点附近的温度使晶体解体后溶解
+<ul>
+<li><figure>
+<img
+src="%E9%AB%98%E7%89%A9%E7%AC%AC%E4%B8%89%E7%AB%A0/image-20250321210140742.png"
+alt="先熔融，后溶解" />
+<figcaption aria-hidden="true">先熔融，后溶解</figcaption>
+</figure></li>
+</ul></li>
+<li>交联高分子——达到溶胀平衡后分子扩散即告停止，<strong>只溶胀，不完全溶解</strong>
+<ul>
+<li><strong>可溶部分：溶胶</strong></li>
+<li>**不可溶部分：凝胶、只能溶胀</li>
+<li>高度交联（C阶热固性树脂）：不溶胀**</li>
+</ul></li>
+</ul></li>
+</ul>
+<h3 id="溶剂的选择">溶剂的选择</h3>
+<ul>
+<li><p>极性相近</p>
+<figure>
+<img
+src="%E9%AB%98%E7%89%A9%E7%AC%AC%E4%B8%89%E7%AB%A0/image-20250321210504152.png"
+alt="高分子和溶剂的极性相似" />
+<figcaption aria-hidden="true">高分子和溶剂的极性相似</figcaption>
+</figure></li>
+<li><p>溶剂化作用——具有相异电性的两种基团，极性强弱越接近，彼此间相互作用越强、结合力越大。</p></li>
+</ul>
+<figure>
+<img
+src="%E9%AB%98%E7%89%A9%E7%AC%AC%E4%B8%89%E7%AB%A0/image-20250321210606908.png"
+alt="溶剂化作用" />
+<figcaption aria-hidden="true">溶剂化作用</figcaption>
+</figure>
+<p>==溶剂-高分子相互作用&gt;高分子-高分子间相互作用==</p>
+<ul>
+<li>内聚能密度或溶度参数相近</li>
+</ul>
+<p><span class="math display">$$
+\Delta \rm{E}=\Delta \rm{H}-\rm{RT}
+$$</span></p>
+<p><span class="math display">$$
+\rm{CED=\dfrac{\Delta E}{V_0}}
+$$</span></p>
+<p><span class="math display">$$
+\rm{\delta=\sqrt{CED}=\dfrac{\sum
+F(基团摩尔引力常数)}{V}=\dfrac{\rho\sum F}{M_0}}
+$$</span></p>
+<figure>
+<img
+src="./%E9%AB%98%E7%89%A9%E7%AC%AC%E4%B8%89%E7%AB%A0/image-20250410162632079.png"
+alt="溶度参数计算实例" />
+<figcaption aria-hidden="true">溶度参数计算实例</figcaption>
+</figure>
+<figure>
+<img
+src="%E9%AB%98%E7%89%A9%E7%AC%AC%E4%B8%89%E7%AB%A0/image-20250321211331133.png"
+alt="image-20250321211331133" />
+<figcaption aria-hidden="true">image-20250321211331133</figcaption>
+</figure>
+<p>溶度参数是具有加和性的 <span
+class="math display"><em>δ</em><sub><em>m</em></sub> = <em>δ</em><sub>1</sub><em>ϕ</em><sub>1</sub> + <em>δ</em><sub>2</sub><em>ϕ</em><sub>2</sub></span>
+==选择同高分子溶质溶度参数相近的溶剂通常有利于溶解==</p>
+<figure>
+<img
+src="./%E9%AB%98%E7%89%A9%E7%AC%AC%E4%B8%89%E7%AB%A0/image-20250410162925461.png"
+alt="计算实例" />
+<figcaption aria-hidden="true">计算实例</figcaption>
+</figure>
+<p>==真实的溶解情况需要将三种因素综合考虑==</p>
+<ul>
+<li><strong>PAN（聚丙烯腈、强极性）：</strong>包括合成纤维（如腈纶，也称人造羊毛）。溶于DMF（二甲基甲酰胺）、乙腈（强极性），但不溶解于与它δ值相近的乙醇、甲醇等。因为PAN极性很强，而乙醇、甲醇等溶剂极性太弱。**</li>
+<li>**
+<strong>PS（聚苯乙烯、弱极性）：</strong>脆性塑料。溶于甲苯、氯仿、苯胺（弱极性）和苯（非极性）。不能溶解在与它δ值相近的丙酮中，因为PS弱极性，而丙酮强极性。</li>
+</ul>
+<h3 id="热力学分析">热力学分析</h3>
+<p><span class="math display">$$
+\rm{\Delta G_m=\Delta H_m -T \Delta S_m}
+$$</span></p>
+<ul>
+<li><p>极性高分子+极性溶液</p>
+<ul>
+<li>溶解放热，<span class="math inline">$\rm{\Delta G_m
+&lt;0}$</span>，溶解过程==能自发进行==</li>
+</ul></li>
+<li><p>非极性溶液——Hildebrand公式</p>
+<ul>
+<li></li>
+</ul>
+<p><span class="math display">$$
+\rm{\Delta  H_m=V\phi_1\phi_2(\delta_1-\delta_2)^2}
+$$</span></p>
+<ul>
+<li><span
+class="math inline">$\rm{ΔH_M}$</span>越小越好即溶度参数尽可能接近</li>
+</ul></li>
+</ul>
+<h4 id="练习题">练习题</h4>
+<figure>
+<img
+src="./%E9%AB%98%E7%89%A9%E7%AC%AC%E4%B8%89%E7%AB%A0/image-20250410163916863.png"
+alt="练习题" />
+<figcaption aria-hidden="true">练习题</figcaption>
+</figure>
+<h2 id="高分子溶液的热力学理论">高分子溶液的热力学理论</h2>
+<p>二元混合体系中两种分子中各含<span
+class="math inline"><em>x</em><sub><em>A</em></sub></span>和<span
+class="math inline"><em>x</em><sub><em>B</em></sub></span>个单元，可有三种不同情况</p>
+<table>
+<thead>
+<tr>
+<th>溶液</th>
+<th><span
+class="math inline"><em>X</em><sub><em>A</em></sub></span></th>
+<th><span
+class="math inline"><em>X</em><sub><em>B</em></sub></span></th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>小分子溶液</td>
+<td>1</td>
+<td>1</td>
+</tr>
+<tr>
+<td>高分子溶液</td>
+<td>1</td>
+<td>x</td>
+</tr>
+<tr>
+<td>高分子共混</td>
+<td><span class="math inline"><em>x</em><sub>1</sub></span></td>
+<td><span class="math inline"><em>x</em><sub>2</sub></span></td>
+</tr>
+</tbody>
+</table>
+<p>理想溶液的热力学性质 <span class="math display">$$
+\rm{\Delta S_m=-k[N_1\ln X_1+N_2\ln X_2]}
+$$</span></p>
+<p><span class="math display">$$
+\rm{\Delta H_m=0}
+$$</span></p>
+<p><span class="math display">$$
+\rm{\Delta V_m=0}
+$$</span></p>
+<p><span class="math display">$$
+\rm{\Delta P=P_1^0X_2}
+$$</span></p>
+<h3 id="flory-huggins理论">Flory-Huggins理论</h3>
+<p>基本假定：</p>
+<ul>
+<li>i.溶液体系虚拟为似晶格结构。一个溶剂分子占一个晶格，一个高分子分为<em>x</em>
+个链段、占<em>x</em> 个相连的晶格。</li>
+<li>ii.等几率。溶剂与链段占某个任选格子的几率正比于其在体系中的分数。</li>
+<li>iii.等构象能。高分子链构象能相等。</li>
+</ul>
+<h4 id="混合熵">混合熵</h4>
+<p><span class="math display">$$
+\mathrm{\Delta S_m=S_{溶液}-S_{高分子}=-k=[N_1\ln
+{\dfrac{N_1}{N_1+xN_2}}+N_2\ln{\dfrac{xN_2}{N_1+xN_2}}]}
+$$</span></p>
+<p><span class="math display">$$
+\phi_1=\dfrac{N_1}{N_1+xN_2}
+$$</span></p>
+<p><span class="math display">$$
+\phi_2=\dfrac{xN_2}{N_1+xN_2}
+$$</span></p>
+<p>混合体系中溶剂分子的体积分数为<span
+class="math inline"><em>ϕ</em><sub>1</sub></span>，高分子为<span
+class="math inline"><em>ϕ</em><sub>2</sub></span></p>
+<h4 id="混合焓-混合自由能">混合焓、 混合自由能</h4>
+<p>混合焓： <span
+class="math display"><em>Δ</em><em>H</em><sub><em>M</em></sub> = (<em>Z</em> − 2)<em>Δ</em><em>ε</em><sub>12</sub><em>N</em><sub>1</sub><em>ϕ</em><sub>2</sub> = <em>R</em><em>T</em><em>χ</em><sub>1</sub><em>n</em><sub>1</sub><em>ϕ</em><sub>2</sub></span>
+Flory-Huggins相互作用参数：高分子与溶剂混合过程中相互作用能的变化 <span
+class="math display">$$
+\chi_1=\dfrac{(Z-2)\Delta \varepsilon_{12}}{kT}
+$$</span></p>
+<table>
+<thead>
+<tr>
+<th>溶剂类型</th>
+<th><span
+class="math inline"><em>Δ</em><em>ε</em><sub>12</sub></span></th>
+<th><span class="math inline"><em>χ</em></span></th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>良溶剂</td>
+<td><span
+class="math inline"><em>Δ</em><em>ε</em><sub>12</sub></span>&lt;0</td>
+<td><span class="math inline"><em>χ</em></span>&lt;0</td>
+</tr>
+<tr>
+<td>无热溶剂</td>
+<td><span
+class="math inline"><em>Δ</em><em>ε</em><sub>12</sub></span>=0</td>
+<td><span class="math inline"><em>χ</em></span>=0</td>
+</tr>
+<tr>
+<td>亚良溶剂</td>
+<td><span
+class="math inline"><em>Δ</em><em>ε</em><sub>12</sub></span>&gt;0</td>
+<td><span class="math inline"><em>χ</em></span>&gt;0</td>
+</tr>
+</tbody>
+</table>
+<p>混合自由能 <span
+class="math display"><em>Δ</em><em>G</em><sub><em>M</em></sub> = <em>R</em><em>T</em>[<em>n</em><sub>1</sub>ln <em>ϕ</em><sub>1</sub> + <em>n</em><sub>2</sub>ln <em>ϕ</em><sub>2</sub> + <em>χ</em><sub>1</sub><em>n</em><sub>1</sub><em>ϕ</em><sub>2</sub>]</span></p>
+<h4 id="偏摩尔量">偏摩尔量</h4>
+<p>在无限大的溶液体系中加入1摩尔溶质或溶剂引起热力学函数的变化称为偏摩尔量
+<span class="math display">$$
+溶剂的化学位：\Delta \mu_1=RT[\ln
+\phi_1+(1-\dfrac{1}{x})\phi_2+\chi_1\phi_1^2]
+$$</span></p>
+<h3 id="flory-krigbaum理论">Flory-Krigbaum理论</h3>
+<p>超量化学位 <span class="math display">$$
+\Delta \mu_1^E=-RT\Psi_1(1-\dfrac{\Theta}{T})\phi_2^2
+$$</span></p>
+<p><span class="math display">$$
+\Theta=\dfrac{T\kappa_1}{\Psi_1}
+$$</span></p>
+<p>一维溶胀因子<span class="math inline"><em>α</em></span></p>
+<ul>
+<li><span class="math inline"><em>α</em></span>的值描述了溶剂的性质</li>
+<li>==<span class="math inline"><em>α</em></span>越大，溶剂越良； <span
+class="math inline"><em>α</em></span>越小，溶剂越差==</li>
+<li>==<span
+class="math inline"><em>α</em></span>=1时线团为无扰尺寸，溶剂为<span
+class="math inline"><em>Θ</em></span>溶剂==</li>
+</ul>
+<p><span
+class="math inline"><em>Θ</em></span>状态——无绕状态，可==看作==理想状态</p>
+<p>此时的溶液称为Θ 溶液, 溶剂称为Θ 溶剂达到Θ 条件的温度称为Θ
+温度，具有以下性质 <span class="math display">$$
+\chi_1=\dfrac{1}{2}, \Delta \mu^E=0, \Delta G_a=0, u=0, \alpha=1
+$$</span></p>
+<h2 id="相平衡">相平衡</h2>
+<h3 id="渗透压">渗透压</h3>
+<p><span class="math display">$$
+\Pi=-\dfrac{1}{V^{'}}[\mu_1-\mu_{10}]=-\dfrac{\Delta \mu_1}{V_1^{'}}
+$$</span></p>
+<p>以<span class="math inline"><em>π</em></span>/(RTc)对浓度c作图，
+可得一条直线。 斜率为<span
+class="math inline"><em>A</em><sub>2</sub></span>,
+由截距可得数均分子量<br />
+<span class="math display">$$
+\dfrac{\pi}{RTc}=[\dfrac{1}{\overline{M_n}}+A_2c]
+$$</span></p>
+<p><span class="math display">$$
+A_2=(\dfrac{1}{2}-\chi)\dfrac{v_2^2}{v_1}
+$$</span></p>
+<ul>
+<li>良溶剂中，<span
+class="math inline"><em>A</em><sub>2</sub></span>&gt;0</li>
+<li><span class="math inline"><em>Θ</em></span>溶剂中，<span
+class="math inline"><em>A</em><sub>2</sub></span>=0</li>
+<li>不良溶剂中，<span
+class="math inline"><em>A</em><sub>2</sub></span>&lt;0</li>
+</ul>
+<h3 id="相分离">相分离</h3>
+<p><span class="math display">$$
+\phi_{2c}=\dfrac{1}{1+\sqrt{x}}
+$$</span></p>
+<p><span class="math display">$$
+\chi_{1c}=\dfrac{1}{2x}(1+\sqrt{x})^2
+$$</span></p>
+<figure>
+<img
+src="./%E9%AB%98%E7%89%A9%E7%AC%AC%E4%B8%89%E7%AB%A0/image-20250410172139490.png"
+alt="结论" />
+<figcaption aria-hidden="true">结论</figcaption>
+</figure>
+<h3 id="习题">习题</h3>
+<figure>
+<img
+src="./%E9%AB%98%E7%89%A9%E7%AC%AC%E4%B8%89%E7%AB%A0/image-20250410172736567.png"
+alt="1" />
+<figcaption aria-hidden="true">1</figcaption>
+</figure>
+<figure>
+<img
+src="./%E9%AB%98%E7%89%A9%E7%AC%AC%E4%B8%89%E7%AB%A0/image-20250410172906109.png"
+alt="2" />
+<figcaption aria-hidden="true">2</figcaption>
+</figure>
+
+                    
+                        
+
+
+                    
+                    
+                        <p>
+                            <a
+                                href="/2025/03/21/%E9%AB%98%E5%88%86%E5%AD%90%E7%89%A9%E7%90%86/%E9%AB%98%E7%89%A9%E7%AC%AC%E4%B8%89%E7%AB%A0/#post-footer"
+                                class="postShorten-excerpt_link link"
+                                aria-label=""
+                            >
+                                Comment and share
+                            </a>
+                        </p>
+                    
+                </div>
+            
+        </div>
+        
+    </article>
+    
+    <div class="pagination-bar">
+    <ul class="pagination">
+        
+          <li class="pagination-prev">
+            <a
+                class="btn btn--default btn--small"
+                href="/page/4/"
+                aria-label="NEWER POSTS"
+            >
+              <i class="fa fa-angle-left text-base icon-mr"></i>
+              <span>NEWER POSTS</span>
+            </a>
+          </li>
+        
+        
+          <li class="pagination-next">
+            <a
+                class="btn btn--default btn--small"
+                href="/page/6/"
+                aria-label="OLDER POSTS"
+            >
+              <span>OLDER POSTS</span>
+              <i class="fa fa-angle-right text-base icon-ml"></i>
+            </a>
+          </li>
+        
+        <li class="pagination-number">page 5 of 8</li>
+    </ul>
+</div>
+
+</section>
+
+
+                <footer id="footer" class="main-content-wrap">
+    <span class="copyrights">
+        Copyrights &copy; 2025 John Doe. All Rights Reserved.
+    </span>
+</footer>
+
+            </div>
+            
+        </div>
+        
+
+
+<div id="about">
+    <div id="about-card">
+        <div id="about-btn-close">
+            <i class="fa fa-times"></i>
+        </div>
+        
+            <h4 id="about-card-name">John Doe</h4>
+        
+            <div id="about-card-bio"><p>author.bio</p>
+</div>
+        
+        
+            <div id="about-card-job">
+                <i class="fa fa-briefcase"></i>
+                <br/>
+                <p>author.job</p>
+
+            </div>
+        
+        
+    </div>
+</div>
+
+        
+        
+<div id="cover" style="background-image:url('/assets/images/cover.jpg');"></div>
+        <!--SCRIPTS-->
+
+<script src="/assets/js/script-akgy1kkmfssyzznzlvk9mjwcvnsn87aqalldnf43rojvlib0s8vpmeb5mayw.min.js"></script>
+
+<!--SCRIPTS END-->
+
+
+
+
+
+    </body>
+</html>
