@@ -243,6 +243,258 @@
                     
                         <a
                             class="link-unstyled"
+                            href="/2025/08/23/%E9%87%8F%E5%AD%90%E5%8C%96%E5%AD%A6/%E5%90%84%E7%A7%8D%E7%90%86%E8%AE%BA%E8%AE%A1%E7%AE%97%E6%96%B9%E6%B3%95/"
+                            aria-label=": 各种理论计算方法"
+                        >
+                            各种理论计算方法
+                        </a>
+                    
+                </h1>
+                <div class="postShorten-meta">
+    <time datetime="2025-08-23T09:20:02+08:00">
+	
+		    Aug 23, 2025
+    	
+    </time>
+    
+        <span>in </span>
+        
+    <a class="category-link" href="/all-categories/%E4%BB%8E%E9%9B%B6%E5%BC%80%E5%A7%8B%E7%9A%84%E7%A7%91%E7%A0%94%E4%B9%8B%E6%97%85/">从零开始的科研之旅</a>, <a class="category-link" href="/all-categories/%E4%BB%8E%E9%9B%B6%E5%BC%80%E5%A7%8B%E7%9A%84%E7%A7%91%E7%A0%94%E4%B9%8B%E6%97%85/first-stage/">first stage</a>
+
+
+    
+</div>
+
+            </div>
+            
+                <div class="postShorten-content">
+                    <p>费米孔</p>
+<p>Coulomb孔</p>
+<p>由于Coulomb孔的存在，电子之间存在动态相关，如何描述原子分子体系中电子之间的动态相关是量子化学的主要任务</p>
+<p>玻色子的波函数是对称的，没有反对称性的要求因此可以靠得很近</p>
+<h2 id="hartree-fock方程与自洽场计算">Hartree-Fock方程与自洽场计算</h2>
+<h3 id="hf方程">HF方程</h3>
+<p>HF方程是量子化学中计算<strong>多电子体系近似波函数和能量</strong>的基本方法，通过“平均场”近似把复杂的多电子问题拆解成单电子问题。</p>
+<p>多电子波函数用<strong>单电子轨道（分子轨道）的Slater行列式</strong>表示
+<span
+class="math display"><em>f̂</em>(<em>x</em><sub><em>i</em></sub>)<em>φ</em><sub><em>k</em></sub>(<em>x</em><sub>1</sub>) = <em>ε</em><sub><em>k</em></sub><em>φ</em><sub><em>k</em></sub>(<em>x</em><sub>1</sub>)</span>
+Fock算符 <span class="math display">$$
+\hat{f}(x_1)=\hat{h}(x_1)+\sum_{j=1}^{N/2}(2\hat{J}-\hat{K_j})
+$$</span></p>
+<ul>
+<li>每个电子在其他电子构成的“平均场”中运动，忽略瞬时电子相关性（这是HF的局限性）。</li>
+</ul>
+<p><strong>类比理解</strong></p>
+<p>想象教室里的学生（电子）在考试：</p>
+<ul>
+<li>HF方法：每个学生只关心自己的试卷（轨道），并假设其他学生的行为是固定的“平均干扰”（库仑和交换势）。</li>
+<li>现实：学生之间其实会互相偷看（电子相关作用），但HF忽略了这点。</li>
+</ul>
+<h3 id="自洽场计算scf"><strong>自洽场计算（SCF）</strong></h3>
+<p><strong>一句话总结</strong></p>
+<p>SCF是求解HF方程的<strong>迭代计算过程</strong>，通过不断更新“平均场”直到结果自洽。</p>
+<p><strong>关键步骤</strong></p>
+<ol type="1">
+<li><p><strong>猜初始轨道</strong>（如用原子轨道线性组合）。</p></li>
+<li><p><strong>构建Fock算符</strong> （依赖当前轨道）。</p></li>
+<li><p><strong>解HF方程</strong> ，得到新轨道。</p></li>
+<li><p>检查收敛</p>
+<p>新轨道与旧轨道是否几乎相同？</p>
+<ul>
+<li>是 → 计算结束，输出能量和波函数。</li>
+<li>否 → 用新轨道回到步骤2，继续迭代。</li>
+</ul></li>
+</ol>
+<p><strong>为什么叫“自洽”？</strong></p>
+<p>最终得到的轨道生成的“平均场”，与计算这些轨道时用的场是一致的（自圆其说）。</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">[多电子薛定谔方程]  </span><br><span class="line">   ↓ 太难解 → 近似  </span><br><span class="line">[HF方程]（单电子近似 + 平均场）  </span><br><span class="line">   ↓ 需要迭代求解  </span><br><span class="line">[SCF计算]  </span><br><span class="line">   ↓ 收敛后  </span><br><span class="line">[分子轨道和能量] → 用于计算化学性质</span><br></pre></td></tr></table></figure>
+<h2
+id="组态相互作用configuration-interaction-ci计算"><strong>组态相互作用（Configuration
+Interaction, CI）计算</strong></h2>
+<p>CI是一种<strong>后Hartree-Fock方法</strong>，通过将多个电子组态（Slater行列式）线性组合，考虑电子相关能，弥补HF方法的不足。</p>
+<h4 id="核心思想"><strong>核心思想</strong></h4>
+<ul>
+<li><p><strong>HF的缺陷</strong>：
+HF单行列式近似忽略了电子瞬时排斥（动态相关）和激发态贡献（静态相关），导致能量偏高。</p></li>
+<li><p><strong>CI的改进</strong>： 将波函数表示为多个激发组态的叠加：
+<span
+class="math display"><em>Ψ</em><sub>CI</sub> = <em>c</em><sub>0</sub><em>Φ</em><sub>HF</sub> + ∑<sub><em>i</em></sub><em>c</em><sub><em>i</em></sub><em>Φ</em><sub><em>i</em></sub><sup>single</sup> + ∑<sub><em>j</em></sub><em>c</em><sub><em>j</em></sub><em>Φ</em><sub><em>j</em></sub><sup>double</sup> + ⋯</span></p>
+<ul>
+<li>(<span
+class="math inline"><em>Φ</em><sub><em>i</em></sub><sup>single</sup></span>)：单激发组态（一个电子从占据轨道跃迁到虚轨道）。</li>
+<li>( <span
+class="math inline"><em>Φ</em><sub><em>j</em></sub><sup>double</sup></span>
+)：双激发组态（两个电子同时跃迁），贡献最大。</li>
+</ul></li>
+</ul>
+<h4 id="ci等级">CI等级</h4>
+<table>
+<colgroup>
+<col style="width: 14%" />
+<col style="width: 35%" />
+<col style="width: 12%" />
+<col style="width: 37%" />
+</colgroup>
+<thead>
+<tr>
+<th>类型</th>
+<th>包含的激发组态</th>
+<th>计算成本</th>
+<th>典型应用</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>CIS</strong></td>
+<td>仅单激发</td>
+<td>低</td>
+<td>激发态初步探索</td>
+</tr>
+<tr>
+<td><strong>CISD</strong></td>
+<td>单+双激发</td>
+<td>中等</td>
+<td>小分子基态相关能修正</td>
+</tr>
+<tr>
+<td><strong>CISDT</strong></td>
+<td>单+双+三激发</td>
+<td>高</td>
+<td>高精度小体系</td>
+</tr>
+<tr>
+<td><strong>FCI</strong></td>
+<td>全组态（所有可能激发）</td>
+<td>天文数字</td>
+<td>极限精度（如H₂O极小基）</td>
+</tr>
+</tbody>
+</table>
+<p><strong>关键问题</strong>：</p>
+<ul>
+<li><strong>计算量爆炸</strong>：FCI的组态数随电子数和轨道数阶乘增长，仅适用于极小体系。</li>
+<li><strong>大小一致性</strong>：CISD不满足大小一致性（如两个远离的H原子能量≠2×单个H能量），需更高激发或耦合簇（CC）修正。</li>
+</ul>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">[Gauss基函数]</span><br><span class="line">   ↓ 基组展开</span><br><span class="line">[Hartree-Fock方程] → 单行列式近似</span><br><span class="line">   ↓ 电子相关修正</span><br><span class="line">[组态相互作用(CI)] → 用二次量子化算符组合激发组态</span><br><span class="line">   ↓ 更高精度</span><br><span class="line">[耦合簇(CC)、多参考方法]</span><br></pre></td></tr></table></figure>
+<h2 id="理论计算中的各种方法">理论计算中的各种方法</h2>
+<p>简单总结了一下Sob老师的博文，个人的总结仅供参考，详细信息请阅读原文：http://sobereva.com/680</p>
+<h3 id="任务类型">任务类型</h3>
+<ul>
+<li>优化极小点</li>
+<li>优化过渡态</li>
+<li>产生反应路径</li>
+<li>振动分析</li>
+<li>分子动力学</li>
+<li>构象/构型搜索</li>
+<li>波函数分析</li>
+</ul>
+<h3 id="计算方法">计算方法</h3>
+<table>
+<colgroup>
+<col style="width: 30%" />
+<col style="width: 48%" />
+<col style="width: 20%" />
+</colgroup>
+<thead>
+<tr>
+<th>计算方法</th>
+<th><strong>VASP</strong></th>
+<th></th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>分子力场</td>
+<td>计算耗时极低</td>
+<td>无法描述化学反应</td>
+</tr>
+<tr>
+<td>机器学习势</td>
+<td>通过机器学习的思想构造依赖于原子坐标的分子描述符与能量之间的抽象关系</td>
+<td></td>
+</tr>
+<tr>
+<td>密度泛函理论（QM）</td>
+<td>性价比非常高</td>
+<td>耗时高于分子力场N个数量级</td>
+</tr>
+<tr>
+<td>Hartree-Fock（QM）</td>
+<td></td>
+<td>完全过时</td>
+</tr>
+<tr>
+<td>后Hatree-Fock类（QM）</td>
+<td>额外把动态相关在一定程度上考虑了进来</td>
+<td>耗时高了很多</td>
+</tr>
+<tr>
+<td>MCSCF如CASSCF（QM）</td>
+<td>弥补HF缺乏对静态相关的考虑</td>
+<td>几乎没有或很少考虑动态相关</td>
+</tr>
+<tr>
+<td>多参考方法如CASPT2、NEVPT2、MRCI（QM）</td>
+<td>在MCSCF基础上进一步把动态相关考虑进来，精度整体很好，普适性很强</td>
+<td>昂贵</td>
+</tr>
+<tr>
+<td>半经验类方法如AM1、PM3、PM6（QM）</td>
+<td>对HF的简化以巨幅降低耗时，耗时只是HF的微小零头</td>
+<td>精度低，只能用于有限的元素</td>
+</tr>
+<tr>
+<td>GFN-xTB（QM）</td>
+<td>相当于纳入了一定DFT思想的半经验级别的方法，整体精度和可靠性&gt;=主流的半经验方法</td>
+<td></td>
+</tr>
+<tr>
+<td></td>
+<td></td>
+<td></td>
+</tr>
+</tbody>
+</table>
+<p>凡是基于量子理论思想提出的，在实际数值求解的过程中一般都要涉及分子轨道，绝大多数计算程序中都是把分子轨道展开成<strong>基函数的线性组合</strong>来描述的</p>
+<p>最常见的基函数一类是<strong>原子中心基函数</strong>（如Gaussian等大多数量子化学程序以及CP2K等部分第一性原理程序用的高斯型基函数），其中心一般位于原子核，还有一类常见的基函数是<strong>平面波基函数</strong>，是大多数计算周期性体系为主的第一性原理程序用的，它的分布覆盖整个被计算的晶胞</p>
+<p>基组（basis
+set）是<strong>对于原子中心基函数而言的</strong>，例如6-31G*、def2-TZVP、cc-pVDZ等都是很常见的基组，它定义了实际计算时对各种元素原子具体用多少、什么参数的基函数。做HF、DFT、后HF、MCSCF、多参考等方法计算时都需要告诉计算程序用什么基组，基组质量越好，也就是越接近于所谓的完备基组极限，这些方法自身的精度发挥得就越充分，但代价就是耗时越高。一个好方法配一个烂基组，以及一个烂方法配一个好基组，结果都不理想，必须好方法配好基组才能得到较准确结果。</p>
+<figure>
+<img src="1-1756622457898-2.png" alt="1" />
+<figcaption aria-hidden="true">1</figcaption>
+</figure>
+
+                    
+                        
+
+
+                    
+                    
+                        <p>
+                            <a
+                                href="/2025/08/23/%E9%87%8F%E5%AD%90%E5%8C%96%E5%AD%A6/%E5%90%84%E7%A7%8D%E7%90%86%E8%AE%BA%E8%AE%A1%E7%AE%97%E6%96%B9%E6%B3%95/#post-footer"
+                                class="postShorten-excerpt_link link"
+                                aria-label=""
+                            >
+                                Comment and share
+                            </a>
+                        </p>
+                    
+                </div>
+            
+        </div>
+        
+    </article>
+    
+    
+    <article class="postShorten postShorten--thumbnailimg-bottom">
+        <div class="postShorten-wrap">
+            
+            <div class="postShorten-header">
+                <h1 class="postShorten-title">
+                    
+                        <a
+                            class="link-unstyled"
                             href="/2025/08/12/%E7%A7%91%E7%A0%94/VASP/Starry%20Sky/vaspkit%E4%B8%ADCIF%E8%BD%ACPOSCAR%E8%84%9A%E6%9C%AC%E7%9A%84%E6%8A%A5%E9%94%99/"
                             aria-label=": np.asmatrix函数被废弃使得CIF转POSCAR脚本报错"
                         >
@@ -2585,290 +2837,6 @@ Li
         
     </article>
     
-    
-    <article class="postShorten postShorten--thumbnailimg-bottom">
-        <div class="postShorten-wrap">
-            
-            <div class="postShorten-header">
-                <h1 class="postShorten-title">
-                    
-                        <a
-                            class="link-unstyled"
-                            href="/2025/05/24/%E7%A7%91%E7%A0%94/first%20stage/2025-05-24-%E5%85%B3%E4%BA%8EX%E5%B0%84%E7%BA%BF%E7%B2%89%E6%9C%AB%E8%A1%8D%E5%B0%84/"
-                            aria-label=": 从零开始的X射线原理"
-                        >
-                            从零开始的X射线原理
-                        </a>
-                    
-                </h1>
-                <div class="postShorten-meta">
-    <time datetime="2025-05-24T20:24:00+08:00">
-	
-		    May 24, 2025
-    	
-    </time>
-    
-        <span>in </span>
-        
-    <a class="category-link" href="/all-categories/%E4%BB%8E%E9%9B%B6%E5%BC%80%E5%A7%8B%E7%9A%84%E7%A7%91%E7%A0%94%E4%B9%8B%E6%97%85/">从零开始的科研之旅</a>, <a class="category-link" href="/all-categories/%E4%BB%8E%E9%9B%B6%E5%BC%80%E5%A7%8B%E7%9A%84%E7%A7%91%E7%A0%94%E4%B9%8B%E6%97%85/first-stage/">first stage</a>
-
-
-    
-</div>
-
-            </div>
-            
-                <div class="postShorten-content">
-                    <h2 id="前言">前言</h2>
-<p>1917 年，赫尔首次描述了简单粉末衍射仪的构造，这是在 1895
-年威廉·康拉德·伦琴发现 X 射线后不久。衍射仪测量 X
-射线反射的角度，从而获得其包含的结构信息。如今，这项技术的分辨率有了显著提高，它被广泛用作分析相信息和解决固态材料晶体结构的工具。X
-射线衍射技术用于确定<strong>样品的组成</strong>或<strong>晶体结构</strong>。对于大分子和无机化合物等<strong>较大的晶体</strong>，它可用于确定样品中原子的结构。如果<strong>晶体尺寸太小</strong>，它可以确定样品的组成、结晶度和相纯度。</p>
-<h2 id="什么是x射线">什么是X射线？</h2>
-<p>X射线是一种<strong>电磁波</strong>，由内壳层电子跃迁所得：</p>
-<figure>
-<img
-src="Screen%20Shot%202022-08-29%20at%2010.39.21%20PM-1756610339401-1.png"
-alt="X 射线由内壳层电子跃迁产生" />
-<figcaption aria-hidden="true">X 射线由内壳层电子跃迁产生</figcaption>
-</figure>
-<p>对于原子序数为Z、仅含一个电子的类氢原子，内壳层电子跃迁所辐射的能量可由Rydberg方程计算：
-<span class="math display">$$
-\bar{v}=(\dfrac{1}{n_i^2}-\dfrac{1}{n_f^2})RZ^2
-$$</span>
-可以明显看出，与电子跃迁相关的能量差随着原子序数的增加而大幅增大，并且在这种跃迁过程中发射的辐射波长随着原子序数的增加从
-10<span class="math inline"><sup>−7</sup></span> m (1000 Å) 范围移至
-10<span class="math inline"><sup>−10</sup></span> m (1
-Å)范围（<strong>此时辐射的电磁波被定义为X射线，此辐射类型被称为特征辐射</strong>）、</p>
-<p>如下图，要引发这种内壳层跃迁，需要产生一个电子空位，必须从K层中移除一个电子。由高压电场加速过的阴极电子书轰击靶材，将其部分能量传递给靶材料的电子，从而导致电子激发。如果入射电子的能量足够高，一些电子可能会击出靶中
-K 壳层的一个电子，从而产生一个空位</p>
-<figure>
-<img
-src="Screen%20Shot%202022-08-29%20at%2010.47.31%20PM-1756610339401-2.png"
-alt="X射线的产生" />
-<figcaption aria-hidden="true">X射线的产生</figcaption>
-</figure>
-<p>不同能级跃迁回K层对应着不同的谱线，如<span
-class="math inline">$\rm{K_{\alpha}}$</span>线和<span
-class="math inline">$\rm{K_{\beta}}$</span>线。对于铜的X射线光谱，在低能分辨率下只有2条特征线被观察到，但是，在更高的分辨率下，很容易看出Kα线是双峰，它被标记为<span
-class="math inline">$\rm{K_{α1}}$</span>和<span
-class="math inline">$\rm{K_{α2}}$</span>。因为铜的2p轨道，能级L分裂为<span
-class="math inline">$\rm{L_{II}}$</span>和<span
-class="math inline">$\rm{L_{III}}$</span>，间距非常小（0.020kev），波长Kα1
-(= 1.54056 Å) 和Kα2 (= 1.54439 Å) 也非常接近。因此，通常说的<span
-class="math inline">$\rm{K_{\alpha}}$</span>其实是<span
-class="math inline">$\rm{K_{α1}}$</span>和<span
-class="math inline">$\rm{K_{α2}}$</span>的加权平均值</p>
-<figure>
-<img src="v2-83f3a61a473493f00779f96bc4c4f9b0_720w-1756610339401-3.webp"
-alt="Cu的原子能级" />
-<figcaption aria-hidden="true">Cu的原子能级</figcaption>
-</figure>
-<table>
-<thead>
-<tr>
-<th>阳极</th>
-<th><span class="math inline">$\rm{K_{\alpha}}$</span></th>
-<th><span class="math inline">$\rm{K_{\beta}}$</span></th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td>铜</td>
-<td>1.54184Å</td>
-<td>1.39222Å</td>
-</tr>
-<tr>
-<td>钼</td>
-<td>0.71073Å</td>
-<td>0.63229Å</td>
-</tr>
-</tbody>
-</table>
-<p>以铜靶为例 <span class="math display">$$
-E=\dfrac{hc}{\lambda}=\dfrac{6.626\times10^{-34}\times2.998\times
-10^8}{1.542\times 10^{-10}\times1.6\times10^{-19}}=8.05~\rm{kV}
-$$</span> 8.05 kV为铜的<span class="math inline">$\rm{K_{\alpha
-1}}$</span>线的最低激发电压，实际操作时通常选择40kV。激发电压选择过低会造成谱线不明显、电流过大热损耗大等问题，选择40kV是长期实验优化的结果。</p>
-<p>由于种种原因，如量子力学的选择定则：电子跃迁需要满足角动量变化Δl=±1、散热和成本等问题，通常X射线光谱中不会出现<span
-class="math inline">$\rm{K_{\gamma}}$</span>甚至更高的线，即使能够发生N→K的跃迁（比如高Z元素W)，也会因为强度极弱而湮灭在噪声中，因此X射线光谱中通常见到的是<span
-class="math inline">$\rm{K_{\alpha}}$</span>和<span
-class="math inline">$\rm{K_{\beta}}$</span></p>
-<figure>
-<img
-src="Screen%20Shot%202022-08-29%20at%2010.50.56%20PM-1756610339401-4.png"
-alt="产生特征X射线的电子跃迁示意图（钼靶）" />
-<figcaption
-aria-hidden="true">产生特征X射线的电子跃迁示意图（钼靶）</figcaption>
-</figure>
-<p>此外，在高速电子轰击靶材的过程中除了由内壳层电子跃迁所辐射的特征X射线，还存在着<strong>轫致辐射</strong>：高速电子被靶材原子核电场偏转，动能转化为连续电磁辐射。</p>
-<p>如下图，当加速电压（单位：kV）较小、高速电子无法引起内壳层跃迁时（<strong>加速电压小于临界电压</strong>），那么此时原子的辐射均为<strong>轫致辐射</strong></p>
-<p><img
-src="Screen%20Shot%202022-08-29%20at%2010.59.00%20PM-1756610339401-5.png"
-alt="钼靶 X 射线光谱随施加电压的变化关系" /> <span
-class="math display">$$
-V_{临界}=\dfrac{hc}{e\lambda_{K-edge}}
-$$</span></p>
-<p>在所得的一系列X射线中，只有满足布拉格条件（波长与晶面间距d匹配）的射线才可用于样品检测，因此需要通过滤光片等手段只保留窄带波长，去除了除
-K<span class="math inline"><sub><em>α</em></sub></span> X
-射线之外的所有电磁波</p>
-<h2 id="xrd谱图上的峰是什么">XRD谱图上的峰是什么？</h2>
-<p>XRD——X-ray diffraction（X射线衍射），其本质是波的干涉与叠加。</p>
-<p>当波（如光波、声波、X射线）遇到障碍物或穿过周期性结构时，波前会发生弯曲和重新分布，这种现象称为衍射。障碍物或结构的尺寸与波长相当，这是发生衍射的关键条件，正因如此，与原子间距匹配的X射线适合用作发生衍射的电磁波。X射线是电磁波，照射到晶体时，<strong>每个原子中的电子受X射线的作用，成为次级波源</strong>，向四周散射X射线（这种散射也被称为相干散射），这些不同路径的X射线相遇并发生干涉（衍射发生的本质是<strong>弹性散射波</strong>，（即此时的次级X射线）的干涉）</p>
-<p>干涉分为两类：</p>
-<ul>
-<li><strong>相长干涉（Constructive
-Interference）</strong>：满足布拉格条件时，所有晶面的散射波<strong>相位一致</strong>，两列波<strong>波峰对齐</strong>，叠加后振幅增强
-→ 形成<strong>峰</strong>。</li>
-<li><strong>相消干涉（Destructive
-Interference）</strong>：波峰与波谷对齐，叠加后振幅抵消 →
-形成暗区。</li>
-</ul>
-<p>布拉格定律： <span
-class="math display"><em>n</em><em>λ</em> = 2<em>d</em>sin <em>θ</em></span>
-其中λ是外加波长，θ是衍射角，d
-是原子平面之间的距离。在大多数情况下，我们假定n=1，即一级衍射，因为总可以将
-n=2,3,…的衍射峰解释为来自(nh nk nl) 晶面的衍射——即来自晶面间距为<span
-class="math inline">$\rm{d_{hkl}}$</span>的<span
-class="math inline">$\dfrac{1}{n}$</span>倍的晶面<span
-class="math inline">$\rm{d_{nhnknl}}$</span>。然后，原子平面之间的距离可用于确定成分或晶体结构。</p>
-<figure>
-<img src="braggslaw-1756610339401-6.jpg" alt="braggs law" />
-<figcaption aria-hidden="true">braggs law</figcaption>
-</figure>
-<p>当路径 ABC 与 A’B’C’之间的距离相差整数个波长（λ）时，衍射的 X
-射线表现出相长干涉</p>
-<p>X 射线衍射的结果绘制出了在各自的
-2θ位置处不同衍射角的信号强度。2θ位置对应于<strong>样品中晶体或原子之间的特定间距</strong>，该间距由入射到样品中的
-X
-射线束的衍射角决定。<strong>峰的强度</strong>与<strong>该相或具有该间距的分子数量</strong>有关。峰的强度越大，具有该特定间距的晶体或分子数量就越多。</p>
-<h2
-id="消光是什么为什么只有特定的晶面处才会出现峰">消光是什么？为什么只有特定的晶面处才会出现峰？</h2>
-<p>衍射峰强度取决于晶胞内所有原子散射辐射之间的相位关系，但经常出现这种情况：虽然布拉格定律预测某个峰应该存在，但其实际强度却为零（这是因为布拉格定律不涉及原子位置，仅与晶胞的大小和形状有关）。</p>
-<p>例如，对于具有体心立方BCC晶胞的(100)晶面衍射峰强度：相位关系表明，在晶胞顶面和底面（即(100)晶面）散射的
-X 射线虽然发生相长干涉，但与晶胞中心原子散射的X射线存在180<span
-class="math inline"><sup>∘</sup></span>的相位差，因此最终强度为零。下表给出了不同立方晶格中特定衍射峰出现与否的选择定则。</p>
-<table style="width:100%;">
-<colgroup>
-<col style="width: 24%" />
-<col style="width: 53%" />
-<col style="width: 22%" />
-</colgroup>
-<thead>
-<tr>
-<th>Bravais Lattice</th>
-<th>Reflections Present</th>
-<th>Reflections Absent</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td>Simple Cubic</td>
-<td>All</td>
-<td>None</td>
-</tr>
-<tr>
-<td>Body-Centered Cubic</td>
-<td>(h+k+l)= even</td>
-<td>(h+k+l)= odd</td>
-</tr>
-<tr>
-<td>Face-Centered Cubic</td>
-<td>h,k,l unmixed (either all odd or all even)</td>
-<td>h,k,l mixed</td>
-</tr>
-<tr>
-<td>Base-Centered Cubic</td>
-<td>h,k unmixed (either all even or all odd)</td>
-<td>h,k mixed</td>
-</tr>
-</tbody>
-</table>
-<h2
-id="为什么谱图的横坐标是2θ"><strong>为什么谱图的横坐标是2θ</strong>？</h2>
-<p>实验中，样品和探测器的转动是围绕同一轴进行的，因此
-<strong>总偏转角的计算需要结合样品和探测器的相对运动</strong>，如下图所示</p>
-<figure>
-<img src="IMG_20250524_210927-1756610339401-7.jpg" alt="示意图" />
-<figcaption aria-hidden="true">示意图</figcaption>
-</figure>
-<h2 id="峰宽度的意义是什么">峰宽度的意义是什么？</h2>
-<p><strong>峰的宽度与晶体尺寸成反比</strong>。较窄的峰对应较大的晶体。较宽的峰意味着可能存在较小的晶体、晶体结构缺陷，或者样品在本质上可能是非晶态的，即一种缺乏完美结晶度的固体。对于较小的样品，将由X
-射线衍射（XRD）所得的图谱与数据库中标准样品的谱图对比可确定样品的组成。此结论可由<strong>谢乐公式（Debye-Scherrer）</strong>直接给出
-<span class="math display">$$
-D=\dfrac{K\lambda}{B \cos\theta}
-$$</span></p>
-<ul>
-<li><p>K为Scherrer常数，也称形状因子，若B为衍射峰的半峰高宽，则K=0.89；</p></li>
-<li><p>D为晶粒垂直于晶面方向的平均厚度（Å）；</p></li>
-<li><p>B为实测样品衍射峰半高宽度</p></li>
-<li><p>θ为布拉格衍射角，单位为角度</p></li>
-<li><p>λ为X射线]波长，对于Cu kα来说，一般为1.54056 Å</p></li>
-</ul>
-<h2
-id="为什么晶相能相长干涉形成峰而非晶相不能"><strong>为什么晶相能相长干涉形成峰，而非晶相不能？</strong></h2>
-<p>晶体是长程有序的<strong>周期性结构</strong>，满足布拉格条件，即所有晶面(hkl)的的间距d恒定，当入射角θ满足布拉格公式时，所有晶面的散射波相位一致
-→ 相长干涉 → 尖锐峰。</p>
-<p>非晶体可能短程有序，而长程无序，d值不固定，
-散射波来自不同局部区域，相位杂乱，无法形成尖锐的峰</p>
-<h3 id="举个例子">举个例子</h3>
-<p>例子仅供参考</p>
-<p>晶体硅的晶胞参数a=0.543nm，X射线波长为0.154nm，那么我们可以预测某个晶面会在何处出现峰</p>
-<p>对于立方晶系： <span class="math display">$$
-d_{hkl}=\dfrac{a}{\sqrt{h^2+k^2+l^2}}
-$$</span> 以(111)晶面为例 <span class="math display">$$
-d_{111}=\dfrac{0.543}{\sqrt{3}}=0.314nm
-$$</span> 根据布拉格公式： <span class="math display">$$
-\theta =\arcsin (\dfrac{\lambda}{2d_{111}})=14.3^\circ
-$$</span></p>
-<h2 id="如何确定2theta角度">如何确定2theta角度？</h2>
-<p>虽然理论上2θ范围是0°~180°，但实际操作中极少覆盖全部范围，原因包括：</p>
-<ul>
-<li><strong>物理限制</strong>：大多数晶面间距d有一个最小值，那么<span
-class="math inline">$\theta_{\rm{max}} \le
-\arcsin(\dfrac{\lambda}{2d_{\rm{min}}})$</span></li>
-<li><strong>信号强度</strong>：高角度区（如2θ&gt;120°）的衍射强度极弱，信噪比差。</li>
-<li><strong>时间成本</strong>：全范围扫描耗时过长，而关键峰通常集中在<strong>20°~80°</strong></li>
-</ul>
-<p>一般选择20~80°，一般情况</p>
-<p><strong>常规晶体材料</strong>的晶面间距d大多在<strong>1~10Å</strong>之间</p>
-<ul>
-<li><strong>Cu靶X射线波长λ≈1.54Å</strong>，代入公式：
-<ul>
-<li>当d=10Å时，( <span class="math inline">$\sinθ = λ/(2d)
-≈0.077$</span> → θ≈4.4° → 2θ≈8.8°)</li>
-<li>当d=1Å时，( <span class="math inline">$\sinθ = 0.77$</span> → θ≈50°
-→ 2θ≈100°)</li>
-</ul></li>
-</ul>
-<h2 id="参考资料">参考资料</h2>
-<ol type="1">
-<li>Sadoway, D. Introduction to Solid State Chemistry.</li>
-<li>Reig, A. CHEM322: Inorganic Chemistry.</li>
-</ol>
-
-                    
-                        
-
-
-                    
-                    
-                        <p>
-                            <a
-                                href="/2025/05/24/%E7%A7%91%E7%A0%94/first%20stage/2025-05-24-%E5%85%B3%E4%BA%8EX%E5%B0%84%E7%BA%BF%E7%B2%89%E6%9C%AB%E8%A1%8D%E5%B0%84/#post-footer"
-                                class="postShorten-excerpt_link link"
-                                aria-label=""
-                            >
-                                Comment and share
-                            </a>
-                        </p>
-                    
-                </div>
-            
-        </div>
-        
-    </article>
-    
     <div class="pagination-bar">
     <ul class="pagination">
         
@@ -2884,7 +2852,7 @@ class="math inline">$\theta_{\rm{max}} \le
             </a>
           </li>
         
-        <li class="pagination-number">page 1 of 4</li>
+        <li class="pagination-number">page 1 of 5</li>
     </ul>
 </div>
 
