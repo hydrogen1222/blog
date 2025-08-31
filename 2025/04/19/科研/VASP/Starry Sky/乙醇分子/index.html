@@ -11,7 +11,7 @@
     
     
     
-    <script type="application/ld+json">{"@context":"http://schema.org","@type":"BlogPosting","author":{"@type":"Person","name":"John Doe","sameAs":["https://github.com/hydrogen1222","https://user.qzone.qq.com/2170147489/infocenter","https://space.bilibili.com/441987358?spm_id_from=333.1007.0.0","mailto:tanch1222@mails.jlu.edu.cn"]},"articleBody":"乙醇分子的结构优化\r\nINCAR\r\n1234567SYSTEM = ethanolISMEAR = 0 #Gaussian ismear, for insulatorSIGMA = 0.01NSW = 200IBRION = 2 #OptimizarionPOTIM = 0.01 #a little conservative step\r\nKPOINTS\r\n12345K-POINTS0Gamma1 1 10 0 0\r\nPOSCAR\r\n1234567891011121314151617Title1.0        4.8082499504         0.0000000000         0.0000000000        0.0000000000         4.8082499504         0.0000000000        0.0000000000         0.0000000000         4.8082499504    O    C    H    1    2    6Direct     0.747990456         0.438959082         0.500000000     0.508714210         0.577741385         0.500000000     0.269437963         0.438959082         0.500000000     0.900000025         0.568403268         0.500000000     0.508714210         0.689008479         0.307289552     0.508714210         0.689008479         0.692710448     0.100000016         0.583231948         0.500000000     0.257895302         0.310991525         0.318291476     0.257895302         0.310991525         0.681708524\r\n分子结构可以使用ChemDraw绘制，也可以去RSC的网站上下载https://www.chemspider.com/、\r\n但是不管是下载的mol结构还是ChemDraw导出的mol结构，导入进Vesta里面发现都少了氢原子，笨比博主（😭）至今没找到解决方案，只能笨拙地把mol结构导入到GaussView里面，GaussView会自动补加上氢原子，然后再导入到Vesta中，再导出为POSCAR文件，当然理论上可以手动改POSCAR，不一定要使用可视化软件\r\nPOTCAR\r\n使用基础的不带后缀的PBE赝势\r\n1cat ..potpaw_PBE.64/O/POTCAR ..potpaw_PBE.64/C/POTCAR ..potpaw_PBE.64/H/POTCAR &gt;&gt; POTCAR\r\n对比优化前后\r\n简单对比一下键长吧\r\n\r\n优化前\r\n\r\nC-C bond: 1.33001(0) Å\r\nO-H bond: 0.96000(0) Å\r\n\r\n\r\n\r\n\r\nO-H bond\r\n\r\n\r\n\r\nC-C bond\r\n\r\n\r\n优化后\r\n\r\nC-C bond: 1.53893(0) Å\r\nO-H bond: 0.96454(0) Å\r\n\r\n\r\n\r\n\r\nO-H bond\r\n\r\n\r\n\r\nC-C bond\r\n\r\n频率计算\r\n频率计算的作用：\r\n\r\n确定结构是否稳定\r\n看振动方式和大小，用来和实验对比\r\n反应热，反应能垒，吸附能等的零点能矫正\r\n确认过渡态(有一个振动的虚频)\r\n热力学中计算entropy，用于计算化学势，微观动力学中的指前因子和反应能垒。\r\n\r\nPOSCAR\r\n使用先前优化的CONTCAR作为POSCAR\r\nINCAR\r\n修改一下IBRION，计算频率(IBRION = 5)而非结构优化(IBRION = 2)\r\n12345678SYSTEM = ethanolISMEAR = 0 #Gaussian ismear, for insulatorSIGMA = 0.01NSW = 1IBRION = 5 #freq calculationPOTIM = 0.01 #a little conservative stepEDIFF = 1E-8NFREE = 2\r\nJmol分析频率\r\n1jmol OUTCAR\r\nTools-AtomSetChooser-Frequencies\r\n\r\n\r\nJmol分析频率\r\n\r\n","dateCreated":"2025-04-19T14:40:00+08:00","dateModified":"2025-08-31T11:25:25+08:00","datePublished":"2025-04-19T14:40:00+08:00","description":"","headline":"乙醇分子的气相优化和振动频率计算","image":[],"mainEntityOfPage":{"@type":"WebPage","@id":"https://hydrogen1222.xyz/2025/04/19/%E7%A7%91%E7%A0%94/VASP/Starry%20Sky/%E4%B9%99%E9%86%87%E5%88%86%E5%AD%90/"},"publisher":{"@type":"Organization","name":"John Doe","sameAs":["https://github.com/hydrogen1222","https://user.qzone.qq.com/2170147489/infocenter","https://space.bilibili.com/441987358?spm_id_from=333.1007.0.0","mailto:tanch1222@mails.jlu.edu.cn"]},"url":"https://hydrogen1222.xyz/2025/04/19/%E7%A7%91%E7%A0%94/VASP/Starry%20Sky/%E4%B9%99%E9%86%87%E5%88%86%E5%AD%90/","keywords":"化学, 科研"}</script>
+    <script type="application/ld+json">{"@context":"http://schema.org","@type":"BlogPosting","author":{"@type":"Person","name":"John Doe","sameAs":["https://github.com/hydrogen1222","https://user.qzone.qq.com/2170147489/infocenter"],"image":"https://www.gravatar.com/avatar/59bc94fdda371da7bfe585b96a3463b0"},"articleBody":"乙醇分子的结构优化\r\nINCAR\r\n1234567SYSTEM = ethanolISMEAR = 0 #Gaussian ismear, for insulatorSIGMA = 0.01NSW = 200IBRION = 2 #OptimizarionPOTIM = 0.01 #a little conservative step\r\nKPOINTS\r\n12345K-POINTS0Gamma1 1 10 0 0\r\nPOSCAR\r\n1234567891011121314151617Title1.0        4.8082499504         0.0000000000         0.0000000000        0.0000000000         4.8082499504         0.0000000000        0.0000000000         0.0000000000         4.8082499504    O    C    H    1    2    6Direct     0.747990456         0.438959082         0.500000000     0.508714210         0.577741385         0.500000000     0.269437963         0.438959082         0.500000000     0.900000025         0.568403268         0.500000000     0.508714210         0.689008479         0.307289552     0.508714210         0.689008479         0.692710448     0.100000016         0.583231948         0.500000000     0.257895302         0.310991525         0.318291476     0.257895302         0.310991525         0.681708524\r\n分子结构可以使用ChemDraw绘制，也可以去RSC的网站上下载https://www.chemspider.com/、\r\n但是不管是下载的mol结构还是ChemDraw导出的mol结构，导入进Vesta里面发现都少了氢原子，笨比博主（😭）至今没找到解决方案，只能笨拙地把mol结构导入到GaussView里面，GaussView会自动补加上氢原子，然后再导入到Vesta中，再导出为POSCAR文件，当然理论上可以手动改POSCAR，不一定要使用可视化软件\r\nPOTCAR\r\n使用基础的不带后缀的PBE赝势\r\n1cat ..potpaw_PBE.64/O/POTCAR ..potpaw_PBE.64/C/POTCAR ..potpaw_PBE.64/H/POTCAR &gt;&gt; POTCAR\r\n对比优化前后\r\n简单对比一下键长吧\r\n\r\n优化前\r\n\r\nC-C bond: 1.33001(0) Å\r\nO-H bond: 0.96000(0) Å\r\n\r\n\r\n\r\n\r\nO-H bond\r\n\r\n\r\n\r\nC-C bond\r\n\r\n\r\n优化后\r\n\r\nC-C bond: 1.53893(0) Å\r\nO-H bond: 0.96454(0) Å\r\n\r\n\r\n\r\n\r\nO-H bond\r\n\r\n\r\n\r\nC-C bond\r\n\r\n频率计算\r\n频率计算的作用：\r\n\r\n确定结构是否稳定\r\n看振动方式和大小，用来和实验对比\r\n反应热，反应能垒，吸附能等的零点能矫正\r\n确认过渡态(有一个振动的虚频)\r\n热力学中计算entropy，用于计算化学势，微观动力学中的指前因子和反应能垒。\r\n\r\nPOSCAR\r\n使用先前优化的CONTCAR作为POSCAR\r\nINCAR\r\n修改一下IBRION，计算频率(IBRION = 5)而非结构优化(IBRION = 2)\r\n12345678SYSTEM = ethanolISMEAR = 0 #Gaussian ismear, for insulatorSIGMA = 0.01NSW = 1IBRION = 5 #freq calculationPOTIM = 0.01 #a little conservative stepEDIFF = 1E-8NFREE = 2\r\nJmol分析频率\r\n1jmol OUTCAR\r\nTools-AtomSetChooser-Frequencies\r\n\r\n\r\nJmol分析频率\r\n\r\n","dateCreated":"2025-04-19T14:40:00+08:00","dateModified":"2025-08-31T11:25:25+08:00","datePublished":"2025-04-19T14:40:00+08:00","description":"","headline":"乙醇分子的气相优化和振动频率计算","image":[],"mainEntityOfPage":{"@type":"WebPage","@id":"https://hydrogen1222.xyz/2025/04/19/%E7%A7%91%E7%A0%94/VASP/Starry%20Sky/%E4%B9%99%E9%86%87%E5%88%86%E5%AD%90/"},"publisher":{"@type":"Organization","name":"John Doe","sameAs":["https://github.com/hydrogen1222","https://user.qzone.qq.com/2170147489/infocenter"],"image":"https://www.gravatar.com/avatar/59bc94fdda371da7bfe585b96a3463b0","logo":{"@type":"ImageObject","url":"https://www.gravatar.com/avatar/59bc94fdda371da7bfe585b96a3463b0"}},"url":"https://hydrogen1222.xyz/2025/04/19/%E7%A7%91%E7%A0%94/VASP/Starry%20Sky/%E4%B9%99%E9%86%87%E5%88%86%E5%AD%90/","keywords":"化学, 科研"}</script>
     <meta name="description" content="乙醇分子的结构优化 INCAR 1234567SYSTEM &#x3D; ethanolISMEAR &#x3D; 0 #Gaussian ismear, for insulatorSIGMA &#x3D; 0.01NSW &#x3D; 200IBRION &#x3D; 2 #OptimizarionPOTIM &#x3D; 0.01 #a little conservative step KPOINTS 12345K-POINTS0Gamma1">
 <meta property="og:type" content="blog">
 <meta property="og:title" content="乙醇分子的气相优化和振动频率计算">
@@ -231,56 +231,6 @@
                         >
                         <i class="sidebar-button-icon fab fa-qq" aria-hidden="true"></i>
                         <span class="sidebar-button-desc">QQ</span>
-                    </a>
-            </li>
-            
-                <li class="sidebar-button">
-                    
-                        <a
-                            class="sidebar-button-link "
-                            href="https://space.bilibili.com/441987358?spm_id_from=333.1007.0.0"
-                            
-                                target="_blank"
-                            
-                            rel="noopener"
-                            title="bilibili"
-                        >
-                        <i class="sidebar-button-icon fab fa-bilibili" aria-hidden="true"></i>
-                        <span class="sidebar-button-desc">bilibili</span>
-                    </a>
-            </li>
-            
-                <li class="sidebar-button">
-                    
-                        <a
-                            class="sidebar-button-link "
-                            href="mailto:tanch1222@mails.jlu.edu.cn"
-                            
-                                target="_blank"
-                            
-                            rel="noopener"
-                            title="Mail"
-                        >
-                        <i class="sidebar-button-icon fa fa-envelope" aria-hidden="true"></i>
-                        <span class="sidebar-button-desc">Mail</span>
-                    </a>
-            </li>
-            
-        </ul>
-        
-            <ul class="sidebar-buttons">
-            
-                <li class="sidebar-button">
-                    
-                        <a
-                            class="sidebar-button-link "
-                            href="/atom.xml"
-                            
-                            rel="noopener"
-                            title="RSS"
-                        >
-                        <i class="sidebar-button-icon fa fa-rss" aria-hidden="true"></i>
-                        <span class="sidebar-button-desc">RSS</span>
                     </a>
             </li>
             
@@ -705,6 +655,12 @@ document.addEventListener("DOMContentLoaded", function() {
 
             </div>
         
+        
+            <div id="about-card-location">
+                <i class="fa fa-map-marker-alt"></i>
+                <br/>
+                Changchun, China
+            </div>
         
     </div>
 </div>

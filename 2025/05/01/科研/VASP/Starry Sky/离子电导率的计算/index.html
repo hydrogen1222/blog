@@ -11,7 +11,7 @@
     
     
     
-    <script type="application/ld+json">{"@context":"http://schema.org","@type":"BlogPosting","author":{"@type":"Person","name":"John Doe","sameAs":["https://github.com/hydrogen1222","https://user.qzone.qq.com/2170147489/infocenter","https://space.bilibili.com/441987358?spm_id_from=333.1007.0.0","mailto:tanch1222@mails.jlu.edu.cn"]},"articleBody":"使用VASP计算离子电导率，似乎比较麻烦\r\n\r\n一个能量较低、结构合理的起始三维构型是进行MD模拟的第一步\r\n\r\n分子动力学模拟的基本步骤\r\n\r\n确定起始构型\r\n选用适当的力场和模拟软件\r\n构建体系和能量最小化\r\n平衡过程\r\n数据采集过程\r\n结果分析\r\n\r\n根据系统的传播方式，分子模拟方法可以分为分子动力学MD和蒙特卡洛MC两类方法\r\n\r\n分子动力学通过数值积分求解牛顿运动方程，生成系统轨迹，可研究结构、动力学和热力学性质。\r\n蒙特卡洛方法基于概率规则生成新构型，侧重采样平衡态结构和热力学性质，不涉及时间动力学。\r\n\r\n力场是一组描述分子中原子间相互作用的势能函数和参数的集合，用于计算系统的总能量和原子受力，从而驱动分子动力学（MD）模拟或蒙特卡罗（MC）采样：\r\n\r\n将量子力学描述的分子相互作用简化为经典力学模型，降低计算成本。\r\n通过参数化的势能函数，预测分子的结构、动力学和热力学性质（如键长、自由能、扩散系数等）。\r\n\r\n固定电荷力场：固定原子电荷，不考虑环境引起的电子云变形（极化），计算效率高\r\n\r\n生物分子力场\r\n\r\nAMBER\r\n\r\n广泛用于蛋白质、核酸模拟，参数优化针对溶液环境，如\r\nff14SB、ff19SB\r\n\r\nCHARMM\r\n\r\n广泛用于蛋白质、核酸模拟，参数优化针对溶液环境，如\r\nff14SB、ff19SB\r\n\r\nGROMOS\r\n\r\n用于膜蛋白和聚合物，参数简洁，计算速度快\r\n\r\n\r\n小分子力场\r\n\r\nGAFF\r\n\r\n可参数化多种有机小分子，支持自定义分子\r\n\r\nUFF\r\n\r\n覆盖周期表多数元素，适合无机材料和有机分子\r\n\r\n\r\n\r\n极化力场：显示考虑原子极化率（电子云随电场变化），通过附加自由度（如\r\nDrude 振子、诱导偶极）模拟极化效应，精度更高但计算成本显著增加\r\n\r\nAMOEBA：基于原子极化率和多极矩，适用于极性体系（如水、蛋白质\r\n- 配体相互作用）。\r\nDrude 模型：每个原子附加虚拟振子模拟极化，如\r\nCHARMM-Drude 力场。\r\nPolarizable AMBER (PAMBS)：在 AMBER\r\n框架中引入极化参数。\r\n\r\n粗粒化力场（Coarse-Grained Force Fields）：将多个原子简化为单个\r\n“珠子”（如蛋白质的每个残基、脂质的疏水尾），降低计算复杂度，适用于大尺度系统（如细胞膜、聚合物）\r\n\r\nMartini：广泛用于膜蛋白、病毒颗粒和软物质，4:1\r\n粗粒化（4 个原子→1 个珠子）。\r\nMARTINI 3.0：支持多尺度模拟，兼容全原子模型。\r\n\r\n使用pymatgen提取数据\r\n12345678910111213141516171819202122232425262728293031323334&#x27;&#x27;&#x27;分析AIMD结果，计算MSD 和 conductivity&#x27;&#x27;&#x27;import osfrom pymatgen.core.trajectory import Trajectoryfrom pymatgen.io.vasp.outputs import Xdatcarfrom pymatgen.core import Structurefrom pymatgen.analysis.diffusion.analyzer import DiffusionAnalyzerimport numpy as npimport pickleimport matplotlib.pyplot as plt# 这一步是读取 XDATCAR，得到一系列结构信息traj = Trajectory.from_file(&#x27;XDATCAR&#x27;)# 这一步是实例化 DiffusionAnalyzer 的类# 并用 from_structures 方法初始化这个类； 900 是温度，2 是POTIM 的值，1是间隔步数# 间隔步数（step_skip）不太容易理解，但是根据官方教程:# dt = timesteps * self.time_step * self.step_skipdiff = DiffusionAnalyzer.from_structures(traj,&#x27;Li&#x27;,900,2,1)# 可以用内置的 plot_msd 方法画出 MSD 图像# 有些终端不能显示图像，这时候可以调用 export_msdt() 方法，得到数据后再自己作图ax = diff.export_msdt(&quot;msd.dat&quot;)#plt.show()# 接下来直接得到 离子迁移率， 单位是 mS/cmC = diff.conductivitywith open(&#x27;result.dat&#x27;,&#x27;w&#x27;) as f:    f.write(&#x27;# AIMD result for Li-ion\\n&#x27;)    f.write(&#x27;temp\\tconductivity\\n&#x27;)    f.write(&#x27;%d\\t%.2f\\n&#x27; %(900,C))\r\n画图\r\n12345678910111213141516171819import numpy as npimport matplotlib.pyplot as plt# 读取数据data = np.loadtxt(&#x27;msd.txt&#x27;, comments=&#x27;#&#x27;)  # 假设你的文件名为 msd.txt# 提取时间步长和 MSD 数据time = data[:, 0]  # 第一列是时间步长msd = data[:, 1]   # 第二列是总的 MSD# 绘制 MSD 曲线plt.figure(figsize=(10, 6))plt.plot(time, msd, label=&#x27;MSD&#x27;, color=&#x27;blue&#x27;, linewidth=2)plt.xlabel(&#x27;Time (fs)&#x27;, fontsize=14)plt.ylabel(&#x27;Mean Square Displacement (Å²)&#x27;, fontsize=14)plt.title(&#x27;MSD vs Time&#x27;, fontsize=16)plt.legend(fontsize=12)plt.grid(True)plt.show()\r\n\r\nSystem preparation\r\nMinimization/Relaxation\r\nEquilibration\r\nProduction\r\n\r\n\r\n系统准备可以说是模拟中最关键的阶段，但在许多情况下却得到了最少的关注；如果你的系统准备有缺陷，这些缺陷可能会证明是致命的。最坏的可能结果是，准备好的系统并非你想要的（例如，它包含不正确的分子或质子化状态），但在化学上却是有效的，并且可以被你的力场很好地描述，因此没有错误地通过了剩余的步骤——实际上，这是系统准备问题中常见的后果。如果系统在随后的平衡步骤中行为良好，不应假设系统已正确准备；这里应该格外小心。\r\n\r\n生产流程如下：\r\n\r\n\r\n生产流程图\r\n\r\n为什么需要有恒温器？\r\n分子动力学模拟用于观察和获取某个研究系统的有趣性质。在很多情况下，为了模拟实验室条件下进行的实验，希望从正则（恒温）配分函数中进行抽样。一般来说，如果系统在模拟过程中必须保持温度不变，将采用某种温控算法。\r\n分子动力学模拟的温度通常使用根据等分配定理定义的动能来测量： $$\r\n\\frac{3}{2}Nk_BT = &lt;\\sum_{i=1}^{N}\\frac{1}{2}m_iv_i^2&gt;\r\n$$\r\n带角标的括号表示温度是一个时间平均值。如果我们使用等分配定理来计算分子动力学模拟单时间点的温度快照，而不是时间平均，这个量称为瞬时温度。瞬时温度不一定等于目标温度；实际上，在正则配分函数中，瞬时温度应该围绕目标温度波动。\r\n温控算法通过改变本质上微观可逆的牛顿运动方程来工作。因此，如果希望计算扩散系数等动力学性质，则最好不使用温控器；相反，在系统达到所需温度后，应关闭温控器。然而，虽然所有温控器都会给出非物理动力学，但有些研究发现它们对特定动力学性质的计算影响很小，并且它们在生产模拟中也常被使用。\r\n一些恒温器\r\n\r\nGaussian\r\n\r\n使用了高斯最小约束原理来确定维持瞬时温度所需的最小扰动力。这种温控器不采样正则分布；相反，它采样的是等速（恒动能）配分函数。但是，等速配分函数采样与正则配分函数相同的配置相空间，因此，使用任一配分函数都可以等效地获得位置依赖（结构）平衡性质。然而，速度依赖（动力学）性质在两个配分函数之间不会等效。这种温控器仅适用于某些高级应用。\r\n\r\nSimple Velocity Rescaling\r\n\r\n实施起来最容易的温控器之一,也是最不物理的温控器之一。这种温控器依赖于重新标粒子的动量，使模拟的瞬时温度恰好与目标温度相匹配，不建议使用\r\n\r\nBerendsen\r\n\r\n既不采样正则分布也不采样等速分布，它的使用可能导致模拟伪象，不建议使用\r\n\r\nBussi-Donadio-Parrinello (Canonical Sampling Velocity Rescaling)\r\n\r\n正确采样了正则配分函数，也被称为“V-rescale”热浴方法，非常常用的热浴方法\r\n\r\nAndersen\r\n\r\n只能用于采样结构性质，因为动力学性质可能会受到突然碰撞的很大影响，不建议使用\r\n\r\nLangevin\r\n\r\n不了解\r\n\r\nNoés-Hoover\r\n\r\n不了解\r\n\r\n\r\n\r\n\r\n\r\n\r\n\r\n\r\n\r\n\r\n\r\n\r\n压浴类型\r\n原理\r\n特点\r\n适用性\r\n局限性\r\n\r\n\r\n\r\n\r\nSimple volume rescaling\r\n每次修改系统体积使瞬时压强等于目标压强\r\n操作简单直接\r\n仅可用于模拟初始阶段，帮助系统初步接近目标压强\r\n不能采样正确配分函数，不能用于生产采样；不平滑地接近目标压强，可能导致系统出现不真实的物理问题\r\n\r\n\r\nBerendsen\r\n将系统耦合到弱相互作用的压力浴，通过缩放因子定期缩放体积\r\n比简单体积缩放更真实地接近目标压强，产生更真实的压力波动\r\n对于平衡开始阶段可能有用\r\n采样配分函数定义不佳，不能保证是 NPT 或 NPH，不应用于生产采样\r\n\r\n\r\nAndersen\r\n在运动方程中增加额外自由度，将系统耦合到假想压力浴（类似各向同性活塞作用）\r\n采样正确的配分函数\r\n适用于对配分函数采样要求高的场景\r\n是各向同性的，不能对系统的一部分施加各向异性压力\r\n\r\n\r\nParrinello - Rahman\r\n对 Andersen 压缩计的扩展，支持模拟盒大小和形状的各向异性缩放\r\n具有 Andersen\r\n压缩计的性质，增加了各向异性支持，适用于固体模拟（可模拟晶体格子中相变形状变化）等\r\n在固体模拟等领域应用优势明显\r\n并非所有模拟器都已实现该压缩计，限制了用户选择\r\n\r\n\r\nMartyna - Tuckerman - Tobias - Klein (MTTK)\r\n引入替代运动方程，正确采样较小系统配分函数\r\n通常被视为对 Parrinello - Rahman 的改进，适用于小系统\r\n为小系统的模拟提供了更准确的配分函数采样方法\r\n未提及明显独特的局限性（与其他扩展自由度压缩计类似，受模拟器实现情况等限制）\r\n\r\n\r\n\r\n","dateCreated":"2025-05-01T16:51:00+08:00","dateModified":"2025-08-31T11:24:03+08:00","datePublished":"2025-05-01T16:51:00+08:00","description":"","headline":"离子电导率的计算","image":[],"mainEntityOfPage":{"@type":"WebPage","@id":"https://hydrogen1222.xyz/2025/05/01/%E7%A7%91%E7%A0%94/VASP/Starry%20Sky/%E7%A6%BB%E5%AD%90%E7%94%B5%E5%AF%BC%E7%8E%87%E7%9A%84%E8%AE%A1%E7%AE%97/"},"publisher":{"@type":"Organization","name":"John Doe","sameAs":["https://github.com/hydrogen1222","https://user.qzone.qq.com/2170147489/infocenter","https://space.bilibili.com/441987358?spm_id_from=333.1007.0.0","mailto:tanch1222@mails.jlu.edu.cn"]},"url":"https://hydrogen1222.xyz/2025/05/01/%E7%A7%91%E7%A0%94/VASP/Starry%20Sky/%E7%A6%BB%E5%AD%90%E7%94%B5%E5%AF%BC%E7%8E%87%E7%9A%84%E8%AE%A1%E7%AE%97/","keywords":"化学, 科研"}</script>
+    <script type="application/ld+json">{"@context":"http://schema.org","@type":"BlogPosting","author":{"@type":"Person","name":"John Doe","sameAs":["https://github.com/hydrogen1222","https://user.qzone.qq.com/2170147489/infocenter"],"image":"https://www.gravatar.com/avatar/59bc94fdda371da7bfe585b96a3463b0"},"articleBody":"使用VASP计算离子电导率，似乎比较麻烦\r\n\r\n一个能量较低、结构合理的起始三维构型是进行MD模拟的第一步\r\n\r\n分子动力学模拟的基本步骤\r\n\r\n确定起始构型\r\n选用适当的力场和模拟软件\r\n构建体系和能量最小化\r\n平衡过程\r\n数据采集过程\r\n结果分析\r\n\r\n根据系统的传播方式，分子模拟方法可以分为分子动力学MD和蒙特卡洛MC两类方法\r\n\r\n分子动力学通过数值积分求解牛顿运动方程，生成系统轨迹，可研究结构、动力学和热力学性质。\r\n蒙特卡洛方法基于概率规则生成新构型，侧重采样平衡态结构和热力学性质，不涉及时间动力学。\r\n\r\n力场是一组描述分子中原子间相互作用的势能函数和参数的集合，用于计算系统的总能量和原子受力，从而驱动分子动力学（MD）模拟或蒙特卡罗（MC）采样：\r\n\r\n将量子力学描述的分子相互作用简化为经典力学模型，降低计算成本。\r\n通过参数化的势能函数，预测分子的结构、动力学和热力学性质（如键长、自由能、扩散系数等）。\r\n\r\n固定电荷力场：固定原子电荷，不考虑环境引起的电子云变形（极化），计算效率高\r\n\r\n生物分子力场\r\n\r\nAMBER\r\n\r\n广泛用于蛋白质、核酸模拟，参数优化针对溶液环境，如\r\nff14SB、ff19SB\r\n\r\nCHARMM\r\n\r\n广泛用于蛋白质、核酸模拟，参数优化针对溶液环境，如\r\nff14SB、ff19SB\r\n\r\nGROMOS\r\n\r\n用于膜蛋白和聚合物，参数简洁，计算速度快\r\n\r\n\r\n小分子力场\r\n\r\nGAFF\r\n\r\n可参数化多种有机小分子，支持自定义分子\r\n\r\nUFF\r\n\r\n覆盖周期表多数元素，适合无机材料和有机分子\r\n\r\n\r\n\r\n极化力场：显示考虑原子极化率（电子云随电场变化），通过附加自由度（如\r\nDrude 振子、诱导偶极）模拟极化效应，精度更高但计算成本显著增加\r\n\r\nAMOEBA：基于原子极化率和多极矩，适用于极性体系（如水、蛋白质\r\n- 配体相互作用）。\r\nDrude 模型：每个原子附加虚拟振子模拟极化，如\r\nCHARMM-Drude 力场。\r\nPolarizable AMBER (PAMBS)：在 AMBER\r\n框架中引入极化参数。\r\n\r\n粗粒化力场（Coarse-Grained Force Fields）：将多个原子简化为单个\r\n“珠子”（如蛋白质的每个残基、脂质的疏水尾），降低计算复杂度，适用于大尺度系统（如细胞膜、聚合物）\r\n\r\nMartini：广泛用于膜蛋白、病毒颗粒和软物质，4:1\r\n粗粒化（4 个原子→1 个珠子）。\r\nMARTINI 3.0：支持多尺度模拟，兼容全原子模型。\r\n\r\n使用pymatgen提取数据\r\n12345678910111213141516171819202122232425262728293031323334&#x27;&#x27;&#x27;分析AIMD结果，计算MSD 和 conductivity&#x27;&#x27;&#x27;import osfrom pymatgen.core.trajectory import Trajectoryfrom pymatgen.io.vasp.outputs import Xdatcarfrom pymatgen.core import Structurefrom pymatgen.analysis.diffusion.analyzer import DiffusionAnalyzerimport numpy as npimport pickleimport matplotlib.pyplot as plt# 这一步是读取 XDATCAR，得到一系列结构信息traj = Trajectory.from_file(&#x27;XDATCAR&#x27;)# 这一步是实例化 DiffusionAnalyzer 的类# 并用 from_structures 方法初始化这个类； 900 是温度，2 是POTIM 的值，1是间隔步数# 间隔步数（step_skip）不太容易理解，但是根据官方教程:# dt = timesteps * self.time_step * self.step_skipdiff = DiffusionAnalyzer.from_structures(traj,&#x27;Li&#x27;,900,2,1)# 可以用内置的 plot_msd 方法画出 MSD 图像# 有些终端不能显示图像，这时候可以调用 export_msdt() 方法，得到数据后再自己作图ax = diff.export_msdt(&quot;msd.dat&quot;)#plt.show()# 接下来直接得到 离子迁移率， 单位是 mS/cmC = diff.conductivitywith open(&#x27;result.dat&#x27;,&#x27;w&#x27;) as f:    f.write(&#x27;# AIMD result for Li-ion\\n&#x27;)    f.write(&#x27;temp\\tconductivity\\n&#x27;)    f.write(&#x27;%d\\t%.2f\\n&#x27; %(900,C))\r\n画图\r\n12345678910111213141516171819import numpy as npimport matplotlib.pyplot as plt# 读取数据data = np.loadtxt(&#x27;msd.txt&#x27;, comments=&#x27;#&#x27;)  # 假设你的文件名为 msd.txt# 提取时间步长和 MSD 数据time = data[:, 0]  # 第一列是时间步长msd = data[:, 1]   # 第二列是总的 MSD# 绘制 MSD 曲线plt.figure(figsize=(10, 6))plt.plot(time, msd, label=&#x27;MSD&#x27;, color=&#x27;blue&#x27;, linewidth=2)plt.xlabel(&#x27;Time (fs)&#x27;, fontsize=14)plt.ylabel(&#x27;Mean Square Displacement (Å²)&#x27;, fontsize=14)plt.title(&#x27;MSD vs Time&#x27;, fontsize=16)plt.legend(fontsize=12)plt.grid(True)plt.show()\r\n\r\nSystem preparation\r\nMinimization/Relaxation\r\nEquilibration\r\nProduction\r\n\r\n\r\n系统准备可以说是模拟中最关键的阶段，但在许多情况下却得到了最少的关注；如果你的系统准备有缺陷，这些缺陷可能会证明是致命的。最坏的可能结果是，准备好的系统并非你想要的（例如，它包含不正确的分子或质子化状态），但在化学上却是有效的，并且可以被你的力场很好地描述，因此没有错误地通过了剩余的步骤——实际上，这是系统准备问题中常见的后果。如果系统在随后的平衡步骤中行为良好，不应假设系统已正确准备；这里应该格外小心。\r\n\r\n生产流程如下：\r\n\r\n\r\n生产流程图\r\n\r\n为什么需要有恒温器？\r\n分子动力学模拟用于观察和获取某个研究系统的有趣性质。在很多情况下，为了模拟实验室条件下进行的实验，希望从正则（恒温）配分函数中进行抽样。一般来说，如果系统在模拟过程中必须保持温度不变，将采用某种温控算法。\r\n分子动力学模拟的温度通常使用根据等分配定理定义的动能来测量： $$\r\n\\frac{3}{2}Nk_BT = &lt;\\sum_{i=1}^{N}\\frac{1}{2}m_iv_i^2&gt;\r\n$$\r\n带角标的括号表示温度是一个时间平均值。如果我们使用等分配定理来计算分子动力学模拟单时间点的温度快照，而不是时间平均，这个量称为瞬时温度。瞬时温度不一定等于目标温度；实际上，在正则配分函数中，瞬时温度应该围绕目标温度波动。\r\n温控算法通过改变本质上微观可逆的牛顿运动方程来工作。因此，如果希望计算扩散系数等动力学性质，则最好不使用温控器；相反，在系统达到所需温度后，应关闭温控器。然而，虽然所有温控器都会给出非物理动力学，但有些研究发现它们对特定动力学性质的计算影响很小，并且它们在生产模拟中也常被使用。\r\n一些恒温器\r\n\r\nGaussian\r\n\r\n使用了高斯最小约束原理来确定维持瞬时温度所需的最小扰动力。这种温控器不采样正则分布；相反，它采样的是等速（恒动能）配分函数。但是，等速配分函数采样与正则配分函数相同的配置相空间，因此，使用任一配分函数都可以等效地获得位置依赖（结构）平衡性质。然而，速度依赖（动力学）性质在两个配分函数之间不会等效。这种温控器仅适用于某些高级应用。\r\n\r\nSimple Velocity Rescaling\r\n\r\n实施起来最容易的温控器之一,也是最不物理的温控器之一。这种温控器依赖于重新标粒子的动量，使模拟的瞬时温度恰好与目标温度相匹配，不建议使用\r\n\r\nBerendsen\r\n\r\n既不采样正则分布也不采样等速分布，它的使用可能导致模拟伪象，不建议使用\r\n\r\nBussi-Donadio-Parrinello (Canonical Sampling Velocity Rescaling)\r\n\r\n正确采样了正则配分函数，也被称为“V-rescale”热浴方法，非常常用的热浴方法\r\n\r\nAndersen\r\n\r\n只能用于采样结构性质，因为动力学性质可能会受到突然碰撞的很大影响，不建议使用\r\n\r\nLangevin\r\n\r\n不了解\r\n\r\nNoés-Hoover\r\n\r\n不了解\r\n\r\n\r\n\r\n\r\n\r\n\r\n\r\n\r\n\r\n\r\n\r\n\r\n压浴类型\r\n原理\r\n特点\r\n适用性\r\n局限性\r\n\r\n\r\n\r\n\r\nSimple volume rescaling\r\n每次修改系统体积使瞬时压强等于目标压强\r\n操作简单直接\r\n仅可用于模拟初始阶段，帮助系统初步接近目标压强\r\n不能采样正确配分函数，不能用于生产采样；不平滑地接近目标压强，可能导致系统出现不真实的物理问题\r\n\r\n\r\nBerendsen\r\n将系统耦合到弱相互作用的压力浴，通过缩放因子定期缩放体积\r\n比简单体积缩放更真实地接近目标压强，产生更真实的压力波动\r\n对于平衡开始阶段可能有用\r\n采样配分函数定义不佳，不能保证是 NPT 或 NPH，不应用于生产采样\r\n\r\n\r\nAndersen\r\n在运动方程中增加额外自由度，将系统耦合到假想压力浴（类似各向同性活塞作用）\r\n采样正确的配分函数\r\n适用于对配分函数采样要求高的场景\r\n是各向同性的，不能对系统的一部分施加各向异性压力\r\n\r\n\r\nParrinello - Rahman\r\n对 Andersen 压缩计的扩展，支持模拟盒大小和形状的各向异性缩放\r\n具有 Andersen\r\n压缩计的性质，增加了各向异性支持，适用于固体模拟（可模拟晶体格子中相变形状变化）等\r\n在固体模拟等领域应用优势明显\r\n并非所有模拟器都已实现该压缩计，限制了用户选择\r\n\r\n\r\nMartyna - Tuckerman - Tobias - Klein (MTTK)\r\n引入替代运动方程，正确采样较小系统配分函数\r\n通常被视为对 Parrinello - Rahman 的改进，适用于小系统\r\n为小系统的模拟提供了更准确的配分函数采样方法\r\n未提及明显独特的局限性（与其他扩展自由度压缩计类似，受模拟器实现情况等限制）\r\n\r\n\r\n\r\n","dateCreated":"2025-05-01T16:51:00+08:00","dateModified":"2025-08-31T11:24:03+08:00","datePublished":"2025-05-01T16:51:00+08:00","description":"","headline":"离子电导率的计算","image":[],"mainEntityOfPage":{"@type":"WebPage","@id":"https://hydrogen1222.xyz/2025/05/01/%E7%A7%91%E7%A0%94/VASP/Starry%20Sky/%E7%A6%BB%E5%AD%90%E7%94%B5%E5%AF%BC%E7%8E%87%E7%9A%84%E8%AE%A1%E7%AE%97/"},"publisher":{"@type":"Organization","name":"John Doe","sameAs":["https://github.com/hydrogen1222","https://user.qzone.qq.com/2170147489/infocenter"],"image":"https://www.gravatar.com/avatar/59bc94fdda371da7bfe585b96a3463b0","logo":{"@type":"ImageObject","url":"https://www.gravatar.com/avatar/59bc94fdda371da7bfe585b96a3463b0"}},"url":"https://hydrogen1222.xyz/2025/05/01/%E7%A7%91%E7%A0%94/VASP/Starry%20Sky/%E7%A6%BB%E5%AD%90%E7%94%B5%E5%AF%BC%E7%8E%87%E7%9A%84%E8%AE%A1%E7%AE%97/","keywords":"化学, 科研"}</script>
     <meta name="description" content="使用VASP计算离子电导率，似乎比较麻烦  一个能量较低、结构合理的起始三维构型是进行MD模拟的第一步  分子动力学模拟的基本步骤  确定起始构型 选用适当的力场和模拟软件 构建体系和能量最小化 平衡过程 数据采集过程 结果分析  根据系统的传播方式，分子模拟方法可以分为分子动力学MD和蒙特卡洛MC两类方法  分子动力学通过数值积分求解牛顿运动方程，生成系统轨迹，可研">
 <meta property="og:type" content="blog">
 <meta property="og:title" content="离子电导率的计算">
@@ -227,56 +227,6 @@
                         >
                         <i class="sidebar-button-icon fab fa-qq" aria-hidden="true"></i>
                         <span class="sidebar-button-desc">QQ</span>
-                    </a>
-            </li>
-            
-                <li class="sidebar-button">
-                    
-                        <a
-                            class="sidebar-button-link "
-                            href="https://space.bilibili.com/441987358?spm_id_from=333.1007.0.0"
-                            
-                                target="_blank"
-                            
-                            rel="noopener"
-                            title="bilibili"
-                        >
-                        <i class="sidebar-button-icon fab fa-bilibili" aria-hidden="true"></i>
-                        <span class="sidebar-button-desc">bilibili</span>
-                    </a>
-            </li>
-            
-                <li class="sidebar-button">
-                    
-                        <a
-                            class="sidebar-button-link "
-                            href="mailto:tanch1222@mails.jlu.edu.cn"
-                            
-                                target="_blank"
-                            
-                            rel="noopener"
-                            title="Mail"
-                        >
-                        <i class="sidebar-button-icon fa fa-envelope" aria-hidden="true"></i>
-                        <span class="sidebar-button-desc">Mail</span>
-                    </a>
-            </li>
-            
-        </ul>
-        
-            <ul class="sidebar-buttons">
-            
-                <li class="sidebar-button">
-                    
-                        <a
-                            class="sidebar-button-link "
-                            href="/atom.xml"
-                            
-                            rel="noopener"
-                            title="RSS"
-                        >
-                        <i class="sidebar-button-icon fa fa-rss" aria-hidden="true"></i>
-                        <span class="sidebar-button-desc">RSS</span>
                     </a>
             </li>
             
@@ -817,6 +767,12 @@ document.addEventListener("DOMContentLoaded", function() {
 
             </div>
         
+        
+            <div id="about-card-location">
+                <i class="fa fa-map-marker-alt"></i>
+                <br/>
+                Changchun, China
+            </div>
         
     </div>
 </div>

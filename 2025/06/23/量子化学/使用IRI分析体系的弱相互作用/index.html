@@ -11,7 +11,7 @@
     
     
     
-    <script type="application/ld+json">{"@context":"http://schema.org","@type":"BlogPosting","author":{"@type":"Person","name":"John Doe","sameAs":["https://github.com/hydrogen1222","https://user.qzone.qq.com/2170147489/infocenter","https://space.bilibili.com/441987358?spm_id_from=333.1007.0.0","mailto:tanch1222@mails.jlu.edu.cn"]},"articleBody":"IRI等值面图\r\n启动Multiwfn，载入输入文件，我使用的输入文件是.fchk文件，别的如.wfn文件等也可以\r\n使用功能20 Visual study of weak interaction，进行弱相互作用分析，选择4 IRI: Interaction region indicator analysis (Chemistry-Methods, 1, 231)进行IRI分析，选择精度，这里我选的是高精度3 High quality grid,   covering whole system, about 1728000 points in total（精度是根据格点数目确定的，对于巨大体系可能高精度也不够用需要手动指定格点数目）\r\n\r\n\r\n已完成IRI分析\r\n\r\n至此，格点计算已经完成，然后我们导出数据3 Output cube files to func1.cub and func2.cub in current folder，借助VMD\r\n分子可视化程序画出更好看的图，将载入文件所在文件夹下导出的func1.cub和func2.cub(这两个文件分别记录的是sign(λ2)ρ和IRI格点数据)复制到VMD程序的根目录并在根目录下新建一个脚本文件，名为IRIfill.vmd，内容为：\r\n12345678910111213141516171819mol new func1.cubmol addfile func2.cubmol delrep 0 topmol representation CPK 1.0 0.3 18.0 16.0mol addrep topmol representation Isosurface 1.0 1 0 0 1 1mol color Volume 0mol addrep topmol scaleminmax top 1 -0.04 0.02mol modstyle 0 top CPK 0.700000 0.300000 18.000000 16.000000color scale midpoint 0.666color scale method BGRcolor Display Background whiteaxes location Offdisplay depthcue offdisplay rendermode GLSLlight 3 oncolor Element N icebluemol modcolor 0 top Element\r\n然后启动VMD，在文本窗口中输入source IRIfill.vmd，\r\n","dateCreated":"2025-06-23T09:20:02+08:00","dateModified":"2025-08-31T10:48:02+08:00","datePublished":"2025-06-23T09:20:02+08:00","description":"","headline":"使用IRI方法进行弱相互作用分析","image":[],"mainEntityOfPage":{"@type":"WebPage","@id":"https://hydrogen1222.xyz/2025/06/23/%E9%87%8F%E5%AD%90%E5%8C%96%E5%AD%A6/%E4%BD%BF%E7%94%A8IRI%E5%88%86%E6%9E%90%E4%BD%93%E7%B3%BB%E7%9A%84%E5%BC%B1%E7%9B%B8%E4%BA%92%E4%BD%9C%E7%94%A8/"},"publisher":{"@type":"Organization","name":"John Doe","sameAs":["https://github.com/hydrogen1222","https://user.qzone.qq.com/2170147489/infocenter","https://space.bilibili.com/441987358?spm_id_from=333.1007.0.0","mailto:tanch1222@mails.jlu.edu.cn"]},"url":"https://hydrogen1222.xyz/2025/06/23/%E9%87%8F%E5%AD%90%E5%8C%96%E5%AD%A6/%E4%BD%BF%E7%94%A8IRI%E5%88%86%E6%9E%90%E4%BD%93%E7%B3%BB%E7%9A%84%E5%BC%B1%E7%9B%B8%E4%BA%92%E4%BD%9C%E7%94%A8/","keywords":"化学, 科研"}</script>
+    <script type="application/ld+json">{"@context":"http://schema.org","@type":"BlogPosting","author":{"@type":"Person","name":"John Doe","sameAs":["https://github.com/hydrogen1222","https://user.qzone.qq.com/2170147489/infocenter"],"image":"https://www.gravatar.com/avatar/59bc94fdda371da7bfe585b96a3463b0"},"articleBody":"IRI等值面图\r\n启动Multiwfn，载入输入文件，我使用的输入文件是.fchk文件，别的如.wfn文件等也可以\r\n使用功能20 Visual study of weak interaction，进行弱相互作用分析，选择4 IRI: Interaction region indicator analysis (Chemistry-Methods, 1, 231)进行IRI分析，选择精度，这里我选的是高精度3 High quality grid,   covering whole system, about 1728000 points in total（精度是根据格点数目确定的，对于巨大体系可能高精度也不够用需要手动指定格点数目）\r\n\r\n\r\n已完成IRI分析\r\n\r\n至此，格点计算已经完成，然后我们导出数据3 Output cube files to func1.cub and func2.cub in current folder，借助VMD\r\n分子可视化程序画出更好看的图，将载入文件所在文件夹下导出的func1.cub和func2.cub(这两个文件分别记录的是sign(λ2)ρ和IRI格点数据)复制到VMD程序的根目录并在根目录下新建一个脚本文件，名为IRIfill.vmd，内容为：\r\n12345678910111213141516171819mol new func1.cubmol addfile func2.cubmol delrep 0 topmol representation CPK 1.0 0.3 18.0 16.0mol addrep topmol representation Isosurface 1.0 1 0 0 1 1mol color Volume 0mol addrep topmol scaleminmax top 1 -0.04 0.02mol modstyle 0 top CPK 0.700000 0.300000 18.000000 16.000000color scale midpoint 0.666color scale method BGRcolor Display Background whiteaxes location Offdisplay depthcue offdisplay rendermode GLSLlight 3 oncolor Element N icebluemol modcolor 0 top Element\r\n然后启动VMD，在文本窗口中输入source IRIfill.vmd，\r\n","dateCreated":"2025-06-23T09:20:02+08:00","dateModified":"2025-08-31T10:48:02+08:00","datePublished":"2025-06-23T09:20:02+08:00","description":"","headline":"使用IRI方法进行弱相互作用分析","image":[],"mainEntityOfPage":{"@type":"WebPage","@id":"https://hydrogen1222.xyz/2025/06/23/%E9%87%8F%E5%AD%90%E5%8C%96%E5%AD%A6/%E4%BD%BF%E7%94%A8IRI%E5%88%86%E6%9E%90%E4%BD%93%E7%B3%BB%E7%9A%84%E5%BC%B1%E7%9B%B8%E4%BA%92%E4%BD%9C%E7%94%A8/"},"publisher":{"@type":"Organization","name":"John Doe","sameAs":["https://github.com/hydrogen1222","https://user.qzone.qq.com/2170147489/infocenter"],"image":"https://www.gravatar.com/avatar/59bc94fdda371da7bfe585b96a3463b0","logo":{"@type":"ImageObject","url":"https://www.gravatar.com/avatar/59bc94fdda371da7bfe585b96a3463b0"}},"url":"https://hydrogen1222.xyz/2025/06/23/%E9%87%8F%E5%AD%90%E5%8C%96%E5%AD%A6/%E4%BD%BF%E7%94%A8IRI%E5%88%86%E6%9E%90%E4%BD%93%E7%B3%BB%E7%9A%84%E5%BC%B1%E7%9B%B8%E4%BA%92%E4%BD%9C%E7%94%A8/","keywords":"化学, 科研"}</script>
     <meta name="description" content="IRI等值面图 启动Multiwfn，载入输入文件，我使用的输入文件是.fchk文件，别的如.wfn文件等也可以 使用功能20 Visual study of weak interaction，进行弱相互作用分析，选择4 IRI: Interaction region indicator analysis (Chemistry-Methods, 1, 231)进行IRI分析，选择精度，这里我选">
 <meta property="og:type" content="blog">
 <meta property="og:title" content="使用IRI方法进行弱相互作用分析">
@@ -227,56 +227,6 @@
                         >
                         <i class="sidebar-button-icon fab fa-qq" aria-hidden="true"></i>
                         <span class="sidebar-button-desc">QQ</span>
-                    </a>
-            </li>
-            
-                <li class="sidebar-button">
-                    
-                        <a
-                            class="sidebar-button-link "
-                            href="https://space.bilibili.com/441987358?spm_id_from=333.1007.0.0"
-                            
-                                target="_blank"
-                            
-                            rel="noopener"
-                            title="bilibili"
-                        >
-                        <i class="sidebar-button-icon fab fa-bilibili" aria-hidden="true"></i>
-                        <span class="sidebar-button-desc">bilibili</span>
-                    </a>
-            </li>
-            
-                <li class="sidebar-button">
-                    
-                        <a
-                            class="sidebar-button-link "
-                            href="mailto:tanch1222@mails.jlu.edu.cn"
-                            
-                                target="_blank"
-                            
-                            rel="noopener"
-                            title="Mail"
-                        >
-                        <i class="sidebar-button-icon fa fa-envelope" aria-hidden="true"></i>
-                        <span class="sidebar-button-desc">Mail</span>
-                    </a>
-            </li>
-            
-        </ul>
-        
-            <ul class="sidebar-buttons">
-            
-                <li class="sidebar-button">
-                    
-                        <a
-                            class="sidebar-button-link "
-                            href="/atom.xml"
-                            
-                            rel="noopener"
-                            title="RSS"
-                        >
-                        <i class="sidebar-button-icon fa fa-rss" aria-hidden="true"></i>
-                        <span class="sidebar-button-desc">RSS</span>
                     </a>
             </li>
             
@@ -643,6 +593,12 @@ document.addEventListener("DOMContentLoaded", function() {
 
             </div>
         
+        
+            <div id="about-card-location">
+                <i class="fa fa-map-marker-alt"></i>
+                <br/>
+                Changchun, China
+            </div>
         
     </div>
 </div>

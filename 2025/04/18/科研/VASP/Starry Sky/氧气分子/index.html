@@ -11,7 +11,7 @@
     
     
     
-    <script type="application/ld+json">{"@context":"http://schema.org","@type":"BlogPosting","author":{"@type":"Person","name":"John Doe","sameAs":["https://github.com/hydrogen1222","https://user.qzone.qq.com/2170147489/infocenter","https://space.bilibili.com/441987358?spm_id_from=333.1007.0.0","mailto:tanch1222@mails.jlu.edu.cn"]},"articleBody":"单点能计算又叫做静态计算，计算时不会优化结构\r\nINCAR\r\n12345678SYSTEM = OISMEAR = 0 #绝缘体系ISMEAR = 0SIGMA = 0.01ISPIN = 2 #氧气是顺磁性分子，ISPIN = 2开启自旋MAGMON = 2*2 #设置磁矩#IBRION = 2 确定计算过程中晶体结构如何变化的参数，不设置使默认IBRION = -1，IBRION =2为共轭梯度算法#NSW = 10  离子步10步\r\nPOSCAR\r\n12345678910O1.07.5 0.0 0.00.0 8.0 0.00.0 0.0 8.9 #三斜的格子打破对称性，symmetry broken solution！！！O2Cartesian0.0 0.0 0.00.0 0.0 1.2074\r\nKPOINTS\r\n12345K-POINTS 0Gamma 1 1 1 0 0 0\r\n运行mpirun -n 8 vasp，正常结束，OUTCAR的部分信息如下，显然，单点计算的结果并不可靠\r\nα电子部分\r\n123456789101112131415161718192021spin component 1k-point     1 :       0.0000    0.0000    0.0000 band No.  band energies     occupation     1     -32.9044      1.00000\t\t\t#1σ轨道     2     -20.2474      1.00000\t\t\t#2σ轨道     3     -13.3174      1.00000\t\t\t#3σ轨道,能量应比1π和2π轨道更低，不合理     4     -13.3171      1.00000\t\t\t#1π轨道     5     -13.2940      1.00000\t\t\t#2π轨道，能量应与1π轨道相同，不合理     6      -6.5560      1.00000\t\t\t#3π轨道     7      -6.5524      1.00000\t\t\t#4π轨道     8      -0.3909      0.00000     9       1.1220      0.00000    10       1.5493      0.00000    11       1.7604      0.00000    12       2.0536      0.00000    13       2.0592      0.00000    14       2.4672      0.00000    15       3.1984      0.00000    16       3.6244      0.00000Fermi energy:        -6.4848556277\r\nβ电子，正常\r\n1234567891011121314151617181920spin component 2k-point     1 :       0.0000    0.0000    0.0000 band No.  band energies     occupation     1     -31.6977      1.00000     2     -18.4541      1.00000     3     -12.3485      1.00000     4     -11.4763      1.00000     5     -11.4760      1.00000     6      -4.2772      0.00000     7      -4.2742      0.00000     8      -0.2440      0.00000     9       1.4049      0.00000    10       1.6215      0.00000    11       1.9473      0.00000    12       2.1710      0.00000    13       2.2499      0.00000    14       2.5860      0.00000    15       3.5816      0.00000    16       3.8831      0.00000\r\n\r\n\r\nMolecule orbital of oxygen\r\n\r\n对氧气进行结构优化，更改INCAR\r\n12345678SYSTEM = OISMEAR = 0 #绝缘体系ISMEAR = 0SIGMA = 0.01ISPIN = 2 #氧气是顺磁性分子，ISPIN = 2开启自旋MAGMON = 2*2 #设置磁矩IBRION = 2 #确定计算过程中晶体结构如何变化的参数，不设置使默认IBRION = -1，IBRION =2为共轭梯度算法NSW = 10  #离子步10步\r\n计算后发现α电子部分已经修正\r\n123456789101112131415161718192021spin component 1k-point     1 :       0.0000    0.0000    0.0000 band No.  band energies     occupation     1     -32.2878      1.00000\t\t\t#1σ轨道     2     -20.4859      1.00000\t\t\t#2σ轨道     3     -13.2238      1.00000\t\t\t#3σ轨道，能量合理     4     -13.0591      1.00000     5     -13.0588      1.00000     6      -6.7814      1.00000     7      -6.7778      1.00000     8      -0.3857      0.00000     9       1.0213      0.00000    10       1.6177      0.00000    11       1.7818      0.00000    12       2.0634      0.00000    13       2.0746      0.00000    14       2.4643      0.00000    15       2.8035      0.00000    16       3.6409      0.00000Fermi energy:        -6.7122607632\r\n用VESTA打开优化好的结构(CONTCAR)可以查看键长\r\n\r\n\r\n优化完的氧气分子的键长\r\n\r\n","dateCreated":"2025-04-18T16:40:00+08:00","dateModified":"2025-08-31T11:25:36+08:00","datePublished":"2025-04-18T16:40:00+08:00","description":"","headline":"氧气分子单点能的计算及结构优化","image":[],"mainEntityOfPage":{"@type":"WebPage","@id":"https://hydrogen1222.xyz/2025/04/18/%E7%A7%91%E7%A0%94/VASP/Starry%20Sky/%E6%B0%A7%E6%B0%94%E5%88%86%E5%AD%90/"},"publisher":{"@type":"Organization","name":"John Doe","sameAs":["https://github.com/hydrogen1222","https://user.qzone.qq.com/2170147489/infocenter","https://space.bilibili.com/441987358?spm_id_from=333.1007.0.0","mailto:tanch1222@mails.jlu.edu.cn"]},"url":"https://hydrogen1222.xyz/2025/04/18/%E7%A7%91%E7%A0%94/VASP/Starry%20Sky/%E6%B0%A7%E6%B0%94%E5%88%86%E5%AD%90/","keywords":"化学, 科研"}</script>
+    <script type="application/ld+json">{"@context":"http://schema.org","@type":"BlogPosting","author":{"@type":"Person","name":"John Doe","sameAs":["https://github.com/hydrogen1222","https://user.qzone.qq.com/2170147489/infocenter"],"image":"https://www.gravatar.com/avatar/59bc94fdda371da7bfe585b96a3463b0"},"articleBody":"单点能计算又叫做静态计算，计算时不会优化结构\r\nINCAR\r\n12345678SYSTEM = OISMEAR = 0 #绝缘体系ISMEAR = 0SIGMA = 0.01ISPIN = 2 #氧气是顺磁性分子，ISPIN = 2开启自旋MAGMON = 2*2 #设置磁矩#IBRION = 2 确定计算过程中晶体结构如何变化的参数，不设置使默认IBRION = -1，IBRION =2为共轭梯度算法#NSW = 10  离子步10步\r\nPOSCAR\r\n12345678910O1.07.5 0.0 0.00.0 8.0 0.00.0 0.0 8.9 #三斜的格子打破对称性，symmetry broken solution！！！O2Cartesian0.0 0.0 0.00.0 0.0 1.2074\r\nKPOINTS\r\n12345K-POINTS 0Gamma 1 1 1 0 0 0\r\n运行mpirun -n 8 vasp，正常结束，OUTCAR的部分信息如下，显然，单点计算的结果并不可靠\r\nα电子部分\r\n123456789101112131415161718192021spin component 1k-point     1 :       0.0000    0.0000    0.0000 band No.  band energies     occupation     1     -32.9044      1.00000\t\t\t#1σ轨道     2     -20.2474      1.00000\t\t\t#2σ轨道     3     -13.3174      1.00000\t\t\t#3σ轨道,能量应比1π和2π轨道更低，不合理     4     -13.3171      1.00000\t\t\t#1π轨道     5     -13.2940      1.00000\t\t\t#2π轨道，能量应与1π轨道相同，不合理     6      -6.5560      1.00000\t\t\t#3π轨道     7      -6.5524      1.00000\t\t\t#4π轨道     8      -0.3909      0.00000     9       1.1220      0.00000    10       1.5493      0.00000    11       1.7604      0.00000    12       2.0536      0.00000    13       2.0592      0.00000    14       2.4672      0.00000    15       3.1984      0.00000    16       3.6244      0.00000Fermi energy:        -6.4848556277\r\nβ电子，正常\r\n1234567891011121314151617181920spin component 2k-point     1 :       0.0000    0.0000    0.0000 band No.  band energies     occupation     1     -31.6977      1.00000     2     -18.4541      1.00000     3     -12.3485      1.00000     4     -11.4763      1.00000     5     -11.4760      1.00000     6      -4.2772      0.00000     7      -4.2742      0.00000     8      -0.2440      0.00000     9       1.4049      0.00000    10       1.6215      0.00000    11       1.9473      0.00000    12       2.1710      0.00000    13       2.2499      0.00000    14       2.5860      0.00000    15       3.5816      0.00000    16       3.8831      0.00000\r\n\r\n\r\nMolecule orbital of oxygen\r\n\r\n对氧气进行结构优化，更改INCAR\r\n12345678SYSTEM = OISMEAR = 0 #绝缘体系ISMEAR = 0SIGMA = 0.01ISPIN = 2 #氧气是顺磁性分子，ISPIN = 2开启自旋MAGMON = 2*2 #设置磁矩IBRION = 2 #确定计算过程中晶体结构如何变化的参数，不设置使默认IBRION = -1，IBRION =2为共轭梯度算法NSW = 10  #离子步10步\r\n计算后发现α电子部分已经修正\r\n123456789101112131415161718192021spin component 1k-point     1 :       0.0000    0.0000    0.0000 band No.  band energies     occupation     1     -32.2878      1.00000\t\t\t#1σ轨道     2     -20.4859      1.00000\t\t\t#2σ轨道     3     -13.2238      1.00000\t\t\t#3σ轨道，能量合理     4     -13.0591      1.00000     5     -13.0588      1.00000     6      -6.7814      1.00000     7      -6.7778      1.00000     8      -0.3857      0.00000     9       1.0213      0.00000    10       1.6177      0.00000    11       1.7818      0.00000    12       2.0634      0.00000    13       2.0746      0.00000    14       2.4643      0.00000    15       2.8035      0.00000    16       3.6409      0.00000Fermi energy:        -6.7122607632\r\n用VESTA打开优化好的结构(CONTCAR)可以查看键长\r\n\r\n\r\n优化完的氧气分子的键长\r\n\r\n","dateCreated":"2025-04-18T16:40:00+08:00","dateModified":"2025-08-31T11:25:36+08:00","datePublished":"2025-04-18T16:40:00+08:00","description":"","headline":"氧气分子单点能的计算及结构优化","image":[],"mainEntityOfPage":{"@type":"WebPage","@id":"https://hydrogen1222.xyz/2025/04/18/%E7%A7%91%E7%A0%94/VASP/Starry%20Sky/%E6%B0%A7%E6%B0%94%E5%88%86%E5%AD%90/"},"publisher":{"@type":"Organization","name":"John Doe","sameAs":["https://github.com/hydrogen1222","https://user.qzone.qq.com/2170147489/infocenter"],"image":"https://www.gravatar.com/avatar/59bc94fdda371da7bfe585b96a3463b0","logo":{"@type":"ImageObject","url":"https://www.gravatar.com/avatar/59bc94fdda371da7bfe585b96a3463b0"}},"url":"https://hydrogen1222.xyz/2025/04/18/%E7%A7%91%E7%A0%94/VASP/Starry%20Sky/%E6%B0%A7%E6%B0%94%E5%88%86%E5%AD%90/","keywords":"化学, 科研"}</script>
     <meta name="description" content="单点能计算又叫做静态计算，计算时不会优化结构 INCAR 12345678SYSTEM &#x3D; OISMEAR &#x3D; 0 #绝缘体系ISMEAR &#x3D; 0SIGMA &#x3D; 0.01ISPIN &#x3D; 2 #氧气是顺磁性分子，ISPIN &#x3D; 2开启自旋MAGMON &#x3D; 2*2 #设置磁矩#IBRION &#x3D; 2 确定计算过程中晶体结构如何变化的参数，不设置使默认IBRION &#x3D; -1，IBRION &#x3D;2为共轭梯">
 <meta property="og:type" content="blog">
 <meta property="og:title" content="氧气分子单点能的计算及结构优化">
@@ -228,56 +228,6 @@
                         >
                         <i class="sidebar-button-icon fab fa-qq" aria-hidden="true"></i>
                         <span class="sidebar-button-desc">QQ</span>
-                    </a>
-            </li>
-            
-                <li class="sidebar-button">
-                    
-                        <a
-                            class="sidebar-button-link "
-                            href="https://space.bilibili.com/441987358?spm_id_from=333.1007.0.0"
-                            
-                                target="_blank"
-                            
-                            rel="noopener"
-                            title="bilibili"
-                        >
-                        <i class="sidebar-button-icon fab fa-bilibili" aria-hidden="true"></i>
-                        <span class="sidebar-button-desc">bilibili</span>
-                    </a>
-            </li>
-            
-                <li class="sidebar-button">
-                    
-                        <a
-                            class="sidebar-button-link "
-                            href="mailto:tanch1222@mails.jlu.edu.cn"
-                            
-                                target="_blank"
-                            
-                            rel="noopener"
-                            title="Mail"
-                        >
-                        <i class="sidebar-button-icon fa fa-envelope" aria-hidden="true"></i>
-                        <span class="sidebar-button-desc">Mail</span>
-                    </a>
-            </li>
-            
-        </ul>
-        
-            <ul class="sidebar-buttons">
-            
-                <li class="sidebar-button">
-                    
-                        <a
-                            class="sidebar-button-link "
-                            href="/atom.xml"
-                            
-                            rel="noopener"
-                            title="RSS"
-                        >
-                        <i class="sidebar-button-icon fa fa-rss" aria-hidden="true"></i>
-                        <span class="sidebar-button-desc">RSS</span>
                     </a>
             </li>
             
@@ -660,6 +610,12 @@ document.addEventListener("DOMContentLoaded", function() {
 
             </div>
         
+        
+            <div id="about-card-location">
+                <i class="fa fa-map-marker-alt"></i>
+                <br/>
+                Changchun, China
+            </div>
         
     </div>
 </div>

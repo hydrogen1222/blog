@@ -11,7 +11,7 @@
     
     
     
-    <script type="application/ld+json">{"@context":"http://schema.org","@type":"BlogPosting","author":{"@type":"Person","name":"John Doe","sameAs":["https://github.com/hydrogen1222","https://user.qzone.qq.com/2170147489/infocenter","https://space.bilibili.com/441987358?spm_id_from=333.1007.0.0","mailto:tanch1222@mails.jlu.edu.cn"]},"articleBody":"PS：很久之前写的一篇体验文章啦~ 测试一下hexo的博客功能~\r\n为什么选择AMD\r\n因为穷（bushi✘），广大的DIY玩家因为各种各样的原因选择了AMD显卡，让我们相聚于此。AMD显卡相较于NVDIA以其高性价比著称，奈何NVDIA早已建立起CUDA的壁垒，AMD显卡在人工智能领域“有劲使不出”或者算力较NV差。几个月前，Ollama支持了部分AMD\r\nRadeon显卡以及AMD Radeon\r\nPro显卡，让广大玩家有了尝鲜的机会，接下来咱们展开说说\r\n什么是Ollama\r\n“畅玩”之前，咱先把简单的原理搞清楚。\r\nOllama gihtub：https://github.com/ollama/ollama\r\nOllama官网：https://ollama.com/（可正常访问）\r\n什么是Ollama？\r\n——Get up and running with large language models.\r\nOllama是一个调用和运行大模型的工具，可以是官方提供的大模型，也可以是非官方提供的途径，非Ollama官方提供的大模型可以前往Huggingface和魔搭社区（可正常访问）下载。\r\n几个月前，Ollama官方终于支持了Radeon、Radeon Pro、以及AMD\r\nInstinct显卡👍👍👍这使得安装有AMD显卡的计算机在使用Ollama推理大模型时能够直接使用GPU而不是CPU推理\r\n\r\n\r\nOllama支持AMD部分显卡\r\n\r\n==目前官方支持的显卡如下==\r\n\r\n\r\n231c4d90dbb166ce141803841024b48f\r\n\r\nLet’s start\r\n首先是下载Ollama客户端\r\n\r\n\r\n图片\r\n\r\n单击下载好的OllamaSetup.exe文件，Ollama会安装在默认位置，无需选择。\r\n需要注意的是，Ollama并没有提供图形化（GUI）的操作界面！！！因此，安装完成后Ollama将在后台运行，模型安装、对话等等交互都在终端中完成\r\n对于A卡用户，这根本难不倒他👍\r\n\r\n\r\n图片\r\n\r\nOllama官方提供了多种模型，如llama3.1，qwen2，并列出了一键式安装方法。\r\n此处以最热门的llama3.1为例\r\n\r\n\r\n图片\r\n\r\n默认提供的是8b模型，大小4.7GB，这对于大多数的Radeon显卡的显存来说都是够用的，8b指的是参数大小，b即billion，此模型有80亿参数。llama3.1也提供了更多选择，若显存更大或者多张显卡交火也可尝试更大的模型。\r\n复制右边的一键运行命令（ollama run llama3.1）\r\n接着打开Windows终端，比如Windows PowerShell\r\n打开开始菜单或者按下Win徽标键，搜索powershell即可找到。\r\n\r\n\r\n图片\r\n\r\n在终端中输入ollama run\r\nllama3.1，相应的8b模型会被下载下来（可正常拉取），速度取决于网速，一段时间下载完成后将自动调用模型，即可与大模型对话。\r\n\r\n\r\n图片\r\n\r\n\r\n\r\n图片\r\n\r\n下载完成后，当看到“&gt;&gt;&gt;\r\n”符号时即可与大模型对话，输入“/bye”退出\r\n笔者使用的是Ollama官方并不支持的AMD\r\n780M核心显卡，因此推理（可理解为对话后文字的返回速度）由CPU完成，速度还行，可以正常接受。\r\n各位读者的计算机上GPU的推理速度一定比CPU快得多得多\r\n后话\r\n除了Ollama官方提供的模型外，Ollama也可以使用从Huggingface或者魔搭社区（可正常访问）下载模型，分为GGUF和PyTorch\r\nor Safetensors两种。\r\n前者的操作如下，而后者通常对硬件设备（显存）要求更加严格\r\n\r\n\r\n图片\r\n\r\n原文链接：https://mp.weixin.qq.com/s/u9RMrjh-_NJmMR7A4XFVBw\r\n","dateCreated":"2025-02-27T12:36:14+08:00","dateModified":"2025-08-31T11:44:54+08:00","datePublished":"2025-02-27T12:36:14+08:00","description":"","headline":"AMD显卡畅玩本地大模型","image":[],"mainEntityOfPage":{"@type":"WebPage","@id":"https://hydrogen1222.xyz/2025/02/27/%E7%95%85%E7%8E%A9%E6%9C%AC%E5%9C%B0%E5%A4%A7%E6%A8%A1%E5%9E%8B/"},"publisher":{"@type":"Organization","name":"John Doe","sameAs":["https://github.com/hydrogen1222","https://user.qzone.qq.com/2170147489/infocenter","https://space.bilibili.com/441987358?spm_id_from=333.1007.0.0","mailto:tanch1222@mails.jlu.edu.cn"]},"url":"https://hydrogen1222.xyz/2025/02/27/%E7%95%85%E7%8E%A9%E6%9C%AC%E5%9C%B0%E5%A4%A7%E6%A8%A1%E5%9E%8B/","keywords":"折腾, AI"}</script>
+    <script type="application/ld+json">{"@context":"http://schema.org","@type":"BlogPosting","author":{"@type":"Person","name":"John Doe","sameAs":["https://github.com/hydrogen1222","https://user.qzone.qq.com/2170147489/infocenter"],"image":"https://www.gravatar.com/avatar/59bc94fdda371da7bfe585b96a3463b0"},"articleBody":"PS：很久之前写的一篇体验文章啦~ 测试一下hexo的博客功能~\r\n为什么选择AMD\r\n因为穷（bushi✘），广大的DIY玩家因为各种各样的原因选择了AMD显卡，让我们相聚于此。AMD显卡相较于NVDIA以其高性价比著称，奈何NVDIA早已建立起CUDA的壁垒，AMD显卡在人工智能领域“有劲使不出”或者算力较NV差。几个月前，Ollama支持了部分AMD\r\nRadeon显卡以及AMD Radeon\r\nPro显卡，让广大玩家有了尝鲜的机会，接下来咱们展开说说\r\n什么是Ollama\r\n“畅玩”之前，咱先把简单的原理搞清楚。\r\nOllama gihtub：https://github.com/ollama/ollama\r\nOllama官网：https://ollama.com/（可正常访问）\r\n什么是Ollama？\r\n——Get up and running with large language models.\r\nOllama是一个调用和运行大模型的工具，可以是官方提供的大模型，也可以是非官方提供的途径，非Ollama官方提供的大模型可以前往Huggingface和魔搭社区（可正常访问）下载。\r\n几个月前，Ollama官方终于支持了Radeon、Radeon Pro、以及AMD\r\nInstinct显卡👍👍👍这使得安装有AMD显卡的计算机在使用Ollama推理大模型时能够直接使用GPU而不是CPU推理\r\n\r\n\r\nOllama支持AMD部分显卡\r\n\r\n==目前官方支持的显卡如下==\r\n\r\n\r\n231c4d90dbb166ce141803841024b48f\r\n\r\nLet’s start\r\n首先是下载Ollama客户端\r\n\r\n\r\n图片\r\n\r\n单击下载好的OllamaSetup.exe文件，Ollama会安装在默认位置，无需选择。\r\n需要注意的是，Ollama并没有提供图形化（GUI）的操作界面！！！因此，安装完成后Ollama将在后台运行，模型安装、对话等等交互都在终端中完成\r\n对于A卡用户，这根本难不倒他👍\r\n\r\n\r\n图片\r\n\r\nOllama官方提供了多种模型，如llama3.1，qwen2，并列出了一键式安装方法。\r\n此处以最热门的llama3.1为例\r\n\r\n\r\n图片\r\n\r\n默认提供的是8b模型，大小4.7GB，这对于大多数的Radeon显卡的显存来说都是够用的，8b指的是参数大小，b即billion，此模型有80亿参数。llama3.1也提供了更多选择，若显存更大或者多张显卡交火也可尝试更大的模型。\r\n复制右边的一键运行命令（ollama run llama3.1）\r\n接着打开Windows终端，比如Windows PowerShell\r\n打开开始菜单或者按下Win徽标键，搜索powershell即可找到。\r\n\r\n\r\n图片\r\n\r\n在终端中输入ollama run\r\nllama3.1，相应的8b模型会被下载下来（可正常拉取），速度取决于网速，一段时间下载完成后将自动调用模型，即可与大模型对话。\r\n\r\n\r\n图片\r\n\r\n\r\n\r\n图片\r\n\r\n下载完成后，当看到“&gt;&gt;&gt;\r\n”符号时即可与大模型对话，输入“/bye”退出\r\n笔者使用的是Ollama官方并不支持的AMD\r\n780M核心显卡，因此推理（可理解为对话后文字的返回速度）由CPU完成，速度还行，可以正常接受。\r\n各位读者的计算机上GPU的推理速度一定比CPU快得多得多\r\n后话\r\n除了Ollama官方提供的模型外，Ollama也可以使用从Huggingface或者魔搭社区（可正常访问）下载模型，分为GGUF和PyTorch\r\nor Safetensors两种。\r\n前者的操作如下，而后者通常对硬件设备（显存）要求更加严格\r\n\r\n\r\n图片\r\n\r\n原文链接：https://mp.weixin.qq.com/s/u9RMrjh-_NJmMR7A4XFVBw\r\n","dateCreated":"2025-02-27T12:36:14+08:00","dateModified":"2025-08-31T11:44:54+08:00","datePublished":"2025-02-27T12:36:14+08:00","description":"","headline":"AMD显卡畅玩本地大模型","image":[],"mainEntityOfPage":{"@type":"WebPage","@id":"https://hydrogen1222.xyz/2025/02/27/%E7%95%85%E7%8E%A9%E6%9C%AC%E5%9C%B0%E5%A4%A7%E6%A8%A1%E5%9E%8B/"},"publisher":{"@type":"Organization","name":"John Doe","sameAs":["https://github.com/hydrogen1222","https://user.qzone.qq.com/2170147489/infocenter"],"image":"https://www.gravatar.com/avatar/59bc94fdda371da7bfe585b96a3463b0","logo":{"@type":"ImageObject","url":"https://www.gravatar.com/avatar/59bc94fdda371da7bfe585b96a3463b0"}},"url":"https://hydrogen1222.xyz/2025/02/27/%E7%95%85%E7%8E%A9%E6%9C%AC%E5%9C%B0%E5%A4%A7%E6%A8%A1%E5%9E%8B/","keywords":"折腾, AI"}</script>
     <meta name="description" content="PS：很久之前写的一篇体验文章啦~ 测试一下hexo的博客功能~ 为什么选择AMD 因为穷（bushi✘），广大的DIY玩家因为各种各样的原因选择了AMD显卡，让我们相聚于此。AMD显卡相较于NVDIA以其高性价比著称，奈何NVDIA早已建立起CUDA的壁垒，AMD显卡在人工智能领域“有劲使不出”或者算力较NV差。几个月前，Ollama支持了部分AMD Radeon显卡以及AMD Radeo">
 <meta property="og:type" content="blog">
 <meta property="og:title" content="AMD显卡畅玩本地大模型">
@@ -228,56 +228,6 @@
                         >
                         <i class="sidebar-button-icon fab fa-qq" aria-hidden="true"></i>
                         <span class="sidebar-button-desc">QQ</span>
-                    </a>
-            </li>
-            
-                <li class="sidebar-button">
-                    
-                        <a
-                            class="sidebar-button-link "
-                            href="https://space.bilibili.com/441987358?spm_id_from=333.1007.0.0"
-                            
-                                target="_blank"
-                            
-                            rel="noopener"
-                            title="bilibili"
-                        >
-                        <i class="sidebar-button-icon fab fa-bilibili" aria-hidden="true"></i>
-                        <span class="sidebar-button-desc">bilibili</span>
-                    </a>
-            </li>
-            
-                <li class="sidebar-button">
-                    
-                        <a
-                            class="sidebar-button-link "
-                            href="mailto:tanch1222@mails.jlu.edu.cn"
-                            
-                                target="_blank"
-                            
-                            rel="noopener"
-                            title="Mail"
-                        >
-                        <i class="sidebar-button-icon fa fa-envelope" aria-hidden="true"></i>
-                        <span class="sidebar-button-desc">Mail</span>
-                    </a>
-            </li>
-            
-        </ul>
-        
-            <ul class="sidebar-buttons">
-            
-                <li class="sidebar-button">
-                    
-                        <a
-                            class="sidebar-button-link "
-                            href="/atom.xml"
-                            
-                            rel="noopener"
-                            title="RSS"
-                        >
-                        <i class="sidebar-button-icon fa fa-rss" aria-hidden="true"></i>
-                        <span class="sidebar-button-desc">RSS</span>
                     </a>
             </li>
             
@@ -716,6 +666,12 @@ document.addEventListener("DOMContentLoaded", function() {
 
             </div>
         
+        
+            <div id="about-card-location">
+                <i class="fa fa-map-marker-alt"></i>
+                <br/>
+                Changchun, China
+            </div>
         
     </div>
 </div>
