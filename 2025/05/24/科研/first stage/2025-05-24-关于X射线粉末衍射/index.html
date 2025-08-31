@@ -11,7 +11,7 @@
     
     
     
-    <script type="application/ld+json">{"@context":"http://schema.org","@type":"BlogPosting","author":{"@type":"Person","name":"John Doe","sameAs":["https://github.com/","http://stackoverflow.com/users","https://twitter.com/","https://facebook.com/","https://plus.google.com/","https://www.linkedin.com/profile/","mailto"]},"articleBody":"前言\r\n1917 年，赫尔首次描述了简单粉末衍射仪的构造，这是在 1895\r\n年威廉·康拉德·伦琴发现 X 射线后不久。衍射仪测量 X\r\n射线反射的角度，从而获得其包含的结构信息。如今，这项技术的分辨率有了显著提高，它被广泛用作分析相信息和解决固态材料晶体结构的工具。X\r\n射线衍射技术用于确定样品的组成或晶体结构。对于大分子和无机化合物等较大的晶体，它可用于确定样品中原子的结构。如果晶体尺寸太小，它可以确定样品的组成、结晶度和相纯度。\r\n什么是X射线？\r\nX射线是一种电磁波，由内壳层电子跃迁所得：\r\n\r\n\r\nX 射线由内壳层电子跃迁产生\r\n\r\n对于原子序数为Z、仅含一个电子的类氢原子，内壳层电子跃迁所辐射的能量可由Rydberg方程计算：\r\n$$\r\n\\bar{v}=(\\dfrac{1}{n_i^2}-\\dfrac{1}{n_f^2})RZ^2\r\n$$\r\n可以明显看出，与电子跃迁相关的能量差随着原子序数的增加而大幅增大，并且在这种跃迁过程中发射的辐射波长随着原子序数的增加从\r\n10−7 m (1000 Å) 范围移至\r\n10−10 m (1\r\nÅ)范围（此时辐射的电磁波被定义为X射线，此辐射类型被称为特征辐射）、\r\n如下图，要引发这种内壳层跃迁，需要产生一个电子空位，必须从K层中移除一个电子。由高压电场加速过的阴极电子书轰击靶材，将其部分能量传递给靶材料的电子，从而导致电子激发。如果入射电子的能量足够高，一些电子可能会击出靶中\r\nK 壳层的一个电子，从而产生一个空位\r\n\r\n\r\nX射线的产生\r\n\r\n不同能级跃迁回K层对应着不同的谱线，如$\\rm{K_{\\alpha}}$线和$\\rm{K_{\\beta}}$线。对于铜的X射线光谱，在低能分辨率下只有2条特征线被观察到，但是，在更高的分辨率下，很容易看出Kα线是双峰，它被标记为$\\rm{K_{α1}}$和$\\rm{K_{α2}}$。因为铜的2p轨道，能级L分裂为$\\rm{L_{II}}$和$\\rm{L_{III}}$，间距非常小（0.020kev），波长Kα1\r\n(= 1.54056 Å) 和Kα2 (= 1.54439 Å) 也非常接近。因此，通常说的$\\rm{K_{\\alpha}}$其实是$\\rm{K_{α1}}$和$\\rm{K_{α2}}$的加权平均值\r\n\r\n\r\nCu的原子能级\r\n\r\n\r\n\r\n\r\n阳极\r\n$\\rm{K_{\\alpha}}$\r\n$\\rm{K_{\\beta}}$\r\n\r\n\r\n\r\n\r\n铜\r\n1.54184Å\r\n1.39222Å\r\n\r\n\r\n钼\r\n0.71073Å\r\n0.63229Å\r\n\r\n\r\n\r\n以铜靶为例 $$\r\nE=\\dfrac{hc}{\\lambda}=\\dfrac{6.626\\times10^{-34}\\times2.998\\times\r\n10^8}{1.542\\times 10^{-10}\\times1.6\\times10^{-19}}=8.05~\\rm{kV}\r\n$$ 8.05 kV为铜的$\\rm{K_{\\alpha\r\n1}}$线的最低激发电压，实际操作时通常选择40kV。激发电压选择过低会造成谱线不明显、电流过大热损耗大等问题，选择40kV是长期实验优化的结果。\r\n由于种种原因，如量子力学的选择定则：电子跃迁需要满足角动量变化Δl=±1、散热和成本等问题，通常X射线光谱中不会出现$\\rm{K_{\\gamma}}$甚至更高的线，即使能够发生N→K的跃迁（比如高Z元素W)，也会因为强度极弱而湮灭在噪声中，因此X射线光谱中通常见到的是$\\rm{K_{\\alpha}}$和$\\rm{K_{\\beta}}$\r\n\r\n\r\n产生特征X射线的电子跃迁示意图（钼靶）\r\n\r\n此外，在高速电子轰击靶材的过程中除了由内壳层电子跃迁所辐射的特征X射线，还存在着轫致辐射：高速电子被靶材原子核电场偏转，动能转化为连续电磁辐射。\r\n如下图，当加速电压（单位：kV）较小、高速电子无法引起内壳层跃迁时（加速电压小于临界电压），那么此时原子的辐射均为轫致辐射\r\n $$\r\nV_{临界}=\\dfrac{hc}{e\\lambda_{K-edge}}\r\n$$\r\n在所得的一系列X射线中，只有满足布拉格条件（波长与晶面间距d匹配）的射线才可用于样品检测，因此需要通过滤光片等手段只保留窄带波长，去除了除\r\nKα X\r\n射线之外的所有电磁波\r\nXRD谱图上的峰是什么？\r\nXRD——X-ray diffraction（X射线衍射），其本质是波的干涉与叠加。\r\n当波（如光波、声波、X射线）遇到障碍物或穿过周期性结构时，波前会发生弯曲和重新分布，这种现象称为衍射。障碍物或结构的尺寸与波长相当，这是发生衍射的关键条件，正因如此，与原子间距匹配的X射线适合用作发生衍射的电磁波。X射线是电磁波，照射到晶体时，每个原子中的电子受X射线的作用，成为次级波源，向四周散射X射线（这种散射也被称为相干散射），这些不同路径的X射线相遇并发生干涉（衍射发生的本质是弹性散射波，（即此时的次级X射线）的干涉）\r\n干涉分为两类：\r\n\r\n相长干涉（Constructive\r\nInterference）：满足布拉格条件时，所有晶面的散射波相位一致，两列波波峰对齐，叠加后振幅增强\r\n→ 形成峰。\r\n相消干涉（Destructive\r\nInterference）：波峰与波谷对齐，叠加后振幅抵消 →\r\n形成暗区。\r\n\r\n布拉格定律： nλ = 2dsin θ\r\n其中λ是外加波长，θ是衍射角，d\r\n是原子平面之间的距离。在大多数情况下，我们假定n=1，即一级衍射，因为总可以将\r\nn=2,3,…的衍射峰解释为来自(nh nk nl) 晶面的衍射——即来自晶面间距为$\\rm{d_{hkl}}$的$\\dfrac{1}{n}$倍的晶面$\\rm{d_{nhnknl}}$。然后，原子平面之间的距离可用于确定成分或晶体结构。\r\n\r\n\r\nbraggs law\r\n\r\n当路径 ABC 与 A’B’C’之间的距离相差整数个波长（λ）时，衍射的 X\r\n射线表现出相长干涉\r\nX 射线衍射的结果绘制出了在各自的\r\n2θ位置处不同衍射角的信号强度。2θ位置对应于样品中晶体或原子之间的特定间距，该间距由入射到样品中的\r\nX\r\n射线束的衍射角决定。峰的强度与该相或具有该间距的分子数量有关。峰的强度越大，具有该特定间距的晶体或分子数量就越多。\r\n消光是什么？为什么只有特定的晶面处才会出现峰？\r\n衍射峰强度取决于晶胞内所有原子散射辐射之间的相位关系，但经常出现这种情况：虽然布拉格定律预测某个峰应该存在，但其实际强度却为零（这是因为布拉格定律不涉及原子位置，仅与晶胞的大小和形状有关）。\r\n例如，对于具有体心立方BCC晶胞的(100)晶面衍射峰强度：相位关系表明，在晶胞顶面和底面（即(100)晶面）散射的\r\nX 射线虽然发生相长干涉，但与晶胞中心原子散射的X射线存在180∘的相位差，因此最终强度为零。下表给出了不同立方晶格中特定衍射峰出现与否的选择定则。\r\n\r\n\r\n\r\n\r\n\r\n\r\n\r\n\r\nBravais Lattice\r\nReflections Present\r\nReflections Absent\r\n\r\n\r\n\r\n\r\nSimple Cubic\r\nAll\r\nNone\r\n\r\n\r\nBody-Centered Cubic\r\n(h+k+l)= even\r\n(h+k+l)= odd\r\n\r\n\r\nFace-Centered Cubic\r\nh,k,l unmixed (either all odd or all even)\r\nh,k,l mixed\r\n\r\n\r\nBase-Centered Cubic\r\nh,k unmixed (either all even or all odd)\r\nh,k mixed\r\n\r\n\r\n\r\n为什么谱图的横坐标是2θ？\r\n实验中，样品和探测器的转动是围绕同一轴进行的，因此\r\n总偏转角的计算需要结合样品和探测器的相对运动，如下图所示\r\n\r\n\r\n示意图\r\n\r\n峰宽度的意义是什么？\r\n峰的宽度与晶体尺寸成反比。较窄的峰对应较大的晶体。较宽的峰意味着可能存在较小的晶体、晶体结构缺陷，或者样品在本质上可能是非晶态的，即一种缺乏完美结晶度的固体。对于较小的样品，将由X\r\n射线衍射（XRD）所得的图谱与数据库中标准样品的谱图对比可确定样品的组成。此结论可由谢乐公式（Debye-Scherrer）直接给出\r\n$$\r\nD=\\dfrac{K\\lambda}{B \\cos\\theta}\r\n$$\r\n\r\nK为Scherrer常数，也称形状因子，若B为衍射峰的半峰高宽，则K=0.89；\r\nD为晶粒垂直于晶面方向的平均厚度（Å）；\r\nB为实测样品衍射峰半高宽度\r\nθ为布拉格衍射角，单位为角度\r\nλ为X射线]波长，对于Cu kα来说，一般为1.54056 Å\r\n\r\n为什么晶相能相长干涉形成峰，而非晶相不能？\r\n晶体是长程有序的周期性结构，满足布拉格条件，即所有晶面(hkl)的的间距d恒定，当入射角θ满足布拉格公式时，所有晶面的散射波相位一致\r\n→ 相长干涉 → 尖锐峰。\r\n非晶体可能短程有序，而长程无序，d值不固定，\r\n散射波来自不同局部区域，相位杂乱，无法形成尖锐的峰\r\n举个例子\r\n例子仅供参考\r\n晶体硅的晶胞参数a=0.543nm，X射线波长为0.154nm，那么我们可以预测某个晶面会在何处出现峰\r\n对于立方晶系： $$\r\nd_{hkl}=\\dfrac{a}{\\sqrt{h^2+k^2+l^2}}\r\n$$ 以(111)晶面为例 $$\r\nd_{111}=\\dfrac{0.543}{\\sqrt{3}}=0.314nm\r\n$$ 根据布拉格公式： $$\r\n\\theta =\\arcsin (\\dfrac{\\lambda}{2d_{111}})=14.3^\\circ\r\n$$\r\n如何确定2theta角度？\r\n虽然理论上2θ范围是0°~180°，但实际操作中极少覆盖全部范围，原因包括：\r\n\r\n物理限制：大多数晶面间距d有一个最小值，那么$\\theta_{\\rm{max}} \\le\r\n\\arcsin(\\dfrac{\\lambda}{2d_{\\rm{min}}})$\r\n信号强度：高角度区（如2θ&gt;120°）的衍射强度极弱，信噪比差。\r\n时间成本：全范围扫描耗时过长，而关键峰通常集中在20°~80°\r\n\r\n一般选择20~80°，一般情况\r\n常规晶体材料的晶面间距d大多在1~10Å之间\r\n\r\nCu靶X射线波长λ≈1.54Å，代入公式：\r\n\r\n当d=10Å时，( $\\sinθ = λ/(2d)\r\n≈0.077$ → θ≈4.4° → 2θ≈8.8°)\r\n当d=1Å时，( $\\sinθ = 0.77$ → θ≈50°\r\n→ 2θ≈100°)\r\n\r\n\r\n参考资料\r\n\r\nSadoway, D. Introduction to Solid State Chemistry.\r\nReig, A. CHEM322: Inorganic Chemistry.\r\n\r\n","dateCreated":"2025-05-24T20:24:00+08:00","dateModified":"2025-05-30T09:53:06+08:00","datePublished":"2025-05-24T20:24:00+08:00","description":"","headline":"从零开始的X射线原理","image":[],"mainEntityOfPage":{"@type":"WebPage","@id":"https://hydrogen1222.xyz/2025/05/24/%E7%A7%91%E7%A0%94/first%20stage/2025-05-24-%E5%85%B3%E4%BA%8EX%E5%B0%84%E7%BA%BF%E7%B2%89%E6%9C%AB%E8%A1%8D%E5%B0%84/"},"publisher":{"@type":"Organization","name":"John Doe","sameAs":["https://github.com/","http://stackoverflow.com/users","https://twitter.com/","https://facebook.com/","https://plus.google.com/","https://www.linkedin.com/profile/","mailto"]},"url":"https://hydrogen1222.xyz/2025/05/24/%E7%A7%91%E7%A0%94/first%20stage/2025-05-24-%E5%85%B3%E4%BA%8EX%E5%B0%84%E7%BA%BF%E7%B2%89%E6%9C%AB%E8%A1%8D%E5%B0%84/","keywords":"化学, 科研"}</script>
+    <script type="application/ld+json">{"@context":"http://schema.org","@type":"BlogPosting","author":{"@type":"Person","name":"John Doe","sameAs":["https://github.com/hydrogen1222","https://user.qzone.qq.com/2170147489/infocenter","https://space.bilibili.com/441987358?spm_id_from=333.1007.0.0","mailto:tanch1222@mails.jlu.edu.cn"]},"articleBody":"前言\r\n1917 年，赫尔首次描述了简单粉末衍射仪的构造，这是在 1895\r\n年威廉·康拉德·伦琴发现 X 射线后不久。衍射仪测量 X\r\n射线反射的角度，从而获得其包含的结构信息。如今，这项技术的分辨率有了显著提高，它被广泛用作分析相信息和解决固态材料晶体结构的工具。X\r\n射线衍射技术用于确定样品的组成或晶体结构。对于大分子和无机化合物等较大的晶体，它可用于确定样品中原子的结构。如果晶体尺寸太小，它可以确定样品的组成、结晶度和相纯度。\r\n什么是X射线？\r\nX射线是一种电磁波，由内壳层电子跃迁所得：\r\n\r\n\r\nX 射线由内壳层电子跃迁产生\r\n\r\n对于原子序数为Z、仅含一个电子的类氢原子，内壳层电子跃迁所辐射的能量可由Rydberg方程计算：\r\n$$\r\n\\bar{v}=(\\dfrac{1}{n_i^2}-\\dfrac{1}{n_f^2})RZ^2\r\n$$\r\n可以明显看出，与电子跃迁相关的能量差随着原子序数的增加而大幅增大，并且在这种跃迁过程中发射的辐射波长随着原子序数的增加从\r\n10−7 m (1000 Å) 范围移至\r\n10−10 m (1\r\nÅ)范围（此时辐射的电磁波被定义为X射线，此辐射类型被称为特征辐射）、\r\n如下图，要引发这种内壳层跃迁，需要产生一个电子空位，必须从K层中移除一个电子。由高压电场加速过的阴极电子书轰击靶材，将其部分能量传递给靶材料的电子，从而导致电子激发。如果入射电子的能量足够高，一些电子可能会击出靶中\r\nK 壳层的一个电子，从而产生一个空位\r\n\r\n\r\nX射线的产生\r\n\r\n不同能级跃迁回K层对应着不同的谱线，如$\\rm{K_{\\alpha}}$线和$\\rm{K_{\\beta}}$线。对于铜的X射线光谱，在低能分辨率下只有2条特征线被观察到，但是，在更高的分辨率下，很容易看出Kα线是双峰，它被标记为$\\rm{K_{α1}}$和$\\rm{K_{α2}}$。因为铜的2p轨道，能级L分裂为$\\rm{L_{II}}$和$\\rm{L_{III}}$，间距非常小（0.020kev），波长Kα1\r\n(= 1.54056 Å) 和Kα2 (= 1.54439 Å) 也非常接近。因此，通常说的$\\rm{K_{\\alpha}}$其实是$\\rm{K_{α1}}$和$\\rm{K_{α2}}$的加权平均值\r\n\r\n\r\nCu的原子能级\r\n\r\n\r\n\r\n\r\n阳极\r\n$\\rm{K_{\\alpha}}$\r\n$\\rm{K_{\\beta}}$\r\n\r\n\r\n\r\n\r\n铜\r\n1.54184Å\r\n1.39222Å\r\n\r\n\r\n钼\r\n0.71073Å\r\n0.63229Å\r\n\r\n\r\n\r\n以铜靶为例 $$\r\nE=\\dfrac{hc}{\\lambda}=\\dfrac{6.626\\times10^{-34}\\times2.998\\times\r\n10^8}{1.542\\times 10^{-10}\\times1.6\\times10^{-19}}=8.05~\\rm{kV}\r\n$$ 8.05 kV为铜的$\\rm{K_{\\alpha\r\n1}}$线的最低激发电压，实际操作时通常选择40kV。激发电压选择过低会造成谱线不明显、电流过大热损耗大等问题，选择40kV是长期实验优化的结果。\r\n由于种种原因，如量子力学的选择定则：电子跃迁需要满足角动量变化Δl=±1、散热和成本等问题，通常X射线光谱中不会出现$\\rm{K_{\\gamma}}$甚至更高的线，即使能够发生N→K的跃迁（比如高Z元素W)，也会因为强度极弱而湮灭在噪声中，因此X射线光谱中通常见到的是$\\rm{K_{\\alpha}}$和$\\rm{K_{\\beta}}$\r\n\r\n\r\n产生特征X射线的电子跃迁示意图（钼靶）\r\n\r\n此外，在高速电子轰击靶材的过程中除了由内壳层电子跃迁所辐射的特征X射线，还存在着轫致辐射：高速电子被靶材原子核电场偏转，动能转化为连续电磁辐射。\r\n如下图，当加速电压（单位：kV）较小、高速电子无法引起内壳层跃迁时（加速电压小于临界电压），那么此时原子的辐射均为轫致辐射\r\n $$\r\nV_{临界}=\\dfrac{hc}{e\\lambda_{K-edge}}\r\n$$\r\n在所得的一系列X射线中，只有满足布拉格条件（波长与晶面间距d匹配）的射线才可用于样品检测，因此需要通过滤光片等手段只保留窄带波长，去除了除\r\nKα X\r\n射线之外的所有电磁波\r\nXRD谱图上的峰是什么？\r\nXRD——X-ray diffraction（X射线衍射），其本质是波的干涉与叠加。\r\n当波（如光波、声波、X射线）遇到障碍物或穿过周期性结构时，波前会发生弯曲和重新分布，这种现象称为衍射。障碍物或结构的尺寸与波长相当，这是发生衍射的关键条件，正因如此，与原子间距匹配的X射线适合用作发生衍射的电磁波。X射线是电磁波，照射到晶体时，每个原子中的电子受X射线的作用，成为次级波源，向四周散射X射线（这种散射也被称为相干散射），这些不同路径的X射线相遇并发生干涉（衍射发生的本质是弹性散射波，（即此时的次级X射线）的干涉）\r\n干涉分为两类：\r\n\r\n相长干涉（Constructive\r\nInterference）：满足布拉格条件时，所有晶面的散射波相位一致，两列波波峰对齐，叠加后振幅增强\r\n→ 形成峰。\r\n相消干涉（Destructive\r\nInterference）：波峰与波谷对齐，叠加后振幅抵消 →\r\n形成暗区。\r\n\r\n布拉格定律： nλ = 2dsin θ\r\n其中λ是外加波长，θ是衍射角，d\r\n是原子平面之间的距离。在大多数情况下，我们假定n=1，即一级衍射，因为总可以将\r\nn=2,3,…的衍射峰解释为来自(nh nk nl) 晶面的衍射——即来自晶面间距为$\\rm{d_{hkl}}$的$\\dfrac{1}{n}$倍的晶面$\\rm{d_{nhnknl}}$。然后，原子平面之间的距离可用于确定成分或晶体结构。\r\n\r\n\r\nbraggs law\r\n\r\n当路径 ABC 与 A’B’C’之间的距离相差整数个波长（λ）时，衍射的 X\r\n射线表现出相长干涉\r\nX 射线衍射的结果绘制出了在各自的\r\n2θ位置处不同衍射角的信号强度。2θ位置对应于样品中晶体或原子之间的特定间距，该间距由入射到样品中的\r\nX\r\n射线束的衍射角决定。峰的强度与该相或具有该间距的分子数量有关。峰的强度越大，具有该特定间距的晶体或分子数量就越多。\r\n消光是什么？为什么只有特定的晶面处才会出现峰？\r\n衍射峰强度取决于晶胞内所有原子散射辐射之间的相位关系，但经常出现这种情况：虽然布拉格定律预测某个峰应该存在，但其实际强度却为零（这是因为布拉格定律不涉及原子位置，仅与晶胞的大小和形状有关）。\r\n例如，对于具有体心立方BCC晶胞的(100)晶面衍射峰强度：相位关系表明，在晶胞顶面和底面（即(100)晶面）散射的\r\nX 射线虽然发生相长干涉，但与晶胞中心原子散射的X射线存在180∘的相位差，因此最终强度为零。下表给出了不同立方晶格中特定衍射峰出现与否的选择定则。\r\n\r\n\r\n\r\n\r\n\r\n\r\n\r\n\r\nBravais Lattice\r\nReflections Present\r\nReflections Absent\r\n\r\n\r\n\r\n\r\nSimple Cubic\r\nAll\r\nNone\r\n\r\n\r\nBody-Centered Cubic\r\n(h+k+l)= even\r\n(h+k+l)= odd\r\n\r\n\r\nFace-Centered Cubic\r\nh,k,l unmixed (either all odd or all even)\r\nh,k,l mixed\r\n\r\n\r\nBase-Centered Cubic\r\nh,k unmixed (either all even or all odd)\r\nh,k mixed\r\n\r\n\r\n\r\n为什么谱图的横坐标是2θ？\r\n实验中，样品和探测器的转动是围绕同一轴进行的，因此\r\n总偏转角的计算需要结合样品和探测器的相对运动，如下图所示\r\n\r\n\r\n示意图\r\n\r\n峰宽度的意义是什么？\r\n峰的宽度与晶体尺寸成反比。较窄的峰对应较大的晶体。较宽的峰意味着可能存在较小的晶体、晶体结构缺陷，或者样品在本质上可能是非晶态的，即一种缺乏完美结晶度的固体。对于较小的样品，将由X\r\n射线衍射（XRD）所得的图谱与数据库中标准样品的谱图对比可确定样品的组成。此结论可由谢乐公式（Debye-Scherrer）直接给出\r\n$$\r\nD=\\dfrac{K\\lambda}{B \\cos\\theta}\r\n$$\r\n\r\nK为Scherrer常数，也称形状因子，若B为衍射峰的半峰高宽，则K=0.89；\r\nD为晶粒垂直于晶面方向的平均厚度（Å）；\r\nB为实测样品衍射峰半高宽度\r\nθ为布拉格衍射角，单位为角度\r\nλ为X射线]波长，对于Cu kα来说，一般为1.54056 Å\r\n\r\n为什么晶相能相长干涉形成峰，而非晶相不能？\r\n晶体是长程有序的周期性结构，满足布拉格条件，即所有晶面(hkl)的的间距d恒定，当入射角θ满足布拉格公式时，所有晶面的散射波相位一致\r\n→ 相长干涉 → 尖锐峰。\r\n非晶体可能短程有序，而长程无序，d值不固定，\r\n散射波来自不同局部区域，相位杂乱，无法形成尖锐的峰\r\n举个例子\r\n例子仅供参考\r\n晶体硅的晶胞参数a=0.543nm，X射线波长为0.154nm，那么我们可以预测某个晶面会在何处出现峰\r\n对于立方晶系： $$\r\nd_{hkl}=\\dfrac{a}{\\sqrt{h^2+k^2+l^2}}\r\n$$ 以(111)晶面为例 $$\r\nd_{111}=\\dfrac{0.543}{\\sqrt{3}}=0.314nm\r\n$$ 根据布拉格公式： $$\r\n\\theta =\\arcsin (\\dfrac{\\lambda}{2d_{111}})=14.3^\\circ\r\n$$\r\n如何确定2theta角度？\r\n虽然理论上2θ范围是0°~180°，但实际操作中极少覆盖全部范围，原因包括：\r\n\r\n物理限制：大多数晶面间距d有一个最小值，那么$\\theta_{\\rm{max}} \\le\r\n\\arcsin(\\dfrac{\\lambda}{2d_{\\rm{min}}})$\r\n信号强度：高角度区（如2θ&gt;120°）的衍射强度极弱，信噪比差。\r\n时间成本：全范围扫描耗时过长，而关键峰通常集中在20°~80°\r\n\r\n一般选择20~80°，一般情况\r\n常规晶体材料的晶面间距d大多在1~10Å之间\r\n\r\nCu靶X射线波长λ≈1.54Å，代入公式：\r\n\r\n当d=10Å时，( $\\sinθ = λ/(2d)\r\n≈0.077$ → θ≈4.4° → 2θ≈8.8°)\r\n当d=1Å时，( $\\sinθ = 0.77$ → θ≈50°\r\n→ 2θ≈100°)\r\n\r\n\r\n参考资料\r\n\r\nSadoway, D. Introduction to Solid State Chemistry.\r\nReig, A. CHEM322: Inorganic Chemistry.\r\n\r\n","dateCreated":"2025-05-24T20:24:00+08:00","dateModified":"2025-08-31T11:19:13+08:00","datePublished":"2025-05-24T20:24:00+08:00","description":"","headline":"从零开始的X射线原理","image":[],"mainEntityOfPage":{"@type":"WebPage","@id":"https://hydrogen1222.xyz/2025/05/24/%E7%A7%91%E7%A0%94/first%20stage/2025-05-24-%E5%85%B3%E4%BA%8EX%E5%B0%84%E7%BA%BF%E7%B2%89%E6%9C%AB%E8%A1%8D%E5%B0%84/"},"publisher":{"@type":"Organization","name":"John Doe","sameAs":["https://github.com/hydrogen1222","https://user.qzone.qq.com/2170147489/infocenter","https://space.bilibili.com/441987358?spm_id_from=333.1007.0.0","mailto:tanch1222@mails.jlu.edu.cn"]},"url":"https://hydrogen1222.xyz/2025/05/24/%E7%A7%91%E7%A0%94/first%20stage/2025-05-24-%E5%85%B3%E4%BA%8EX%E5%B0%84%E7%BA%BF%E7%B2%89%E6%9C%AB%E8%A1%8D%E5%B0%84/","keywords":"化学, 科研"}</script>
     <meta name="description" content="前言 1917 年，赫尔首次描述了简单粉末衍射仪的构造，这是在 1895 年威廉·康拉德·伦琴发现 X 射线后不久。衍射仪测量 X 射线反射的角度，从而获得其包含的结构信息。如今，这项技术的分辨率有了显著提高，它被广泛用作分析相信息和解决固态材料晶体结构的工具。X 射线衍射技术用于确定样品的组成或晶体结构。对于大分子和无机化合物等较大的晶体，它可用于确定样品中原子的结构。如果晶体尺寸太小，">
 <meta property="og:type" content="blog">
 <meta property="og:title" content="从零开始的X射线原理">
@@ -19,12 +19,16 @@
 <meta property="og:site_name" content="Hexo">
 <meta property="og:description" content="前言 1917 年，赫尔首次描述了简单粉末衍射仪的构造，这是在 1895 年威廉·康拉德·伦琴发现 X 射线后不久。衍射仪测量 X 射线反射的角度，从而获得其包含的结构信息。如今，这项技术的分辨率有了显著提高，它被广泛用作分析相信息和解决固态材料晶体结构的工具。X 射线衍射技术用于确定样品的组成或晶体结构。对于大分子和无机化合物等较大的晶体，它可用于确定样品中原子的结构。如果晶体尺寸太小，">
 <meta property="og:locale" content="en_US">
+<meta property="og:image" content="https://hydrogen1222.xyz/2025/05/24/%E7%A7%91%E7%A0%94/first%20stage/2025-05-24-%E5%85%B3%E4%BA%8EX%E5%B0%84%E7%BA%BF%E7%B2%89%E6%9C%AB%E8%A1%8D%E5%B0%84/v2-83f3a61a473493f00779f96bc4c4f9b0_720w-1756610339401-3.webp">
+<meta property="og:image" content="https://hydrogen1222.xyz/2025/05/24/%E7%A7%91%E7%A0%94/first%20stage/2025-05-24-%E5%85%B3%E4%BA%8EX%E5%B0%84%E7%BA%BF%E7%B2%89%E6%9C%AB%E8%A1%8D%E5%B0%84/braggslaw-1756610339401-6.jpg">
+<meta property="og:image" content="https://hydrogen1222.xyz/2025/05/24/%E7%A7%91%E7%A0%94/first%20stage/2025-05-24-%E5%85%B3%E4%BA%8EX%E5%B0%84%E7%BA%BF%E7%B2%89%E6%9C%AB%E8%A1%8D%E5%B0%84/IMG_20250524_210927-1756610339401-7.jpg">
 <meta property="article:published_time" content="2025-05-24T12:24:00.000Z">
-<meta property="article:modified_time" content="2025-05-30T01:53:06.000Z">
+<meta property="article:modified_time" content="2025-08-31T03:19:13.031Z">
 <meta property="article:author" content="John Doe">
 <meta property="article:tag" content="化学">
 <meta property="article:tag" content="科研">
 <meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://hydrogen1222.xyz/2025/05/24/%E7%A7%91%E7%A0%94/first%20stage/2025-05-24-%E5%85%B3%E4%BA%8EX%E5%B0%84%E7%BA%BF%E7%B2%89%E6%9C%AB%E8%A1%8D%E5%B0%84/v2-83f3a61a473493f00779f96bc4c4f9b0_720w-1756610339401-3.webp">
     
     
         
@@ -181,20 +185,6 @@
                 <li class="sidebar-button">
                     
                         <a
-                            class="sidebar-button-link open-algolia-search"
-                            href="#search"
-                            
-                            rel="noopener"
-                            title="Search"
-                        >
-                        <i class="sidebar-button-icon fa fa-search" aria-hidden="true"></i>
-                        <span class="sidebar-button-desc">Search</span>
-                    </a>
-            </li>
-            
-                <li class="sidebar-button">
-                    
-                        <a
                             class="sidebar-button-link "
                             href="#about"
                             
@@ -214,7 +204,7 @@
                     
                         <a
                             class="sidebar-button-link "
-                            href="https://github.com/"
+                            href="https://github.com/hydrogen1222"
                             
                                 target="_blank"
                             
@@ -230,15 +220,15 @@
                     
                         <a
                             class="sidebar-button-link "
-                            href="http://stackoverflow.com/users"
+                            href="https://user.qzone.qq.com/2170147489/infocenter"
                             
                                 target="_blank"
                             
                             rel="noopener"
-                            title="Stack Overflow"
+                            title="QQ"
                         >
-                        <i class="sidebar-button-icon fab fa-stack-overflow" aria-hidden="true"></i>
-                        <span class="sidebar-button-desc">Stack Overflow</span>
+                        <i class="sidebar-button-icon fab fa-qq" aria-hidden="true"></i>
+                        <span class="sidebar-button-desc">QQ</span>
                     </a>
             </li>
             
@@ -246,15 +236,15 @@
                     
                         <a
                             class="sidebar-button-link "
-                            href="https://twitter.com/"
+                            href="https://space.bilibili.com/441987358?spm_id_from=333.1007.0.0"
                             
                                 target="_blank"
                             
                             rel="noopener"
-                            title="Twitter"
+                            title="bilibili"
                         >
-                        <i class="sidebar-button-icon fab fa-twitter" aria-hidden="true"></i>
-                        <span class="sidebar-button-desc">Twitter</span>
+                        <i class="sidebar-button-icon fab fa-bilibili" aria-hidden="true"></i>
+                        <span class="sidebar-button-desc">bilibili</span>
                     </a>
             </li>
             
@@ -262,55 +252,9 @@
                     
                         <a
                             class="sidebar-button-link "
-                            href="https://facebook.com/"
+                            href="mailto:tanch1222@mails.jlu.edu.cn"
                             
                                 target="_blank"
-                            
-                            rel="noopener"
-                            title="Facebook"
-                        >
-                        <i class="sidebar-button-icon fab fa-facebook" aria-hidden="true"></i>
-                        <span class="sidebar-button-desc">Facebook</span>
-                    </a>
-            </li>
-            
-                <li class="sidebar-button">
-                    
-                        <a
-                            class="sidebar-button-link "
-                            href="https://plus.google.com/"
-                            
-                                target="_blank"
-                            
-                            rel="noopener"
-                            title="Google +"
-                        >
-                        <i class="sidebar-button-icon fab fa-google-plus" aria-hidden="true"></i>
-                        <span class="sidebar-button-desc">Google +</span>
-                    </a>
-            </li>
-            
-                <li class="sidebar-button">
-                    
-                        <a
-                            class="sidebar-button-link "
-                            href="https://www.linkedin.com/profile/"
-                            
-                                target="_blank"
-                            
-                            rel="noopener"
-                            title="LinkedIn"
-                        >
-                        <i class="sidebar-button-icon fab fa-linkedin" aria-hidden="true"></i>
-                        <span class="sidebar-button-desc">LinkedIn</span>
-                    </a>
-            </li>
-            
-                <li class="sidebar-button">
-                    
-                        <a
-                            class="sidebar-button-link "
-                            href="/mailto"
                             
                             rel="noopener"
                             title="Mail"
@@ -389,7 +333,7 @@
 <p>X射线是一种<strong>电磁波</strong>，由内壳层电子跃迁所得：</p>
 <figure>
 <img
-src="./2025-05-24-%E5%85%B3%E4%BA%8EX%E5%B0%84%E7%BA%BF%E7%B2%89%E6%9C%AB%E8%A1%8D%E5%B0%84/Screen%20Shot%202022-08-29%20at%2010.39.21%20PM.png"
+src="Screen%20Shot%202022-08-29%20at%2010.39.21%20PM-1756610339401-1.png"
 alt="X 射线由内壳层电子跃迁产生" />
 <figcaption aria-hidden="true">X 射线由内壳层电子跃迁产生</figcaption>
 </figure>
@@ -405,7 +349,7 @@ $$</span>
 K 壳层的一个电子，从而产生一个空位</p>
 <figure>
 <img
-src="./2025-05-24-%E5%85%B3%E4%BA%8EX%E5%B0%84%E7%BA%BF%E7%B2%89%E6%9C%AB%E8%A1%8D%E5%B0%84/Screen%20Shot%202022-08-29%20at%2010.47.31%20PM.png"
+src="Screen%20Shot%202022-08-29%20at%2010.47.31%20PM-1756610339401-2.png"
 alt="X射线的产生" />
 <figcaption aria-hidden="true">X射线的产生</figcaption>
 </figure>
@@ -421,8 +365,7 @@ class="math inline">$\rm{K_{\alpha}}$</span>其实是<span
 class="math inline">$\rm{K_{α1}}$</span>和<span
 class="math inline">$\rm{K_{α2}}$</span>的加权平均值</p>
 <figure>
-<img
-src="./2025-05-24-%E5%85%B3%E4%BA%8EX%E5%B0%84%E7%BA%BF%E7%B2%89%E6%9C%AB%E8%A1%8D%E5%B0%84/v2-83f3a61a473493f00779f96bc4c4f9b0_720w.webp"
+<img src="v2-83f3a61a473493f00779f96bc4c4f9b0_720w-1756610339401-3.webp"
 alt="Cu的原子能级" />
 <figcaption aria-hidden="true">Cu的原子能级</figcaption>
 </figure>
@@ -458,7 +401,7 @@ class="math inline">$\rm{K_{\alpha}}$</span>和<span
 class="math inline">$\rm{K_{\beta}}$</span></p>
 <figure>
 <img
-src="./2025-05-24-%E5%85%B3%E4%BA%8EX%E5%B0%84%E7%BA%BF%E7%B2%89%E6%9C%AB%E8%A1%8D%E5%B0%84/Screen%20Shot%202022-08-29%20at%2010.50.56%20PM.png"
+src="Screen%20Shot%202022-08-29%20at%2010.50.56%20PM-1756610339401-4.png"
 alt="产生特征X射线的电子跃迁示意图（钼靶）" />
 <figcaption
 aria-hidden="true">产生特征X射线的电子跃迁示意图（钼靶）</figcaption>
@@ -466,7 +409,7 @@ aria-hidden="true">产生特征X射线的电子跃迁示意图（钼靶）</figc
 <p>此外，在高速电子轰击靶材的过程中除了由内壳层电子跃迁所辐射的特征X射线，还存在着<strong>轫致辐射</strong>：高速电子被靶材原子核电场偏转，动能转化为连续电磁辐射。</p>
 <p>如下图，当加速电压（单位：kV）较小、高速电子无法引起内壳层跃迁时（<strong>加速电压小于临界电压</strong>），那么此时原子的辐射均为<strong>轫致辐射</strong></p>
 <p><img
-src="./2025-05-24-%E5%85%B3%E4%BA%8EX%E5%B0%84%E7%BA%BF%E7%B2%89%E6%9C%AB%E8%A1%8D%E5%B0%84/Screen%20Shot%202022-08-29%20at%2010.59.00%20PM.png"
+src="Screen%20Shot%202022-08-29%20at%2010.59.00%20PM-1756610339401-5.png"
 alt="钼靶 X 射线光谱随施加电压的变化关系" /> <span
 class="math display">$$
 V_{临界}=\dfrac{hc}{e\lambda_{K-edge}}
@@ -495,9 +438,7 @@ class="math inline">$\rm{d_{hkl}}$</span>的<span
 class="math inline">$\dfrac{1}{n}$</span>倍的晶面<span
 class="math inline">$\rm{d_{nhnknl}}$</span>。然后，原子平面之间的距离可用于确定成分或晶体结构。</p>
 <figure>
-<img
-src="./2025-05-24-%E5%85%B3%E4%BA%8EX%E5%B0%84%E7%BA%BF%E7%B2%89%E6%9C%AB%E8%A1%8D%E5%B0%84/braggslaw.jpg"
-alt="braggs law" />
+<img src="braggslaw-1756610339401-6.jpg" alt="braggs law" />
 <figcaption aria-hidden="true">braggs law</figcaption>
 </figure>
 <p>当路径 ABC 与 A’B’C’之间的距离相差整数个波长（λ）时，衍射的 X
@@ -553,9 +494,7 @@ id="为什么谱图的横坐标是2θ"><strong>为什么谱图的横坐标是2θ
 <p>实验中，样品和探测器的转动是围绕同一轴进行的，因此
 <strong>总偏转角的计算需要结合样品和探测器的相对运动</strong>，如下图所示</p>
 <figure>
-<img
-src="./2025-05-24-%E5%85%B3%E4%BA%8EX%E5%B0%84%E7%BA%BF%E7%B2%89%E6%9C%AB%E8%A1%8D%E5%B0%84/IMG_20250524_210927.jpg"
-alt="示意图" />
+<img src="IMG_20250524_210927-1756610339401-7.jpg" alt="示意图" />
 <figcaption aria-hidden="true">示意图</figcaption>
 </figure>
 <h2 id="峰宽度的意义是什么">峰宽度的意义是什么？</h2>
@@ -732,6 +671,14 @@ class="math inline">$\theta_{\rm{max}} \le
     </div>
 </article>
 
+<script>
+document.addEventListener("DOMContentLoaded", function() {
+  const elements = document.querySelectorAll('.post-body'); // 取文章正文
+  elements.forEach(el => {
+    el.innerHTML = el.innerHTML.replace(/==([^=]+)==/g, '<mark>$1</mark>');
+  });
+});
+</script>
 
 
                 <footer id="footer" class="main-content-wrap">
@@ -930,6 +877,9 @@ class="math inline">$\theta_{\rm{max}} \le
     
 
 
+
+
+<script src="/js/equals-mark.js"></script>
 
 
     </body>

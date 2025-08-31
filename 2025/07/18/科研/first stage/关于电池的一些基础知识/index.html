@@ -11,7 +11,7 @@
     
     
     
-    <script type="application/ld+json">{"@context":"http://schema.org","@type":"BlogPosting","author":{"@type":"Person","name":"John Doe","sameAs":["https://github.com/","http://stackoverflow.com/users","https://twitter.com/","https://facebook.com/","https://plus.google.com/","https://www.linkedin.com/profile/","mailto"]},"articleBody":"==为什么方形电池设计为带正电的？==，作为一个小白的无意间看到了这么一个问题，仔细学习了一下，参考许多资料。\r\n动力电池的电芯封装模式：\r\n\r\n硬壳\r\n\r\n圆柱：技术成熟成本较低、稳定耐用、单体一致性好，但能量密度的上升空间小、对电池管理系统的要求高\r\n\r\n铝壳\r\n钢壳\r\n\r\n==方形==：强度高、内阻小、寿命长、空间利用率高，应用最广，但厂商需求不一样，规格多且难统一\r\n\r\n铝壳\r\n钢壳\r\n\r\n\r\n软包：能量密度极高、重量轻，但成本高，需要额外防护防止电池受损和热失控，更容易因为膨胀产生内应力、膨胀力，导致电池内部的结构都会发生改变\r\n\r\n铝塑膜\r\n钢塑膜\r\n\r\n\r\n标题中的方形电池应该指的是铝壳封装的方形电池，其中的电芯通常与正极相连，出于以下五个方面考虑\r\n\r\n容易形成Al-Li合金。Al的立方晶格的八面体空隙大小与$\\rm{Li^+}$半径匹配，在负极电位下，二者极易形成金属间隙化合物，随着嵌锂的深入，氧化锂、氢氧化锂等副产物会逐步形成，腐蚀反应会使得铝外壳逐渐粉化\r\n铝的嵌锂电位$\\varphi\r\n\\rm(vs~Li^+/Li)$较高，大致0.3V，高于石墨负极的嵌锂电位$\\varphi (\\rm\r\nvs~Li^+/Li)$的0.01-0.2V，如果石墨和铝同时作为负极那么铝将优先发生嵌锂反应。为了避免铝的嵌锂反应，需要将铝外壳的电位提升至嵌锂电位以上，\r\n\r\nEIS在电池表征中的应用\r\n电极材料的表征\r\n\r\n电子电导性评估\r\n离子扩散特性研究\r\n\r\n界面行为分析\r\n\r\nSEI膜：中频区半圆直径对应电荷转移电阻$\\rm\r\nR_{ct}$，循环后$\\rm\r\nR_{ct}$突增可能预示着SEI膜破裂再生（如六氟磷酸锂分解产物积累）\r\n复合电极层间接触：多层电极（如NCM/石墨全电池）中，中高频区额外半圆可揭示正负极界面接触电阻\r\n\r\n电池老化与失效诊断\r\n\r\n活性锂损失：全频阻抗缓升，$\\rm\r\nR_{ct}$与$\\rm\r\nR_W$同步增加（如负极析锂导致可逆锂损失）\r\n结构衰退：低频Warburg斜率陡降（如NCM正极晶界裂纹阻碍离子传输）\r\n极端失效识别：\r\n\r\n微短路：高频截距$\\rm\r\nR_s$异常降低（如隔膜穿透引发电子泄露）\r\n析锂：低频区“扩散尾”畸变（如锂枝晶导致传输异质性）\r\n\r\n\r\n锂电池中需要铜箔吗？\r\n铜箔在锂电池中作为负极的集流体，主要用于收集锂电池在放电过程中的电子并有效地导出，确保电池的电流传输效率。此外，铜箔能够支撑负极活性材料（如石墨、硅等），确保电池在充放电过程中结构稳定。\r\n机械性能\r\n\r\n厚度及均匀性：会导致电池性能不均匀。厚度偏差需控制在±0.5μm以内\r\n面密度一致性：单位面积质量极差≤1.5g/m²\r\n抗拉强度：高抗拉强度可提高电池生产中的涂布碾压效率，避免断带现象。普抗(300-400MPa)、中抗（400-500MPa）、高抗(500-600MPa)、超高抗（&gt;600MPa)，5μm产品要求≥430MPa\r\n延伸率：高延伸率可增强极片的压实密度并降低电极片的厚度，更好地抑制电池循环过程中活性材料的变形，从而提高电池的耐久性和使用寿命6μm常规延伸&gt;4%，高延&gt;6%;8μm常规&gt;5%，高延&gt;8%，5μm铜箔延伸率要求≥6%\r\n\r\n物理化学性能\r\n\r\n表面粗糙度：表面粗糙度对负极活性物质的附着和涂布效果至关重要，以提升涂覆均匀性，减少活性材料脱落。\r\n粗糙度Rz≤2μm\r\n纯度：避免杂质在电池充放电过程中因杂质的存在而引发副反应，影响电池的容量、寿命和安全性。要求≥99.999%（六个九），高端产品达99.9999%(七个九)，杂质(如Fe、S)需&lt;0.001%\r\n电导率/电阻率：降低电池内阻，可以减少电池内部的能量损失，提高电池的充放电效率和功率性能；纯铜的电阻率约为1.694$\\rm \\mu\\Omega \\cdot\r\ncm$，锂电池用铜箔的电阻率需尽可能接近纯铜理论值\r\n\r\n表面特性\r\n\r\n清洁度：无压痕、皱褶、缺口、污物及氧化缺陷\r\n亲水性：表面需良好润湿性，增强与负极材料及粘结剂的结合力\r\n抗氧化性：180℃高温环境60分钟无明显氧化\r\n良好的耐腐蚀性：防止其被电解液等物质腐蚀，从而保证电池的性能和寿命\r\n\r\n热稳定性和微观结构\r\n\r\n高温屈服强度：需在150C制造过程中保持原始机械性能，防止软化\r\n微观结构：铜晶粒的取向和织构需优化避免晶界过多导致电子传输受阻，从而维持低电阻率\r\n\r\n电解液浸润不良可能导致电池析锂\r\n极化效应\r\n\r\n欧姆极化\r\n\r\n孔隙填充率下降，浸润不良区域，电解液渗透率&lt;80%时，离子传输路径的曲折度增加40%-60%；浸润不良导致电极与电解液\r\n的有效接触面积减小，界面电阻增大\r\n\r\n浓差极化\r\n\r\n扩散延迟，孔隙内电解液缺失使锂离子扩散系数降低\r\n表面浓度降低，充电过程中电极表面Li浓度可达本体浓度的2-3倍，触发局部析锂的临界电流密度降低40%\r\n\r\n电化学极化\r\n\r\n活性位点减少，由于电解液进入不足导致电极与电解液活性位点减少，以及有效嵌锂位点减少，电荷转移电阻增大\r\n动力学-热力学耦合效应\r\n浸润不良打破了锂离子嵌入/沉积的动态平衡，沉积电势窗口变窄，局部区域有效电势低于锂沉积阔值的概率提\r\n升2-3倍\r\nSEI膜形成异常\r\n浸润不良时，反应物无法到达特定区域，导致SEI膜无法连续覆盖，不均匀的SEI膜中薄弱区域易因体积膨胀或机械应力破裂，会优先成为锂金属沉积位点，诱导锂枝晶的形成\r\n电池传输路径受阻\r\n电解液浸润不良，导致电极可能会出现部分干涸区域，锂离子传输需要绕过浸润不良区域，增加了锂离子的迁移路径，导致局部锂离子扩散速率降低，传输受阻\r\n电流密度\r\n浸润不良的区域因电解液缺乏，阻抗升高，电流被迫集中于少数通道，高电流密度区域锂离子嵌入速度达到极限，超出负极动力学承受能力，引发局部析锂\r\n关于SEI膜\r\n\r\n\r\n存疑\r\n\r\n\r\nLiF化学稳定性极高，电子绝缘优异，可以有效提升界面抑制副反应；但其锂离子扩散能垒非常高（约0.5eV以上），当其在界面中过度堆积时，会显著阻碍Li+穿透SEI并进入负极，从而对倍率性能、低温性能产生不利影响\r\nLi2O易形成多孔、富缺陷的结构，其离子电导率高于LiF，能够在一定程度上缓解界面阻抗，特别适合快充或低温场景。然而其稳定性略低，循环过程中容易参与副反应并诱导SEI逐渐增厚或成分演化，对长寿命形成挑战\r\n理想的SEI应由多相协同构成，其中LiF负责界面钝化与电子阻断，Li2O则提升离子通量与机械缓冲性能。通过精准调控电解液配方、FEC浓度、锂盐类型与化成条件，可以构建出具有“分散型LiF+结构调和型Li2O”的纳米复合SEI结构，真正满足未来快充与高能电池对界面性能的双重要求。\r\n\r\n电池中使用的各种表征手段\r\n电池材料结构表征\r\n\r\n\r\n\r\n\r\n\r\n\r\n\r\n\r\n表征手段\r\n分析内容\r\n参考标准\r\n\r\n\r\n\r\n\r\nSEM\r\n表面形貌、颗粒尺寸、孔隙结构\r\n颗粒均一及无裂纹、团聚\r\n\r\n\r\nTEM\r\n微观结构、晶格条纹缺陷\r\n晶格清晰及无相分离\r\n\r\n\r\nAFM\r\n表面粗糙度、机械性能\r\n固态电解质表面粗糙度&lt;10nm\r\n\r\n\r\nXRD\r\n晶格结构、物相纯度、晶格参数\r\n无杂项及晶格应变&lt;2%\r\n\r\n\r\nND\r\n轻元素(Li/H)占位分析\r\n明确锂离子迁移路径\r\n\r\n\r\nBET\r\n比表面积、孔径分布\r\n负极&lt;10m2/g，正极&gt;50m2/g\r\n\r\n\r\n压汞法\r\n大孔分布（厚电极）\r\n孔隙率&gt;30%且连通\r\n\r\n\r\nRBS\r\n薄膜组成、厚度\r\n成分梯度符合设计\r\n\r\n\r\n俄歇电子能谱\r\n表面元素分布深刻剖析\r\nLi分布均与，无局部富集\r\n\r\n\r\n\r\n电池材料成分与化学态分析\r\n\r\n\r\n\r\n\r\n\r\n\r\n\r\n\r\n表征手段\r\n分析内容\r\n参考判断标准\r\n\r\n\r\n\r\n\r\nXP\r\n表面元素价态，SEI 成分（LiF、Li₂O）\r\n（如 Ni2+等高价态金属），SEI\r\n无机层占比高\r\n\r\n\r\nEDS\r\n元素分布（如 S/C 复合材料中各元素分散均匀性）\r\n元素分散均匀\r\n\r\n\r\nTOF-SIMS\r\nSEI/CEI 膜成分深度剖析\r\n外层有机相（ROCO2Li），\r\n内层无机相（LiF）\r\n\r\n\r\nFTIR\r\n官能团变化、电解液分解产物（如 PFs 等）\r\n无有害副产物（如五氟化磷）\r\n\r\n\r\nICP-MS\r\n痕量金属元素含量（如过渡金属溶解量）\r\n溶解量 &lt; 1 ppm\r\n\r\n\r\nBET\r\n界面元素分布、Li+扩散路径\r\nLi+梯度分布合理\r\n\r\n\r\nEELS\r\n过渡金属价态稳定性、局部电子结构\r\n过渡金属价态稳定（如 Co3+）\r\n\r\n\r\nSTXM\r\n化学成像（如硫物种在碳基质中的分布）\r\n硫均匀分散于碳基质\r\n\r\n\r\n\r\n电池材料电子结构与能带分析\r\n\r\n\r\n\r\n\r\n\r\n\r\n\r\n\r\n表征手段\r\n分析内容\r\n参考判断标准\r\n\r\n\r\n\r\n\r\nXANES\r\n元素价态、未占据电子态\r\n高价态稳定性（如Mn4+）\r\n\r\n\r\nEXAFS\r\n局部原子结构（配位数、键长）\r\n配位环境稳定（如Ni-O键长不变）\r\n\r\n\r\nNMR\r\nLi+局域环境（固态电解质中迁移位点）\r\nLi+占据高迁移率位点\r\n\r\n\r\nARPES\r\n能带结构（如石墨烯导电性）\r\n费米面处有电子态密度\r\n\r\n\r\nRIXS\r\n磁性相互作用激发态\r\n无有害磁有序（如反铁磁耦合）\r\n\r\n\r\nUV\r\n带隙测量（如固态电解质）\r\n带隙 &gt; 4eV（抑制电子传导）\r\n\r\n\r\n\r\n电池材料界面与动态过程表征\r\n\r\n\r\n\r\n\r\n\r\n\r\n\r\n\r\n表征手段\r\n分析内容\r\n参考判断标准\r\n\r\n\r\n\r\n\r\n原位XRD\r\n充放电过程相变（如LiCoO2→Co3O4）\r\n相变可逆（无结构坍塌）\r\n\r\n\r\n原位Raman\r\n硫物种转化（Li2S4→Li2S）\r\n硫完全转化（无多硫化物残留）\r\n\r\n\r\nSPM\r\n表面电势（KPFM）、离子迁移（PFM）\r\n电势分布均匀、无枝晶热点\r\n\r\n\r\nPEEM\r\n表面化学活性分布\r\n活性位点分布均匀\r\n\r\n\r\nPAT\r\n缺陷结构与电子结构\r\n缺陷浓度可控（如氧空位&lt;5%）\r\n\r\n\r\n\r\n电池材料热安全与机械性能\r\n\r\n\r\n\r\n表征手段\r\n分析内容\r\n参考判断标准\r\n\r\n\r\n\r\n\r\nDSC\r\n材料热稳定性（分解温度）\r\n正极分解温度&gt;200°C\r\n\r\n\r\nTGA\r\n组分热分解行为\r\n无剧烈失重（&lt;5%@300°C）\r\n\r\n\r\nARC\r\n热失控起始温度\r\n&gt;150度（安全阈值）\r\n\r\n\r\n纳米压痕\r\n固态电解质机械强度\r\n杨氏模量&gt;10GPa\r\n\r\n\r\n\r\n电池材料电化学性能表征\r\n\r\n\r\n\r\n\r\n\r\n\r\n\r\n\r\n表征手段\r\n分析内容\r\n参考判断标准\r\n\r\n\r\n\r\n\r\nGCD\r\n比容量、库仑效率\r\n石墨负极&gt;340mAh/g 首效&gt;90%\r\n\r\n\r\nCV\r\n氧化还原峰极化程度\r\n峰间距&lt;0.1V（低极化）\r\n\r\n\r\nEIS\r\n表面电势（KPFM）、\r\n离子迁移（PFM）Rse&lt;50 Ω、Li+扩散系数10−14~10−12cm2/s\r\n\r\n\r\n倍率性能测试\r\n高电流密度下容量保持率\r\n5C下&gt;80%容量\r\n\r\n\r\ndQ/dV分析\r\n相变可逆性\r\n峰位稳定（无可逆性损失）\r\n\r\n\r\n\r\n安全与失效分析\r\n\r\n\r\n\r\n\r\n\r\n\r\n\r\n\r\n表征手段\r\n分析内容\r\n参考判断标准\r\n\r\n\r\n\r\n\r\nOEMS\r\n产气成分实时监测（H₂、CO等）\r\n总产气量&lt;0.1mL/Ah\r\n\r\n\r\n原位气体质谱红外热成像IR\r\n温度场分布与热失控传播\r\n局部温差&lt;5°C（1C充放电）\r\n\r\n\r\n声发射检测AE\r\n内部裂纹枝晶生长动态\r\n高频声信号事件数&lt;10 cycle\r\n\r\n\r\n\r\n一些基础知识\r\nC rate\r\n即倍率，描述了电池充电或放电的速度。假定使用的电池的额定==容量==Q= 40\r\n==mAh==，倍率为0.2 ==C==。这意味着理想情况下，根据以下等式电池能以8\r\nmA的恒定电流放电5小时 Q = It\r\n$$\r\nI=\\dfrac{Q}{t}=\\dfrac{Q}{\\frac{1}{C}}=\\dfrac{40}{\\frac{1}{0.2}}\\rm\r\nmA=8mA\r\n$$\r\n\r\n\r\n不同倍率下的单次放电曲线\r\n\r\n实验数据如下表所示：\r\n\r\n\r\n\r\n\r\n\r\n\r\n\r\n\r\n\r\n\r\n\r\n参数\r\nC-rate 0.2\r\nC-rate 0.4\r\nC-rate 0.6\r\nC-rate 0.8\r\nC-rate 1.0\r\n\r\n\r\n\r\n\r\nI [mA]\r\n8\r\n16\r\n24\r\n32\r\n40\r\n\r\n\r\nt [h]\r\n4.0\r\n2.0\r\n1.3\r\n1.0\r\n0.7\r\n\r\n\r\nΔU [mV]\r\n-4.8\r\n-8.8\r\n-13.1\r\n-17.3\r\n-20.8\r\n\r\n\r\nESR [mΩ]\r\n605\r\n555\r\n548\r\n542\r\n522\r\n\r\n\r\nQ [mAh]\r\n31.8\r\n31.3\r\n31.1\r\n30.1\r\n28.7\r\n\r\n\r\nE [mWh]\r\n118\r\n115\r\n112\r\n107\r\n101\r\n\r\n\r\n\r\n可以看到，随着倍率C的增加，放电时间减小，IR压降更多，因此容量也逐渐减小。\r\n等效串联电阻ESR随着倍率增大而降低，这是电池内部温度升高造成的。然而，容量和能源较低等缺点超过了这一优势。此外，较高的温度也可能会导致材料变质\r\n电池循环测试\r\n测试电池长期稳定性的典型实验是循环。为此，电池会被充电和放电数百甚至更多次并测量容量。\r\n下图显示了电池的标准循环充放电（CCD，即恒电流充放电）实验。首先以1.0\r\nC速率（40 mA电流） 将纽扣电池充电至4.2\r\nV。然后，该电位保持至少72小时，或者如果电流达到1mA。然后以1.0\r\nC的速率将电池放电至2.7 V。该序列重复 100\r\n个周期。较暗的曲线显示容量，较浅的曲线显示相对于开始时的容量百分比。\r\n\r\n\r\n100此恒流充放电循环的容量变化图\r\n\r\n电解质杂质或电极缺陷总是会导致容量损失。\r\n本例中测试的电池显示出良好的循环行为。 纽扣电池的最大容量约为 28.7 mAh。\r\n100 次循环后容量仅略有下降。 总容量损失总和约为\r\n4.5%。极端温度、过度充电或过度放电会加速容量损失。一般情况下，当容量损失超过20%时应更换电池。\r\n库伦效率被定义为： $$\r\n\\rm \\eta_C=\\dfrac{Q_{discharge}}{Q_{charge}}\r\n$$\r\n库伦效率总是小于100%，这也是测试中放电时的容量小于充电时容量的原因，本次测试纽扣电池表现出约98%的库仑效率。\r\n漏电和自放电\r\n理想情况下，当没有外部电流流动时，电池的电位是恒定的。然而，实际上，即使电池没有连接到外部负载，电位也会随着时间的推移而降低，这种效应称为自放电（self\r\ndischarge），所有储能设备或多或少都会受到自放电 （SD） 的影响。\r\n下图显示了使用新型纽扣电池的自放电实验图。首先将电池充电至 4.2\r\nV，然后在此电位下保持恒电位三天。然后测量开路电位九天。\r\n\r\n\r\n纽扣电池的自放电实验\r\n\r\n最初，电位降低超过 6 mV。之后，速率减慢至每天不到 1 mV。9\r\n天后，电位总共降低了 15.6 mV。这相当于相对于初始值仅下降\r\n0.37%，具体数据如下表所示：\r\n\r\n\r\n\r\n参数\r\nDay1\r\nDay2\r\nDay3\r\nDay4\r\nDay9\r\n\r\n\r\n\r\n\r\nSD [mV]\r\n6.3\r\n8.6\r\n10.0\r\n11\r\n15.6\r\n\r\n\r\nSD [100%]\r\n0.15\r\n0.21\r\n0.24\r\n0.26\r\n0.37\r\n\r\n\r\n\r\n自放电是由内部电流引起的，称为漏电流（$\\rm\r\nI_{leakage}$）。自放电率主要受电池的使用年限和使用情况、初始电位以及温度影响。\r\n下图显示了两个纽扣电池的漏电流测量值。一块电池是新的，另一块电池短时间加热到\r\n100°C。两块电池最初都充电至 4.2 V。然后保持电位恒定并测量电流。\r\n\r\n\r\n自放电对比实验\r\n\r\n许多制造商将$\\rm I_{leakage}$ 指定为\r\n72\r\n小时后的测量值，但请注意，即使在72小时候测量电流依旧不断下降，不是恒定的。\r\n在此情况下，新电池的漏电流约为4.7\r\nμA，而老化的纽扣电池显示出两倍大的值，约10 μA。\r\n\r\nGamry公司建议不要使用恒电位测试来测量漏电流。\r\n\r\n电化学阻抗谱EIS\r\n关于EIS的基础知识，之前也是写过一篇博文\r\n下图显示了不同电位下的四种不同的Nyquist图。纽扣电池首先分别充电至3.9\r\nV、4.1 V、4.3 V和4.5 V。然后保持电位，直到电流降至1\r\nmA以下。此步骤可确保电位在EIS实验期间保持恒定。恒电流EIS实验在100\r\nKHz和10 MHz 之间进行。直流电流为零，交流电流设置为10 mArms\r\n\r\n\r\n电池的EIS测量\r\n\r\n奈奎斯特图的形状在很大程度上取决于电池的电位。在较低电位下，即 3.9 V\r\n和 4.1 V，两条曲线几乎重叠。电池的阻抗在更高的电位下增加。4.3 V 和 4.5 V\r\n处的奈奎斯特曲线分别向右移动，半圆更大。下图显示了锂离子电池的典型模型\r\n\r\n\r\n锂离子电池的典型模型\r\n\r\n$\\rm\r\nR_{ESR}$代表电池的ESR电阻。它是高频下的极限阻抗，可以很容易地估计为奈奎斯特曲线和x轴（$\\rm Z_{real}$） 之间的交点。\r\n此外，假设每个电极/电解质界面具有双层电容和电荷转移电阻$\\rm\r\nR_{ct}$。这些元件的每个并联电路代表奈奎斯特图中的一个半圆。\r\n为了解决两个电极的孔隙率和不均匀性问题，双层电容被恒相元件（CPE）\r\n取代，它总结了双层在非理想电极/电解质界面处的极化效应。==理想情况下，CPE\r\n可以被视为电容器。==\r\n==所有奈奎斯特曲线在低频下都显示一条-45°角的对角线==。该区域可以通过Warburg阻抗$\\rm\r\nZ_W$进行建模，它描述了扩散层无限厚度的线性扩散。为了简化问题，仅考虑一个电极上的扩散。\r\n\r\n\r\n\r\n参数\r\n数值\r\n\r\n\r\n\r\n\r\n$\\rm R_{ESR}$ [mΩ]\r\n382.5\r\n\r\n\r\n$\\rm R_{ct,1}$ [mΩ]\r\n594.5\r\n\r\n\r\n$\\rm Y_{dl,1}$ [S·s2]\r\n0.020\r\n\r\n\r\n$\\rm a_{dl,1}$\r\n0.487\r\n\r\n\r\n$\\rm R_{ct,2}$ [mΩ]\r\n793.8\r\n\r\n\r\n$\\rm Y_{dl,2}$ [S·s]\r\n0.042\r\n\r\n\r\n$\\rm a_{dl,2}$\r\n0.635\r\n\r\n\r\n$\\rm W$ [S·s0.5]\r\n5.113\r\n\r\n\r\nGoodness of Fit\r\n2.30 × 10−4\r\n\r\n\r\n\r\n其中，参数Y及其无量纲指数a定义了CPE，Y的单位为$\\rm S\\cdot s^a$。\r\n\r\nCPE定义为： $$\r\nZ_{CPE}=\\dfrac{1}{Y_0(j\\omega)^a}\r\n$$ ZCPE的单位为Ω，ωa的单位为$\\rm s^{-a}$\r\n\r\n\r\n当a = 1时：\r\n\r\n$$\r\nZ_{CPE}=\\dfrac{1}{Y_0(j\\omega)^1}=\\dfrac{1}{j\\omega Y_0}\r\n$$\r\n与电容器的阻抗形式$Z_C=\\dfrac{1}{j\\omega\r\nC}$相同，此时CPE元件等价于理想电容器，Y0的单位$\\rm S\\cdot\r\ns^1$等价于法拉第(F)。CPE元件代表一个完美的、没有能量损耗的电荷存储元件。在电化学中，这可能对应于一个完全平整、均匀且不发生任何化学反应的理想电极表面\r\n\r\n当a = 0时：\r\n\r\n$$\r\nZ_{CPE}=\\dfrac{1}{Y_0}\r\n$$\r\n这是一个不随频率变化的常数，也就是一个纯电阻。此时，Y0是这个电阻的电导G，而$\\frac{1}{Y_0}$就是电阻值R，CPE元件代表一个纯粹的能量耗散元件，通常模拟电解液的电阻或电路中的其他欧姆电阻。\r\n\r\n当a =\r\n0.5时：CPE模拟的是一种特殊的电化学现象——==扩散过程==，这被称为瓦氏阻抗。这代表了电化学反应中，反应物从溶液主体传输到电极表面，或者反应产物从电极表面扩散离去的过程所遇到的阻碍。这种阻碍与频率的平方根成反比，是==受扩散控制==的电化学反应的典型特征。在Nyquist图上，它表现为一条与实轴成45°角的直线。\r\n\r\n对称电池是啥？\r\n具有相同电极的电池或对称电池用于==研究电池电极的行为、研究插入反应以及确定电池中正极和负极的阻抗==\r\n对称电池由两个发生氧化还原反应的相同电极组成，电极间通过液态或固态离子导体隔离，电荷通过离子传输实现迁移。使用对称电池的主要优势在于可以研究两个相似的界面，而全电池甚至半电池中涉及的是两种不同界面。在电池系统中，电极是由多种化学物质组成的复合体，包括活性材料、粘结剂、电子导体等成分……对称电池使我们能够了解在特定电解质或特定电极条件下，这些化合物在氧化和还原过程中的相互作用及电化学稳定性。\r\n让我们考虑一个由两个锂电极组成的对称电池，两电极间填充含有锂离子的电解质，该电池两端的电位差为零。若施加正向电流（\r\nI&gt;0），那么其中一个电极将成为阳极，其界面会发生如下氧化反应： $$\r\n\\rm Li \\longrightarrow Li^+ +e^-\r\n$$ 另一电极则成为阴极，其界面会发生如下还原反应：\r\n$$\r\n\\rm Li^+ +e^- \\longrightarrow Li\r\n$$ 下图展示了对称锂电池在正负电流阶跃作用下的电位响应。τ1被称为过渡时间常数，超过该值后”（在还原反应情况下）流向电极表面的О通量[…]不足以满足施加电流需求，电位将偏移至更极端的数值，==此时可能发生其他电极过程（比如下面所说的集流体的氧化）==\r\n\r\n\r\n恒电流阶跃示意图（上）及对称Li-Li\r\n电池的电压响应曲线（下）\r\n\r\n就I&gt;0的正向电流而言，t = τ1处电位的快速上升可能对应着锂电极的完全消耗，由下图所示：\r\n\r\n\r\n阳极完全氧化导致的过渡时，对称电池浓度分布与电极的演变过程\r\n\r\n上图中，阳极厚度在转变时刻(t = τ1)为0，进一步的氧化过程可能是集流体的氧化。初始条件下为E1 = E2，随后变为\r\nE1 &gt; E2且U = E1 − E2\r\n然而，在正向电流的情况下，电位的快速上升也可能对应于阴极电解质 |\r\n锂界面处锂离子的完全耗尽，如下图所示：\r\n\r\n\r\n因界面阳离子耗竭而导致过渡的对称电极的浓度曲线和电极的演变\r\n\r\n阴极界面处的锂离子浓度降至0，==进一步的还原过程可能是溶剂的还原==。初始条件下为E1 = E2，随后变为\r\nE1 &gt; E2且U = E1 − E2。\r\n对称电池是一种简单且经验性的方法，==用于测试电极在恒电流循环中的稳定性==。对于锂金属电极而言，氧化可能导致表面降解，而金属沉积（锂离子被还原）则可能导致枝晶形成。下图a)展示了稳定电池和稳定电极的电压响应，其电压幅值不随时间变化；图b)则显示了由不稳定电极组成的不稳定电池的电压响应，其电位幅值会随时间发生变化：\r\n\r\n\r\na)稳定电极和\r\nb)不稳定电极的电位分布示意图\r\n\r\n对过渡时间的讨论\r\n我们知道了在t = τ时电位会发生阶跃，对应这两种可能的情况：阳极锂金属耗尽或者阴极与电解质的界面处的锂离子耗尽，下面分别讨论一下这两种情况：\r\n假设阳极氧化过程完全遵循方程$\\rm Li\r\n\\longrightarrow Li^+ +e^-$，则过渡时间τ仅取决于电极质量（该质量决定了完全氧化阳极所需的电荷量）以及施加电流。若我们定义单位面积的电荷量与电流密度分别为Q和i，则可得到：\r\n$$\r\n\\tau=\\dfrac{Q}{i}\r\n$$ 将单位面积电子数量Q替换为单位面积锂离子数量，可得：\r\n12345&#123;% raw %&#125;$$\\tau=\\dfrac&#123;m_&#123;\\rm Li&#125;&#125;&#123;&#123;\\rm M_&#123;Li&#125;&#125;i&#125;$$&#123;% endraw %&#125;\r\n假设阴极还原过程完全遵循$\\rm Li^+ +e^-\r\n\\longrightarrow Li$，则过渡时间τ现可通过 Sand 方程计算得出： $$\r\n\\sqrt{\\tau}=\\dfrac{FC^*_{\\rm Li^+}\\sqrt{\\pi D_{\\rm Li^+}}}{2i}\r\n$$ 其中$C^*_{\\rm Li^+}$和$D_{\\rm\r\nLi^+}$分别表示电解液中锂离子的本体浓度和扩散系数，了解电流密度如何影响过渡时间，有助于我们更好地理解是哪种机制决定了电位升降所对应的时间过渡特性。\r\n\r\n简化版的sand方程： $$\r\nj(\\tau)=\\dfrac{z_eFc\\sqrt{\\pi D_{\\rm Li^+}}}{2\\sqrt{\\tau}}\r\n$$ 当电流密度超过电解质的$\\rm\r\nLi^+$传输能力时，电极表面$\\rm\r\nLi^+$浓度随时间下降，直至耗尽(τ时刻），引发电压骤升（阻塞型极化）。方程表明，τ与j2成反比，与DLi+和c成正比\r\n\r\n下图展示了在锂对称电池（Li |\r\nLi）上，以三种不同数值、正负相反的恒电流密度阶跃测试时，电压随时间变化的演变过程。\r\n\r\n\r\n采用递增电流密度进行的计时电位法测试\r\n\r\n可以看出，当电流密度增大一倍时，两个电流方向的==过渡时间均减半==。这表明上述方程可用于描述过渡时间与时间的依赖关系，且==控制机制为锂的完全氧化过程==。\r\n对称电池可有效用于研究和测试锂电极与固体电解质接触时的稳定性，以及这些电解质防止枝晶形成的能力。通过使用两个相同的电极，研究者无需参比电极即可==轻松研究单一电极\r\n|\r\n电解质界面随时间和循环次数的阳极与阴极行为==。然而，若要==深入研究降解机制，建议采用三电极配置==。\r\n一些基本的术语\r\n锂离子电池的文献中有很多关于电池性能的测试，要怎么判断什么是好的锂电池呢？循环次数\r\n参考资料\r\n美国Gamry公司技术资料，https://www.gamry.com/application-notes/battery-research/testing-lithium-ion-batteries/\r\nBiologic公司，https://www.biologic.net/topics/introducing-symmetric-cells/\r\n研之成理微信公众号，https://mp.weixin.qq.com/s?__biz=MzUxMDMzODg2Ng==&amp;mid=2247522824&amp;idx=1&amp;sn=2bc2f226c7348a1f89b1a11ea91fdf86&amp;chksm=f906a855ce7121434d626bfd0c840c22786744c056b41a557149832e7cd5360af8a15dd12e9c&amp;scene=21#wechat_redirect\r\n","dateCreated":"2025-07-18T17:28:00+08:00","dateModified":"2025-08-22T13:50:19+08:00","datePublished":"2025-07-18T17:28:00+08:00","description":"","headline":"关于电池的一些基础知识","image":[],"mainEntityOfPage":{"@type":"WebPage","@id":"https://hydrogen1222.xyz/2025/07/18/%E7%A7%91%E7%A0%94/first%20stage/%E5%85%B3%E4%BA%8E%E7%94%B5%E6%B1%A0%E7%9A%84%E4%B8%80%E4%BA%9B%E5%9F%BA%E7%A1%80%E7%9F%A5%E8%AF%86/"},"publisher":{"@type":"Organization","name":"John Doe","sameAs":["https://github.com/","http://stackoverflow.com/users","https://twitter.com/","https://facebook.com/","https://plus.google.com/","https://www.linkedin.com/profile/","mailto"]},"url":"https://hydrogen1222.xyz/2025/07/18/%E7%A7%91%E7%A0%94/first%20stage/%E5%85%B3%E4%BA%8E%E7%94%B5%E6%B1%A0%E7%9A%84%E4%B8%80%E4%BA%9B%E5%9F%BA%E7%A1%80%E7%9F%A5%E8%AF%86/","keywords":"化学, 科研"}</script>
+    <script type="application/ld+json">{"@context":"http://schema.org","@type":"BlogPosting","author":{"@type":"Person","name":"John Doe","sameAs":["https://github.com/hydrogen1222","https://user.qzone.qq.com/2170147489/infocenter","https://space.bilibili.com/441987358?spm_id_from=333.1007.0.0","mailto:tanch1222@mails.jlu.edu.cn"]},"articleBody":"==为什么方形电池设计为带正电的？==，作为一个小白的无意间看到了这么一个问题，仔细学习了一下，参考许多资料。\r\n动力电池的电芯封装模式：\r\n\r\n硬壳\r\n\r\n圆柱：技术成熟成本较低、稳定耐用、单体一致性好，但能量密度的上升空间小、对电池管理系统的要求高\r\n\r\n铝壳\r\n钢壳\r\n\r\n==方形==：强度高、内阻小、寿命长、空间利用率高，应用最广，但厂商需求不一样，规格多且难统一\r\n\r\n铝壳\r\n钢壳\r\n\r\n\r\n软包：能量密度极高、重量轻，但成本高，需要额外防护防止电池受损和热失控，更容易因为膨胀产生内应力、膨胀力，导致电池内部的结构都会发生改变\r\n\r\n铝塑膜\r\n钢塑膜\r\n\r\n\r\n标题中的方形电池应该指的是铝壳封装的方形电池，其中的电芯通常与正极相连，出于以下五个方面考虑\r\n\r\n容易形成Al-Li合金。Al的立方晶格的八面体空隙大小与$\\rm{Li^+}$半径匹配，在负极电位下，二者极易形成金属间隙化合物，随着嵌锂的深入，氧化锂、氢氧化锂等副产物会逐步形成，腐蚀反应会使得铝外壳逐渐粉化\r\n铝的嵌锂电位$\\varphi\r\n\\rm(vs~Li^+/Li)$较高，大致0.3V，高于石墨负极的嵌锂电位$\\varphi (\\rm\r\nvs~Li^+/Li)$的0.01-0.2V，如果石墨和铝同时作为负极那么铝将优先发生嵌锂反应。为了避免铝的嵌锂反应，需要将铝外壳的电位提升至嵌锂电位以上，\r\n\r\nEIS在电池表征中的应用\r\n电极材料的表征\r\n\r\n电子电导性评估\r\n离子扩散特性研究\r\n\r\n界面行为分析\r\n\r\nSEI膜：中频区半圆直径对应电荷转移电阻$\\rm\r\nR_{ct}$，循环后$\\rm\r\nR_{ct}$突增可能预示着SEI膜破裂再生（如六氟磷酸锂分解产物积累）\r\n复合电极层间接触：多层电极（如NCM/石墨全电池）中，中高频区额外半圆可揭示正负极界面接触电阻\r\n\r\n电池老化与失效诊断\r\n\r\n活性锂损失：全频阻抗缓升，$\\rm\r\nR_{ct}$与$\\rm\r\nR_W$同步增加（如负极析锂导致可逆锂损失）\r\n结构衰退：低频Warburg斜率陡降（如NCM正极晶界裂纹阻碍离子传输）\r\n极端失效识别：\r\n\r\n微短路：高频截距$\\rm\r\nR_s$异常降低（如隔膜穿透引发电子泄露）\r\n析锂：低频区“扩散尾”畸变（如锂枝晶导致传输异质性）\r\n\r\n\r\n锂电池中需要铜箔吗？\r\n铜箔在锂电池中作为负极的集流体，主要用于收集锂电池在放电过程中的电子并有效地导出，确保电池的电流传输效率。此外，铜箔能够支撑负极活性材料（如石墨、硅等），确保电池在充放电过程中结构稳定。\r\n机械性能\r\n\r\n厚度及均匀性：会导致电池性能不均匀。厚度偏差需控制在±0.5μm以内\r\n面密度一致性：单位面积质量极差≤1.5g/m²\r\n抗拉强度：高抗拉强度可提高电池生产中的涂布碾压效率，避免断带现象。普抗(300-400MPa)、中抗（400-500MPa）、高抗(500-600MPa)、超高抗（&gt;600MPa)，5μm产品要求≥430MPa\r\n延伸率：高延伸率可增强极片的压实密度并降低电极片的厚度，更好地抑制电池循环过程中活性材料的变形，从而提高电池的耐久性和使用寿命6μm常规延伸&gt;4%，高延&gt;6%;8μm常规&gt;5%，高延&gt;8%，5μm铜箔延伸率要求≥6%\r\n\r\n物理化学性能\r\n\r\n表面粗糙度：表面粗糙度对负极活性物质的附着和涂布效果至关重要，以提升涂覆均匀性，减少活性材料脱落。\r\n粗糙度Rz≤2μm\r\n纯度：避免杂质在电池充放电过程中因杂质的存在而引发副反应，影响电池的容量、寿命和安全性。要求≥99.999%（六个九），高端产品达99.9999%(七个九)，杂质(如Fe、S)需&lt;0.001%\r\n电导率/电阻率：降低电池内阻，可以减少电池内部的能量损失，提高电池的充放电效率和功率性能；纯铜的电阻率约为1.694$\\rm \\mu\\Omega \\cdot\r\ncm$，锂电池用铜箔的电阻率需尽可能接近纯铜理论值\r\n\r\n表面特性\r\n\r\n清洁度：无压痕、皱褶、缺口、污物及氧化缺陷\r\n亲水性：表面需良好润湿性，增强与负极材料及粘结剂的结合力\r\n抗氧化性：180℃高温环境60分钟无明显氧化\r\n良好的耐腐蚀性：防止其被电解液等物质腐蚀，从而保证电池的性能和寿命\r\n\r\n热稳定性和微观结构\r\n\r\n高温屈服强度：需在150C制造过程中保持原始机械性能，防止软化\r\n微观结构：铜晶粒的取向和织构需优化避免晶界过多导致电子传输受阻，从而维持低电阻率\r\n\r\n电解液浸润不良可能导致电池析锂\r\n极化效应\r\n\r\n欧姆极化\r\n\r\n孔隙填充率下降，浸润不良区域，电解液渗透率&lt;80%时，离子传输路径的曲折度增加40%-60%；浸润不良导致电极与电解液\r\n的有效接触面积减小，界面电阻增大\r\n\r\n浓差极化\r\n\r\n扩散延迟，孔隙内电解液缺失使锂离子扩散系数降低\r\n表面浓度降低，充电过程中电极表面Li浓度可达本体浓度的2-3倍，触发局部析锂的临界电流密度降低40%\r\n\r\n电化学极化\r\n\r\n活性位点减少，由于电解液进入不足导致电极与电解液活性位点减少，以及有效嵌锂位点减少，电荷转移电阻增大\r\n动力学-热力学耦合效应\r\n浸润不良打破了锂离子嵌入/沉积的动态平衡，沉积电势窗口变窄，局部区域有效电势低于锂沉积阔值的概率提\r\n升2-3倍\r\nSEI膜形成异常\r\n浸润不良时，反应物无法到达特定区域，导致SEI膜无法连续覆盖，不均匀的SEI膜中薄弱区域易因体积膨胀或机械应力破裂，会优先成为锂金属沉积位点，诱导锂枝晶的形成\r\n电池传输路径受阻\r\n电解液浸润不良，导致电极可能会出现部分干涸区域，锂离子传输需要绕过浸润不良区域，增加了锂离子的迁移路径，导致局部锂离子扩散速率降低，传输受阻\r\n电流密度\r\n浸润不良的区域因电解液缺乏，阻抗升高，电流被迫集中于少数通道，高电流密度区域锂离子嵌入速度达到极限，超出负极动力学承受能力，引发局部析锂\r\n关于SEI膜\r\n\r\n\r\n存疑\r\n\r\n\r\nLiF化学稳定性极高，电子绝缘优异，可以有效提升界面抑制副反应；但其锂离子扩散能垒非常高（约0.5eV以上），当其在界面中过度堆积时，会显著阻碍Li+穿透SEI并进入负极，从而对倍率性能、低温性能产生不利影响\r\nLi2O易形成多孔、富缺陷的结构，其离子电导率高于LiF，能够在一定程度上缓解界面阻抗，特别适合快充或低温场景。然而其稳定性略低，循环过程中容易参与副反应并诱导SEI逐渐增厚或成分演化，对长寿命形成挑战\r\n理想的SEI应由多相协同构成，其中LiF负责界面钝化与电子阻断，Li2O则提升离子通量与机械缓冲性能。通过精准调控电解液配方、FEC浓度、锂盐类型与化成条件，可以构建出具有“分散型LiF+结构调和型Li2O”的纳米复合SEI结构，真正满足未来快充与高能电池对界面性能的双重要求。\r\n\r\n电池中使用的各种表征手段\r\n电池材料结构表征\r\n\r\n\r\n\r\n\r\n\r\n\r\n\r\n\r\n表征手段\r\n分析内容\r\n参考标准\r\n\r\n\r\n\r\n\r\nSEM\r\n表面形貌、颗粒尺寸、孔隙结构\r\n颗粒均一及无裂纹、团聚\r\n\r\n\r\nTEM\r\n微观结构、晶格条纹缺陷\r\n晶格清晰及无相分离\r\n\r\n\r\nAFM\r\n表面粗糙度、机械性能\r\n固态电解质表面粗糙度&lt;10nm\r\n\r\n\r\nXRD\r\n晶格结构、物相纯度、晶格参数\r\n无杂项及晶格应变&lt;2%\r\n\r\n\r\nND\r\n轻元素(Li/H)占位分析\r\n明确锂离子迁移路径\r\n\r\n\r\nBET\r\n比表面积、孔径分布\r\n负极&lt;10m2/g，正极&gt;50m2/g\r\n\r\n\r\n压汞法\r\n大孔分布（厚电极）\r\n孔隙率&gt;30%且连通\r\n\r\n\r\nRBS\r\n薄膜组成、厚度\r\n成分梯度符合设计\r\n\r\n\r\n俄歇电子能谱\r\n表面元素分布深刻剖析\r\nLi分布均与，无局部富集\r\n\r\n\r\n\r\n电池材料成分与化学态分析\r\n\r\n\r\n\r\n\r\n\r\n\r\n\r\n\r\n表征手段\r\n分析内容\r\n参考判断标准\r\n\r\n\r\n\r\n\r\nXP\r\n表面元素价态，SEI 成分（LiF、Li₂O）\r\n（如 Ni2+等高价态金属），SEI\r\n无机层占比高\r\n\r\n\r\nEDS\r\n元素分布（如 S/C 复合材料中各元素分散均匀性）\r\n元素分散均匀\r\n\r\n\r\nTOF-SIMS\r\nSEI/CEI 膜成分深度剖析\r\n外层有机相（ROCO2Li），\r\n内层无机相（LiF）\r\n\r\n\r\nFTIR\r\n官能团变化、电解液分解产物（如 PFs 等）\r\n无有害副产物（如五氟化磷）\r\n\r\n\r\nICP-MS\r\n痕量金属元素含量（如过渡金属溶解量）\r\n溶解量 &lt; 1 ppm\r\n\r\n\r\nBET\r\n界面元素分布、Li+扩散路径\r\nLi+梯度分布合理\r\n\r\n\r\nEELS\r\n过渡金属价态稳定性、局部电子结构\r\n过渡金属价态稳定（如 Co3+）\r\n\r\n\r\nSTXM\r\n化学成像（如硫物种在碳基质中的分布）\r\n硫均匀分散于碳基质\r\n\r\n\r\n\r\n电池材料电子结构与能带分析\r\n\r\n\r\n\r\n\r\n\r\n\r\n\r\n\r\n表征手段\r\n分析内容\r\n参考判断标准\r\n\r\n\r\n\r\n\r\nXANES\r\n元素价态、未占据电子态\r\n高价态稳定性（如Mn4+）\r\n\r\n\r\nEXAFS\r\n局部原子结构（配位数、键长）\r\n配位环境稳定（如Ni-O键长不变）\r\n\r\n\r\nNMR\r\nLi+局域环境（固态电解质中迁移位点）\r\nLi+占据高迁移率位点\r\n\r\n\r\nARPES\r\n能带结构（如石墨烯导电性）\r\n费米面处有电子态密度\r\n\r\n\r\nRIXS\r\n磁性相互作用激发态\r\n无有害磁有序（如反铁磁耦合）\r\n\r\n\r\nUV\r\n带隙测量（如固态电解质）\r\n带隙 &gt; 4eV（抑制电子传导）\r\n\r\n\r\n\r\n电池材料界面与动态过程表征\r\n\r\n\r\n\r\n\r\n\r\n\r\n\r\n\r\n表征手段\r\n分析内容\r\n参考判断标准\r\n\r\n\r\n\r\n\r\n原位XRD\r\n充放电过程相变（如LiCoO2→Co3O4）\r\n相变可逆（无结构坍塌）\r\n\r\n\r\n原位Raman\r\n硫物种转化（Li2S4→Li2S）\r\n硫完全转化（无多硫化物残留）\r\n\r\n\r\nSPM\r\n表面电势（KPFM）、离子迁移（PFM）\r\n电势分布均匀、无枝晶热点\r\n\r\n\r\nPEEM\r\n表面化学活性分布\r\n活性位点分布均匀\r\n\r\n\r\nPAT\r\n缺陷结构与电子结构\r\n缺陷浓度可控（如氧空位&lt;5%）\r\n\r\n\r\n\r\n电池材料热安全与机械性能\r\n\r\n\r\n\r\n表征手段\r\n分析内容\r\n参考判断标准\r\n\r\n\r\n\r\n\r\nDSC\r\n材料热稳定性（分解温度）\r\n正极分解温度&gt;200°C\r\n\r\n\r\nTGA\r\n组分热分解行为\r\n无剧烈失重（&lt;5%@300°C）\r\n\r\n\r\nARC\r\n热失控起始温度\r\n&gt;150度（安全阈值）\r\n\r\n\r\n纳米压痕\r\n固态电解质机械强度\r\n杨氏模量&gt;10GPa\r\n\r\n\r\n\r\n电池材料电化学性能表征\r\n\r\n\r\n\r\n\r\n\r\n\r\n\r\n\r\n表征手段\r\n分析内容\r\n参考判断标准\r\n\r\n\r\n\r\n\r\nGCD\r\n比容量、库仑效率\r\n石墨负极&gt;340mAh/g 首效&gt;90%\r\n\r\n\r\nCV\r\n氧化还原峰极化程度\r\n峰间距&lt;0.1V（低极化）\r\n\r\n\r\nEIS\r\n表面电势（KPFM）、\r\n离子迁移（PFM）Rse&lt;50 Ω、Li+扩散系数10−14~10−12cm2/s\r\n\r\n\r\n倍率性能测试\r\n高电流密度下容量保持率\r\n5C下&gt;80%容量\r\n\r\n\r\ndQ/dV分析\r\n相变可逆性\r\n峰位稳定（无可逆性损失）\r\n\r\n\r\n\r\n安全与失效分析\r\n\r\n\r\n\r\n\r\n\r\n\r\n\r\n\r\n表征手段\r\n分析内容\r\n参考判断标准\r\n\r\n\r\n\r\n\r\nOEMS\r\n产气成分实时监测（H₂、CO等）\r\n总产气量&lt;0.1mL/Ah\r\n\r\n\r\n原位气体质谱红外热成像IR\r\n温度场分布与热失控传播\r\n局部温差&lt;5°C（1C充放电）\r\n\r\n\r\n声发射检测AE\r\n内部裂纹枝晶生长动态\r\n高频声信号事件数&lt;10 cycle\r\n\r\n\r\n\r\n一些基础知识\r\nC rate\r\n即倍率，描述了电池充电或放电的速度。假定使用的电池的额定==容量==Q= 40\r\n==mAh==，倍率为0.2 ==C==。这意味着理想情况下，根据以下等式电池能以8\r\nmA的恒定电流放电5小时 Q = It\r\n$$\r\nI=\\dfrac{Q}{t}=\\dfrac{Q}{\\frac{1}{C}}=\\dfrac{40}{\\frac{1}{0.2}}\\rm\r\nmA=8mA\r\n$$\r\n\r\n\r\n不同倍率下的单次放电曲线\r\n\r\n实验数据如下表所示：\r\n\r\n\r\n\r\n\r\n\r\n\r\n\r\n\r\n\r\n\r\n\r\n参数\r\nC-rate 0.2\r\nC-rate 0.4\r\nC-rate 0.6\r\nC-rate 0.8\r\nC-rate 1.0\r\n\r\n\r\n\r\n\r\nI [mA]\r\n8\r\n16\r\n24\r\n32\r\n40\r\n\r\n\r\nt [h]\r\n4.0\r\n2.0\r\n1.3\r\n1.0\r\n0.7\r\n\r\n\r\nΔU [mV]\r\n-4.8\r\n-8.8\r\n-13.1\r\n-17.3\r\n-20.8\r\n\r\n\r\nESR [mΩ]\r\n605\r\n555\r\n548\r\n542\r\n522\r\n\r\n\r\nQ [mAh]\r\n31.8\r\n31.3\r\n31.1\r\n30.1\r\n28.7\r\n\r\n\r\nE [mWh]\r\n118\r\n115\r\n112\r\n107\r\n101\r\n\r\n\r\n\r\n可以看到，随着倍率C的增加，放电时间减小，IR压降更多，因此容量也逐渐减小。\r\n等效串联电阻ESR随着倍率增大而降低，这是电池内部温度升高造成的。然而，容量和能源较低等缺点超过了这一优势。此外，较高的温度也可能会导致材料变质\r\n电池循环测试\r\n测试电池长期稳定性的典型实验是循环。为此，电池会被充电和放电数百甚至更多次并测量容量。\r\n下图显示了电池的标准循环充放电（CCD，即恒电流充放电）实验。首先以1.0\r\nC速率（40 mA电流） 将纽扣电池充电至4.2\r\nV。然后，该电位保持至少72小时，或者如果电流达到1mA。然后以1.0\r\nC的速率将电池放电至2.7 V。该序列重复 100\r\n个周期。较暗的曲线显示容量，较浅的曲线显示相对于开始时的容量百分比。\r\n\r\n\r\n100此恒流充放电循环的容量变化图\r\n\r\n电解质杂质或电极缺陷总是会导致容量损失。\r\n本例中测试的电池显示出良好的循环行为。 纽扣电池的最大容量约为 28.7 mAh。\r\n100 次循环后容量仅略有下降。 总容量损失总和约为\r\n4.5%。极端温度、过度充电或过度放电会加速容量损失。一般情况下，当容量损失超过20%时应更换电池。\r\n库伦效率被定义为： $$\r\n\\rm \\eta_C=\\dfrac{Q_{discharge}}{Q_{charge}}\r\n$$\r\n库伦效率总是小于100%，这也是测试中放电时的容量小于充电时容量的原因，本次测试纽扣电池表现出约98%的库仑效率。\r\n漏电和自放电\r\n理想情况下，当没有外部电流流动时，电池的电位是恒定的。然而，实际上，即使电池没有连接到外部负载，电位也会随着时间的推移而降低，这种效应称为自放电（self\r\ndischarge），所有储能设备或多或少都会受到自放电 （SD） 的影响。\r\n下图显示了使用新型纽扣电池的自放电实验图。首先将电池充电至 4.2\r\nV，然后在此电位下保持恒电位三天。然后测量开路电位九天。\r\n\r\n\r\n纽扣电池的自放电实验\r\n\r\n最初，电位降低超过 6 mV。之后，速率减慢至每天不到 1 mV。9\r\n天后，电位总共降低了 15.6 mV。这相当于相对于初始值仅下降\r\n0.37%，具体数据如下表所示：\r\n\r\n\r\n\r\n参数\r\nDay1\r\nDay2\r\nDay3\r\nDay4\r\nDay9\r\n\r\n\r\n\r\n\r\nSD [mV]\r\n6.3\r\n8.6\r\n10.0\r\n11\r\n15.6\r\n\r\n\r\nSD [100%]\r\n0.15\r\n0.21\r\n0.24\r\n0.26\r\n0.37\r\n\r\n\r\n\r\n自放电是由内部电流引起的，称为漏电流（$\\rm\r\nI_{leakage}$）。自放电率主要受电池的使用年限和使用情况、初始电位以及温度影响。\r\n下图显示了两个纽扣电池的漏电流测量值。一块电池是新的，另一块电池短时间加热到\r\n100°C。两块电池最初都充电至 4.2 V。然后保持电位恒定并测量电流。\r\n\r\n\r\n自放电对比实验\r\n\r\n许多制造商将$\\rm I_{leakage}$ 指定为\r\n72\r\n小时后的测量值，但请注意，即使在72小时候测量电流依旧不断下降，不是恒定的。\r\n在此情况下，新电池的漏电流约为4.7\r\nμA，而老化的纽扣电池显示出两倍大的值，约10 μA。\r\n\r\nGamry公司建议不要使用恒电位测试来测量漏电流。\r\n\r\n电化学阻抗谱EIS\r\n关于EIS的基础知识，之前也是写过一篇博文\r\n下图显示了不同电位下的四种不同的Nyquist图。纽扣电池首先分别充电至3.9\r\nV、4.1 V、4.3 V和4.5 V。然后保持电位，直到电流降至1\r\nmA以下。此步骤可确保电位在EIS实验期间保持恒定。恒电流EIS实验在100\r\nKHz和10 MHz 之间进行。直流电流为零，交流电流设置为10 mArms\r\n\r\n\r\n电池的EIS测量\r\n\r\n奈奎斯特图的形状在很大程度上取决于电池的电位。在较低电位下，即 3.9 V\r\n和 4.1 V，两条曲线几乎重叠。电池的阻抗在更高的电位下增加。4.3 V 和 4.5 V\r\n处的奈奎斯特曲线分别向右移动，半圆更大。下图显示了锂离子电池的典型模型\r\n\r\n\r\n锂离子电池的典型模型\r\n\r\n$\\rm\r\nR_{ESR}$代表电池的ESR电阻。它是高频下的极限阻抗，可以很容易地估计为奈奎斯特曲线和x轴（$\\rm Z_{real}$） 之间的交点。\r\n此外，假设每个电极/电解质界面具有双层电容和电荷转移电阻$\\rm\r\nR_{ct}$。这些元件的每个并联电路代表奈奎斯特图中的一个半圆。\r\n为了解决两个电极的孔隙率和不均匀性问题，双层电容被恒相元件（CPE）\r\n取代，它总结了双层在非理想电极/电解质界面处的极化效应。==理想情况下，CPE\r\n可以被视为电容器。==\r\n==所有奈奎斯特曲线在低频下都显示一条-45°角的对角线==。该区域可以通过Warburg阻抗$\\rm\r\nZ_W$进行建模，它描述了扩散层无限厚度的线性扩散。为了简化问题，仅考虑一个电极上的扩散。\r\n\r\n\r\n\r\n参数\r\n数值\r\n\r\n\r\n\r\n\r\n$\\rm R_{ESR}$ [mΩ]\r\n382.5\r\n\r\n\r\n$\\rm R_{ct,1}$ [mΩ]\r\n594.5\r\n\r\n\r\n$\\rm Y_{dl,1}$ [S·s2]\r\n0.020\r\n\r\n\r\n$\\rm a_{dl,1}$\r\n0.487\r\n\r\n\r\n$\\rm R_{ct,2}$ [mΩ]\r\n793.8\r\n\r\n\r\n$\\rm Y_{dl,2}$ [S·s]\r\n0.042\r\n\r\n\r\n$\\rm a_{dl,2}$\r\n0.635\r\n\r\n\r\n$\\rm W$ [S·s0.5]\r\n5.113\r\n\r\n\r\nGoodness of Fit\r\n2.30 × 10−4\r\n\r\n\r\n\r\n其中，参数Y及其无量纲指数a定义了CPE，Y的单位为$\\rm S\\cdot s^a$。\r\n\r\nCPE定义为： $$\r\nZ_{CPE}=\\dfrac{1}{Y_0(j\\omega)^a}\r\n$$ ZCPE的单位为Ω，ωa的单位为$\\rm s^{-a}$\r\n\r\n\r\n当a = 1时：\r\n\r\n$$\r\nZ_{CPE}=\\dfrac{1}{Y_0(j\\omega)^1}=\\dfrac{1}{j\\omega Y_0}\r\n$$\r\n与电容器的阻抗形式$Z_C=\\dfrac{1}{j\\omega\r\nC}$相同，此时CPE元件等价于理想电容器，Y0的单位$\\rm S\\cdot\r\ns^1$等价于法拉第(F)。CPE元件代表一个完美的、没有能量损耗的电荷存储元件。在电化学中，这可能对应于一个完全平整、均匀且不发生任何化学反应的理想电极表面\r\n\r\n当a = 0时：\r\n\r\n$$\r\nZ_{CPE}=\\dfrac{1}{Y_0}\r\n$$\r\n这是一个不随频率变化的常数，也就是一个纯电阻。此时，Y0是这个电阻的电导G，而$\\frac{1}{Y_0}$就是电阻值R，CPE元件代表一个纯粹的能量耗散元件，通常模拟电解液的电阻或电路中的其他欧姆电阻。\r\n\r\n当a =\r\n0.5时：CPE模拟的是一种特殊的电化学现象——==扩散过程==，这被称为瓦氏阻抗。这代表了电化学反应中，反应物从溶液主体传输到电极表面，或者反应产物从电极表面扩散离去的过程所遇到的阻碍。这种阻碍与频率的平方根成反比，是==受扩散控制==的电化学反应的典型特征。在Nyquist图上，它表现为一条与实轴成45°角的直线。\r\n\r\n对称电池是啥？\r\n具有相同电极的电池或对称电池用于==研究电池电极的行为、研究插入反应以及确定电池中正极和负极的阻抗==\r\n对称电池由两个发生氧化还原反应的相同电极组成，电极间通过液态或固态离子导体隔离，电荷通过离子传输实现迁移。使用对称电池的主要优势在于可以研究两个相似的界面，而全电池甚至半电池中涉及的是两种不同界面。在电池系统中，电极是由多种化学物质组成的复合体，包括活性材料、粘结剂、电子导体等成分……对称电池使我们能够了解在特定电解质或特定电极条件下，这些化合物在氧化和还原过程中的相互作用及电化学稳定性。\r\n让我们考虑一个由两个锂电极组成的对称电池，两电极间填充含有锂离子的电解质，该电池两端的电位差为零。若施加正向电流（\r\nI&gt;0），那么其中一个电极将成为阳极，其界面会发生如下氧化反应： $$\r\n\\rm Li \\longrightarrow Li^+ +e^-\r\n$$ 另一电极则成为阴极，其界面会发生如下还原反应：\r\n$$\r\n\\rm Li^+ +e^- \\longrightarrow Li\r\n$$ 下图展示了对称锂电池在正负电流阶跃作用下的电位响应。τ1被称为过渡时间常数，超过该值后”（在还原反应情况下）流向电极表面的О通量[…]不足以满足施加电流需求，电位将偏移至更极端的数值，==此时可能发生其他电极过程（比如下面所说的集流体的氧化）==\r\n\r\n\r\n恒电流阶跃示意图（上）及对称Li-Li\r\n电池的电压响应曲线（下）\r\n\r\n就I&gt;0的正向电流而言，t = τ1处电位的快速上升可能对应着锂电极的完全消耗，由下图所示：\r\n\r\n\r\n阳极完全氧化导致的过渡时，对称电池浓度分布与电极的演变过程\r\n\r\n上图中，阳极厚度在转变时刻(t = τ1)为0，进一步的氧化过程可能是集流体的氧化。初始条件下为E1 = E2，随后变为\r\nE1 &gt; E2且U = E1 − E2\r\n然而，在正向电流的情况下，电位的快速上升也可能对应于阴极电解质 |\r\n锂界面处锂离子的完全耗尽，如下图所示：\r\n\r\n\r\n因界面阳离子耗竭而导致过渡的对称电极的浓度曲线和电极的演变\r\n\r\n阴极界面处的锂离子浓度降至0，==进一步的还原过程可能是溶剂的还原==。初始条件下为E1 = E2，随后变为\r\nE1 &gt; E2且U = E1 − E2。\r\n对称电池是一种简单且经验性的方法，==用于测试电极在恒电流循环中的稳定性==。对于锂金属电极而言，氧化可能导致表面降解，而金属沉积（锂离子被还原）则可能导致枝晶形成。下图a)展示了稳定电池和稳定电极的电压响应，其电压幅值不随时间变化；图b)则显示了由不稳定电极组成的不稳定电池的电压响应，其电位幅值会随时间发生变化：\r\n\r\n\r\na)稳定电极和\r\nb)不稳定电极的电位分布示意图\r\n\r\n对过渡时间的讨论\r\n我们知道了在t = τ时电位会发生阶跃，对应这两种可能的情况：阳极锂金属耗尽或者阴极与电解质的界面处的锂离子耗尽，下面分别讨论一下这两种情况：\r\n假设阳极氧化过程完全遵循方程$\\rm Li\r\n\\longrightarrow Li^+ +e^-$，则过渡时间τ仅取决于电极质量（该质量决定了完全氧化阳极所需的电荷量）以及施加电流。若我们定义单位面积的电荷量与电流密度分别为Q和i，则可得到：\r\n$$\r\n\\tau=\\dfrac{Q}{i}\r\n$$ 将单位面积电子数量Q替换为单位面积锂离子数量，可得：\r\n12345&#123;% raw %&#125;$$\\tau=\\dfrac&#123;m_&#123;\\rm Li&#125;&#125;&#123;&#123;\\rm M_&#123;Li&#125;&#125;i&#125;$$&#123;% endraw %&#125;\r\n假设阴极还原过程完全遵循$\\rm Li^+ +e^-\r\n\\longrightarrow Li$，则过渡时间τ现可通过 Sand 方程计算得出： $$\r\n\\sqrt{\\tau}=\\dfrac{FC^*_{\\rm Li^+}\\sqrt{\\pi D_{\\rm Li^+}}}{2i}\r\n$$ 其中$C^*_{\\rm Li^+}$和$D_{\\rm\r\nLi^+}$分别表示电解液中锂离子的本体浓度和扩散系数，了解电流密度如何影响过渡时间，有助于我们更好地理解是哪种机制决定了电位升降所对应的时间过渡特性。\r\n\r\n简化版的sand方程： $$\r\nj(\\tau)=\\dfrac{z_eFc\\sqrt{\\pi D_{\\rm Li^+}}}{2\\sqrt{\\tau}}\r\n$$ 当电流密度超过电解质的$\\rm\r\nLi^+$传输能力时，电极表面$\\rm\r\nLi^+$浓度随时间下降，直至耗尽(τ时刻），引发电压骤升（阻塞型极化）。方程表明，τ与j2成反比，与DLi+和c成正比\r\n\r\n下图展示了在锂对称电池（Li |\r\nLi）上，以三种不同数值、正负相反的恒电流密度阶跃测试时，电压随时间变化的演变过程。\r\n\r\n\r\n采用递增电流密度进行的计时电位法测试\r\n\r\n可以看出，当电流密度增大一倍时，两个电流方向的==过渡时间均减半==。这表明上述方程可用于描述过渡时间与时间的依赖关系，且==控制机制为锂的完全氧化过程==。\r\n对称电池可有效用于研究和测试锂电极与固体电解质接触时的稳定性，以及这些电解质防止枝晶形成的能力。通过使用两个相同的电极，研究者无需参比电极即可==轻松研究单一电极\r\n|\r\n电解质界面随时间和循环次数的阳极与阴极行为==。然而，若要==深入研究降解机制，建议采用三电极配置==。\r\n一些基本的术语\r\n锂离子电池的文献中有很多关于电池性能的测试，要怎么判断什么是好的锂电池呢？循环次数\r\n参考资料\r\n美国Gamry公司技术资料，https://www.gamry.com/application-notes/battery-research/testing-lithium-ion-batteries/\r\nBiologic公司，https://www.biologic.net/topics/introducing-symmetric-cells/\r\n研之成理微信公众号，https://mp.weixin.qq.com/s?__biz=MzUxMDMzODg2Ng==&amp;mid=2247522824&amp;idx=1&amp;sn=2bc2f226c7348a1f89b1a11ea91fdf86&amp;chksm=f906a855ce7121434d626bfd0c840c22786744c056b41a557149832e7cd5360af8a15dd12e9c&amp;scene=21#wechat_redirect\r\n","dateCreated":"2025-07-18T17:28:00+08:00","dateModified":"2025-08-31T10:48:02+08:00","datePublished":"2025-07-18T17:28:00+08:00","description":"","headline":"关于电池的一些基础知识","image":[],"mainEntityOfPage":{"@type":"WebPage","@id":"https://hydrogen1222.xyz/2025/07/18/%E7%A7%91%E7%A0%94/first%20stage/%E5%85%B3%E4%BA%8E%E7%94%B5%E6%B1%A0%E7%9A%84%E4%B8%80%E4%BA%9B%E5%9F%BA%E7%A1%80%E7%9F%A5%E8%AF%86/"},"publisher":{"@type":"Organization","name":"John Doe","sameAs":["https://github.com/hydrogen1222","https://user.qzone.qq.com/2170147489/infocenter","https://space.bilibili.com/441987358?spm_id_from=333.1007.0.0","mailto:tanch1222@mails.jlu.edu.cn"]},"url":"https://hydrogen1222.xyz/2025/07/18/%E7%A7%91%E7%A0%94/first%20stage/%E5%85%B3%E4%BA%8E%E7%94%B5%E6%B1%A0%E7%9A%84%E4%B8%80%E4%BA%9B%E5%9F%BA%E7%A1%80%E7%9F%A5%E8%AF%86/","keywords":"化学, 科研"}</script>
     <meta name="description" content="&#x3D;&#x3D;为什么方形电池设计为带正电的？&#x3D;&#x3D;，作为一个小白的无意间看到了这么一个问题，仔细学习了一下，参考许多资料。 动力电池的电芯封装模式：  硬壳  圆柱：技术成熟成本较低、稳定耐用、单体一致性好，但能量密度的上升空间小、对电池管理系统的要求高  铝壳 钢壳  &#x3D;&#x3D;方形&#x3D;&#x3D;：强度高、内阻小、寿命长、空间利用率高，应用最广，但厂商需求不一样，规格多且难统一  铝壳 钢壳">
 <meta property="og:type" content="blog">
 <meta property="og:title" content="关于电池的一些基础知识">
@@ -19,25 +19,25 @@
 <meta property="og:site_name" content="Hexo">
 <meta property="og:description" content="&#x3D;&#x3D;为什么方形电池设计为带正电的？&#x3D;&#x3D;，作为一个小白的无意间看到了这么一个问题，仔细学习了一下，参考许多资料。 动力电池的电芯封装模式：  硬壳  圆柱：技术成熟成本较低、稳定耐用、单体一致性好，但能量密度的上升空间小、对电池管理系统的要求高  铝壳 钢壳  &#x3D;&#x3D;方形&#x3D;&#x3D;：强度高、内阻小、寿命长、空间利用率高，应用最广，但厂商需求不一样，规格多且难统一  铝壳 钢壳">
 <meta property="og:locale" content="en_US">
-<meta property="og:image" content="https://hydrogen1222.xyz/2025/07/18/%E7%A7%91%E7%A0%94/first%20stage/%E5%85%B3%E4%BA%8E%E7%94%B5%E6%B1%A0%E7%9A%84%E4%B8%80%E4%BA%9B%E5%9F%BA%E7%A1%80%E7%9F%A5%E8%AF%86/%E5%85%B3%E4%BA%8E%E7%94%B5%E6%B1%A0%E7%9A%84%E4%B8%80%E4%BA%9B%E5%9F%BA%E7%A1%80%E7%9F%A5%E8%AF%86/image-20250719163419348.png">
-<meta property="og:image" content="https://hydrogen1222.xyz/2025/07/18/%E7%A7%91%E7%A0%94/first%20stage/%E5%85%B3%E4%BA%8E%E7%94%B5%E6%B1%A0%E7%9A%84%E4%B8%80%E4%BA%9B%E5%9F%BA%E7%A1%80%E7%9F%A5%E8%AF%86/%E5%85%B3%E4%BA%8E%E7%94%B5%E6%B1%A0%E7%9A%84%E4%B8%80%E4%BA%9B%E5%9F%BA%E7%A1%80%E7%9F%A5%E8%AF%86/image-20250720112802551.png">
-<meta property="og:image" content="https://hydrogen1222.xyz/2025/07/18/%E7%A7%91%E7%A0%94/first%20stage/%E5%85%B3%E4%BA%8E%E7%94%B5%E6%B1%A0%E7%9A%84%E4%B8%80%E4%BA%9B%E5%9F%BA%E7%A1%80%E7%9F%A5%E8%AF%86/%E5%85%B3%E4%BA%8E%E7%94%B5%E6%B1%A0%E7%9A%84%E4%B8%80%E4%BA%9B%E5%9F%BA%E7%A1%80%E7%9F%A5%E8%AF%86/image-20250720114950340.png">
-<meta property="og:image" content="https://hydrogen1222.xyz/2025/07/18/%E7%A7%91%E7%A0%94/first%20stage/%E5%85%B3%E4%BA%8E%E7%94%B5%E6%B1%A0%E7%9A%84%E4%B8%80%E4%BA%9B%E5%9F%BA%E7%A1%80%E7%9F%A5%E8%AF%86/%E5%85%B3%E4%BA%8E%E7%94%B5%E6%B1%A0%E7%9A%84%E4%B8%80%E4%BA%9B%E5%9F%BA%E7%A1%80%E7%9F%A5%E8%AF%86/image-20250720115641912.png">
-<meta property="og:image" content="https://hydrogen1222.xyz/2025/07/18/%E7%A7%91%E7%A0%94/first%20stage/%E5%85%B3%E4%BA%8E%E7%94%B5%E6%B1%A0%E7%9A%84%E4%B8%80%E4%BA%9B%E5%9F%BA%E7%A1%80%E7%9F%A5%E8%AF%86/%E5%85%B3%E4%BA%8E%E7%94%B5%E6%B1%A0%E7%9A%84%E4%B8%80%E4%BA%9B%E5%9F%BA%E7%A1%80%E7%9F%A5%E8%AF%86/image-20250720120012586.png">
-<meta property="og:image" content="https://hydrogen1222.xyz/2025/07/18/%E7%A7%91%E7%A0%94/first%20stage/%E5%85%B3%E4%BA%8E%E7%94%B5%E6%B1%A0%E7%9A%84%E4%B8%80%E4%BA%9B%E5%9F%BA%E7%A1%80%E7%9F%A5%E8%AF%86/%E5%85%B3%E4%BA%8E%E7%94%B5%E6%B1%A0%E7%9A%84%E4%B8%80%E4%BA%9B%E5%9F%BA%E7%A1%80%E7%9F%A5%E8%AF%86/image-20250720121122850.png">
-<meta property="og:image" content="https://hydrogen1222.xyz/2025/07/18/%E7%A7%91%E7%A0%94/first%20stage/%E5%85%B3%E4%BA%8E%E7%94%B5%E6%B1%A0%E7%9A%84%E4%B8%80%E4%BA%9B%E5%9F%BA%E7%A1%80%E7%9F%A5%E8%AF%86/%E5%85%B3%E4%BA%8E%E7%94%B5%E6%B1%A0%E7%9A%84%E4%B8%80%E4%BA%9B%E5%9F%BA%E7%A1%80%E7%9F%A5%E8%AF%86/image-20250720121227448.png">
-<meta property="og:image" content="https://hydrogen1222.xyz/2025/07/18/%E7%A7%91%E7%A0%94/first%20stage/%E5%85%B3%E4%BA%8E%E7%94%B5%E6%B1%A0%E7%9A%84%E4%B8%80%E4%BA%9B%E5%9F%BA%E7%A1%80%E7%9F%A5%E8%AF%86/%E5%85%B3%E4%BA%8E%E7%94%B5%E6%B1%A0%E7%9A%84%E4%B8%80%E4%BA%9B%E5%9F%BA%E7%A1%80%E7%9F%A5%E8%AF%86/image-20250720172902591.png">
-<meta property="og:image" content="https://hydrogen1222.xyz/2025/07/18/%E7%A7%91%E7%A0%94/first%20stage/%E5%85%B3%E4%BA%8E%E7%94%B5%E6%B1%A0%E7%9A%84%E4%B8%80%E4%BA%9B%E5%9F%BA%E7%A1%80%E7%9F%A5%E8%AF%86/%E5%85%B3%E4%BA%8E%E7%94%B5%E6%B1%A0%E7%9A%84%E4%B8%80%E4%BA%9B%E5%9F%BA%E7%A1%80%E7%9F%A5%E8%AF%86/f2.gif">
-<meta property="og:image" content="https://hydrogen1222.xyz/2025/07/18/%E7%A7%91%E7%A0%94/first%20stage/%E5%85%B3%E4%BA%8E%E7%94%B5%E6%B1%A0%E7%9A%84%E4%B8%80%E4%BA%9B%E5%9F%BA%E7%A1%80%E7%9F%A5%E8%AF%86/%E5%85%B3%E4%BA%8E%E7%94%B5%E6%B1%A0%E7%9A%84%E4%B8%80%E4%BA%9B%E5%9F%BA%E7%A1%80%E7%9F%A5%E8%AF%86/f3.gif">
-<meta property="og:image" content="https://hydrogen1222.xyz/2025/07/18/%E7%A7%91%E7%A0%94/first%20stage/%E5%85%B3%E4%BA%8E%E7%94%B5%E6%B1%A0%E7%9A%84%E4%B8%80%E4%BA%9B%E5%9F%BA%E7%A1%80%E7%9F%A5%E8%AF%86/%E5%85%B3%E4%BA%8E%E7%94%B5%E6%B1%A0%E7%9A%84%E4%B8%80%E4%BA%9B%E5%9F%BA%E7%A1%80%E7%9F%A5%E8%AF%86/f4.png">
-<meta property="og:image" content="https://hydrogen1222.xyz/2025/07/18/%E7%A7%91%E7%A0%94/first%20stage/%E5%85%B3%E4%BA%8E%E7%94%B5%E6%B1%A0%E7%9A%84%E4%B8%80%E4%BA%9B%E5%9F%BA%E7%A1%80%E7%9F%A5%E8%AF%86/%E5%85%B3%E4%BA%8E%E7%94%B5%E6%B1%A0%E7%9A%84%E4%B8%80%E4%BA%9B%E5%9F%BA%E7%A1%80%E7%9F%A5%E8%AF%86/f5.png">
+<meta property="og:image" content="https://hydrogen1222.xyz/2025/07/18/%E7%A7%91%E7%A0%94/first%20stage/%E5%85%B3%E4%BA%8E%E7%94%B5%E6%B1%A0%E7%9A%84%E4%B8%80%E4%BA%9B%E5%9F%BA%E7%A1%80%E7%9F%A5%E8%AF%86/image-20250719163419348.png">
+<meta property="og:image" content="https://hydrogen1222.xyz/2025/07/18/%E7%A7%91%E7%A0%94/first%20stage/%E5%85%B3%E4%BA%8E%E7%94%B5%E6%B1%A0%E7%9A%84%E4%B8%80%E4%BA%9B%E5%9F%BA%E7%A1%80%E7%9F%A5%E8%AF%86/image-20250720112802551.png">
+<meta property="og:image" content="https://hydrogen1222.xyz/2025/07/18/%E7%A7%91%E7%A0%94/first%20stage/%E5%85%B3%E4%BA%8E%E7%94%B5%E6%B1%A0%E7%9A%84%E4%B8%80%E4%BA%9B%E5%9F%BA%E7%A1%80%E7%9F%A5%E8%AF%86/image-20250720114950340.png">
+<meta property="og:image" content="https://hydrogen1222.xyz/2025/07/18/%E7%A7%91%E7%A0%94/first%20stage/%E5%85%B3%E4%BA%8E%E7%94%B5%E6%B1%A0%E7%9A%84%E4%B8%80%E4%BA%9B%E5%9F%BA%E7%A1%80%E7%9F%A5%E8%AF%86/image-20250720115641912.png">
+<meta property="og:image" content="https://hydrogen1222.xyz/2025/07/18/%E7%A7%91%E7%A0%94/first%20stage/%E5%85%B3%E4%BA%8E%E7%94%B5%E6%B1%A0%E7%9A%84%E4%B8%80%E4%BA%9B%E5%9F%BA%E7%A1%80%E7%9F%A5%E8%AF%86/image-20250720120012586.png">
+<meta property="og:image" content="https://hydrogen1222.xyz/2025/07/18/%E7%A7%91%E7%A0%94/first%20stage/%E5%85%B3%E4%BA%8E%E7%94%B5%E6%B1%A0%E7%9A%84%E4%B8%80%E4%BA%9B%E5%9F%BA%E7%A1%80%E7%9F%A5%E8%AF%86/image-20250720121122850.png">
+<meta property="og:image" content="https://hydrogen1222.xyz/2025/07/18/%E7%A7%91%E7%A0%94/first%20stage/%E5%85%B3%E4%BA%8E%E7%94%B5%E6%B1%A0%E7%9A%84%E4%B8%80%E4%BA%9B%E5%9F%BA%E7%A1%80%E7%9F%A5%E8%AF%86/image-20250720121227448.png">
+<meta property="og:image" content="https://hydrogen1222.xyz/2025/07/18/%E7%A7%91%E7%A0%94/first%20stage/%E5%85%B3%E4%BA%8E%E7%94%B5%E6%B1%A0%E7%9A%84%E4%B8%80%E4%BA%9B%E5%9F%BA%E7%A1%80%E7%9F%A5%E8%AF%86/image-20250720172902591.png">
+<meta property="og:image" content="https://hydrogen1222.xyz/2025/07/18/%E7%A7%91%E7%A0%94/first%20stage/%E5%85%B3%E4%BA%8E%E7%94%B5%E6%B1%A0%E7%9A%84%E4%B8%80%E4%BA%9B%E5%9F%BA%E7%A1%80%E7%9F%A5%E8%AF%86/f2.gif">
+<meta property="og:image" content="https://hydrogen1222.xyz/2025/07/18/%E7%A7%91%E7%A0%94/first%20stage/%E5%85%B3%E4%BA%8E%E7%94%B5%E6%B1%A0%E7%9A%84%E4%B8%80%E4%BA%9B%E5%9F%BA%E7%A1%80%E7%9F%A5%E8%AF%86/f3.gif">
+<meta property="og:image" content="https://hydrogen1222.xyz/2025/07/18/%E7%A7%91%E7%A0%94/first%20stage/%E5%85%B3%E4%BA%8E%E7%94%B5%E6%B1%A0%E7%9A%84%E4%B8%80%E4%BA%9B%E5%9F%BA%E7%A1%80%E7%9F%A5%E8%AF%86/f4.png">
+<meta property="og:image" content="https://hydrogen1222.xyz/2025/07/18/%E7%A7%91%E7%A0%94/first%20stage/%E5%85%B3%E4%BA%8E%E7%94%B5%E6%B1%A0%E7%9A%84%E4%B8%80%E4%BA%9B%E5%9F%BA%E7%A1%80%E7%9F%A5%E8%AF%86/f5.png">
 <meta property="article:published_time" content="2025-07-18T09:28:00.000Z">
-<meta property="article:modified_time" content="2025-08-22T05:50:19.772Z">
+<meta property="article:modified_time" content="2025-08-31T02:48:02.587Z">
 <meta property="article:author" content="John Doe">
 <meta property="article:tag" content="化学">
 <meta property="article:tag" content="科研">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:image" content="https://hydrogen1222.xyz/2025/07/18/%E7%A7%91%E7%A0%94/first%20stage/%E5%85%B3%E4%BA%8E%E7%94%B5%E6%B1%A0%E7%9A%84%E4%B8%80%E4%BA%9B%E5%9F%BA%E7%A1%80%E7%9F%A5%E8%AF%86/%E5%85%B3%E4%BA%8E%E7%94%B5%E6%B1%A0%E7%9A%84%E4%B8%80%E4%BA%9B%E5%9F%BA%E7%A1%80%E7%9F%A5%E8%AF%86/image-20250719163419348.png">
+<meta name="twitter:image" content="https://hydrogen1222.xyz/2025/07/18/%E7%A7%91%E7%A0%94/first%20stage/%E5%85%B3%E4%BA%8E%E7%94%B5%E6%B1%A0%E7%9A%84%E4%B8%80%E4%BA%9B%E5%9F%BA%E7%A1%80%E7%9F%A5%E8%AF%86/image-20250719163419348.png">
     
     
         
@@ -194,20 +194,6 @@
                 <li class="sidebar-button">
                     
                         <a
-                            class="sidebar-button-link open-algolia-search"
-                            href="#search"
-                            
-                            rel="noopener"
-                            title="Search"
-                        >
-                        <i class="sidebar-button-icon fa fa-search" aria-hidden="true"></i>
-                        <span class="sidebar-button-desc">Search</span>
-                    </a>
-            </li>
-            
-                <li class="sidebar-button">
-                    
-                        <a
                             class="sidebar-button-link "
                             href="#about"
                             
@@ -227,7 +213,7 @@
                     
                         <a
                             class="sidebar-button-link "
-                            href="https://github.com/"
+                            href="https://github.com/hydrogen1222"
                             
                                 target="_blank"
                             
@@ -243,15 +229,15 @@
                     
                         <a
                             class="sidebar-button-link "
-                            href="http://stackoverflow.com/users"
+                            href="https://user.qzone.qq.com/2170147489/infocenter"
                             
                                 target="_blank"
                             
                             rel="noopener"
-                            title="Stack Overflow"
+                            title="QQ"
                         >
-                        <i class="sidebar-button-icon fab fa-stack-overflow" aria-hidden="true"></i>
-                        <span class="sidebar-button-desc">Stack Overflow</span>
+                        <i class="sidebar-button-icon fab fa-qq" aria-hidden="true"></i>
+                        <span class="sidebar-button-desc">QQ</span>
                     </a>
             </li>
             
@@ -259,15 +245,15 @@
                     
                         <a
                             class="sidebar-button-link "
-                            href="https://twitter.com/"
+                            href="https://space.bilibili.com/441987358?spm_id_from=333.1007.0.0"
                             
                                 target="_blank"
                             
                             rel="noopener"
-                            title="Twitter"
+                            title="bilibili"
                         >
-                        <i class="sidebar-button-icon fab fa-twitter" aria-hidden="true"></i>
-                        <span class="sidebar-button-desc">Twitter</span>
+                        <i class="sidebar-button-icon fab fa-bilibili" aria-hidden="true"></i>
+                        <span class="sidebar-button-desc">bilibili</span>
                     </a>
             </li>
             
@@ -275,55 +261,9 @@
                     
                         <a
                             class="sidebar-button-link "
-                            href="https://facebook.com/"
+                            href="mailto:tanch1222@mails.jlu.edu.cn"
                             
                                 target="_blank"
-                            
-                            rel="noopener"
-                            title="Facebook"
-                        >
-                        <i class="sidebar-button-icon fab fa-facebook" aria-hidden="true"></i>
-                        <span class="sidebar-button-desc">Facebook</span>
-                    </a>
-            </li>
-            
-                <li class="sidebar-button">
-                    
-                        <a
-                            class="sidebar-button-link "
-                            href="https://plus.google.com/"
-                            
-                                target="_blank"
-                            
-                            rel="noopener"
-                            title="Google +"
-                        >
-                        <i class="sidebar-button-icon fab fa-google-plus" aria-hidden="true"></i>
-                        <span class="sidebar-button-desc">Google +</span>
-                    </a>
-            </li>
-            
-                <li class="sidebar-button">
-                    
-                        <a
-                            class="sidebar-button-link "
-                            href="https://www.linkedin.com/profile/"
-                            
-                                target="_blank"
-                            
-                            rel="noopener"
-                            title="LinkedIn"
-                        >
-                        <i class="sidebar-button-icon fab fa-linkedin" aria-hidden="true"></i>
-                        <span class="sidebar-button-desc">LinkedIn</span>
-                    </a>
-            </li>
-            
-                <li class="sidebar-button">
-                    
-                        <a
-                            class="sidebar-button-link "
-                            href="/mailto"
                             
                             rel="noopener"
                             title="Mail"
@@ -508,8 +448,7 @@ id="电解液浸润不良可能导致电池析锂">电解液浸润不良可能�
 <p>浸润不良的区域因电解液缺乏，阻抗升高，电流被迫集中于少数通道，高电流密度区域锂离子嵌入速度达到极限，超出负极动力学承受能力，引发局部析锂</p>
 <h2 id="关于sei膜">关于SEI膜</h2>
 <figure>
-<img src="关于电池的一些基础知识/image-20250719163419348.png"
-alt="存疑" />
+<img src="image-20250719163419348.png" alt="存疑" />
 <figcaption aria-hidden="true">存疑</figcaption>
 </figure>
 <ul>
@@ -864,8 +803,7 @@ I=\dfrac{Q}{t}=\dfrac{Q}{\frac{1}{C}}=\dfrac{40}{\frac{1}{0.2}}\rm
 mA=8mA
 $$</span></p>
 <figure>
-<img src="关于电池的一些基础知识/image-20250720112802551.png"
-alt="不同倍率下的单次放电曲线" />
+<img src="image-20250720112802551.png" alt="不同倍率下的单次放电曲线" />
 <figcaption aria-hidden="true">不同倍率下的单次放电曲线</figcaption>
 </figure>
 <p>实验数据如下表所示：</p>
@@ -949,7 +887,7 @@ V。然后，该电位保持至少72小时，或者如果电流达到1mA。然�
 C的速率将电池放电至2.7 V。该序列重复 100
 个周期。较暗的曲线显示容量，较浅的曲线显示相对于开始时的容量百分比。</p>
 <figure>
-<img src="关于电池的一些基础知识/image-20250720114950340.png"
+<img src="image-20250720114950340.png"
 alt="100此恒流充放电循环的容量变化图" />
 <figcaption
 aria-hidden="true">100此恒流充放电循环的容量变化图</figcaption>
@@ -968,8 +906,7 @@ discharge），所有储能设备或多或少都会受到自放电 （SD） 的�
 <p>下图显示了使用新型纽扣电池的自放电实验图。首先将电池充电至 4.2
 V，然后在此电位下保持恒电位三天。然后测量开路电位九天。</p>
 <figure>
-<img src="关于电池的一些基础知识/image-20250720115641912.png"
-alt="纽扣电池的自放电实验" />
+<img src="image-20250720115641912.png" alt="纽扣电池的自放电实验" />
 <figcaption aria-hidden="true">纽扣电池的自放电实验</figcaption>
 </figure>
 <p>最初，电位降低超过 6 mV。之后，速率减慢至每天不到 1 mV。9
@@ -1010,8 +947,7 @@ I_{leakage}$</span>）。自放电率主要受电池的使用年限和使用情�
 <p>下图显示了两个纽扣电池的漏电流测量值。一块电池是新的，另一块电池短时间加热到
 100°C。两块电池最初都充电至 4.2 V。然后保持电位恒定并测量电流。</p>
 <figure>
-<img src="关于电池的一些基础知识/image-20250720120012586.png"
-alt="自放电对比实验" />
+<img src="image-20250720120012586.png" alt="自放电对比实验" />
 <figcaption aria-hidden="true">自放电对比实验</figcaption>
 </figure>
 <p>许多制造商将<span class="math inline">$\rm I_{leakage}$</span> 指定为
@@ -1030,16 +966,14 @@ V、4.1 V、4.3 V和4.5 V。然后保持电位，直到电流降至1
 mA以下。此步骤可确保电位在EIS实验期间保持恒定。恒电流EIS实验在100
 KHz和10 MHz 之间进行。直流电流为零，交流电流设置为10 mArms</p>
 <figure>
-<img src="关于电池的一些基础知识/image-20250720121122850.png"
-alt="电池的EIS测量" />
+<img src="image-20250720121122850.png" alt="电池的EIS测量" />
 <figcaption aria-hidden="true">电池的EIS测量</figcaption>
 </figure>
 <p>奈奎斯特图的形状在很大程度上取决于电池的电位。在较低电位下，即 3.9 V
 和 4.1 V，两条曲线几乎重叠。电池的阻抗在更高的电位下增加。4.3 V 和 4.5 V
 处的奈奎斯特曲线分别向右移动，半圆更大。下图显示了锂离子电池的典型模型</p>
 <figure>
-<img src="关于电池的一些基础知识/image-20250720121227448.png"
-alt="锂离子电池的典型模型" />
+<img src="image-20250720121227448.png" alt="锂离子电池的典型模型" />
 <figcaption aria-hidden="true">锂离子电池的典型模型</figcaption>
 </figure>
 <p><span class="math inline">$\rm
@@ -1150,7 +1084,7 @@ $$</span> 另一电极则成为阴极，其界面会发生如下还原反应：<
 $$</span> 下图展示了对称锂电池在正负电流阶跃作用下的电位响应。<span
 class="math inline"><em>τ</em><sub>1</sub></span>被称为过渡时间常数，超过该值后”（在还原反应情况下）流向电极表面的О通量[…]不足以满足施加电流需求，电位将偏移至更极端的数值，==此时可能发生其他电极过程（比如下面所说的集流体的氧化）==</p>
 <figure>
-<img src="关于电池的一些基础知识/image-20250720172902591.png"
+<img src="image-20250720172902591.png"
 alt="恒电流阶跃示意图（上）及对称Li-Li 电池的电压响应曲线（下）" />
 <figcaption aria-hidden="true">恒电流阶跃示意图（上）及对称Li-Li
 电池的电压响应曲线（下）</figcaption>
@@ -1158,7 +1092,7 @@ alt="恒电流阶跃示意图（上）及对称Li-Li 电池的电压响应曲线
 <p>就I&gt;0的正向电流而言，<span
 class="math inline"><em>t</em> = <em>τ</em><sub>1</sub></span>处电位的快速上升可能对应着锂电极的完全消耗，由下图所示：</p>
 <figure>
-<img src="关于电池的一些基础知识/f2.gif"
+<img src="f2.gif"
 alt="阳极完全氧化导致的过渡时，对称电池浓度分布与电极的演变过程" />
 <figcaption
 aria-hidden="true">阳极完全氧化导致的过渡时，对称电池浓度分布与电极的演变过程</figcaption>
@@ -1172,7 +1106,7 @@ class="math inline"><em>U</em> = <em>E</em><sub>1</sub> − <em>E</em><s
 <p>然而，在正向电流的情况下，电位的快速上升也可能对应于阴极电解质 |
 锂界面处锂离子的完全耗尽，如下图所示：</p>
 <figure>
-<img src="关于电池的一些基础知识/f3.gif"
+<img src="f3.gif"
 alt="因界面阳离子耗竭而导致过渡的对称电极的浓度曲线和电极的演变" />
 <figcaption
 aria-hidden="true">因界面阳离子耗竭而导致过渡的对称电极的浓度曲线和电极的演变</figcaption>
@@ -1184,8 +1118,7 @@ class="math inline"><em>E</em><sub>1</sub> &gt; <em>E</em><sub>2</sub></span
 class="math inline"><em>U</em> = <em>E</em><sub>1</sub> − <em>E</em><sub>2</sub></span>。</p>
 <p>对称电池是一种简单且经验性的方法，==用于测试电极在恒电流循环中的稳定性==。对于锂金属电极而言，氧化可能导致表面降解，而金属沉积（锂离子被还原）则可能导致枝晶形成。下图a)展示了稳定电池和稳定电极的电压响应，其电压幅值不随时间变化；图b)则显示了由不稳定电极组成的不稳定电池的电压响应，其电位幅值会随时间发生变化：</p>
 <figure>
-<img src="关于电池的一些基础知识/f4.png"
-alt="a)稳定电极和 b)不稳定电极的电位分布示意图" />
+<img src="f4.png" alt="a)稳定电极和 b)不稳定电极的电位分布示意图" />
 <figcaption aria-hidden="true">a)稳定电极和
 b)不稳定电极的电位分布示意图</figcaption>
 </figure>
@@ -1221,8 +1154,7 @@ class="math inline"><em>D</em><sub>Li<sup>+</sup></sub></span>和c成正比</p>
 <p>下图展示了在锂对称电池（Li |
 Li）上，以三种不同数值、正负相反的恒电流密度阶跃测试时，电压随时间变化的演变过程。</p>
 <figure>
-<img src="关于电池的一些基础知识/f5.png"
-alt="采用递增电流密度进行的计时电位法测试" />
+<img src="f5.png" alt="采用递增电流密度进行的计时电位法测试" />
 <figcaption
 aria-hidden="true">采用递增电流密度进行的计时电位法测试</figcaption>
 </figure>
@@ -1356,6 +1288,14 @@ aria-hidden="true">采用递增电流密度进行的计时电位法测试</figca
     </div>
 </article>
 
+<script>
+document.addEventListener("DOMContentLoaded", function() {
+  const elements = document.querySelectorAll('.post-body'); // 取文章正文
+  elements.forEach(el => {
+    el.innerHTML = el.innerHTML.replace(/==([^=]+)==/g, '<mark>$1</mark>');
+  });
+});
+</script>
 
 
                 <footer id="footer" class="main-content-wrap">
@@ -1554,6 +1494,9 @@ aria-hidden="true">采用递增电流密度进行的计时电位法测试</figca
     
 
 
+
+
+<script src="/js/equals-mark.js"></script>
 
 
     </body>

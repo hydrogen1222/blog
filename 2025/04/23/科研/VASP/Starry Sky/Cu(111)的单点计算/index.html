@@ -11,7 +11,7 @@
     
     
     
-    <script type="application/ld+json">{"@context":"http://schema.org","@type":"BlogPosting","author":{"@type":"Person","name":"John Doe","sameAs":["https://github.com/","http://stackoverflow.com/users","https://twitter.com/","https://facebook.com/","https://plus.google.com/","https://www.linkedin.com/profile/","mailto"]},"articleBody":"首先对Cu单胞进行结构优化（bulk计算），然后使用优化的结构进行切割，再进行计算（由于晶胞已经优化过，所以本次计算其实是单点计算）。大师兄提到：\r\n\r\nCu(111) slab\r\n模型（POSCAR）的制作流程（复习一下）。注意：前面我们用的是Conventional\r\ncell，下面用的是Primitive Cell。\r\n一般来说用Conventional cell，\r\nFCC的金属可以用Primitive Cell\r\n但对于其他体系，通过Primitive Cell切出来表面模型有问题\r\n\r\n我准备两种都验证一下。\r\n使用Conventional\r\nCell建立slab模型\r\n切割结构\r\n将bulk计算完毕的CONTCAR文件用Vesta打开，再转换为.cif文件使用Materials\r\nStudio打开\r\n\r\nStep1：Build-Surface-Cleave Surface\r\n\r\nAngstrom是单位埃，需要切割的晶面是(111)，相应的平面方程为x + y + z − 1 = 0，使用点到直线的距离公式即可求出晶面间距离，，即厚度thickness\r\nPS：之前111晶面是啥都给整忘了，算个点到直线的距离也能算错，真该抽自己两巴掌回去恶补高等数学😭\r\n以下是来自维基百科的关于米勒指数以及111晶面的介绍，很形象了\r\n\r\n\r\n米勒指数以及111晶面\r\n\r\n\r\n\r\nGeoGebra计算器\r\n\r\n平面ABC为：x + y + z − 1 = 0，点D为(1,1,0)\r\n算一下厚度： $$\r\nd=\\dfrac{|Ax_0+By_0+Cz_0|}{\\sqrt{A^2+B^2+C^2}}=\\dfrac{1}{\\sqrt{3}}a\\approx\r\n\\dfrac{1}{\\sqrt{3}}\\times 3.63468 \\approx 2.0984\r\n$$ \r\n在切割晶面时，thickness设置为4.0 (4.0 = 1.0 × 4)，即四倍的晶胞参数、四层原子，按一下TAB，软件软件会自动计算四层原子的真是厚度（单位：Angstrom埃），大约是8.394 ≈ 4 × 2.0984，这与我们手动计算的晶面间距离2.0984的四倍相符\r\n\r\nStep2：添加真空层，Build-Crystal-Build vacuum slab-Vacuum\r\norientation：C\r\n\r\n\r\n\r\n添加真空层\r\n\r\n\r\nStep3：右键-lattice parameters\r\n\r\n\r\n\r\n设置Z轴方向为真空层\r\n\r\n导出为.cif，vesta打开转换为POSCAR,\r\nINCAR如下\r\n123456789101112System = Cu-conventional-slabISMEAR = 1SIGMA = 0.1ALGO = FastENCUT = 450 # the system is too huge to adopt huge ENCUTEDIFF = 1E-5LDIPOL = .TRUE.IDIPOL = 3NWRITE = 0LWAVE = .FALSE.LCHARG = .FALSE.NCORE = 20\r\nSlab模型虽然是代表表面，但是实际上在z方向是固体-真空-固体-真空-…的交替。如果我们建立的Slab模型在z方向是非对称的，模型就会产生一个沿z方向的偶极。偶极会产生静电势，静电势接着会影响模型的镜像（周期性边界条件）。最后算出来的模型的总能量和力与真实情况是不相符的。因此我们需要方法去矫正这种虚假的静电影响。\r\n一种常用的方法就是偶极矫正，在真空部分加入一个超窄的但是方向相反的偶极。这样一来，固体模型产生的偶极和真空中的偶极就会相互抵消。模型和其镜像之间的静电势影响就会抵消\r\n微调KPOINTS\r\n12345K-POINTS 0Gamma  13 13 1  0 0 0\r\n计算结果\r\n12[ctan@baifq-hpc141 Cu-conventional-slab]$ grep &#x27;  without&#x27; OUTCAR  energy  without entropy=      -55.91176854  energy(sigma-&gt;0) =      -55.91397643\r\nPS：最近学迷糊了，关于收敛脑海中有一个极其不正且的理解\r\n1234567891011121314151617181920212223242526272829303132333435[ctan@baifq-hpc141 bulk-calc]$ grep accuracy OUTCAR reached required accuracy - stopping structural energy minimisation[ctan@baifq-hpc141 bulk-calc]$ cat OSZICAR       N       E                     dE             d eps       ncg     rms          rms(c)DAV:   1     0.103476848532E+03    0.10348E+03   -0.27847E+04  6720   0.246E+03DAV:   2    -0.180387697818E+02   -0.12152E+03   -0.12091E+03  7280   0.155E+02DAV:   3    -0.185227503579E+02   -0.48398E+00   -0.48396E+00 10160   0.132E+01DAV:   4    -0.185240376489E+02   -0.12873E-02   -0.12873E-02  8200   0.464E-01DAV:   5    -0.185240414620E+02   -0.38131E-05   -0.38134E-05 10480   0.143E-02    0.154E+01DAV:   6    -0.164394189736E+02    0.20846E+01   -0.72731E+01  6800   0.881E+01    0.783E+00DAV:   7    -0.149577606472E+02    0.14817E+01   -0.11165E+01  6720   0.344E+01    0.111E+00DAV:   8    -0.149148685722E+02    0.42892E-01   -0.18431E-02  7280   0.139E+00    0.620E-01DAV:   9    -0.149081819010E+02    0.66867E-02   -0.51836E-02  8440   0.220E+00    0.636E-02DAV:  10    -0.149081753161E+02    0.65849E-05   -0.22202E-04  9000   0.149E-01    0.115E-02DAV:  11    -0.149081715196E+02    0.37964E-05   -0.16862E-06  8520   0.968E-03    0.844E-04DAV:  12    -0.149081716052E+02   -0.85577E-07   -0.88627E-08  4640   0.248E-03   1 F= -.14908172E+02 E0= -.14905377E+02  d E =-.149082E+02       N       E                     dE             d eps       ncg     rms          rms(c)DAV:   1    -0.149363274123E+02   -0.28156E-01   -0.51946E-01  6720   0.830E+00    0.131E+00DAV:   2    -0.149199449776E+02    0.16382E-01   -0.41291E-01  6720   0.646E+00    0.538E-01DAV:   3    -0.149119014518E+02    0.80435E-02   -0.68998E-02  6720   0.271E+00    0.192E-01DAV:   4    -0.149112107699E+02    0.69068E-03   -0.11896E-03  9800   0.216E-01    0.117E-02DAV:   5    -0.149112123403E+02   -0.15704E-05   -0.80430E-06  7320   0.267E-02    0.594E-03DAV:   6    -0.149112142891E+02   -0.19488E-05   -0.13229E-06  4760   0.997E-03    0.128E-04DAV:   7    -0.149112142406E+02    0.48522E-07   -0.22610E-08  3560   0.101E-03   2 F= -.14911214E+02 E0= -.14908447E+02  d E =-.304264E-02       N       E                     dE             d eps       ncg     rms          rms(c)DAV:   1    -0.150389301673E+02   -0.12772E+00   -0.26022E+00  6720   0.187E+01    0.290E+00DAV:   2    -0.149566578541E+02    0.82272E-01   -0.20265E+00  6720   0.143E+01    0.119E+00DAV:   3    -0.149175257623E+02    0.39132E-01   -0.34317E-01  6720   0.604E+00    0.437E-01DAV:   4    -0.149140056079E+02    0.35202E-02   -0.72028E-03 10080   0.565E-01    0.378E-02DAV:   5    -0.149139977907E+02    0.78172E-05   -0.11528E-04  7840   0.108E-01    0.134E-02DAV:   6    -0.149140005388E+02   -0.27480E-05   -0.66656E-06  7680   0.220E-02    0.371E-04DAV:   7    -0.149140005655E+02   -0.26792E-07   -0.64306E-08  3960   0.196E-03   3 F= -.14914001E+02 E0= -.14911298E+02  d E =-.582896E-02\r\n这是上一节里的关于bulk计算（结构优化）的部分内容，可以看到，reached required accuracy - stopping structural energy minimisation——离子步已经收敛，在之后的OSZICAR里，电子步迭代最多7步，并未超过设置的最大电子步数目。因此对于bulk计算，==电子步和离子步都收敛==\r\n而对于slab模型的单点计算，我也傻傻的这么做😢\r\n12345678910111213141516171819202122232425262728[ctan@baifq-hpc141 conventional-slab-static]$ grep accuracy OUTCAR[ctan@baifq-hpc141 conventional-slab-static]$ cat OSZICAR       N       E                     dE             d eps       ncg     rms          rms(c)DAV:   1     0.178654188479E+04    0.17865E+04   -0.88940E+04 10388   0.264E+03DAV:   2     0.200572973408E+03   -0.15860E+04   -0.15355E+04 10388   0.519E+02DAV:   3    -0.535557174826E+02   -0.25413E+03   -0.23428E+03 10438   0.249E+02DAV:   4    -0.683234131101E+02   -0.14768E+02   -0.14274E+02 11572   0.815E+01DAV:   5    -0.687193157556E+02   -0.39590E+00   -0.39405E+00 12400   0.117E+01    0.292E+01RMM:   6    -0.611494529970E+02    0.75699E+01   -0.15131E+02 11054   0.104E+02    0.161E+01RMM:   7    -0.558685188476E+02    0.52809E+01   -0.32335E+01 10772   0.530E+01    0.226E+00RMM:   8    -0.559296519539E+02   -0.61133E-01   -0.22789E+00 11552   0.614E+00    0.111E+00RMM:   9    -0.559488617332E+02   -0.19210E-01   -0.37622E-01 11539   0.361E+00    0.509E-01RMM:  10    -0.559454147061E+02    0.34470E-02   -0.13294E-01 12844   0.193E+00    0.214E-01RMM:  11    -0.559437301097E+02    0.16846E-02   -0.22655E-02 12875   0.691E-01    0.208E-01RMM:  12    -0.559413428432E+02    0.23873E-02   -0.55145E-03 11960   0.354E-01    0.586E-02RMM:  13    -0.559414638149E+02   -0.12097E-03   -0.17465E-03 13023   0.187E-01    0.323E-02RMM:  14    -0.559411451635E+02    0.31865E-03   -0.83089E-04 11756   0.134E-01    0.373E-02RMM:  15    -0.559412390394E+02   -0.93876E-04   -0.47990E-04 11372   0.168E-01    0.284E-02RMM:  16    -0.559414153722E+02   -0.17633E-03   -0.21175E-04 11475   0.107E-01    0.129E-02RMM:  17    -0.559414836424E+02   -0.68270E-04   -0.10022E-04 11751   0.526E-02    0.889E-03RMM:  18    -0.559415856898E+02   -0.10205E-03   -0.51724E-05 11898   0.366E-02    0.682E-03RMM:  19    -0.559416259149E+02   -0.40225E-04   -0.26297E-05 11504   0.350E-02    0.861E-03RMM:  20    -0.559416406670E+02   -0.14752E-04   -0.10748E-05 11263   0.208E-02    0.367E-03RMM:  21    -0.559416498741E+02   -0.92071E-05   -0.47420E-06  8911   0.102E-02    0.119E-03RMM:  22    -0.559416543655E+02   -0.44914E-05   -0.22030E-06  7155   0.977E-03    0.193E-03RMM:  23    -0.559416573370E+02   -0.29715E-05   -0.14726E-06  6702   0.894E-03    0.135E-03RMM:  24    -0.559416575122E+02   -0.17515E-06   -0.44209E-07  6318   0.507E-03   1 F= -.55941658E+02 E0= -.55944345E+02  d E =0.806296E-02\r\n不管怎么修改ALGO、ENCUT等参数，grep accuracy OUTCAR始终不返回reached required accuracy - stopping structural energy minimisation，后来我才意识到，这是==单点计算==，NSW = 0，并不会进行离子步迭代呀，所以我们只需关注电子步收敛即可，很明显电子步收敛，OUTCAR里的信息也可说明\r\n12[ctan@baifq-hpc141 conventional-slab-static]$ grep abort OUTCAR------------------------ aborting loop because EDIFF is reached ----------------------------------------\r\nThis is definitely a stupid, stupid and stupid\r\nmistake😭\r\n就写到这，吃饭去了，待会还要回实验室\r\n使用Primitive Cell\r\n使用bulk计算且收敛的CONTCAR进行slab模型的建立，操作还是类似的\r\n值得注意的是，需要先==find\r\nsymmetry==，然后才能转换为primitive cell\r\n\r\n\r\n降低对称性之前\r\n\r\n\r\n\r\nfind symmetry\r\n\r\n然后impose symmetry，接着再转换为primitive cell，然后建立slab模型\r\nPOSCAR会有些不同\r\n123456789101112CONTCAR\\(1\\1\\1)1.0        2.5701000690         0.0000000000         0.0000000000       -1.2850500345         2.2257719501         0.0000000000        0.0000000000         0.0000000000        21.2954006195   Cu    4Direct     0.000000000         0.000000000         0.000000000     0.666670000         0.333330000         0.098540000     0.333330000         0.666670000         0.197080000     0.000000000         0.000000000         0.295620000\r\n计算后的能量也有所不同：\r\n12(base) storm@DESKTOP-HE4FQ8Q:~/my-learn/ex42/Cu-primitive-slab$ grep &#x27;  without&#x27; OUTCAR  energy  without entropy=      -13.97087892  energy(sigma-&gt;0) =      -13.97120814\r\n值得一提的是，在白老师的计算集群上运行时报错了(vasp.6.4.2)\r\n如果截断能ENCUT过小可能报错Error EDDDAV: Call to ZHEGV failed. Returncode = 7 1 8\r\n1234567891011121314151617181920212223242526272829303132333435363738394041424344454647484950515253545556575859606162636465666768697071727374757677[ctan@baifq-hpc141 Cu-primmitive-slab]$ lsINCAR  KPOINTS  POSCAR  POTCAR[ctan@baifq-hpc141 Cu-primmitive-slab]$ clear[ctan@baifq-hpc141 Cu-primmitive-slab]$ sbatch vaspSubmitted batch job 4321[ctan@baifq-hpc141 Cu-primmitive-slab]$ tail -f OUTCAR--------------------------------------- Ionic step        1  ---------------------------------------------------------------------------------- Iteration      1(   1)  ---------------------------------------    POTLOK:  cpu time      0.0215: real time      0.0258    SETDIJ:  cpu time      0.0109: real time      0.0118     EDDAV:  cpu time      0.7451: real time      0.7613       DOS:  cpu time      0.0052: real time      0.0060    --------------------------------------------      LOOP:  cpu time      0.7826: real time      0.8050 eigenvalue-minimisations  :  2548 total energy-change (2. order) : 0.3445715E+03  (-0.1837296E+04) number of electron      44.0000000 magnetization augmentation part       44.0000000 magnetization DIPCOR: dipole corrections for dipol direction  3 min pos   155, dipolmoment           0.000000      0.000000      0.000026 electrons x Angstroem Tr[quadrupol]       -31.061780 energy correction for charged system         0.000000 eV dipol+quadrupol energy correction           -0.000000 eV added-field ion interaction          0.001451 eV  (added to PSCEN) Free energy of the ion-electron system (eV)  ---------------------------------------------------  alpha Z        PSCENC =        96.14159556  Ewald energy   TEWEN  =     16384.30326894  -Hartree energ DENC   =    -21746.47963692  -exchange      EXHF   =         0.00000000  -V(xc)+E(xc)   XCENC  =       182.01436818  PAW double counting   =      4912.82663951    -5336.19386850  entropy T*S    EENTRO =         0.00034874  eigenvalues    EBANDS =       288.07434016  atomic energy  EATOM  =      5563.88447798  Solvation  Ediel_sol  =         0.00000000  ---------------------------------------------------  free energy    TOTEN  =       344.57153365 eV  energy without entropy =      344.57118491  energy(sigma-&gt;0) =      344.57141740----------------------------------------------------------------------------------------------------------------------------------------------- Iteration      1(   2)  --------------------------------------- -----------------------------------------------------------------------------|                                                                             ||     EEEEEEE  RRRRRR   RRRRRR   OOOOOOO  RRRRRR      ###     ###     ###     ||     E        R     R  R     R  O     O  R     R     ###     ###     ###     ||     E        R     R  R     R  O     O  R     R     ###     ###     ###     ||     EEEEE    RRRRRR   RRRRRR   O     O  RRRRRR       #       #       #      ||     E        R   R    R   R    O     O  R   R                               ||     E        R    R   R    R   O     O  R    R      ###     ###     ###     ||     EEEEEEE  R     R  R     R  OOOOOOO  R     R     ###     ###     ###     ||                                                                             ||     Error EDDDAV: Call to ZHEGV failed. Returncode = 7 1 8                  ||                                                                             ||       ----&gt;  I REFUSE TO CONTINUE WITH THIS SICK JOB ... BYE!!! &lt;----       ||                                                                             | -----------------------------------------------------------------------------\r\n小结\r\n\r\n此计算是在bulk计算的基础上(最优结构)进行的单点计算，计算时不能进行离子弛豫，不能进行离子步迭代，默认NSW=0\r\n不进行离子弛豫，那么自然不能设置离子步收敛条件，不能设置EDIFFG\r\n如果不报错运行但结果不收敛可试着增大电子步数NSW以及截断能ENCUT\r\n\r\n","dateCreated":"2025-04-23T10:48:00+08:00","dateModified":"2025-04-27T21:14:10+08:00","datePublished":"2025-04-23T10:48:00+08:00","description":"","headline":"Cu(111) slab模型的单点计算","image":[],"mainEntityOfPage":{"@type":"WebPage","@id":"https://hydrogen1222.xyz/2025/04/23/%E7%A7%91%E7%A0%94/VASP/Starry%20Sky/Cu(111)%E7%9A%84%E5%8D%95%E7%82%B9%E8%AE%A1%E7%AE%97/"},"publisher":{"@type":"Organization","name":"John Doe","sameAs":["https://github.com/","http://stackoverflow.com/users","https://twitter.com/","https://facebook.com/","https://plus.google.com/","https://www.linkedin.com/profile/","mailto"]},"url":"https://hydrogen1222.xyz/2025/04/23/%E7%A7%91%E7%A0%94/VASP/Starry%20Sky/Cu(111)%E7%9A%84%E5%8D%95%E7%82%B9%E8%AE%A1%E7%AE%97/","keywords":"化学, 科研"}</script>
+    <script type="application/ld+json">{"@context":"http://schema.org","@type":"BlogPosting","author":{"@type":"Person","name":"John Doe","sameAs":["https://github.com/hydrogen1222","https://user.qzone.qq.com/2170147489/infocenter","https://space.bilibili.com/441987358?spm_id_from=333.1007.0.0","mailto:tanch1222@mails.jlu.edu.cn"]},"articleBody":"首先对Cu单胞进行结构优化（bulk计算），然后使用优化的结构进行切割，再进行计算（由于晶胞已经优化过，所以本次计算其实是单点计算）。大师兄提到：\r\n\r\nCu(111) slab\r\n模型（POSCAR）的制作流程（复习一下）。注意：前面我们用的是Conventional\r\ncell，下面用的是Primitive Cell。\r\n一般来说用Conventional cell，\r\nFCC的金属可以用Primitive Cell\r\n但对于其他体系，通过Primitive Cell切出来表面模型有问题\r\n\r\n我准备两种都验证一下。\r\n使用Conventional\r\nCell建立slab模型\r\n切割结构\r\n将bulk计算完毕的CONTCAR文件用Vesta打开，再转换为.cif文件使用Materials\r\nStudio打开\r\n\r\nStep1：Build-Surface-Cleave Surface\r\n\r\nAngstrom是单位埃，需要切割的晶面是(111)，相应的平面方程为x + y + z − 1 = 0，使用点到直线的距离公式即可求出晶面间距离，，即厚度thickness\r\nPS：之前111晶面是啥都给整忘了，算个点到直线的距离也能算错，真该抽自己两巴掌回去恶补高等数学😭\r\n以下是来自维基百科的关于米勒指数以及111晶面的介绍，很形象了\r\n\r\n\r\n米勒指数以及111晶面\r\n\r\n\r\n\r\nGeoGebra计算器\r\n\r\n平面ABC为：x + y + z − 1 = 0，点D为(1,1,0)\r\n算一下厚度： $$\r\nd=\\dfrac{|Ax_0+By_0+Cz_0|}{\\sqrt{A^2+B^2+C^2}}=\\dfrac{1}{\\sqrt{3}}a\\approx\r\n\\dfrac{1}{\\sqrt{3}}\\times 3.63468 \\approx 2.0984\r\n$$ \r\n在切割晶面时，thickness设置为4.0 (4.0 = 1.0 × 4)，即四倍的晶胞参数、四层原子，按一下TAB，软件软件会自动计算四层原子的真是厚度（单位：Angstrom埃），大约是8.394 ≈ 4 × 2.0984，这与我们手动计算的晶面间距离2.0984的四倍相符\r\n\r\nStep2：添加真空层，Build-Crystal-Build vacuum slab-Vacuum\r\norientation：C\r\n\r\n\r\n\r\n添加真空层\r\n\r\n\r\nStep3：右键-lattice parameters\r\n\r\n\r\n\r\n设置Z轴方向为真空层\r\n\r\n导出为.cif，vesta打开转换为POSCAR,\r\nINCAR如下\r\n123456789101112System = Cu-conventional-slabISMEAR = 1SIGMA = 0.1ALGO = FastENCUT = 450 # the system is too huge to adopt huge ENCUTEDIFF = 1E-5LDIPOL = .TRUE.IDIPOL = 3NWRITE = 0LWAVE = .FALSE.LCHARG = .FALSE.NCORE = 20\r\nSlab模型虽然是代表表面，但是实际上在z方向是固体-真空-固体-真空-…的交替。如果我们建立的Slab模型在z方向是非对称的，模型就会产生一个沿z方向的偶极。偶极会产生静电势，静电势接着会影响模型的镜像（周期性边界条件）。最后算出来的模型的总能量和力与真实情况是不相符的。因此我们需要方法去矫正这种虚假的静电影响。\r\n一种常用的方法就是偶极矫正，在真空部分加入一个超窄的但是方向相反的偶极。这样一来，固体模型产生的偶极和真空中的偶极就会相互抵消。模型和其镜像之间的静电势影响就会抵消\r\n微调KPOINTS\r\n12345K-POINTS 0Gamma  13 13 1  0 0 0\r\n计算结果\r\n12[ctan@baifq-hpc141 Cu-conventional-slab]$ grep &#x27;  without&#x27; OUTCAR  energy  without entropy=      -55.91176854  energy(sigma-&gt;0) =      -55.91397643\r\nPS：最近学迷糊了，关于收敛脑海中有一个极其不正且的理解\r\n1234567891011121314151617181920212223242526272829303132333435[ctan@baifq-hpc141 bulk-calc]$ grep accuracy OUTCAR reached required accuracy - stopping structural energy minimisation[ctan@baifq-hpc141 bulk-calc]$ cat OSZICAR       N       E                     dE             d eps       ncg     rms          rms(c)DAV:   1     0.103476848532E+03    0.10348E+03   -0.27847E+04  6720   0.246E+03DAV:   2    -0.180387697818E+02   -0.12152E+03   -0.12091E+03  7280   0.155E+02DAV:   3    -0.185227503579E+02   -0.48398E+00   -0.48396E+00 10160   0.132E+01DAV:   4    -0.185240376489E+02   -0.12873E-02   -0.12873E-02  8200   0.464E-01DAV:   5    -0.185240414620E+02   -0.38131E-05   -0.38134E-05 10480   0.143E-02    0.154E+01DAV:   6    -0.164394189736E+02    0.20846E+01   -0.72731E+01  6800   0.881E+01    0.783E+00DAV:   7    -0.149577606472E+02    0.14817E+01   -0.11165E+01  6720   0.344E+01    0.111E+00DAV:   8    -0.149148685722E+02    0.42892E-01   -0.18431E-02  7280   0.139E+00    0.620E-01DAV:   9    -0.149081819010E+02    0.66867E-02   -0.51836E-02  8440   0.220E+00    0.636E-02DAV:  10    -0.149081753161E+02    0.65849E-05   -0.22202E-04  9000   0.149E-01    0.115E-02DAV:  11    -0.149081715196E+02    0.37964E-05   -0.16862E-06  8520   0.968E-03    0.844E-04DAV:  12    -0.149081716052E+02   -0.85577E-07   -0.88627E-08  4640   0.248E-03   1 F= -.14908172E+02 E0= -.14905377E+02  d E =-.149082E+02       N       E                     dE             d eps       ncg     rms          rms(c)DAV:   1    -0.149363274123E+02   -0.28156E-01   -0.51946E-01  6720   0.830E+00    0.131E+00DAV:   2    -0.149199449776E+02    0.16382E-01   -0.41291E-01  6720   0.646E+00    0.538E-01DAV:   3    -0.149119014518E+02    0.80435E-02   -0.68998E-02  6720   0.271E+00    0.192E-01DAV:   4    -0.149112107699E+02    0.69068E-03   -0.11896E-03  9800   0.216E-01    0.117E-02DAV:   5    -0.149112123403E+02   -0.15704E-05   -0.80430E-06  7320   0.267E-02    0.594E-03DAV:   6    -0.149112142891E+02   -0.19488E-05   -0.13229E-06  4760   0.997E-03    0.128E-04DAV:   7    -0.149112142406E+02    0.48522E-07   -0.22610E-08  3560   0.101E-03   2 F= -.14911214E+02 E0= -.14908447E+02  d E =-.304264E-02       N       E                     dE             d eps       ncg     rms          rms(c)DAV:   1    -0.150389301673E+02   -0.12772E+00   -0.26022E+00  6720   0.187E+01    0.290E+00DAV:   2    -0.149566578541E+02    0.82272E-01   -0.20265E+00  6720   0.143E+01    0.119E+00DAV:   3    -0.149175257623E+02    0.39132E-01   -0.34317E-01  6720   0.604E+00    0.437E-01DAV:   4    -0.149140056079E+02    0.35202E-02   -0.72028E-03 10080   0.565E-01    0.378E-02DAV:   5    -0.149139977907E+02    0.78172E-05   -0.11528E-04  7840   0.108E-01    0.134E-02DAV:   6    -0.149140005388E+02   -0.27480E-05   -0.66656E-06  7680   0.220E-02    0.371E-04DAV:   7    -0.149140005655E+02   -0.26792E-07   -0.64306E-08  3960   0.196E-03   3 F= -.14914001E+02 E0= -.14911298E+02  d E =-.582896E-02\r\n这是上一节里的关于bulk计算（结构优化）的部分内容，可以看到，reached required accuracy - stopping structural energy minimisation——离子步已经收敛，在之后的OSZICAR里，电子步迭代最多7步，并未超过设置的最大电子步数目。因此对于bulk计算，==电子步和离子步都收敛==\r\n而对于slab模型的单点计算，我也傻傻的这么做😢\r\n12345678910111213141516171819202122232425262728[ctan@baifq-hpc141 conventional-slab-static]$ grep accuracy OUTCAR[ctan@baifq-hpc141 conventional-slab-static]$ cat OSZICAR       N       E                     dE             d eps       ncg     rms          rms(c)DAV:   1     0.178654188479E+04    0.17865E+04   -0.88940E+04 10388   0.264E+03DAV:   2     0.200572973408E+03   -0.15860E+04   -0.15355E+04 10388   0.519E+02DAV:   3    -0.535557174826E+02   -0.25413E+03   -0.23428E+03 10438   0.249E+02DAV:   4    -0.683234131101E+02   -0.14768E+02   -0.14274E+02 11572   0.815E+01DAV:   5    -0.687193157556E+02   -0.39590E+00   -0.39405E+00 12400   0.117E+01    0.292E+01RMM:   6    -0.611494529970E+02    0.75699E+01   -0.15131E+02 11054   0.104E+02    0.161E+01RMM:   7    -0.558685188476E+02    0.52809E+01   -0.32335E+01 10772   0.530E+01    0.226E+00RMM:   8    -0.559296519539E+02   -0.61133E-01   -0.22789E+00 11552   0.614E+00    0.111E+00RMM:   9    -0.559488617332E+02   -0.19210E-01   -0.37622E-01 11539   0.361E+00    0.509E-01RMM:  10    -0.559454147061E+02    0.34470E-02   -0.13294E-01 12844   0.193E+00    0.214E-01RMM:  11    -0.559437301097E+02    0.16846E-02   -0.22655E-02 12875   0.691E-01    0.208E-01RMM:  12    -0.559413428432E+02    0.23873E-02   -0.55145E-03 11960   0.354E-01    0.586E-02RMM:  13    -0.559414638149E+02   -0.12097E-03   -0.17465E-03 13023   0.187E-01    0.323E-02RMM:  14    -0.559411451635E+02    0.31865E-03   -0.83089E-04 11756   0.134E-01    0.373E-02RMM:  15    -0.559412390394E+02   -0.93876E-04   -0.47990E-04 11372   0.168E-01    0.284E-02RMM:  16    -0.559414153722E+02   -0.17633E-03   -0.21175E-04 11475   0.107E-01    0.129E-02RMM:  17    -0.559414836424E+02   -0.68270E-04   -0.10022E-04 11751   0.526E-02    0.889E-03RMM:  18    -0.559415856898E+02   -0.10205E-03   -0.51724E-05 11898   0.366E-02    0.682E-03RMM:  19    -0.559416259149E+02   -0.40225E-04   -0.26297E-05 11504   0.350E-02    0.861E-03RMM:  20    -0.559416406670E+02   -0.14752E-04   -0.10748E-05 11263   0.208E-02    0.367E-03RMM:  21    -0.559416498741E+02   -0.92071E-05   -0.47420E-06  8911   0.102E-02    0.119E-03RMM:  22    -0.559416543655E+02   -0.44914E-05   -0.22030E-06  7155   0.977E-03    0.193E-03RMM:  23    -0.559416573370E+02   -0.29715E-05   -0.14726E-06  6702   0.894E-03    0.135E-03RMM:  24    -0.559416575122E+02   -0.17515E-06   -0.44209E-07  6318   0.507E-03   1 F= -.55941658E+02 E0= -.55944345E+02  d E =0.806296E-02\r\n不管怎么修改ALGO、ENCUT等参数，grep accuracy OUTCAR始终不返回reached required accuracy - stopping structural energy minimisation，后来我才意识到，这是==单点计算==，NSW = 0，并不会进行离子步迭代呀，所以我们只需关注电子步收敛即可，很明显电子步收敛，OUTCAR里的信息也可说明\r\n12[ctan@baifq-hpc141 conventional-slab-static]$ grep abort OUTCAR------------------------ aborting loop because EDIFF is reached ----------------------------------------\r\nThis is definitely a stupid, stupid and stupid\r\nmistake😭\r\n就写到这，吃饭去了，待会还要回实验室\r\n使用Primitive Cell\r\n使用bulk计算且收敛的CONTCAR进行slab模型的建立，操作还是类似的\r\n值得注意的是，需要先==find\r\nsymmetry==，然后才能转换为primitive cell\r\n\r\n\r\n降低对称性之前\r\n\r\n\r\n\r\nfind symmetry\r\n\r\n然后impose symmetry，接着再转换为primitive cell，然后建立slab模型\r\nPOSCAR会有些不同\r\n123456789101112CONTCAR\\(1\\1\\1)1.0        2.5701000690         0.0000000000         0.0000000000       -1.2850500345         2.2257719501         0.0000000000        0.0000000000         0.0000000000        21.2954006195   Cu    4Direct     0.000000000         0.000000000         0.000000000     0.666670000         0.333330000         0.098540000     0.333330000         0.666670000         0.197080000     0.000000000         0.000000000         0.295620000\r\n计算后的能量也有所不同：\r\n12(base) storm@DESKTOP-HE4FQ8Q:~/my-learn/ex42/Cu-primitive-slab$ grep &#x27;  without&#x27; OUTCAR  energy  without entropy=      -13.97087892  energy(sigma-&gt;0) =      -13.97120814\r\n值得一提的是，在白老师的计算集群上运行时报错了(vasp.6.4.2)\r\n如果截断能ENCUT过小可能报错Error EDDDAV: Call to ZHEGV failed. Returncode = 7 1 8\r\n1234567891011121314151617181920212223242526272829303132333435363738394041424344454647484950515253545556575859606162636465666768697071727374757677[ctan@baifq-hpc141 Cu-primmitive-slab]$ lsINCAR  KPOINTS  POSCAR  POTCAR[ctan@baifq-hpc141 Cu-primmitive-slab]$ clear[ctan@baifq-hpc141 Cu-primmitive-slab]$ sbatch vaspSubmitted batch job 4321[ctan@baifq-hpc141 Cu-primmitive-slab]$ tail -f OUTCAR--------------------------------------- Ionic step        1  ---------------------------------------------------------------------------------- Iteration      1(   1)  ---------------------------------------    POTLOK:  cpu time      0.0215: real time      0.0258    SETDIJ:  cpu time      0.0109: real time      0.0118     EDDAV:  cpu time      0.7451: real time      0.7613       DOS:  cpu time      0.0052: real time      0.0060    --------------------------------------------      LOOP:  cpu time      0.7826: real time      0.8050 eigenvalue-minimisations  :  2548 total energy-change (2. order) : 0.3445715E+03  (-0.1837296E+04) number of electron      44.0000000 magnetization augmentation part       44.0000000 magnetization DIPCOR: dipole corrections for dipol direction  3 min pos   155, dipolmoment           0.000000      0.000000      0.000026 electrons x Angstroem Tr[quadrupol]       -31.061780 energy correction for charged system         0.000000 eV dipol+quadrupol energy correction           -0.000000 eV added-field ion interaction          0.001451 eV  (added to PSCEN) Free energy of the ion-electron system (eV)  ---------------------------------------------------  alpha Z        PSCENC =        96.14159556  Ewald energy   TEWEN  =     16384.30326894  -Hartree energ DENC   =    -21746.47963692  -exchange      EXHF   =         0.00000000  -V(xc)+E(xc)   XCENC  =       182.01436818  PAW double counting   =      4912.82663951    -5336.19386850  entropy T*S    EENTRO =         0.00034874  eigenvalues    EBANDS =       288.07434016  atomic energy  EATOM  =      5563.88447798  Solvation  Ediel_sol  =         0.00000000  ---------------------------------------------------  free energy    TOTEN  =       344.57153365 eV  energy without entropy =      344.57118491  energy(sigma-&gt;0) =      344.57141740----------------------------------------------------------------------------------------------------------------------------------------------- Iteration      1(   2)  --------------------------------------- -----------------------------------------------------------------------------|                                                                             ||     EEEEEEE  RRRRRR   RRRRRR   OOOOOOO  RRRRRR      ###     ###     ###     ||     E        R     R  R     R  O     O  R     R     ###     ###     ###     ||     E        R     R  R     R  O     O  R     R     ###     ###     ###     ||     EEEEE    RRRRRR   RRRRRR   O     O  RRRRRR       #       #       #      ||     E        R   R    R   R    O     O  R   R                               ||     E        R    R   R    R   O     O  R    R      ###     ###     ###     ||     EEEEEEE  R     R  R     R  OOOOOOO  R     R     ###     ###     ###     ||                                                                             ||     Error EDDDAV: Call to ZHEGV failed. Returncode = 7 1 8                  ||                                                                             ||       ----&gt;  I REFUSE TO CONTINUE WITH THIS SICK JOB ... BYE!!! &lt;----       ||                                                                             | -----------------------------------------------------------------------------\r\n小结\r\n\r\n此计算是在bulk计算的基础上(最优结构)进行的单点计算，计算时不能进行离子弛豫，不能进行离子步迭代，默认NSW=0\r\n不进行离子弛豫，那么自然不能设置离子步收敛条件，不能设置EDIFFG\r\n如果不报错运行但结果不收敛可试着增大电子步数NSW以及截断能ENCUT\r\n\r\n","dateCreated":"2025-04-23T10:48:00+08:00","dateModified":"2025-08-31T11:25:08+08:00","datePublished":"2025-04-23T10:48:00+08:00","description":"","headline":"Cu(111) slab模型的单点计算","image":[],"mainEntityOfPage":{"@type":"WebPage","@id":"https://hydrogen1222.xyz/2025/04/23/%E7%A7%91%E7%A0%94/VASP/Starry%20Sky/Cu(111)%E7%9A%84%E5%8D%95%E7%82%B9%E8%AE%A1%E7%AE%97/"},"publisher":{"@type":"Organization","name":"John Doe","sameAs":["https://github.com/hydrogen1222","https://user.qzone.qq.com/2170147489/infocenter","https://space.bilibili.com/441987358?spm_id_from=333.1007.0.0","mailto:tanch1222@mails.jlu.edu.cn"]},"url":"https://hydrogen1222.xyz/2025/04/23/%E7%A7%91%E7%A0%94/VASP/Starry%20Sky/Cu(111)%E7%9A%84%E5%8D%95%E7%82%B9%E8%AE%A1%E7%AE%97/","keywords":"化学, 科研"}</script>
     <meta name="description" content="首先对Cu单胞进行结构优化（bulk计算），然后使用优化的结构进行切割，再进行计算（由于晶胞已经优化过，所以本次计算其实是单点计算）。大师兄提到：  Cu(111) slab 模型（POSCAR）的制作流程（复习一下）。注意：前面我们用的是Conventional cell，下面用的是Primitive Cell。 一般来说用Conventional cell， FCC的金属可以用Pr">
 <meta property="og:type" content="blog">
 <meta property="og:title" content="Cu(111) slab模型的单点计算">
@@ -19,14 +19,20 @@
 <meta property="og:site_name" content="Hexo">
 <meta property="og:description" content="首先对Cu单胞进行结构优化（bulk计算），然后使用优化的结构进行切割，再进行计算（由于晶胞已经优化过，所以本次计算其实是单点计算）。大师兄提到：  Cu(111) slab 模型（POSCAR）的制作流程（复习一下）。注意：前面我们用的是Conventional cell，下面用的是Primitive Cell。 一般来说用Conventional cell， FCC的金属可以用Pr">
 <meta property="og:locale" content="en_US">
-<meta property="og:image" content="https://hydrogen1222.xyz/2025/04/23/%E7%A7%91%E7%A0%94/VASP/Starry%20Sky/Cu(111)%E7%9A%84%E5%8D%95%E7%82%B9%E8%AE%A1%E7%AE%97/Cu(111)%E7%9A%84%E5%8D%95%E7%82%B9%E8%AE%A1%E7%AE%97/1.png">
+<meta property="og:image" content="https://hydrogen1222.xyz/2025/04/23/%E7%A7%91%E7%A0%94/VASP/Starry%20Sky/Cu(111)%E7%9A%84%E5%8D%95%E7%82%B9%E8%AE%A1%E7%AE%97/Indices_miller_plan_exemple_cube-1756610698112-29.png">
+<meta property="og:image" content="https://hydrogen1222.xyz/2025/04/23/%E7%A7%91%E7%A0%94/VASP/Starry%20Sky/Cu(111)%E7%9A%84%E5%8D%95%E7%82%B9%E8%AE%A1%E7%AE%97/1-1756610698112-30.png">
+<meta property="og:image" content="https://hydrogen1222.xyz/2025/04/23/%E7%A7%91%E7%A0%94/VASP/Starry%20Sky/Cu(111)%E7%9A%84%E5%8D%95%E7%82%B9%E8%AE%A1%E7%AE%97/image-20250426174733986-1756610698112-33.png">
+<meta property="og:image" content="https://hydrogen1222.xyz/2025/04/23/%E7%A7%91%E7%A0%94/VASP/Starry%20Sky/Cu(111)%E7%9A%84%E5%8D%95%E7%82%B9%E8%AE%A1%E7%AE%97/image-20250423111821857-1756610698112-31.png">
+<meta property="og:image" content="https://hydrogen1222.xyz/2025/04/23/%E7%A7%91%E7%A0%94/VASP/Starry%20Sky/Cu(111)%E7%9A%84%E5%8D%95%E7%82%B9%E8%AE%A1%E7%AE%97/image-20250423110528280-1756610698112-32.png">
+<meta property="og:image" content="https://hydrogen1222.xyz/2025/04/23/%E7%A7%91%E7%A0%94/VASP/Starry%20Sky/Cu(111)%E7%9A%84%E5%8D%95%E7%82%B9%E8%AE%A1%E7%AE%97/image-20250426191515563-1756610698112-34.png">
+<meta property="og:image" content="https://hydrogen1222.xyz/2025/04/23/%E7%A7%91%E7%A0%94/VASP/Starry%20Sky/Cu(111)%E7%9A%84%E5%8D%95%E7%82%B9%E8%AE%A1%E7%AE%97/image-20250426191902480-1756610698112-35.png">
 <meta property="article:published_time" content="2025-04-23T02:48:00.000Z">
-<meta property="article:modified_time" content="2025-04-27T13:14:10.000Z">
+<meta property="article:modified_time" content="2025-08-31T03:25:08.618Z">
 <meta property="article:author" content="John Doe">
 <meta property="article:tag" content="化学">
 <meta property="article:tag" content="科研">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:image" content="https://hydrogen1222.xyz/2025/04/23/%E7%A7%91%E7%A0%94/VASP/Starry%20Sky/Cu(111)%E7%9A%84%E5%8D%95%E7%82%B9%E8%AE%A1%E7%AE%97/Cu(111)%E7%9A%84%E5%8D%95%E7%82%B9%E8%AE%A1%E7%AE%97/1.png">
+<meta name="twitter:image" content="https://hydrogen1222.xyz/2025/04/23/%E7%A7%91%E7%A0%94/VASP/Starry%20Sky/Cu(111)%E7%9A%84%E5%8D%95%E7%82%B9%E8%AE%A1%E7%AE%97/Indices_miller_plan_exemple_cube-1756610698112-29.png">
     
     
         
@@ -183,20 +189,6 @@
                 <li class="sidebar-button">
                     
                         <a
-                            class="sidebar-button-link open-algolia-search"
-                            href="#search"
-                            
-                            rel="noopener"
-                            title="Search"
-                        >
-                        <i class="sidebar-button-icon fa fa-search" aria-hidden="true"></i>
-                        <span class="sidebar-button-desc">Search</span>
-                    </a>
-            </li>
-            
-                <li class="sidebar-button">
-                    
-                        <a
                             class="sidebar-button-link "
                             href="#about"
                             
@@ -216,7 +208,7 @@
                     
                         <a
                             class="sidebar-button-link "
-                            href="https://github.com/"
+                            href="https://github.com/hydrogen1222"
                             
                                 target="_blank"
                             
@@ -232,15 +224,15 @@
                     
                         <a
                             class="sidebar-button-link "
-                            href="http://stackoverflow.com/users"
+                            href="https://user.qzone.qq.com/2170147489/infocenter"
                             
                                 target="_blank"
                             
                             rel="noopener"
-                            title="Stack Overflow"
+                            title="QQ"
                         >
-                        <i class="sidebar-button-icon fab fa-stack-overflow" aria-hidden="true"></i>
-                        <span class="sidebar-button-desc">Stack Overflow</span>
+                        <i class="sidebar-button-icon fab fa-qq" aria-hidden="true"></i>
+                        <span class="sidebar-button-desc">QQ</span>
                     </a>
             </li>
             
@@ -248,15 +240,15 @@
                     
                         <a
                             class="sidebar-button-link "
-                            href="https://twitter.com/"
+                            href="https://space.bilibili.com/441987358?spm_id_from=333.1007.0.0"
                             
                                 target="_blank"
                             
                             rel="noopener"
-                            title="Twitter"
+                            title="bilibili"
                         >
-                        <i class="sidebar-button-icon fab fa-twitter" aria-hidden="true"></i>
-                        <span class="sidebar-button-desc">Twitter</span>
+                        <i class="sidebar-button-icon fab fa-bilibili" aria-hidden="true"></i>
+                        <span class="sidebar-button-desc">bilibili</span>
                     </a>
             </li>
             
@@ -264,55 +256,9 @@
                     
                         <a
                             class="sidebar-button-link "
-                            href="https://facebook.com/"
+                            href="mailto:tanch1222@mails.jlu.edu.cn"
                             
                                 target="_blank"
-                            
-                            rel="noopener"
-                            title="Facebook"
-                        >
-                        <i class="sidebar-button-icon fab fa-facebook" aria-hidden="true"></i>
-                        <span class="sidebar-button-desc">Facebook</span>
-                    </a>
-            </li>
-            
-                <li class="sidebar-button">
-                    
-                        <a
-                            class="sidebar-button-link "
-                            href="https://plus.google.com/"
-                            
-                                target="_blank"
-                            
-                            rel="noopener"
-                            title="Google +"
-                        >
-                        <i class="sidebar-button-icon fab fa-google-plus" aria-hidden="true"></i>
-                        <span class="sidebar-button-desc">Google +</span>
-                    </a>
-            </li>
-            
-                <li class="sidebar-button">
-                    
-                        <a
-                            class="sidebar-button-link "
-                            href="https://www.linkedin.com/profile/"
-                            
-                                target="_blank"
-                            
-                            rel="noopener"
-                            title="LinkedIn"
-                        >
-                        <i class="sidebar-button-icon fab fa-linkedin" aria-hidden="true"></i>
-                        <span class="sidebar-button-desc">LinkedIn</span>
-                    </a>
-            </li>
-            
-                <li class="sidebar-button">
-                    
-                        <a
-                            class="sidebar-button-link "
-                            href="/mailto"
                             
                             rel="noopener"
                             title="Mail"
@@ -405,14 +351,12 @@ class="math inline"><em>x</em> + <em>y</em> + <em>z</em> − 1 =�
 <p>PS：之前<code>111</code>晶面是啥都给整忘了，算个点到直线的距离也能算错，真该抽自己两巴掌回去恶补<code>高等数学</code>😭</p>
 <p>以下是来自维基百科的关于米勒指数以及<code>111</code>晶面的介绍，很形象了</p>
 <figure>
-<img
-src="./Cu(111)%E7%9A%84%E5%8D%95%E7%82%B9%E8%AE%A1%E7%AE%97/Indices_miller_plan_exemple_cube.png"
+<img src="Indices_miller_plan_exemple_cube-1756610698112-29.png"
 alt="米勒指数以及111晶面" />
 <figcaption aria-hidden="true">米勒指数以及111晶面</figcaption>
 </figure>
 <figure>
-<img src="./Cu(111)%E7%9A%84%E5%8D%95%E7%82%B9%E8%AE%A1%E7%AE%97/1.png"
-alt="GeoGebra计算器" />
+<img src="1-1756610698112-30.png" alt="GeoGebra计算器" />
 <figcaption aria-hidden="true">GeoGebra计算器</figcaption>
 </figure>
 <p>平面ABC为：<span
@@ -420,8 +364,7 @@ class="math inline"><em>x</em> + <em>y</em> + <em>z</em> − 1 =�
 <p>算一下厚度： <span class="math display">$$
 d=\dfrac{|Ax_0+By_0+Cz_0|}{\sqrt{A^2+B^2+C^2}}=\dfrac{1}{\sqrt{3}}a\approx
 \dfrac{1}{\sqrt{3}}\times 3.63468 \approx 2.0984
-$$</span> <img
-src="./Cu(111)%E7%9A%84%E5%8D%95%E7%82%B9%E8%AE%A1%E7%AE%97/image-20250426174733986.png"
+$$</span> <img src="image-20250426174733986-1756610698112-33.png"
 alt="Cleave Surface in Materials Studio" /></p>
 <p>在切割晶面时，<code>thickness</code>设置为4.0 (<span
 class="math inline">4.0 = 1.0 × 4</span>)，即四倍的晶胞参数、四层原子，按一下<code>TAB</code>，软件软件会自动计算四层原子的真是厚度（单位：Angstrom埃），大约是<span
@@ -431,8 +374,7 @@ class="math inline">8.394 ≈ 4 × 2.0984</span>，这与我们手动计
 orientation：C</li>
 </ul>
 <figure>
-<img
-src="./Cu(111)%E7%9A%84%E5%8D%95%E7%82%B9%E8%AE%A1%E7%AE%97/image-20250423111821857.png"
+<img src="image-20250423111821857-1756610698112-31.png"
 alt="添加真空层" />
 <figcaption aria-hidden="true">添加真空层</figcaption>
 </figure>
@@ -440,8 +382,7 @@ alt="添加真空层" />
 <li>Step3：右键-lattice parameters</li>
 </ul>
 <figure>
-<img
-src="./Cu(111)%E7%9A%84%E5%8D%95%E7%82%B9%E8%AE%A1%E7%AE%97/image-20250423110528280.png"
+<img src="image-20250423110528280-1756610698112-32.png"
 alt="设置Z轴方向为真空层" />
 <figcaption aria-hidden="true">设置Z轴方向为真空层</figcaption>
 </figure>
@@ -469,14 +410,12 @@ mistake</strong>😭</p>
 <p>值得注意的是，需要先==find
 symmetry==，然后才能转换为<code>primitive cell</code></p>
 <figure>
-<img
-src="./Cu(111)%E7%9A%84%E5%8D%95%E7%82%B9%E8%AE%A1%E7%AE%97/image-20250426191515563.png"
+<img src="image-20250426191515563-1756610698112-34.png"
 alt="降低对称性之前" />
 <figcaption aria-hidden="true">降低对称性之前</figcaption>
 </figure>
 <figure>
-<img
-src="./Cu(111)%E7%9A%84%E5%8D%95%E7%82%B9%E8%AE%A1%E7%AE%97/image-20250426191902480.png"
+<img src="image-20250426191902480-1756610698112-35.png"
 alt="find symmetry" />
 <figcaption aria-hidden="true">find symmetry</figcaption>
 </figure>
@@ -614,6 +553,14 @@ alt="find symmetry" />
     </div>
 </article>
 
+<script>
+document.addEventListener("DOMContentLoaded", function() {
+  const elements = document.querySelectorAll('.post-body'); // 取文章正文
+  elements.forEach(el => {
+    el.innerHTML = el.innerHTML.replace(/==([^=]+)==/g, '<mark>$1</mark>');
+  });
+});
+</script>
 
 
                 <footer id="footer" class="main-content-wrap">
@@ -812,6 +759,9 @@ alt="find symmetry" />
     
 
 
+
+
+<script src="/js/equals-mark.js"></script>
 
 
     </body>

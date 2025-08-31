@@ -173,20 +173,6 @@
                 <li class="sidebar-button">
                     
                         <a
-                            class="sidebar-button-link open-algolia-search"
-                            href="#search"
-                            
-                            rel="noopener"
-                            title="Search"
-                        >
-                        <i class="sidebar-button-icon fa fa-search" aria-hidden="true"></i>
-                        <span class="sidebar-button-desc">Search</span>
-                    </a>
-            </li>
-            
-                <li class="sidebar-button">
-                    
-                        <a
                             class="sidebar-button-link "
                             href="#about"
                             
@@ -206,7 +192,7 @@
                     
                         <a
                             class="sidebar-button-link "
-                            href="https://github.com/"
+                            href="https://github.com/hydrogen1222"
                             
                                 target="_blank"
                             
@@ -222,15 +208,15 @@
                     
                         <a
                             class="sidebar-button-link "
-                            href="http://stackoverflow.com/users"
+                            href="https://user.qzone.qq.com/2170147489/infocenter"
                             
                                 target="_blank"
                             
                             rel="noopener"
-                            title="Stack Overflow"
+                            title="QQ"
                         >
-                        <i class="sidebar-button-icon fab fa-stack-overflow" aria-hidden="true"></i>
-                        <span class="sidebar-button-desc">Stack Overflow</span>
+                        <i class="sidebar-button-icon fab fa-qq" aria-hidden="true"></i>
+                        <span class="sidebar-button-desc">QQ</span>
                     </a>
             </li>
             
@@ -238,15 +224,15 @@
                     
                         <a
                             class="sidebar-button-link "
-                            href="https://twitter.com/"
+                            href="https://space.bilibili.com/441987358?spm_id_from=333.1007.0.0"
                             
                                 target="_blank"
                             
                             rel="noopener"
-                            title="Twitter"
+                            title="bilibili"
                         >
-                        <i class="sidebar-button-icon fab fa-twitter" aria-hidden="true"></i>
-                        <span class="sidebar-button-desc">Twitter</span>
+                        <i class="sidebar-button-icon fab fa-bilibili" aria-hidden="true"></i>
+                        <span class="sidebar-button-desc">bilibili</span>
                     </a>
             </li>
             
@@ -254,55 +240,9 @@
                     
                         <a
                             class="sidebar-button-link "
-                            href="https://facebook.com/"
+                            href="mailto:tanch1222@mails.jlu.edu.cn"
                             
                                 target="_blank"
-                            
-                            rel="noopener"
-                            title="Facebook"
-                        >
-                        <i class="sidebar-button-icon fab fa-facebook" aria-hidden="true"></i>
-                        <span class="sidebar-button-desc">Facebook</span>
-                    </a>
-            </li>
-            
-                <li class="sidebar-button">
-                    
-                        <a
-                            class="sidebar-button-link "
-                            href="https://plus.google.com/"
-                            
-                                target="_blank"
-                            
-                            rel="noopener"
-                            title="Google +"
-                        >
-                        <i class="sidebar-button-icon fab fa-google-plus" aria-hidden="true"></i>
-                        <span class="sidebar-button-desc">Google +</span>
-                    </a>
-            </li>
-            
-                <li class="sidebar-button">
-                    
-                        <a
-                            class="sidebar-button-link "
-                            href="https://www.linkedin.com/profile/"
-                            
-                                target="_blank"
-                            
-                            rel="noopener"
-                            title="LinkedIn"
-                        >
-                        <i class="sidebar-button-icon fab fa-linkedin" aria-hidden="true"></i>
-                        <span class="sidebar-button-desc">LinkedIn</span>
-                    </a>
-            </li>
-            
-                <li class="sidebar-button">
-                    
-                        <a
-                            class="sidebar-button-link "
-                            href="/mailto"
                             
                             rel="noopener"
                             title="Mail"
@@ -387,29 +327,25 @@ Pro似乎是中国移动的固件，可以为其刷入OpenWRT，也可刷入衍�
 <p>路由器固件用的是<code>Immortalwrt</code>，爱来自恩山大佬😀，原帖链接：https://www.right.com.cn/forum/forum.php?mod=viewthread&amp;tid=8398454&amp;highlight=%E6%8D%B7%E7%A8%80%2BJCG%2BQ30%2BPro</p>
 <p>泥吉校园网使用的是哆点客户端，即Dr.COM认证(包括DHCP、PPPoE、802.1x三种认证方式，即D版、P版、X版)，桌面端(windows、Linux、MacOS)下载客户端认证，然而Dr.COM备受吐槽、嫌弃，Arm路由器也无法使用Dr.COM。各位民间大佬分析了DrCOM的通信协议，开发了<code>drcom-generic</code>。当时的开发者是通过<code>python2</code>脚本来代替Dr.COM实现校园网认证的，下图是项目仓库。</p>
 <figure>
-<img
-src="在Immortalwrt上使用dogcom进行校园网认证/image-20250822154601355.png"
+<img src="image-20250822154601355-1756612582693-1.png"
 alt="drcom-generic官方仓库" />
 <figcaption aria-hidden="true">drcom-generic官方仓库</figcaption>
 </figure>
 <p>然而，现在<code>python3</code>才是主流，<code>OpenWRT</code>及其衍生版本的官方仓库中早已抛弃了<code>python2</code>，在离线环境安装<code>python2</code>还是比较痛苦的。因此，后续大佬使用C语言重新复现<code>drcom-generic</code>的功能，将新项目命名为<code>dogcom</code>，以及后续有大佬开发了泥吉专属的C语言版客户端。</p>
 <figure>
-<img
-src="在Immortalwrt上使用dogcom进行校园网认证/image-20250822155043897.png"
+<img src="image-20250822155043897-1756612582693-2.png"
 alt="dogcom项目仓库" />
 <figcaption aria-hidden="true">dogcom项目仓库</figcaption>
 </figure>
 <figure>
-<img
-src="在Immortalwrt上使用dogcom进行校园网认证/image-20250822155104114.png"
+<img src="image-20250822155104114-1756612582693-3.png"
 alt="吉大版dogcom" />
 <figcaption aria-hidden="true">吉大版dogcom</figcaption>
 </figure>
 <p>本次使用前者，开发者大佬开源了源代码，需要将源代码编译为<code>MT 7981</code>可用的二进制文件，由于<code>MT 7981</code>性能远不如AMD64处理器，因此编译在Linux(WSL)上完成。笔者使用的机子为2*2676V3，固件为Immortalwrt，首先搭建交叉编译环境。</p>
 <p>交叉编译环境需要固件的SDK，然而Immortalwrt并没有现成的关于<code>MT 7981</code>的SDK，还得先手动编译SDK😅。进入适用于处理器的Immortalwrt项目仓库，如下图。</p>
 <figure>
-<img
-src="在Immortalwrt上使用dogcom进行校园网认证/image-20250822155718517.png"
+<img src="image-20250822155718517-1756612582693-4.png"
 alt="immortalwrt-mt798x仓库" />
 <figcaption aria-hidden="true">immortalwrt-mt798x仓库</figcaption>
 </figure>
@@ -417,12 +353,11 @@ alt="immortalwrt-mt798x仓库" />
 <p>首先更新源，然后更新系统，接着安装所需依赖。</p>
 <figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">sudo</span> apt update -y</span><br><span class="line"><span class="built_in">sudo</span> apt full-upgrade -y</span><br><span class="line"><span class="built_in">sudo</span> apt install -y ack antlr3 asciidoc autoconf automake autopoint binutils bison build-essential \</span><br><span class="line">  bzip2 ccache clang clangd cmake cpio curl device-tree-compiler ecj fastjar flex gawk gettext gcc-multilib \</span><br><span class="line">  g++-multilib git gperf haveged help2man intltool lib32gcc-s1 libc6-dev-i386 libelf-dev libglib2.0-dev \</span><br><span class="line">  libgmp3-dev libltdl-dev libmpc-dev libmpfr-dev libncurses5-dev libncursesw5 libncursesw5-dev libreadline-dev \</span><br><span class="line">  libssl-dev libtool lld lldb lrzsz mkisofs msmtp nano ninja-build p7zip p7zip-full patch pkgconf python2.7 \</span><br><span class="line">  python3 python3-pip python3-ply python3-docutils qemu-utils re2c rsync scons squashfs-tools subversion swig \</span><br><span class="line">  texinfo uglifyjs upx-ucl unzip vim wget xmlto xxd zlib1g-dev</span><br></pre></td></tr></table></figure>
 <p>然后就可以克隆代码，开始搭建交叉环境了。</p>
-<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">git <span class="built_in">clone</span> --depth=1 https://github.com/hanwckf/immortalwrt-mt798x.git </span><br><span class="line"><span class="built_in">cd</span> immortalwrt-mt798x</span><br><span class="line">./scripts/feeds update -a</span><br><span class="line">./scripts/feeds install -a</span><br></pre></td></tr></table></figure>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">git <span class="built_in">clone</span> --depth=1 https://github.com/hanwckf/immortalwrt-mt798x.git </span><br><span class="line"><span class="built_in">cd</span> immortalwrt-mt798x</span><br><span class="line">scripts/feeds update -a</span><br><span class="line">scripts/feeds install -a</span><br></pre></td></tr></table></figure>
 <p>如果是Win11的话，可以在WSL设置中将网络模式设置为镜像mirror，然后在Windows上开启代理，那么WSL中就能连上GitHub。</p>
 <p>接着<code>cp -f defconfig/mt7981-ax3000.config .config</code>拷贝配置文件，然后<code>make menuconfig</code>进一步编辑，如下图。</p>
 <figure>
-<img
-src="在Immortalwrt上使用dogcom进行校园网认证/image-20250822160405445.png"
+<img src="image-20250822160405445-1756612582693-5.png"
 alt="menuconfig" />
 <figcaption aria-hidden="true">menuconfig</figcaption>
 </figure>
@@ -437,14 +372,12 @@ alt="menuconfig" />
 <figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">make menuconfig</span><br></pre></td></tr></table></figure>
 <p>分别添加<code>dogcom</code>和<code>luci-app-dogcom</code></p>
 <figure>
-<img
-src="在Immortalwrt上使用dogcom进行校园网认证/image-20250822161234054.png"
+<img src="image-20250822161234054-1756612582693-6.png"
 alt="添加dogcom" />
 <figcaption aria-hidden="true">添加dogcom</figcaption>
 </figure>
 <figure>
-<img
-src="在Immortalwrt上使用dogcom进行校园网认证/image-20250822161347542.png"
+<img src="image-20250822161347542-1756612582693-7.png"
 alt="添加luci-app-dogcom" />
 <figcaption aria-hidden="true">添加luci-app-dogcom</figcaption>
 </figure>
@@ -453,16 +386,13 @@ alt="添加luci-app-dogcom" />
 <figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">make package/openwrt-dogcom/compile</span><br><span class="line">make package/luci-app-dogcom/compile</span><br></pre></td></tr></table></figure>
 <p>这两个软件包都不大，很快就编译好了，生成的<code>ipk</code>文件（适用于OpenWRT及其衍生发行版的安装包文件）在<code>/bin/packages</code>目录下：</p>
 <figure>
-<img
-src="在Immortalwrt上使用dogcom进行校园网认证/image-20250822161651654.png"
-alt="ipk文件" />
+<img src="image-20250822161651654-1756612582693-8.png" alt="ipk文件" />
 <figcaption aria-hidden="true">ipk文件</figcaption>
 </figure>
 <h2 id="安装dogcom及图形化界面">安装dogcom及图形化界面</h2>
 <p>拿到<code>ipk</code>文件后就可以安装了。使用ssh登录<code>Immortalwrt</code>。使用<code>winscp</code>上传两个文件，<code>OpenWRT</code>及其衍生版的包管理器为<code>opkg</code>。</p>
 <figure>
-<img
-src="在Immortalwrt上使用dogcom进行校园网认证/image-20250822162246070.png"
+<img src="image-20250822162246070-1756612582693-9.png"
 alt="安装ipk文件" />
 <figcaption aria-hidden="true">安装ipk文件</figcaption>
 </figure>
@@ -763,7 +693,7 @@ alt="安装ipk文件" />
 <p>hexo对图片的引用格式比较反人类，笔者习惯使用typora写文章，因此有了这篇博客，图片将会保存在.md同级目录下的同名文件夹内</p>
 <p>参考中文互联网上众多方法后，笔者在此直接给出有效的解决方案</p>
 <ul>
-<li>typora的图片设置为复制到指定路径./${filename}</li>
+<li>typora的图片设置为复制到指定路径${filename}</li>
 <li>编辑_config.yml修改并添加以下内容</li>
 </ul>
 <figure class="highlight yml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="attr">post_asset_folder:</span> <span class="literal">true</span></span><br><span class="line"><span class="attr">marked:</span></span><br><span class="line">  <span class="attr">prependRoot:</span> <span class="literal">true</span></span><br><span class="line">  <span class="attr">postAsset:</span> <span class="literal">true</span></span><br></pre></td></tr></table></figure>
@@ -856,7 +786,7 @@ alt="Ollama支持AMD部分显卡" />
 </figure>
 <p>==目前官方支持的显卡如下==</p>
 <figure>
-<img src="231c4d90dbb166ce141803841024b48f.png"
+<img src="/231c4d90dbb166ce141803841024b48f-1756610905031-1.png"
 alt="231c4d90dbb166ce141803841024b48f" />
 <figcaption
 aria-hidden="true">231c4d90dbb166ce141803841024b48f</figcaption>
@@ -864,7 +794,7 @@ aria-hidden="true">231c4d90dbb166ce141803841024b48f</figcaption>
 <h2 id="lets-start">Let’s start</h2>
 <p>首先是下载Ollama客户端</p>
 <figure>
-<img src="/640-1740631088818-4.png" alt="图片" />
+<img src="/640-1740631088818-4-1756610905032-2.png" alt="图片" />
 <figcaption aria-hidden="true">图片</figcaption>
 </figure>
 <p>单击下载好的OllamaSetup.exe文件，Ollama会安装在默认位置，无需选择。</p>
@@ -1005,6 +935,9 @@ alt="图片" />
 
 
 
+
+
+<script src="/js/equals-mark.js"></script>
 
 
     </body>

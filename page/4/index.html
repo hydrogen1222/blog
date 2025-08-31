@@ -11,7 +11,7 @@
     
     
     
-    <script type="application/ld+json">{"@context":"http://schema.org","@type":"Website","@id":"https://hydrogen1222.xyz","author":{"@type":"Person","name":"John Doe","sameAs":["https://github.com/","http://stackoverflow.com/users","https://twitter.com/","https://facebook.com/","https://plus.google.com/","https://www.linkedin.com/profile/","mailto"]},"name":"Hexo","description":"","url":"https://hydrogen1222.xyz"}</script>
+    <script type="application/ld+json">{"@context":"http://schema.org","@type":"Website","@id":"https://hydrogen1222.xyz","author":{"@type":"Person","name":"John Doe","sameAs":["https://github.com/hydrogen1222","https://user.qzone.qq.com/2170147489/infocenter","https://space.bilibili.com/441987358?spm_id_from=333.1007.0.0","mailto:tanch1222@mails.jlu.edu.cn"]},"name":"Hexo","description":"","url":"https://hydrogen1222.xyz"}</script>
     <meta property="og:type" content="blog">
 <meta property="og:title" content="Hexo">
 <meta property="og:url" content="https://hydrogen1222.xyz/page/4/index.html">
@@ -173,20 +173,6 @@
                 <li class="sidebar-button">
                     
                         <a
-                            class="sidebar-button-link open-algolia-search"
-                            href="#search"
-                            
-                            rel="noopener"
-                            title="Search"
-                        >
-                        <i class="sidebar-button-icon fa fa-search" aria-hidden="true"></i>
-                        <span class="sidebar-button-desc">Search</span>
-                    </a>
-            </li>
-            
-                <li class="sidebar-button">
-                    
-                        <a
                             class="sidebar-button-link "
                             href="#about"
                             
@@ -206,7 +192,7 @@
                     
                         <a
                             class="sidebar-button-link "
-                            href="https://github.com/"
+                            href="https://github.com/hydrogen1222"
                             
                                 target="_blank"
                             
@@ -222,15 +208,15 @@
                     
                         <a
                             class="sidebar-button-link "
-                            href="http://stackoverflow.com/users"
+                            href="https://user.qzone.qq.com/2170147489/infocenter"
                             
                                 target="_blank"
                             
                             rel="noopener"
-                            title="Stack Overflow"
+                            title="QQ"
                         >
-                        <i class="sidebar-button-icon fab fa-stack-overflow" aria-hidden="true"></i>
-                        <span class="sidebar-button-desc">Stack Overflow</span>
+                        <i class="sidebar-button-icon fab fa-qq" aria-hidden="true"></i>
+                        <span class="sidebar-button-desc">QQ</span>
                     </a>
             </li>
             
@@ -238,15 +224,15 @@
                     
                         <a
                             class="sidebar-button-link "
-                            href="https://twitter.com/"
+                            href="https://space.bilibili.com/441987358?spm_id_from=333.1007.0.0"
                             
                                 target="_blank"
                             
                             rel="noopener"
-                            title="Twitter"
+                            title="bilibili"
                         >
-                        <i class="sidebar-button-icon fab fa-twitter" aria-hidden="true"></i>
-                        <span class="sidebar-button-desc">Twitter</span>
+                        <i class="sidebar-button-icon fab fa-bilibili" aria-hidden="true"></i>
+                        <span class="sidebar-button-desc">bilibili</span>
                     </a>
             </li>
             
@@ -254,55 +240,9 @@
                     
                         <a
                             class="sidebar-button-link "
-                            href="https://facebook.com/"
+                            href="mailto:tanch1222@mails.jlu.edu.cn"
                             
                                 target="_blank"
-                            
-                            rel="noopener"
-                            title="Facebook"
-                        >
-                        <i class="sidebar-button-icon fab fa-facebook" aria-hidden="true"></i>
-                        <span class="sidebar-button-desc">Facebook</span>
-                    </a>
-            </li>
-            
-                <li class="sidebar-button">
-                    
-                        <a
-                            class="sidebar-button-link "
-                            href="https://plus.google.com/"
-                            
-                                target="_blank"
-                            
-                            rel="noopener"
-                            title="Google +"
-                        >
-                        <i class="sidebar-button-icon fab fa-google-plus" aria-hidden="true"></i>
-                        <span class="sidebar-button-desc">Google +</span>
-                    </a>
-            </li>
-            
-                <li class="sidebar-button">
-                    
-                        <a
-                            class="sidebar-button-link "
-                            href="https://www.linkedin.com/profile/"
-                            
-                                target="_blank"
-                            
-                            rel="noopener"
-                            title="LinkedIn"
-                        >
-                        <i class="sidebar-button-icon fab fa-linkedin" aria-hidden="true"></i>
-                        <span class="sidebar-button-desc">LinkedIn</span>
-                    </a>
-            </li>
-            
-                <li class="sidebar-button">
-                    
-                        <a
-                            class="sidebar-button-link "
-                            href="/mailto"
                             
                             rel="noopener"
                             title="Mail"
@@ -462,7 +402,7 @@ metals-Cu.xsd，然后export为cif文件</p>
 <p>但是不管是下载的mol结构还是ChemDraw导出的mol结构，导入进Vesta里面发现都少了氢原子，笨比博主（😭）至今没找到解决方案，只能笨拙地把mol结构导入到GaussView里面，GaussView会自动补加上氢原子，然后再导入到Vesta中，再导出为POSCAR文件，当然理论上可以手动改POSCAR，不一定要使用可视化软件</p>
 <h3 id="potcar">POTCAR</h3>
 <p>使用基础的不带后缀的PBE赝势</p>
-<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">cat</span> ../../potpaw_PBE.64/O/POTCAR ../../potpaw_PBE.64/C/POTCAR ../../potpaw_PBE.64/H/POTCAR &gt;&gt; POTCAR</span><br></pre></td></tr></table></figure>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">cat</span> ..potpaw_PBE.64/O/POTCAR ..potpaw_PBE.64/C/POTCAR ..potpaw_PBE.64/H/POTCAR &gt;&gt; POTCAR</span><br></pre></td></tr></table></figure>
 <h3 id="对比优化前后">对比优化前后</h3>
 <p>简单对比一下键长吧</p>
 <ul>
@@ -473,14 +413,12 @@ metals-Cu.xsd，然后export为cif文件</p>
 </ul></li>
 </ul>
 <figure>
-<img
-src="./%E4%B9%99%E9%86%87%E5%88%86%E5%AD%90/image-20250419153648574.png"
+<img src="image-20250419153648574-1756610718168-43.png"
 alt="O-H bond" />
 <figcaption aria-hidden="true">O-H bond</figcaption>
 </figure>
 <figure>
-<img
-src="./%E4%B9%99%E9%86%87%E5%88%86%E5%AD%90/image-20250419153711491.png"
+<img src="image-20250419153711491-1756610718168-44.png"
 alt="C-C bond" />
 <figcaption aria-hidden="true">C-C bond</figcaption>
 </figure>
@@ -492,14 +430,12 @@ alt="C-C bond" />
 </ul></li>
 </ul>
 <figure>
-<img
-src="./%E4%B9%99%E9%86%87%E5%88%86%E5%AD%90/image-20250419153912122.png"
+<img src="image-20250419153912122-1756610718168-45.png"
 alt="O-H bond" />
 <figcaption aria-hidden="true">O-H bond</figcaption>
 </figure>
 <figure>
-<img
-src="./%E4%B9%99%E9%86%87%E5%88%86%E5%AD%90/image-20250419153931409.png"
+<img src="image-20250419153931409-1756610718168-46.png"
 alt="C-C bond" />
 <figcaption aria-hidden="true">C-C bond</figcaption>
 </figure>
@@ -521,8 +457,7 @@ alt="C-C bond" />
 <figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">jmol OUTCAR</span><br></pre></td></tr></table></figure>
 <p>Tools-AtomSetChooser-Frequencies</p>
 <figure>
-<img
-src="./%E4%B9%99%E9%86%87%E5%88%86%E5%AD%90/image-20250420180231090.png"
+<img src="image-20250420180231090-1756610718168-47.png"
 alt="Jmol分析频率" />
 <figcaption aria-hidden="true">Jmol分析频率</figcaption>
 </figure>
@@ -985,8 +920,7 @@ that Rome wasn’t built in a day, or for that matter, one night.</p>
 <p><span class="math inline"><em>β</em></span>电子，正常</p>
 <figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br></pre></td><td class="code"><pre><span class="line">spin component 2</span><br><span class="line"></span><br><span class="line">k-point     1 :       0.0000    0.0000    0.0000</span><br><span class="line"> band No.  band energies     occupation</span><br><span class="line">     1     -31.6977      1.00000</span><br><span class="line">     2     -18.4541      1.00000</span><br><span class="line">     3     -12.3485      1.00000</span><br><span class="line">     4     -11.4763      1.00000</span><br><span class="line">     5     -11.4760      1.00000</span><br><span class="line">     6      -4.2772      0.00000</span><br><span class="line">     7      -4.2742      0.00000</span><br><span class="line">     8      -0.2440      0.00000</span><br><span class="line">     9       1.4049      0.00000</span><br><span class="line">    10       1.6215      0.00000</span><br><span class="line">    11       1.9473      0.00000</span><br><span class="line">    12       2.1710      0.00000</span><br><span class="line">    13       2.2499      0.00000</span><br><span class="line">    14       2.5860      0.00000</span><br><span class="line">    15       3.5816      0.00000</span><br><span class="line">    16       3.8831      0.00000</span><br></pre></td></tr></table></figure>
 <figure>
-<img
-src="./%E6%B0%A7%E6%B0%94%E5%88%86%E5%AD%90/imageedit_6_9897027704.png"
+<img src="imageedit_6_9897027704-1756610731821-53.png"
 alt="Molecule orbital of oxygen" />
 <figcaption aria-hidden="true">Molecule orbital of oxygen</figcaption>
 </figure>
@@ -997,7 +931,7 @@ class="math inline"><em>α</em></span>电子部分已经修正</p>
 <figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br></pre></td><td class="code"><pre><span class="line">spin component 1</span><br><span class="line"></span><br><span class="line">k-point     1 :       0.0000    0.0000    0.0000</span><br><span class="line"> band No.  band energies     occupation</span><br><span class="line">     1     -32.2878      1.00000			#1σ轨道</span><br><span class="line">     2     -20.4859      1.00000			#2σ轨道</span><br><span class="line">     3     -13.2238      1.00000			#3σ轨道，能量合理</span><br><span class="line">     4     -13.0591      1.00000</span><br><span class="line">     5     -13.0588      1.00000</span><br><span class="line">     6      -6.7814      1.00000</span><br><span class="line">     7      -6.7778      1.00000</span><br><span class="line">     8      -0.3857      0.00000</span><br><span class="line">     9       1.0213      0.00000</span><br><span class="line">    10       1.6177      0.00000</span><br><span class="line">    11       1.7818      0.00000</span><br><span class="line">    12       2.0634      0.00000</span><br><span class="line">    13       2.0746      0.00000</span><br><span class="line">    14       2.4643      0.00000</span><br><span class="line">    15       2.8035      0.00000</span><br><span class="line">    16       3.6409      0.00000</span><br><span class="line">Fermi energy:        -6.7122607632</span><br></pre></td></tr></table></figure>
 <p>用VESTA打开优化好的结构(<code>CONTCAR</code>)可以查看键长</p>
 <figure>
-<img src="./%E6%B0%A7%E6%B0%94%E5%88%86%E5%AD%90/QQ20250418-203001.png"
+<img src="QQ20250418-203001-1756610731821-54.png"
 alt="优化完的氧气分子的键长" />
 <figcaption aria-hidden="true">优化完的氧气分子的键长</figcaption>
 </figure>
@@ -1063,8 +997,7 @@ id="年4月amd平台下vasp的编译安装">2025年4月AMD平台下VASP的编译
 <h2 id="wsl2安装">WSL2安装</h2>
 <p>本次安装选择的Ubuntu作为发行版，使用人数较多，解决方案较多</p>
 <figure>
-<img
-src="./2025%E5%B9%B45%E6%9C%88AMD%E5%B9%B3%E5%8F%B0%E4%B8%8BVASP%E7%9A%84%E7%BC%96%E8%AF%91%E5%AE%89%E8%A3%85/image-20250417225652853.png"
+<img src="image-20250417225652853-1756610753766-1.png"
 alt="Ubuntu 24.04.1 on AMD 7840HS" />
 <figcaption aria-hidden="true">Ubuntu 24.04.1 on AMD 7840HS</figcaption>
 </figure>
@@ -1073,15 +1006,15 @@ alt="Ubuntu 24.04.1 on AMD 7840HS" />
 <h2 id="安装编译器">安装编译器</h2>
 <h3 id="aocc">AOCC</h3>
 <p>下载aocc-compiler-5.0.0.tar，解压</p>
-<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">tar -xvf aocc-compiler-5.0.0.tar <span class="comment">#解压</span></span><br><span class="line"><span class="built_in">cd</span> aocc-compiler-3.2.0 <span class="comment">#进入目录</span></span><br><span class="line">./install.sh <span class="comment">#如果没有可执行权限请赋予可执行权限, chmod +x ./install.sh</span></span><br><span class="line"><span class="built_in">source</span> ../setenv_AOCC.sh <span class="comment">#这一行可以写入~/.bashrc，然后source ~/.bashrc，刷新一下环境变量</span></span><br></pre></td></tr></table></figure>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">tar -xvf aocc-compiler-5.0.0.tar <span class="comment">#解压</span></span><br><span class="line"><span class="built_in">cd</span> aocc-compiler-3.2.0 <span class="comment">#进入目录</span></span><br><span class="line">install.sh <span class="comment">#如果没有可执行权限请赋予可执行权限, chmod +x install.sh</span></span><br><span class="line"><span class="built_in">source</span> .setenv_AOCC.sh <span class="comment">#这一行可以写入~/.bashrc，然后source ~/.bashrc，刷新一下环境变量</span></span><br></pre></td></tr></table></figure>
 <h3 id="aocl">AOCL</h3>
 <p>下载AOCL 5.0 binary packages compiled with AOCC 5.0</p>
-<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">tar -zxvf XXX.tar.gz <span class="comment">#解压tar.gz包，如果报错请查询Linux下的解压命令，up记不太清了、、、  </span></span><br><span class="line"><span class="built_in">cd</span> XXX</span><br><span class="line">./install.sh -t /home/XXX <span class="comment">#安装，可以指定安装目录，up安装在/home目录下的某个文件夹里的，这样不需要管理员权限、</span></span><br></pre></td></tr></table></figure>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">tar -zxvf XXX.tar.gz <span class="comment">#解压tar.gz包，如果报错请查询Linux下的解压命令，up记不太清了、、、  </span></span><br><span class="line"><span class="built_in">cd</span> XXX</span><br><span class="line">install.sh -t /home/XXX <span class="comment">#安装，可以指定安装目录，up安装在/home目录下的某个文件夹里的，这样不需要管理员权限、</span></span><br></pre></td></tr></table></figure>
 <h2 id="安装openmpi">安装OpenMPI</h2>
 <p>在安装OpenMPI之前请确保AOCC、AOCL以及必备的依赖已安装完全</p>
 <figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">which</span> clang <span class="comment">#检查clang</span></span><br><span class="line"><span class="built_in">which</span> clang++ <span class="comment">#检查clang++</span></span><br><span class="line"><span class="built_in">which</span> flang <span class="comment">#检查flang</span></span><br><span class="line">以上三个来自于AOCC和AOCL</span><br><span class="line"><span class="built_in">which</span> c <span class="comment">#检查有没有C</span></span><br><span class="line"><span class="built_in">which</span> c++ <span class="comment">#检查有没有C++</span></span><br><span class="line"><span class="built_in">sudo</span> apt install g++</span><br><span class="line"><span class="built_in">sudo</span> apt install gcc</span><br></pre></td></tr></table></figure>
 <p>下载OpenMPI的稳定版本，然后解压，进入目录</p>
-<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">./configure CC=clang CXX=clang++ FC=flang --prefix=/xxxx <span class="comment">#可以手动指定/xxx目录</span></span><br><span class="line">make -j4 <span class="comment">#以4核心编译，大小可调，比如16核处理器就改成make -j16</span></span><br><span class="line">make install <span class="comment">#编译安装</span></span><br></pre></td></tr></table></figure>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">configure CC=clang CXX=clang++ FC=flang --prefix=/xxxx <span class="comment">#可以手动指定/xxx目录</span></span><br><span class="line">make -j4 <span class="comment">#以4核心编译，大小可调，比如16核处理器就改成make -j16</span></span><br><span class="line">make install <span class="comment">#编译安装</span></span><br></pre></td></tr></table></figure>
 <p>OpenMPI安装时报错很可能是由于依赖问题造成的，建议安装之前<code>sudo apt install g++ cmake gcc</code></p>
 <p>在<code>~/.bashrc</code>中添加环境变量</p>
 <figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">MPI_HOME=/xxx/; make <span class="comment">#这一步容易出错，记得添加对目录</span></span><br><span class="line"><span class="built_in">export</span> PATH=<span class="variable">$&#123;MPI_HOME&#125;</span>/bin:<span class="variable">$PATH</span></span><br><span class="line"><span class="built_in">export</span> LD_LIBRARY_PATH=<span class="variable">$&#123;MPI_HOME&#125;</span>/lib:<span class="variable">$LD_LIBRARY_PATH</span></span><br><span class="line"><span class="built_in">export</span> MANPATH=<span class="variable">$&#123;MPI_HOME&#125;</span>/share/man:<span class="variable">$MANPATH</span></span><br></pre></td></tr></table></figure>
@@ -2304,6 +2237,9 @@ contributors</p>
 
 
 
+
+
+<script src="/js/equals-mark.js"></script>
 
 
     </body>

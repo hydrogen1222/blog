@@ -11,16 +11,16 @@
     
     
     
-    <script type="application/ld+json">{"@context":"http://schema.org","@type":"BlogPosting","author":{"@type":"Person","name":"John Doe","sameAs":["https://github.com/","http://stackoverflow.com/users","https://twitter.com/","https://facebook.com/","https://plus.google.com/","https://www.linkedin.com/profile/","mailto"]},"articleBody":"s\r\n\r\nENCUT是用来指定平面波基组能量截止值的参数\r\n\r\n以上是wiki对ENCUT的描述，POTCAR文件中已经包含了元素的ENMAX和ENMIN，这也是互联网上对ENCUT的选择方案对通常是1.3倍的ENMAX\r\n侯柱峰老师提供了另外一种方法并指出通过该方法选择的ENCUT通常能满足1.3倍ENMAX，供参考使用\r\n截断能指定了用于波函数展开的平面波基组的截断能量，此能量越大则用来描述波函数的平面波基组越多，精度越高，但计算也越耗时。\r\n可以通过计算测试来选择合适的ENCUT。\r\n以下是用于测试的脚本：\r\n123456789101112131415#!/bin/shrm WAVECARfor i in 150 200 250 300 350 400docat &gt; INCAR &lt;&lt;!SYSTEM = Si-DiamondENCUT = $iISTART = 0 ; ICHARG = 2ISMEAR = -5PREC = Accurate!echo &quot;ENCUT = $i eV&quot; ; time vaspE=`grep &quot;TOTEN&quot; OUTCAR | tail -1 | awk &#x27;&#123;printf &quot;%12.6f \\n&quot;, $5 &#125;&#x27;`echo $i $E &gt;&gt;commentdone\r\n计算后会得到comment文件，它列出了在不同ENCUT下计算得到的总能量\r\n123456150 -11.900655200 -11.938864250 -11.944599300 -11.945248350 -11.945503400 -11.945622\r\n==总能量变化在0.001\r\neV即可==，因此在这个例子中ENCUT可以选择250\r\n","dateCreated":"2025-04-29T21:40:00+08:00","dateModified":"2025-05-02T23:07:26+08:00","datePublished":"2025-04-29T21:40:00+08:00","description":"","headline":"截断能ENCUT的选取","image":[],"mainEntityOfPage":{"@type":"WebPage","@id":"https://hydrogen1222.xyz/2025/04/29/%E7%A7%91%E7%A0%94/VASP/Starry%20Sky/%E6%88%AA%E6%96%AD%E8%83%BDENCUT%E7%9A%84%E9%80%89%E5%8F%96/"},"publisher":{"@type":"Organization","name":"John Doe","sameAs":["https://github.com/","http://stackoverflow.com/users","https://twitter.com/","https://facebook.com/","https://plus.google.com/","https://www.linkedin.com/profile/","mailto"]},"url":"https://hydrogen1222.xyz/2025/04/29/%E7%A7%91%E7%A0%94/VASP/Starry%20Sky/%E6%88%AA%E6%96%AD%E8%83%BDENCUT%E7%9A%84%E9%80%89%E5%8F%96/","keywords":"化学, 科研"}</script>
-    <meta name="description" content="s  ENCUT是用来指定平面波基组能量截止值的参数  以上是wiki对ENCUT的描述，POTCAR文件中已经包含了元素的ENMAX和ENMIN，这也是互联网上对ENCUT的选择方案对通常是1.3倍的ENMAX 侯柱峰老师提供了另外一种方法并指出通过该方法选择的ENCUT通常能满足1.3倍ENMAX，供参考使用 截断能指定了用于波函数展开的平面波基组的截断能量，此能量越大则用来描述波">
+    <script type="application/ld+json">{"@context":"http://schema.org","@type":"BlogPosting","author":{"@type":"Person","name":"John Doe","sameAs":["https://github.com/hydrogen1222","https://user.qzone.qq.com/2170147489/infocenter","https://space.bilibili.com/441987358?spm_id_from=333.1007.0.0","mailto:tanch1222@mails.jlu.edu.cn"]},"articleBody":"\r\nENCUT是用来指定平面波基组能量截止值的参数\r\n\r\n以上是wiki对ENCUT的描述，POTCAR文件中已经包含了元素的ENMAX和ENMIN，这也是互联网上对ENCUT的选择方案对通常是1.3倍的ENMAX\r\n侯柱峰老师提供了另外一种方法并指出通过该方法选择的ENCUT通常能满足1.3倍ENMAX，供参考使用\r\n截断能指定了用于波函数展开的平面波基组的截断能量，此能量越大则用来描述波函数的平面波基组越多，精度越高，但计算也越耗时。\r\n可以通过计算测试来选择合适的ENCUT。\r\n以下是用于测试的脚本：\r\n123456789101112131415#!/bin/shrm WAVECARfor i in 150 200 250 300 350 400docat &gt; INCAR &lt;&lt;!SYSTEM = Si-DiamondENCUT = $iISTART = 0 ; ICHARG = 2ISMEAR = -5PREC = Accurate!echo &quot;ENCUT = $i eV&quot; ; time vaspE=`grep &quot;TOTEN&quot; OUTCAR | tail -1 | awk &#x27;&#123;printf &quot;%12.6f \\n&quot;, $5 &#125;&#x27;`echo $i $E &gt;&gt;commentdone\r\n计算后会得到comment文件，它列出了在不同ENCUT下计算得到的总能量\r\n123456150 -11.900655200 -11.938864250 -11.944599300 -11.945248350 -11.945503400 -11.945622\r\n==总能量变化在0.001\r\neV即可==，因此在这个例子中ENCUT可以选择250\r\n","dateCreated":"2025-04-29T21:40:00+08:00","dateModified":"2025-08-31T11:24:30+08:00","datePublished":"2025-04-29T21:40:00+08:00","description":"","headline":"截断能ENCUT的选取","image":[],"mainEntityOfPage":{"@type":"WebPage","@id":"https://hydrogen1222.xyz/2025/04/29/%E7%A7%91%E7%A0%94/VASP/Starry%20Sky/%E6%88%AA%E6%96%AD%E8%83%BDENCUT%E7%9A%84%E9%80%89%E5%8F%96/"},"publisher":{"@type":"Organization","name":"John Doe","sameAs":["https://github.com/hydrogen1222","https://user.qzone.qq.com/2170147489/infocenter","https://space.bilibili.com/441987358?spm_id_from=333.1007.0.0","mailto:tanch1222@mails.jlu.edu.cn"]},"url":"https://hydrogen1222.xyz/2025/04/29/%E7%A7%91%E7%A0%94/VASP/Starry%20Sky/%E6%88%AA%E6%96%AD%E8%83%BDENCUT%E7%9A%84%E9%80%89%E5%8F%96/","keywords":"化学, 科研"}</script>
+    <meta name="description" content="ENCUT是用来指定平面波基组能量截止值的参数  以上是wiki对ENCUT的描述，POTCAR文件中已经包含了元素的ENMAX和ENMIN，这也是互联网上对ENCUT的选择方案对通常是1.3倍的ENMAX 侯柱峰老师提供了另外一种方法并指出通过该方法选择的ENCUT通常能满足1.3倍ENMAX，供参考使用 截断能指定了用于波函数展开的平面波基组的截断能量，此能量越大则用来描述波函数的">
 <meta property="og:type" content="blog">
 <meta property="og:title" content="截断能ENCUT的选取">
 <meta property="og:url" content="https://hydrogen1222.xyz/2025/04/29/%E7%A7%91%E7%A0%94/VASP/Starry%20Sky/%E6%88%AA%E6%96%AD%E8%83%BDENCUT%E7%9A%84%E9%80%89%E5%8F%96/index.html">
 <meta property="og:site_name" content="Hexo">
-<meta property="og:description" content="s  ENCUT是用来指定平面波基组能量截止值的参数  以上是wiki对ENCUT的描述，POTCAR文件中已经包含了元素的ENMAX和ENMIN，这也是互联网上对ENCUT的选择方案对通常是1.3倍的ENMAX 侯柱峰老师提供了另外一种方法并指出通过该方法选择的ENCUT通常能满足1.3倍ENMAX，供参考使用 截断能指定了用于波函数展开的平面波基组的截断能量，此能量越大则用来描述波">
+<meta property="og:description" content="ENCUT是用来指定平面波基组能量截止值的参数  以上是wiki对ENCUT的描述，POTCAR文件中已经包含了元素的ENMAX和ENMIN，这也是互联网上对ENCUT的选择方案对通常是1.3倍的ENMAX 侯柱峰老师提供了另外一种方法并指出通过该方法选择的ENCUT通常能满足1.3倍ENMAX，供参考使用 截断能指定了用于波函数展开的平面波基组的截断能量，此能量越大则用来描述波函数的">
 <meta property="og:locale" content="en_US">
 <meta property="article:published_time" content="2025-04-29T13:40:00.000Z">
-<meta property="article:modified_time" content="2025-05-02T15:07:26.000Z">
+<meta property="article:modified_time" content="2025-08-31T03:24:30.241Z">
 <meta property="article:author" content="John Doe">
 <meta property="article:tag" content="化学">
 <meta property="article:tag" content="科研">
@@ -181,20 +181,6 @@
                 <li class="sidebar-button">
                     
                         <a
-                            class="sidebar-button-link open-algolia-search"
-                            href="#search"
-                            
-                            rel="noopener"
-                            title="Search"
-                        >
-                        <i class="sidebar-button-icon fa fa-search" aria-hidden="true"></i>
-                        <span class="sidebar-button-desc">Search</span>
-                    </a>
-            </li>
-            
-                <li class="sidebar-button">
-                    
-                        <a
                             class="sidebar-button-link "
                             href="#about"
                             
@@ -214,7 +200,7 @@
                     
                         <a
                             class="sidebar-button-link "
-                            href="https://github.com/"
+                            href="https://github.com/hydrogen1222"
                             
                                 target="_blank"
                             
@@ -230,15 +216,15 @@
                     
                         <a
                             class="sidebar-button-link "
-                            href="http://stackoverflow.com/users"
+                            href="https://user.qzone.qq.com/2170147489/infocenter"
                             
                                 target="_blank"
                             
                             rel="noopener"
-                            title="Stack Overflow"
+                            title="QQ"
                         >
-                        <i class="sidebar-button-icon fab fa-stack-overflow" aria-hidden="true"></i>
-                        <span class="sidebar-button-desc">Stack Overflow</span>
+                        <i class="sidebar-button-icon fab fa-qq" aria-hidden="true"></i>
+                        <span class="sidebar-button-desc">QQ</span>
                     </a>
             </li>
             
@@ -246,15 +232,15 @@
                     
                         <a
                             class="sidebar-button-link "
-                            href="https://twitter.com/"
+                            href="https://space.bilibili.com/441987358?spm_id_from=333.1007.0.0"
                             
                                 target="_blank"
                             
                             rel="noopener"
-                            title="Twitter"
+                            title="bilibili"
                         >
-                        <i class="sidebar-button-icon fab fa-twitter" aria-hidden="true"></i>
-                        <span class="sidebar-button-desc">Twitter</span>
+                        <i class="sidebar-button-icon fab fa-bilibili" aria-hidden="true"></i>
+                        <span class="sidebar-button-desc">bilibili</span>
                     </a>
             </li>
             
@@ -262,55 +248,9 @@
                     
                         <a
                             class="sidebar-button-link "
-                            href="https://facebook.com/"
+                            href="mailto:tanch1222@mails.jlu.edu.cn"
                             
                                 target="_blank"
-                            
-                            rel="noopener"
-                            title="Facebook"
-                        >
-                        <i class="sidebar-button-icon fab fa-facebook" aria-hidden="true"></i>
-                        <span class="sidebar-button-desc">Facebook</span>
-                    </a>
-            </li>
-            
-                <li class="sidebar-button">
-                    
-                        <a
-                            class="sidebar-button-link "
-                            href="https://plus.google.com/"
-                            
-                                target="_blank"
-                            
-                            rel="noopener"
-                            title="Google +"
-                        >
-                        <i class="sidebar-button-icon fab fa-google-plus" aria-hidden="true"></i>
-                        <span class="sidebar-button-desc">Google +</span>
-                    </a>
-            </li>
-            
-                <li class="sidebar-button">
-                    
-                        <a
-                            class="sidebar-button-link "
-                            href="https://www.linkedin.com/profile/"
-                            
-                                target="_blank"
-                            
-                            rel="noopener"
-                            title="LinkedIn"
-                        >
-                        <i class="sidebar-button-icon fab fa-linkedin" aria-hidden="true"></i>
-                        <span class="sidebar-button-desc">LinkedIn</span>
-                    </a>
-            </li>
-            
-                <li class="sidebar-button">
-                    
-                        <a
-                            class="sidebar-button-link "
-                            href="/mailto"
                             
                             rel="noopener"
                             title="Mail"
@@ -380,8 +320,7 @@
     
     <div class="post-content markdown">
         <div class="main-content-wrap">
-            <p>s</p>
-<blockquote>
+            <blockquote>
 <p><code>ENCUT</code>是用来指定平面波基组能量截止值的参数</p>
 </blockquote>
 <p>以上是wiki对<code>ENCUT</code>的描述，<code>POTCAR</code>文件中已经包含了元素的<code>ENMAX</code>和<code>ENMIN</code>，这也是互联网上对<code>ENCUT</code>的选择方案对通常是1.3倍的<code>ENMAX</code></p>
@@ -419,8 +358,8 @@ eV即可==，因此在这个例子中<code>ENCUT</code>可以选择250</p>
                 <a
                     class="post-action-btn btn btn--default tooltip--top"
                     href="/2025/05/01/%E7%A7%91%E7%A0%94/VASP/Starry%20Sky/%E7%A6%BB%E5%AD%90%E7%94%B5%E5%AF%BC%E7%8E%87%E7%9A%84%E8%AE%A1%E7%AE%97/"
-                    data-tooltip="表面能的计算"
-                    aria-label="PREVIOUS: 表面能的计算"
+                    data-tooltip="离子电导率的计算"
+                    aria-label="PREVIOUS: 离子电导率的计算"
                 >
                     
                         <i class="fa fa-angle-left" aria-hidden="true"></i>
@@ -514,6 +453,14 @@ eV即可==，因此在这个例子中<code>ENCUT</code>可以选择250</p>
     </div>
 </article>
 
+<script>
+document.addEventListener("DOMContentLoaded", function() {
+  const elements = document.querySelectorAll('.post-body'); // 取文章正文
+  elements.forEach(el => {
+    el.innerHTML = el.innerHTML.replace(/==([^=]+)==/g, '<mark>$1</mark>');
+  });
+});
+</script>
 
 
                 <footer id="footer" class="main-content-wrap">
@@ -534,8 +481,8 @@ eV即可==，因此在这个例子中<code>ENCUT</code>可以选择250</p>
                 <a
                     class="post-action-btn btn btn--default tooltip--top"
                     href="/2025/05/01/%E7%A7%91%E7%A0%94/VASP/Starry%20Sky/%E7%A6%BB%E5%AD%90%E7%94%B5%E5%AF%BC%E7%8E%87%E7%9A%84%E8%AE%A1%E7%AE%97/"
-                    data-tooltip="表面能的计算"
-                    aria-label="PREVIOUS: 表面能的计算"
+                    data-tooltip="离子电导率的计算"
+                    aria-label="PREVIOUS: 离子电导率的计算"
                 >
                     
                         <i class="fa fa-angle-left" aria-hidden="true"></i>
@@ -712,6 +659,9 @@ eV即可==，因此在这个例子中<code>ENCUT</code>可以选择250</p>
     
 
 
+
+
+<script src="/js/equals-mark.js"></script>
 
 
     </body>

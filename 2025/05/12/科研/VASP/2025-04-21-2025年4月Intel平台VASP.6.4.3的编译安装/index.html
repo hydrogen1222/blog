@@ -11,7 +11,7 @@
     
     
     
-    <script type="application/ld+json">{"@context":"http://schema.org","@type":"BlogPosting","author":{"@type":"Person","name":"John Doe","sameAs":["https://github.com/","http://stackoverflow.com/users","https://twitter.com/","https://facebook.com/","https://plus.google.com/","https://www.linkedin.com/profile/","mailto"]},"articleBody":"2025年5月Intel平台VASP.6.4.3的编译安装\r\n\r\nWSL的安装\r\n选择Arch Linux，个人比较熟悉，仅供学习使用不作为稳定的生产力环境，配置如下，两颗E5\r\n2676 v3\r\n\r\n\r\n洋垃圾配置\r\n\r\n打开powershell或者终端，输入wsl --install archlinux以自动安装，这一步需要使用代理(MAGIC)，主机上使用Clash-Verge进行代理（运气好也能连上），终端中输入：\r\n12set http_proxy=http://127.0.0.1:7897 #自己使用的端口是7897，http代理set https_proxy=http://127.0.0.1:7897 #自己使用的端口是7897，https代理\r\n如果没有条件使用代理，也可以手动安装，参考Arch Wiki，https://wiki.archlinuxcn.org/wiki/%E5%9C%A8_WSL_%E4%B8%8A%E5%AE%89%E8%A3%85_Arch_Linux，手动下载.wsl镜像，然后安装\r\n笔者计算机C盘性能太差，于是想要将wsl2迁移到另一个分区\r\n安装成功\r\n12345678910111213141516171819202122[root@NAS ~]# fastfetch                  -`                     root@NAS                 .o+`                    --------                `ooo/                    OS: Arch Linux x86_64               `+oooo:                   Host: Windows Subsystem for Linux - archlinux (2.4.12)              `+oooooo:                  Kernel: Linux 5.15.167.4-microsoft-standard-WSL2              -+oooooo+:                 Uptime: 5 hours, 16 mins            `/:-:++oooo+:                Packages: 155 (pacman)           `/++++/+++++++:               Shell: bash 5.2.37          `/++++++++++++++:              WM: WSLg 1.0.65 (Wayland)         `/+++ooooooooooooo/`            Terminal: xterm-256color        ./ooosssso++osssssso+`           CPU: Intel(R) Xeon(R) E5-2676 v3 (48) @ 2.39 GHz       .oossssso-````/ossssss+`          Memory: 1.09 GiB / 15.57 GiB (7%)      -osssssso.      :ssssssso.         Swap: 304.95 MiB / 4.00 GiB (7%)     :osssssss/        osssso+++.        Disk (/): 18.67 GiB / 1006.85 GiB (2%) - ext4    /ossssssss/        +ssssooo/-        Disk (/mnt/c): 159.05 GiB / 237.01 GiB (67%) - 9p  `/ossssso+/:-        -:/+osssso+-      Disk (/mnt/d): 13.16 TiB / 14.55 TiB (90%) - 9p `+sso+:-`                 `.-/+oso:     Disk (/mnt/e): 1.70 TiB / 3.64 TiB (47%) - 9p`++:.                           `-/+/    Disk (/mnt/f): 49.45 GiB / 476.94 GiB (10%) - 9p.`                                 `/    Disk (/mnt/g): 25.16 TiB / 29.10 TiB (86%) - 9p                                         Local IP (eth0): 172.31.36.99/20                                         Locale: en_US.UTF-8\r\n编译器的安装\r\n1234567891011pacman -S makepacman -S cmakepacman -S gccpacman -S gcc-fortran####发现gcc和gfortran编译器太新，会编报错(C23)，故降级软件包#添加中科大源来安装yaypacman -Syy yayyay -S downgrade #安装降级工具downgrade -S gcc-libs #选择12.1.0版本，安装gcc的依赖downgrade -S gcc #安装gcc，选择12.1.0版本downgrade -S gcc-fortran #安装gforran，选择12.1.0版本\r\n前往Intel官网下载oneAPI BaseTool\r\nkithttps://www.intel.com/content/www/us/en/developer/tools/oneapi/base-toolkit-download.html?packages=oneapi-toolkit&amp;oneapi-toolkit-os=linux&amp;oneapi-lin=online\r\n12chmod +x ./xxxxxxxxxx.sh #赋予下载下来的sh文件可执行权限./xxxx.sh #运行sh文件\r\noneAPI BaseTool kit不需要全部安装，只需安装MKL部分，\r\nHPC也只需安装一部分\r\n此处博主踩了较多的坑：\r\n\r\n编译器采用2022版，不可采用过新编译器\r\n\r\n2024年10月后，Intel删除了ifort编译器\r\n\r\ngcc编译器不可太新，否则编译某些fortran模块会报错，博主从14降级到了12.1.0\r\n\r\nVASP.6.4.3的编译安装\r\n源码包可以去各大私密性较强的论坛或者微信公众号获取，仅供个人学习使用，不用于学术、商业用途\r\n选择arch/目录中的模板makefile.include.intel，复制到../(上一层目录)，并修改名称为makefile.include，修改目录如下\r\n12345678910111213141516171819202122232425262728293031323334353637383940414243444546474849505152535455565758596061626364656667686970717273# Default precompiler optionsCPP_OPTIONS = -DHOST=\\&quot;LinuxIFC\\&quot; \\              -DMPI -DMPI_BLOCK=8000 -Duse_collective \\              -DscaLAPACK \\              -DCACHE_SIZE=4000 \\              -Davoidalloc \\              -Dvasp6 \\              -Duse_bse_te \\              -Dtbdyn \\              -Dfock_dblbufCPP         = fpp -f_com=no -free -w0  $*$(FUFFIX) $*$(SUFFIX) $(CPP_OPTIONS)FC          = mpiifortFCL         = mpiifortFREE        = -free -names lowercaseFFLAGS      = -assume byterecl -wOFLAG       = -O2 -xhost  #添加-xhost标记OFLAG_IN    = $(OFLAG)DEBUG       = -O0OBJECTS     = fftmpiw.o fftmpi_map.o fftw3d.o fft3dlib.oOBJECTS_O1 += fftw3d.o fftmpi.o fftmpiw.oOBJECTS_O2 += fft3dlib.o# For what used to be vasp.5.libCPP_LIB     = $(CPP)FC_LIB      = $(FC)CC_LIB      = iccCFLAGS_LIB  = -OFFLAGS_LIB  = -O1FREE_LIB    = $(FREE)OBJECTS_LIB = linpack_double.o# For the parser libraryCXX_PARS    = icpcLLIBS       = -lstdc++#### Customize as of this point! Of course you may change the preceding## part of this file as well if you like, but it should rarely be## necessary ...### When compiling on the target machine itself, change this to the# relevant target when cross-compiling for another architectureVASP_TARGET_CPU ?= -xHOSTFFLAGS     += $(VASP_TARGET_CPU)# Intel MKL (FFTW, BLAS, LAPACK, and scaLAPACK)# (Note: for Intel Parallel Studio&#x27;s MKL use -mkl instead of -qmkl)FCL        += -qmkl=sequentialMKLROOT    ?= /opt/intel/oneapi/mkl/2022.1.0 #一定要添加MKLROOT的目录，否则会报错/home/storm/intel/oneapi/mkl/2022.1.0LLIBS      += -L$(MKLROOT)/lib/intel64 -lmkl_scalapack_lp64 -lmkl_blacs_intelmpi_lp64INCS        =-I$(MKLROOT)/include/fftw# HDF5-support (optional but strongly recommended)#CPP_OPTIONS+= -DVASP_HDF5#HDF5_ROOT  ?= /path/to/your/hdf5/installation#LLIBS      += -L$(HDF5_ROOT)/lib -lhdf5_fortran#INCS       += -I$(HDF5_ROOT)/include# For the VASP-2-Wannier90 interface (optional)#CPP_OPTIONS    += -DVASP2WANNIER90#WANNIER90_ROOT ?= /path/to/your/wannier90/installation#LLIBS          += -L$(WANNIER90_ROOT)/lib -lwannier\r\n然后开始编译\r\n发现使用命令make all -j48会编译报错\r\n于是改为官方wiki的命令make DEPS=1 -j48，编译成功\r\n测试\r\nmake test进行测试，有一些报错，懒得管了、、、能跑就行\r\n","dateCreated":"2025-05-12T22:40:00+08:00","dateModified":"2025-05-13T22:43:39+08:00","datePublished":"2025-05-12T22:40:00+08:00","description":"","headline":"2025年5月Intel平台VASP.6.4.3的编译安装","image":[],"mainEntityOfPage":{"@type":"WebPage","@id":"https://hydrogen1222.xyz/2025/05/12/%E7%A7%91%E7%A0%94/VASP/2025-04-21-2025%E5%B9%B44%E6%9C%88Intel%E5%B9%B3%E5%8F%B0VASP.6.4.3%E7%9A%84%E7%BC%96%E8%AF%91%E5%AE%89%E8%A3%85/"},"publisher":{"@type":"Organization","name":"John Doe","sameAs":["https://github.com/","http://stackoverflow.com/users","https://twitter.com/","https://facebook.com/","https://plus.google.com/","https://www.linkedin.com/profile/","mailto"]},"url":"https://hydrogen1222.xyz/2025/05/12/%E7%A7%91%E7%A0%94/VASP/2025-04-21-2025%E5%B9%B44%E6%9C%88Intel%E5%B9%B3%E5%8F%B0VASP.6.4.3%E7%9A%84%E7%BC%96%E8%AF%91%E5%AE%89%E8%A3%85/","keywords":"化学, 科研"}</script>
+    <script type="application/ld+json">{"@context":"http://schema.org","@type":"BlogPosting","author":{"@type":"Person","name":"John Doe","sameAs":["https://github.com/hydrogen1222","https://user.qzone.qq.com/2170147489/infocenter","https://space.bilibili.com/441987358?spm_id_from=333.1007.0.0","mailto:tanch1222@mails.jlu.edu.cn"]},"articleBody":"2025年5月Intel平台VASP.6.4.3的编译安装\r\n\r\nWSL的安装\r\n选择Arch Linux，个人比较熟悉，仅供学习使用不作为稳定的生产力环境，配置如下，两颗E5\r\n2676 v3\r\n\r\n\r\n洋垃圾配置\r\n\r\n打开powershell或者终端，输入wsl --install archlinux以自动安装，这一步需要使用代理(MAGIC)，主机上使用Clash-Verge进行代理（运气好也能连上），终端中输入：\r\n12set http_proxy=http://127.0.0.1:7897 #自己使用的端口是7897，http代理set https_proxy=http://127.0.0.1:7897 #自己使用的端口是7897，https代理\r\n如果没有条件使用代理，也可以手动安装，参考Arch Wiki，https://wiki.archlinuxcn.org/wiki/%E5%9C%A8_WSL_%E4%B8%8A%E5%AE%89%E8%A3%85_Arch_Linux，手动下载.wsl镜像，然后安装\r\n笔者计算机C盘性能太差，于是想要将wsl2迁移到另一个分区\r\n安装成功\r\n12345678910111213141516171819202122[root@NAS ~]# fastfetch                  -`                     root@NAS                 .o+`                    --------                `ooo/                    OS: Arch Linux x86_64               `+oooo:                   Host: Windows Subsystem for Linux - archlinux (2.4.12)              `+oooooo:                  Kernel: Linux 5.15.167.4-microsoft-standard-WSL2              -+oooooo+:                 Uptime: 5 hours, 16 mins            `/:-:++oooo+:                Packages: 155 (pacman)           `/++++/+++++++:               Shell: bash 5.2.37          `/++++++++++++++:              WM: WSLg 1.0.65 (Wayland)         `/+++ooooooooooooo/`            Terminal: xterm-256color        ooosssso++osssssso+`           CPU: Intel(R) Xeon(R) E5-2676 v3 (48) @ 2.39 GHz       .oossssso-````/ossssss+`          Memory: 1.09 GiB / 15.57 GiB (7%)      -osssssso.      :ssssssso.         Swap: 304.95 MiB / 4.00 GiB (7%)     :osssssss/        osssso+++.        Disk (/): 18.67 GiB / 1006.85 GiB (2%) - ext4    /ossssssss/        +ssssooo/-        Disk (/mnt/c): 159.05 GiB / 237.01 GiB (67%) - 9p  `/ossssso+/:-        -:/+osssso+-      Disk (/mnt/d): 13.16 TiB / 14.55 TiB (90%) - 9p `+sso+:-`                 `.-/+oso:     Disk (/mnt/e): 1.70 TiB / 3.64 TiB (47%) - 9p`++:.                           `-/+/    Disk (/mnt/f): 49.45 GiB / 476.94 GiB (10%) - 9p.`                                 `/    Disk (/mnt/g): 25.16 TiB / 29.10 TiB (86%) - 9p                                         Local IP (eth0): 172.31.36.99/20                                         Locale: en_US.UTF-8\r\n编译器的安装\r\n1234567891011pacman -S makepacman -S cmakepacman -S gccpacman -S gcc-fortran####发现gcc和gfortran编译器太新，会编报错(C23)，故降级软件包#添加中科大源来安装yaypacman -Syy yayyay -S downgrade #安装降级工具downgrade -S gcc-libs #选择12.1.0版本，安装gcc的依赖downgrade -S gcc #安装gcc，选择12.1.0版本downgrade -S gcc-fortran #安装gforran，选择12.1.0版本\r\n前往Intel官网下载oneAPI BaseTool\r\nkithttps://www.intel.com/content/www/us/en/developer/tools/oneapi/base-toolkit-download.html?packages=oneapi-toolkit&amp;oneapi-toolkit-os=linux&amp;oneapi-lin=online\r\n12chmod +x xxxxxxxxxx.sh #赋予下载下来的sh文件可执行权限xxxx.sh #运行sh文件\r\noneAPI BaseTool kit不需要全部安装，只需安装MKL部分，\r\nHPC也只需安装一部分\r\n此处博主踩了较多的坑：\r\n\r\n编译器采用2022版，不可采用过新编译器\r\n\r\n2024年10月后，Intel删除了ifort编译器\r\n\r\ngcc编译器不可太新，否则编译某些fortran模块会报错，博主从14降级到了12.1.0\r\n\r\nVASP.6.4.3的编译安装\r\n源码包可以去各大私密性较强的论坛或者微信公众号获取，仅供个人学习使用，不用于学术、商业用途\r\n选择arch/目录中的模板makefile.include.intel，复制到.(上一层目录)，并修改名称为makefile.include，修改目录如下\r\n12345678910111213141516171819202122232425262728293031323334353637383940414243444546474849505152535455565758596061626364656667686970717273# Default precompiler optionsCPP_OPTIONS = -DHOST=\\&quot;LinuxIFC\\&quot; \\              -DMPI -DMPI_BLOCK=8000 -Duse_collective \\              -DscaLAPACK \\              -DCACHE_SIZE=4000 \\              -Davoidalloc \\              -Dvasp6 \\              -Duse_bse_te \\              -Dtbdyn \\              -Dfock_dblbufCPP         = fpp -f_com=no -free -w0  $*$(FUFFIX) $*$(SUFFIX) $(CPP_OPTIONS)FC          = mpiifortFCL         = mpiifortFREE        = -free -names lowercaseFFLAGS      = -assume byterecl -wOFLAG       = -O2 -xhost  #添加-xhost标记OFLAG_IN    = $(OFLAG)DEBUG       = -O0OBJECTS     = fftmpiw.o fftmpi_map.o fftw3d.o fft3dlib.oOBJECTS_O1 += fftw3d.o fftmpi.o fftmpiw.oOBJECTS_O2 += fft3dlib.o# For what used to be vasp.5.libCPP_LIB     = $(CPP)FC_LIB      = $(FC)CC_LIB      = iccCFLAGS_LIB  = -OFFLAGS_LIB  = -O1FREE_LIB    = $(FREE)OBJECTS_LIB = linpack_double.o# For the parser libraryCXX_PARS    = icpcLLIBS       = -lstdc++#### Customize as of this point! Of course you may change the preceding## part of this file as well if you like, but it should rarely be## necessary ...### When compiling on the target machine itself, change this to the# relevant target when cross-compiling for another architectureVASP_TARGET_CPU ?= -xHOSTFFLAGS     += $(VASP_TARGET_CPU)# Intel MKL (FFTW, BLAS, LAPACK, and scaLAPACK)# (Note: for Intel Parallel Studio&#x27;s MKL use -mkl instead of -qmkl)FCL        += -qmkl=sequentialMKLROOT    ?= /opt/intel/oneapi/mkl/2022.1.0 #一定要添加MKLROOT的目录，否则会报错/home/storm/intel/oneapi/mkl/2022.1.0LLIBS      += -L$(MKLROOT)/lib/intel64 -lmkl_scalapack_lp64 -lmkl_blacs_intelmpi_lp64INCS        =-I$(MKLROOT)/include/fftw# HDF5-support (optional but strongly recommended)#CPP_OPTIONS+= -DVASP_HDF5#HDF5_ROOT  ?= /path/to/your/hdf5/installation#LLIBS      += -L$(HDF5_ROOT)/lib -lhdf5_fortran#INCS       += -I$(HDF5_ROOT)/include# For the VASP-2-Wannier90 interface (optional)#CPP_OPTIONS    += -DVASP2WANNIER90#WANNIER90_ROOT ?= /path/to/your/wannier90/installation#LLIBS          += -L$(WANNIER90_ROOT)/lib -lwannier\r\n然后开始编译\r\n发现使用命令make all -j48会编译报错\r\n于是改为官方wiki的命令make DEPS=1 -j48，编译成功\r\n测试\r\nmake test进行测试，有一些报错，懒得管了、、、能跑就行\r\n","dateCreated":"2025-05-12T22:40:00+08:00","dateModified":"2025-08-31T11:27:17+08:00","datePublished":"2025-05-12T22:40:00+08:00","description":"","headline":"2025年5月Intel平台VASP.6.4.3的编译安装","image":[],"mainEntityOfPage":{"@type":"WebPage","@id":"https://hydrogen1222.xyz/2025/05/12/%E7%A7%91%E7%A0%94/VASP/2025-04-21-2025%E5%B9%B44%E6%9C%88Intel%E5%B9%B3%E5%8F%B0VASP.6.4.3%E7%9A%84%E7%BC%96%E8%AF%91%E5%AE%89%E8%A3%85/"},"publisher":{"@type":"Organization","name":"John Doe","sameAs":["https://github.com/hydrogen1222","https://user.qzone.qq.com/2170147489/infocenter","https://space.bilibili.com/441987358?spm_id_from=333.1007.0.0","mailto:tanch1222@mails.jlu.edu.cn"]},"url":"https://hydrogen1222.xyz/2025/05/12/%E7%A7%91%E7%A0%94/VASP/2025-04-21-2025%E5%B9%B44%E6%9C%88Intel%E5%B9%B3%E5%8F%B0VASP.6.4.3%E7%9A%84%E7%BC%96%E8%AF%91%E5%AE%89%E8%A3%85/","keywords":"化学, 科研"}</script>
     <meta name="description" content="2025年5月Intel平台VASP.6.4.3的编译安装  WSL的安装 选择Arch Linux，个人比较熟悉，仅供学习使用不作为稳定的生产力环境，配置如下，两颗E5 2676 v3   洋垃圾配置  打开powershell或者终端，输入wsl --install archlinux以自动安装，这一步需要使用代理(MAGIC)，主机上使用Clash-Verge进行代理（运气">
 <meta property="og:type" content="blog">
 <meta property="og:title" content="2025年5月Intel平台VASP.6.4.3的编译安装">
@@ -19,12 +19,14 @@
 <meta property="og:site_name" content="Hexo">
 <meta property="og:description" content="2025年5月Intel平台VASP.6.4.3的编译安装  WSL的安装 选择Arch Linux，个人比较熟悉，仅供学习使用不作为稳定的生产力环境，配置如下，两颗E5 2676 v3   洋垃圾配置  打开powershell或者终端，输入wsl --install archlinux以自动安装，这一步需要使用代理(MAGIC)，主机上使用Clash-Verge进行代理（运气">
 <meta property="og:locale" content="en_US">
+<meta property="og:image" content="https://hydrogen1222.xyz/2025/05/12/%E7%A7%91%E7%A0%94/VASP/2025-04-21-2025%E5%B9%B44%E6%9C%88Intel%E5%B9%B3%E5%8F%B0VASP.6.4.3%E7%9A%84%E7%BC%96%E8%AF%91%E5%AE%89%E8%A3%85/image-20250421212627422-1756610835113-1.png">
 <meta property="article:published_time" content="2025-05-12T14:40:00.000Z">
-<meta property="article:modified_time" content="2025-05-13T14:43:39.000Z">
+<meta property="article:modified_time" content="2025-08-31T03:27:17.250Z">
 <meta property="article:author" content="John Doe">
 <meta property="article:tag" content="化学">
 <meta property="article:tag" content="科研">
 <meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://hydrogen1222.xyz/2025/05/12/%E7%A7%91%E7%A0%94/VASP/2025-04-21-2025%E5%B9%B44%E6%9C%88Intel%E5%B9%B3%E5%8F%B0VASP.6.4.3%E7%9A%84%E7%BC%96%E8%AF%91%E5%AE%89%E8%A3%85/image-20250421212627422-1756610835113-1.png">
     
     
         
@@ -181,20 +183,6 @@
                 <li class="sidebar-button">
                     
                         <a
-                            class="sidebar-button-link open-algolia-search"
-                            href="#search"
-                            
-                            rel="noopener"
-                            title="Search"
-                        >
-                        <i class="sidebar-button-icon fa fa-search" aria-hidden="true"></i>
-                        <span class="sidebar-button-desc">Search</span>
-                    </a>
-            </li>
-            
-                <li class="sidebar-button">
-                    
-                        <a
                             class="sidebar-button-link "
                             href="#about"
                             
@@ -214,7 +202,7 @@
                     
                         <a
                             class="sidebar-button-link "
-                            href="https://github.com/"
+                            href="https://github.com/hydrogen1222"
                             
                                 target="_blank"
                             
@@ -230,15 +218,15 @@
                     
                         <a
                             class="sidebar-button-link "
-                            href="http://stackoverflow.com/users"
+                            href="https://user.qzone.qq.com/2170147489/infocenter"
                             
                                 target="_blank"
                             
                             rel="noopener"
-                            title="Stack Overflow"
+                            title="QQ"
                         >
-                        <i class="sidebar-button-icon fab fa-stack-overflow" aria-hidden="true"></i>
-                        <span class="sidebar-button-desc">Stack Overflow</span>
+                        <i class="sidebar-button-icon fab fa-qq" aria-hidden="true"></i>
+                        <span class="sidebar-button-desc">QQ</span>
                     </a>
             </li>
             
@@ -246,15 +234,15 @@
                     
                         <a
                             class="sidebar-button-link "
-                            href="https://twitter.com/"
+                            href="https://space.bilibili.com/441987358?spm_id_from=333.1007.0.0"
                             
                                 target="_blank"
                             
                             rel="noopener"
-                            title="Twitter"
+                            title="bilibili"
                         >
-                        <i class="sidebar-button-icon fab fa-twitter" aria-hidden="true"></i>
-                        <span class="sidebar-button-desc">Twitter</span>
+                        <i class="sidebar-button-icon fab fa-bilibili" aria-hidden="true"></i>
+                        <span class="sidebar-button-desc">bilibili</span>
                     </a>
             </li>
             
@@ -262,55 +250,9 @@
                     
                         <a
                             class="sidebar-button-link "
-                            href="https://facebook.com/"
+                            href="mailto:tanch1222@mails.jlu.edu.cn"
                             
                                 target="_blank"
-                            
-                            rel="noopener"
-                            title="Facebook"
-                        >
-                        <i class="sidebar-button-icon fab fa-facebook" aria-hidden="true"></i>
-                        <span class="sidebar-button-desc">Facebook</span>
-                    </a>
-            </li>
-            
-                <li class="sidebar-button">
-                    
-                        <a
-                            class="sidebar-button-link "
-                            href="https://plus.google.com/"
-                            
-                                target="_blank"
-                            
-                            rel="noopener"
-                            title="Google +"
-                        >
-                        <i class="sidebar-button-icon fab fa-google-plus" aria-hidden="true"></i>
-                        <span class="sidebar-button-desc">Google +</span>
-                    </a>
-            </li>
-            
-                <li class="sidebar-button">
-                    
-                        <a
-                            class="sidebar-button-link "
-                            href="https://www.linkedin.com/profile/"
-                            
-                                target="_blank"
-                            
-                            rel="noopener"
-                            title="LinkedIn"
-                        >
-                        <i class="sidebar-button-icon fab fa-linkedin" aria-hidden="true"></i>
-                        <span class="sidebar-button-desc">LinkedIn</span>
-                    </a>
-            </li>
-            
-                <li class="sidebar-button">
-                    
-                        <a
-                            class="sidebar-button-link "
-                            href="/mailto"
                             
                             rel="noopener"
                             title="Mail"
@@ -387,8 +329,7 @@ id="年5月intel平台vasp.6.4.3的编译安装">2025年5月Intel平台VASP.6.4.
 <p>选择<code>Arch Linux</code>，个人比较熟悉，仅供学习使用不作为稳定的生产力环境，配置如下，两颗E5
 2676 v3</p>
 <figure>
-<img
-src="./2025-04-21-2025%E5%B9%B44%E6%9C%88Intel%E5%B9%B3%E5%8F%B0VASP.6.4.3%E7%9A%84%E7%BC%96%E8%AF%91%E5%AE%89%E8%A3%85/image-20250421212627422.png"
+<img src="image-20250421212627422-1756610835113-1.png"
 alt="洋垃圾配置" />
 <figcaption aria-hidden="true">洋垃圾配置</figcaption>
 </figure>
@@ -397,12 +338,12 @@ alt="洋垃圾配置" />
 <p>如果没有条件使用代理，也可以手动安装，参考<code>Arch Wiki</code>，https://wiki.archlinuxcn.org/wiki/%E5%9C%A8_WSL_%E4%B8%8A%E5%AE%89%E8%A3%85_Arch_Linux，手动下载<code>.wsl</code>镜像，然后安装</p>
 <p>笔者计算机C盘性能太差，于是想要将wsl2迁移到另一个分区</p>
 <p>安装成功</p>
-<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br></pre></td><td class="code"><pre><span class="line">[root@NAS ~]# fastfetch</span><br><span class="line">                  -`                     root@NAS</span><br><span class="line">                 .o+`                    --------</span><br><span class="line">                `ooo/                    OS: Arch Linux x86_64</span><br><span class="line">               `+oooo:                   Host: Windows Subsystem <span class="keyword">for</span> Linux - archlinux (2.4.12)</span><br><span class="line">              `+oooooo:                  Kernel: Linux 5.15.167.4-microsoft-standard-WSL2</span><br><span class="line">              -+oooooo+:                 Uptime: 5 hours, 16 mins</span><br><span class="line">            `/:-:++oooo+:                Packages: 155 (pacman)</span><br><span class="line">           `/++++/+++++++:               Shell: bash 5.2.37</span><br><span class="line">          `/++++++++++++++:              WM: WSLg 1.0.65 (Wayland)</span><br><span class="line">         `/+++ooooooooooooo/`            Terminal: xterm-256color</span><br><span class="line">        ./ooosssso++osssssso+`           CPU: Intel(R) Xeon(R) E5-2676 v3 (48) @ 2.39 GHz</span><br><span class="line">       .oossssso-````/ossssss+`          Memory: 1.09 GiB / 15.57 GiB (7%)</span><br><span class="line">      -osssssso.      :ssssssso.         Swap: 304.95 MiB / 4.00 GiB (7%)</span><br><span class="line">     :osssssss/        osssso+++.        Disk (/): 18.67 GiB / 1006.85 GiB (2%) - ext4</span><br><span class="line">    /ossssssss/        +ssssooo/-        Disk (/mnt/c): 159.05 GiB / 237.01 GiB (67%) - 9p</span><br><span class="line">  `/ossssso+/:-        -:/+osssso+-      Disk (/mnt/d): 13.16 TiB / 14.55 TiB (90%) - 9p</span><br><span class="line"> `+sso+:-`                 `.-/+oso:     Disk (/mnt/e): 1.70 TiB / 3.64 TiB (47%) - 9p</span><br><span class="line">`++:.                           `-/+/    Disk (/mnt/f): 49.45 GiB / 476.94 GiB (10%) - 9p</span><br><span class="line">.`                                 `/    Disk (/mnt/g): 25.16 TiB / 29.10 TiB (86%) - 9p</span><br><span class="line">                                         Local IP (eth0): 172.31.36.99/20</span><br><span class="line">                                         Locale: en_US.UTF-8</span><br></pre></td></tr></table></figure>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br></pre></td><td class="code"><pre><span class="line">[root@NAS ~]# fastfetch</span><br><span class="line">                  -`                     root@NAS</span><br><span class="line">                 .o+`                    --------</span><br><span class="line">                `ooo/                    OS: Arch Linux x86_64</span><br><span class="line">               `+oooo:                   Host: Windows Subsystem <span class="keyword">for</span> Linux - archlinux (2.4.12)</span><br><span class="line">              `+oooooo:                  Kernel: Linux 5.15.167.4-microsoft-standard-WSL2</span><br><span class="line">              -+oooooo+:                 Uptime: 5 hours, 16 mins</span><br><span class="line">            `/:-:++oooo+:                Packages: 155 (pacman)</span><br><span class="line">           `/++++/+++++++:               Shell: bash 5.2.37</span><br><span class="line">          `/++++++++++++++:              WM: WSLg 1.0.65 (Wayland)</span><br><span class="line">         `/+++ooooooooooooo/`            Terminal: xterm-256color</span><br><span class="line">        ooosssso++osssssso+`           CPU: Intel(R) Xeon(R) E5-2676 v3 (48) @ 2.39 GHz</span><br><span class="line">       .oossssso-````/ossssss+`          Memory: 1.09 GiB / 15.57 GiB (7%)</span><br><span class="line">      -osssssso.      :ssssssso.         Swap: 304.95 MiB / 4.00 GiB (7%)</span><br><span class="line">     :osssssss/        osssso+++.        Disk (/): 18.67 GiB / 1006.85 GiB (2%) - ext4</span><br><span class="line">    /ossssssss/        +ssssooo/-        Disk (/mnt/c): 159.05 GiB / 237.01 GiB (67%) - 9p</span><br><span class="line">  `/ossssso+/:-        -:/+osssso+-      Disk (/mnt/d): 13.16 TiB / 14.55 TiB (90%) - 9p</span><br><span class="line"> `+sso+:-`                 `.-/+oso:     Disk (/mnt/e): 1.70 TiB / 3.64 TiB (47%) - 9p</span><br><span class="line">`++:.                           `-/+/    Disk (/mnt/f): 49.45 GiB / 476.94 GiB (10%) - 9p</span><br><span class="line">.`                                 `/    Disk (/mnt/g): 25.16 TiB / 29.10 TiB (86%) - 9p</span><br><span class="line">                                         Local IP (eth0): 172.31.36.99/20</span><br><span class="line">                                         Locale: en_US.UTF-8</span><br></pre></td></tr></table></figure>
 <h2 id="编译器的安装">编译器的安装</h2>
 <figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">pacman -S make</span><br><span class="line">pacman -S cmake</span><br><span class="line">pacman -S gcc</span><br><span class="line">pacman -S gcc-fortran</span><br><span class="line"><span class="comment">####发现gcc和gfortran编译器太新，会编报错(C23)，故降级软件包</span></span><br><span class="line"><span class="comment">#添加中科大源来安装yay</span></span><br><span class="line">pacman -Syy yay</span><br><span class="line">yay -S downgrade <span class="comment">#安装降级工具</span></span><br><span class="line">downgrade -S gcc-libs <span class="comment">#选择12.1.0版本，安装gcc的依赖</span></span><br><span class="line">downgrade -S gcc <span class="comment">#安装gcc，选择12.1.0版本</span></span><br><span class="line">downgrade -S gcc-fortran <span class="comment">#安装gforran，选择12.1.0版本</span></span><br></pre></td></tr></table></figure>
 <p>前往Intel官网下载oneAPI BaseTool
 kithttps://www.intel.com/content/www/us/en/developer/tools/oneapi/base-toolkit-download.html?packages=oneapi-toolkit&amp;oneapi-toolkit-os=linux&amp;oneapi-lin=online</p>
-<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">chmod</span> +x ./xxxxxxxxxx.sh <span class="comment">#赋予下载下来的sh文件可执行权限</span></span><br><span class="line">./xxxx.sh <span class="comment">#运行sh文件</span></span><br></pre></td></tr></table></figure>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">chmod</span> +x xxxxxxxxxx.sh <span class="comment">#赋予下载下来的sh文件可执行权限</span></span><br><span class="line">xxxx.sh <span class="comment">#运行sh文件</span></span><br></pre></td></tr></table></figure>
 <p>oneAPI BaseTool kit不需要全部安装，只需安装MKL部分，</p>
 <p>HPC也只需安装一部分</p>
 <p>此处博主踩了较多的坑：</p>
@@ -415,7 +356,7 @@ kithttps://www.intel.com/content/www/us/en/developer/tools/oneapi/base-toolkit-d
 </ul>
 <h2 id="vasp.6.4.3的编译安装">VASP.6.4.3的编译安装</h2>
 <p>源码包可以去各大私密性较强的论坛或者微信公众号获取，仅供个人学习使用，不用于学术、商业用途</p>
-<p>选择<code>arch/</code>目录中的模板<code>makefile.include.intel</code>，复制到<code>../</code>(上一层目录)，并修改名称为<code>makefile.include</code>，修改目录如下</p>
+<p>选择<code>arch/</code>目录中的模板<code>makefile.include.intel</code>，复制到<code>.</code>(上一层目录)，并修改名称为<code>makefile.include</code>，修改目录如下</p>
 <figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># Default precompiler options</span></span><br><span class="line">CPP_OPTIONS = -DHOST=\&quot;LinuxIFC\&quot; \</span><br><span class="line">              -DMPI -DMPI_BLOCK=8000 -Duse_collective \</span><br><span class="line">              -DscaLAPACK \</span><br><span class="line">              -DCACHE_SIZE=4000 \</span><br><span class="line">              -Davoidalloc \</span><br><span class="line">              -Dvasp6 \</span><br><span class="line">              -Duse_bse_te \</span><br><span class="line">              -Dtbdyn \</span><br><span class="line">              -Dfock_dblbuf</span><br><span class="line"></span><br><span class="line">CPP         = fpp -f_com=no -free -w0  $*$(FUFFIX) $*$(SUFFIX) $(CPP_OPTIONS)</span><br><span class="line"></span><br><span class="line">FC          = mpiifort</span><br><span class="line">FCL         = mpiifort</span><br><span class="line"></span><br><span class="line">FREE        = -free -names lowercase</span><br><span class="line"></span><br><span class="line">FFLAGS      = -assume byterecl -w</span><br><span class="line"></span><br><span class="line">OFLAG       = -O2 -xhost  <span class="comment">#添加-xhost标记</span></span><br><span class="line">OFLAG_IN    = $(OFLAG)</span><br><span class="line">DEBUG       = -O0</span><br><span class="line"></span><br><span class="line">OBJECTS     = fftmpiw.o fftmpi_map.o fftw3d.o fft3dlib.o</span><br><span class="line">OBJECTS_O1 += fftw3d.o fftmpi.o fftmpiw.o</span><br><span class="line">OBJECTS_O2 += fft3dlib.o</span><br><span class="line"></span><br><span class="line"><span class="comment"># For what used to be vasp.5.lib</span></span><br><span class="line">CPP_LIB     = $(CPP)</span><br><span class="line">FC_LIB      = $(FC)</span><br><span class="line">CC_LIB      = icc</span><br><span class="line">CFLAGS_LIB  = -O</span><br><span class="line">FFLAGS_LIB  = -O1</span><br><span class="line">FREE_LIB    = $(FREE)</span><br><span class="line"></span><br><span class="line">OBJECTS_LIB = linpack_double.o</span><br><span class="line"></span><br><span class="line"><span class="comment"># For the parser library</span></span><br><span class="line">CXX_PARS    = icpc</span><br><span class="line">LLIBS       = -lstdc++</span><br><span class="line"></span><br><span class="line"><span class="comment">##</span></span><br><span class="line"><span class="comment">## Customize as of this point! Of course you may change the preceding</span></span><br><span class="line"><span class="comment">## part of this file as well if you like, but it should rarely be</span></span><br><span class="line"><span class="comment">## necessary ...</span></span><br><span class="line"><span class="comment">##</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># When compiling on the target machine itself, change this to the</span></span><br><span class="line"><span class="comment"># relevant target when cross-compiling for another architecture</span></span><br><span class="line">VASP_TARGET_CPU ?= -xHOST</span><br><span class="line">FFLAGS     += $(VASP_TARGET_CPU)</span><br><span class="line"></span><br><span class="line"><span class="comment"># Intel MKL (FFTW, BLAS, LAPACK, and scaLAPACK)</span></span><br><span class="line"><span class="comment"># (Note: for Intel Parallel Studio&#x27;s MKL use -mkl instead of -qmkl)</span></span><br><span class="line">FCL        += -qmkl=sequential</span><br><span class="line">MKLROOT    ?= /opt/intel/oneapi/mkl/2022.1.0 <span class="comment">#一定要添加MKLROOT的目录，否则会报错</span></span><br><span class="line"></span><br><span class="line"></span><br><span class="line">/home/storm/intel/oneapi/mkl/2022.1.0</span><br><span class="line">LLIBS      += -L$(MKLROOT)/lib/intel64 -lmkl_scalapack_lp64 -lmkl_blacs_intelmpi_lp64</span><br><span class="line">INCS        =-I$(MKLROOT)/include/fftw</span><br><span class="line"></span><br><span class="line"><span class="comment"># HDF5-support (optional but strongly recommended)</span></span><br><span class="line"><span class="comment">#CPP_OPTIONS+= -DVASP_HDF5</span></span><br><span class="line"><span class="comment">#HDF5_ROOT  ?= /path/to/your/hdf5/installation</span></span><br><span class="line"><span class="comment">#LLIBS      += -L$(HDF5_ROOT)/lib -lhdf5_fortran</span></span><br><span class="line"><span class="comment">#INCS       += -I$(HDF5_ROOT)/include</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># For the VASP-2-Wannier90 interface (optional)</span></span><br><span class="line"><span class="comment">#CPP_OPTIONS    += -DVASP2WANNIER90</span></span><br><span class="line"><span class="comment">#WANNIER90_ROOT ?= /path/to/your/wannier90/installation</span></span><br><span class="line"><span class="comment">#LLIBS          += -L$(WANNIER90_ROOT)/lib -lwannier</span></span><br></pre></td></tr></table></figure>
 <p>然后开始编译</p>
 <p>发现使用命令<code>make all -j48</code>会编译报错</p>
@@ -542,6 +483,14 @@ kithttps://www.intel.com/content/www/us/en/developer/tools/oneapi/base-toolkit-d
     </div>
 </article>
 
+<script>
+document.addEventListener("DOMContentLoaded", function() {
+  const elements = document.querySelectorAll('.post-body'); // 取文章正文
+  elements.forEach(el => {
+    el.innerHTML = el.innerHTML.replace(/==([^=]+)==/g, '<mark>$1</mark>');
+  });
+});
+</script>
 
 
                 <footer id="footer" class="main-content-wrap">
@@ -740,6 +689,9 @@ kithttps://www.intel.com/content/www/us/en/developer/tools/oneapi/base-toolkit-d
     
 
 
+
+
+<script src="/js/equals-mark.js"></script>
 
 
     </body>

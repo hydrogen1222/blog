@@ -11,7 +11,7 @@
     
     
     
-    <script type="application/ld+json">{"@context":"http://schema.org","@type":"BlogPosting","author":{"@type":"Person","name":"John Doe","sameAs":["https://github.com/","http://stackoverflow.com/users","https://twitter.com/","https://facebook.com/","https://plus.google.com/","https://www.linkedin.com/profile/","mailto"]},"articleBody":"使用最新版的Miniconda3，python环境的版本是14.x，顺手pip install numpy安装的numpy版本过高，使用vaspkit尝试将.cif文件转换为POSCAR时报错:\r\n1AttributeError: `np.mat` was removed in the NumPy 2.0 release. Use `np.asmatrix` instead\r\n错误原因在于当前的NumPy版本太新（&gt;=2.0），而vaspkit的cif2pos.py脚本中使用了已被移除的np.mat函数，最简单的方式是降级numpy版本：\r\n1pip install numpy==1.26.4\r\n","dateCreated":"2025-08-12T17:00:00+08:00","dateModified":"2025-08-12T17:04:30+08:00","datePublished":"2025-08-12T17:00:00+08:00","description":"","headline":"np.asmatrix函数被废弃使得CIF转POSCAR脚本报错","image":[],"mainEntityOfPage":{"@type":"WebPage","@id":"https://hydrogen1222.xyz/2025/08/12/%E7%A7%91%E7%A0%94/VASP/Starry%20Sky/vaspkit%E4%B8%ADCIF%E8%BD%ACPOSCAR%E8%84%9A%E6%9C%AC%E7%9A%84%E6%8A%A5%E9%94%99/"},"publisher":{"@type":"Organization","name":"John Doe","sameAs":["https://github.com/","http://stackoverflow.com/users","https://twitter.com/","https://facebook.com/","https://plus.google.com/","https://www.linkedin.com/profile/","mailto"]},"url":"https://hydrogen1222.xyz/2025/08/12/%E7%A7%91%E7%A0%94/VASP/Starry%20Sky/vaspkit%E4%B8%ADCIF%E8%BD%ACPOSCAR%E8%84%9A%E6%9C%AC%E7%9A%84%E6%8A%A5%E9%94%99/","keywords":"化学, 科研"}</script>
+    <script type="application/ld+json">{"@context":"http://schema.org","@type":"BlogPosting","author":{"@type":"Person","name":"John Doe","sameAs":["https://github.com/hydrogen1222","https://user.qzone.qq.com/2170147489/infocenter","https://space.bilibili.com/441987358?spm_id_from=333.1007.0.0","mailto:tanch1222@mails.jlu.edu.cn"]},"articleBody":"使用最新版的Miniconda3，python环境的版本是14.x，顺手pip install numpy安装的numpy版本过高，使用vaspkit尝试将.cif文件转换为POSCAR时报错:\r\n1AttributeError: `np.mat` was removed in the NumPy 2.0 release. Use `np.asmatrix` instead\r\n错误原因在于当前的NumPy版本太新（&gt;=2.0），而vaspkit的cif2pos.py脚本中使用了已被移除的np.mat函数，最简单的方式是降级numpy版本：\r\n1pip install numpy==1.26.4\r\n","dateCreated":"2025-08-12T17:00:00+08:00","dateModified":"2025-08-31T10:48:02+08:00","datePublished":"2025-08-12T17:00:00+08:00","description":"","headline":"np.asmatrix函数被废弃使得CIF转POSCAR脚本报错","image":[],"mainEntityOfPage":{"@type":"WebPage","@id":"https://hydrogen1222.xyz/2025/08/12/%E7%A7%91%E7%A0%94/VASP/Starry%20Sky/vaspkit%E4%B8%ADCIF%E8%BD%ACPOSCAR%E8%84%9A%E6%9C%AC%E7%9A%84%E6%8A%A5%E9%94%99/"},"publisher":{"@type":"Organization","name":"John Doe","sameAs":["https://github.com/hydrogen1222","https://user.qzone.qq.com/2170147489/infocenter","https://space.bilibili.com/441987358?spm_id_from=333.1007.0.0","mailto:tanch1222@mails.jlu.edu.cn"]},"url":"https://hydrogen1222.xyz/2025/08/12/%E7%A7%91%E7%A0%94/VASP/Starry%20Sky/vaspkit%E4%B8%ADCIF%E8%BD%ACPOSCAR%E8%84%9A%E6%9C%AC%E7%9A%84%E6%8A%A5%E9%94%99/","keywords":"化学, 科研"}</script>
     <meta name="description" content="使用最新版的Miniconda3，python环境的版本是14.x，顺手pip install numpy安装的numpy版本过高，使用vaspkit尝试将.cif文件转换为POSCAR时报错: 1AttributeError: &#96;np.mat&#96; was removed in the NumPy 2.0 release. Use &#96;np.asmatrix&#96; instead 错误原因在于当前的N">
 <meta property="og:type" content="blog">
 <meta property="og:title" content="np.asmatrix函数被废弃使得CIF转POSCAR脚本报错">
@@ -20,7 +20,7 @@
 <meta property="og:description" content="使用最新版的Miniconda3，python环境的版本是14.x，顺手pip install numpy安装的numpy版本过高，使用vaspkit尝试将.cif文件转换为POSCAR时报错: 1AttributeError: &#96;np.mat&#96; was removed in the NumPy 2.0 release. Use &#96;np.asmatrix&#96; instead 错误原因在于当前的N">
 <meta property="og:locale" content="en_US">
 <meta property="article:published_time" content="2025-08-12T09:00:00.000Z">
-<meta property="article:modified_time" content="2025-08-12T09:04:30.806Z">
+<meta property="article:modified_time" content="2025-08-31T02:48:02.597Z">
 <meta property="article:author" content="John Doe">
 <meta property="article:tag" content="化学">
 <meta property="article:tag" content="科研">
@@ -181,20 +181,6 @@
                 <li class="sidebar-button">
                     
                         <a
-                            class="sidebar-button-link open-algolia-search"
-                            href="#search"
-                            
-                            rel="noopener"
-                            title="Search"
-                        >
-                        <i class="sidebar-button-icon fa fa-search" aria-hidden="true"></i>
-                        <span class="sidebar-button-desc">Search</span>
-                    </a>
-            </li>
-            
-                <li class="sidebar-button">
-                    
-                        <a
                             class="sidebar-button-link "
                             href="#about"
                             
@@ -214,7 +200,7 @@
                     
                         <a
                             class="sidebar-button-link "
-                            href="https://github.com/"
+                            href="https://github.com/hydrogen1222"
                             
                                 target="_blank"
                             
@@ -230,15 +216,15 @@
                     
                         <a
                             class="sidebar-button-link "
-                            href="http://stackoverflow.com/users"
+                            href="https://user.qzone.qq.com/2170147489/infocenter"
                             
                                 target="_blank"
                             
                             rel="noopener"
-                            title="Stack Overflow"
+                            title="QQ"
                         >
-                        <i class="sidebar-button-icon fab fa-stack-overflow" aria-hidden="true"></i>
-                        <span class="sidebar-button-desc">Stack Overflow</span>
+                        <i class="sidebar-button-icon fab fa-qq" aria-hidden="true"></i>
+                        <span class="sidebar-button-desc">QQ</span>
                     </a>
             </li>
             
@@ -246,15 +232,15 @@
                     
                         <a
                             class="sidebar-button-link "
-                            href="https://twitter.com/"
+                            href="https://space.bilibili.com/441987358?spm_id_from=333.1007.0.0"
                             
                                 target="_blank"
                             
                             rel="noopener"
-                            title="Twitter"
+                            title="bilibili"
                         >
-                        <i class="sidebar-button-icon fab fa-twitter" aria-hidden="true"></i>
-                        <span class="sidebar-button-desc">Twitter</span>
+                        <i class="sidebar-button-icon fab fa-bilibili" aria-hidden="true"></i>
+                        <span class="sidebar-button-desc">bilibili</span>
                     </a>
             </li>
             
@@ -262,55 +248,9 @@
                     
                         <a
                             class="sidebar-button-link "
-                            href="https://facebook.com/"
+                            href="mailto:tanch1222@mails.jlu.edu.cn"
                             
                                 target="_blank"
-                            
-                            rel="noopener"
-                            title="Facebook"
-                        >
-                        <i class="sidebar-button-icon fab fa-facebook" aria-hidden="true"></i>
-                        <span class="sidebar-button-desc">Facebook</span>
-                    </a>
-            </li>
-            
-                <li class="sidebar-button">
-                    
-                        <a
-                            class="sidebar-button-link "
-                            href="https://plus.google.com/"
-                            
-                                target="_blank"
-                            
-                            rel="noopener"
-                            title="Google +"
-                        >
-                        <i class="sidebar-button-icon fab fa-google-plus" aria-hidden="true"></i>
-                        <span class="sidebar-button-desc">Google +</span>
-                    </a>
-            </li>
-            
-                <li class="sidebar-button">
-                    
-                        <a
-                            class="sidebar-button-link "
-                            href="https://www.linkedin.com/profile/"
-                            
-                                target="_blank"
-                            
-                            rel="noopener"
-                            title="LinkedIn"
-                        >
-                        <i class="sidebar-button-icon fab fa-linkedin" aria-hidden="true"></i>
-                        <span class="sidebar-button-desc">LinkedIn</span>
-                    </a>
-            </li>
-            
-                <li class="sidebar-button">
-                    
-                        <a
-                            class="sidebar-button-link "
-                            href="/mailto"
                             
                             rel="noopener"
                             title="Mail"
@@ -504,6 +444,14 @@
     </div>
 </article>
 
+<script>
+document.addEventListener("DOMContentLoaded", function() {
+  const elements = document.querySelectorAll('.post-body'); // 取文章正文
+  elements.forEach(el => {
+    el.innerHTML = el.innerHTML.replace(/==([^=]+)==/g, '<mark>$1</mark>');
+  });
+});
+</script>
 
 
                 <footer id="footer" class="main-content-wrap">
@@ -702,6 +650,9 @@
     
 
 
+
+
+<script src="/js/equals-mark.js"></script>
 
 
     </body>
