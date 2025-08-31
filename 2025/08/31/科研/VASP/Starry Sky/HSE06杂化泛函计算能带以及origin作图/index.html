@@ -1,0 +1,713 @@
+
+<!DOCTYPE html>
+<html lang="en">
+    
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="generator" content="Hexo">
+    <title>能带的计算以及origin绘制能带图 - Hexo</title>
+    <meta name="author" content="John Doe">
+    
+    
+    
+    <script type="application/ld+json">{"@context":"http://schema.org","@type":"BlogPosting","author":{"@type":"Person","name":"John Doe","sameAs":["https://github.com/hydrogen1222","https://user.qzone.qq.com/2170147489/infocenter"],"image":"https://www.gravatar.com/avatar/59bc94fdda371da7bfe585b96a3463b0"},"articleBody":"终于也是把文献整理得差不多了，博客也翻新了一下，继续分享一些之前的计算。\r\n我的计算体系是Argyrodite硫化物固态电解质体系，计算以$\\rm\r\nLi_6PS_5Cl$为例吧。能带计算最好是使用primitive\r\ncell，即原胞。这是惯用晶胞或者超胞计算得到的能带是折叠的，固体物理的相关书籍中有提到，（当然计算成本也是不同的），参考公社论坛上的两篇讨论帖子：\r\n\r\nhttp://bbs.keinsci.com/thread-11373-1-1.html\r\nhttp://bbs.keinsci.com/thread-19361-1-1.html\r\n\r\n原胞的变胞优化\r\n计算使用我稍微熟一点的VASP来，首先从Materials\r\nProject网站下载晶体结构文件，下载primitive\r\ncell，如果已经有了conventional\r\ncell的cif文件，也可以使用vaspkit的602功能生成PRIMCELL.vasp原胞文件。\r\n然后进行原胞的变胞优化，除了POSCAR的剩下三个输入文件可以使用vaspkit方便地生成，使用101功能，选择lattice\r\nrelaxation进行变胞优化，102功能生成自洽计算地K点，选择Gamma撒点方案，0.03间隙，原胞计算量比较小，间隙填小一点也无妨。\r\n笔者在Intel\r\n5218R的集群上进行计算，分配了40个物理核心，计算时在INCAR中设置KPAR=2和NCORE=20来最大化效率，一般而言NPAR参数不需要设置，KPAR和NCORE的参数设置众说纷纭，我参考的公社某一篇帖子里的经验，前者设置为2，后者设置为物理核心数的一般，当然这是对于CPU版本的VASP而言的。\r\n原胞的变胞优化用时很短：\r\n123456789101112 reached required accuracy - stopping structural energy minimisation[ctan@baifq-hpc141 primitive_cell-opt]$ tail OUTCAR                            User time (sec):       88.516                          System time (sec):        3.010                         Elapsed time (sec):       94.030                   Maximum memory used (kb):      238296.                   Average memory used (kb):          N/A                          Minor page faults:        36126                          Major page faults:          669                 Voluntary context switches:         1271\r\n在确认收敛并确认结构正常后进行能带的计算\r\nPBE泛函计算能带\r\n\r\n能带计算的KPOINTS与普通计算的KPOINTS不一样，通常需要第一布里渊区内的一条或几条高对称点路径来计算能带性质\r\n\r\nVASP的计算中PBE泛函是被使用最广泛的，需要修改K点和输入文件。参考vaspkit官网的教程：http://vaspkit.cn/index.php/27.html\r\nPBE能带的计算可以分两步进行。\r\n首先进行自洽计算，此时也即（最常用的）静态计算，将变胞优化的CONTCAR更名为POSCAR，使用vaspkit的101功能，选择Static-Calculation，k点选择可以不变。\r\n接着进行能带计算，需要使用vaspkit的303功能生成高对称K点，将生成的KPATH.in文件更名为KPOINTS\r\n12(base) [storm@X16 temp]$ lsHIGH_SYMMETRY_POINTS  INCAR  KPATH.in  KPOINTS  POSCAR  POTCAR  PRIMCELL.vasp  SYMMETRY  vmd-1.9.3\r\n可以看到，303功能也生成了原胞结构，当然前面我们已经提到过。\r\n在进行能带计算的目录中，将上一步自洽计算的CHGCAR文件拷贝过来并在INCAR中设置电荷密度不更新，即ICHARG=11，这是必须的，为了加速计算，建议读取上一步的WAVECAR文件，虽然ISTART设置为1或者2程序都可以读取WAVECAR，但是为了保持整个计算任务中（第一步和第二步）的平面波基组一致，建议使用ISTART=2。\r\n此种方法计算能带分两步的原因是使用高密度 k\r\n点网格进行计算时耗时较长，因此用不耗时的普通静态计算多次迭代得到的CHGCAR和WAVECAR来加速高密度k点网格的计算。\r\n其实对于我的小体系，直接使用高密度k点网格进行静态计算也是完全可接受的，并且SCF\r\n和能带完全自洽，会更精确一些，用时并不长：\r\n123456789101112131415[ctan@baifq-hpc141 primitive_cell-band_PBE]$ ls4736.log  CONTCAR   HIGH_SYMMETRY_POINTS  KPOINTS  PCDAT   PRIMCELL.vasp  slurm-4736.out  vasp.out     WAVECARCHG       DOSCAR    INCAR                 OSZICAR  POSCAR  PROCAR         SYMMETRY        vaspout.h5   XDATCARCHGCAR    EIGENVAL  KPATH.in              OUTCAR   POTCAR  REPORT         vasp.err        vasprun.xml[ctan@baifq-hpc141 primitive_cell-band_PBE]$ tail OUTCAR                            User time (sec):      216.131                          System time (sec):        4.733                         Elapsed time (sec):      223.789                   Maximum memory used (kb):      427044.                   Average memory used (kb):          N/A                          Minor page faults:        28812                          Major page faults:          666                 Voluntary context switches:         1232\r\nHSE06杂化泛函计算能带\r\nPBE最常被诟病的方面即能带计算，它常常低估带隙。By the way，Materials\r\nProject上的能带数据刚好能和我用PBE算出来的能带数据对上，明显小于HSE06泛函计算的数据，估计是使用PBE算的。\r\nHSE\r\n(Heyd–Scuseria–Ernzerhof)杂化泛函在2003年首次被提出（HSE03），在2006年HSE06被提出，它能更加精确地计算能带。使用HSE06杂化泛函做计算是十分昂贵的，用时是PBE泛函的数十倍不止。\r\n受vasp算法所限制，使用HSE06杂化泛函计算能带时只能使用自洽计算（此时为静态计算），不能进行非自洽计算。中文互联网上有一些教程是错误的，PBE可以自洽+非自洽两步，也可以自洽一步，但是HSE06杂化泛函只能一步自洽。不过可以在能带计算之前也先做一下静态计算（自洽计算），然后将产生的WAVECAR文件用于能带计算以加速。\r\n使用vaspkit的251功能生成所需要的KPOINTS文件，这是一个“混合”的文件：\r\n1234567891011121314151617181920212223242526272829303132 ------------&gt;&gt;251 --&gt;&gt; (01) Reading Input Parameters From INCAR File. ======================== K-Mesh Scheme ========================== 1) Monkhorst-Pack Scheme 2) Gamma Scheme 0)   Quit 9)   Back -------------&gt;&gt;2 +---------------------------- Tip ------------------------------+ Input the K-spacing value for SCF Calculation: (Typical Value: 0.03-0.04 is Generally Precise Enough) ------------&gt;&gt;0.03 Input the K-spacing value for Band Calculation: (Typical Value: 0.03-0.04 for DFT and 0.04-0.06 for hybrid DFT) ------------&gt;&gt;0.03 +---------------------------------------------------------------+ --&gt;&gt; (02) Reading K-Path From KPATH.in File. +-------------------------- Summary ----------------------------+ K-Mesh for SCF Calculation:    3    3    3 The Number of K-Points along K-Path No.1:  14 The Number of K-Points along K-Path No.2:   6 The Number of K-Points along K-Path No.3:  18 The Number of K-Points along K-Path No.4:  17 The Number of K-Points along K-Path No.5:   7 The Number of K-Points along K-Path No.6:   7 +---------------------------------------------------------------+ --&gt;&gt; (03) Written KPOINTS File.\r\n首先需要生成自洽（静态）计算所需要的k点网格，然后生成能带计算的高密度k点网格。INCAR文件可以沿用普通静态计算的然后改一下泛函，也可以使用101功能生成HSE06\r\nCalculation的INCAR。\r\nHSE06杂化泛函极为昂贵，大概在第五个电子步时，用时超过8h仍未计算完，遂放弃。之前注册某家超算平台时送了一点机时，开通了GPU版本的vasp计算，发现快了不少：\r\n1234567891011121314151617General timing and accounting informations for this job:========================================================                  Total CPU time used (sec):    22600.775                           User time (sec):    10925.947                         System time (sec):    11674.828                        Elapsed time (sec):     7781.069                   Maximum memory used (kb):     6086716.                  Average memory used (kb):          N/A                          Minor page faults:      6831986                         Major page faults:          282                Voluntary context switches:     53436870PROFILE, used timers:     405=============================\r\n数据后处理与Origin绘图\r\n能带计算结束后，将目录拷贝到可以使用vaspkit的机器上。\r\n对于PBE计算的能带，使用211功能处理数据，得到带隙、CBM、VBM、Fermi\r\nEnergy等信息：\r\n123456789101112131415161718192021222324252627282930 ------------&gt;&gt;21 ============================ Band Options ======================= 211) Band-Structure 212) Projected Band-Structure of Only-One-Selected Atom 213) Projected Band-Structure of Each Element 214) Projected Band-Structure of Selected Atoms 215) Projected Band-Structure by Element-Weights 216) The Sum of Projected Band for Selected Atoms and Orbitals 0)   Quit 9)   Back ------------&gt;&gt;211 --&gt;&gt; (01) Reading Input Parameters From INCAR File. +---------------------------------------------------------------+ |       &gt;&gt;&gt; The Fermi Energy will be set to zero eV &lt;&lt;&lt;         | +---------------------------------------------------------------+ --&gt;&gt; (02) Reading Fermi-Energy from DOSCAR File. --&gt;&gt; (03) Reading Energy-Levels From EIGENVAL File. --&gt;&gt; (04) Reading K-Path From KPOINTS File. --&gt;&gt; (05) Written KLABELS File. +---------------------------- Tip ------------------------------+ |If You Want to Get Fine Band Structrue by Interpolating Method.| | You CAN set GET_INTERPOLATED_DATA = .TRUE. in ~/.vaspkit file.| +---------------------------------------------------------------+ --&gt;&gt; (06) Written BAND.dat File. --&gt;&gt; (07) Written REFORMATTED_BAND.dat File. --&gt;&gt; (08) Written KLINES.dat File. --&gt;&gt; (09) Written BAND_GAP File.\r\n对于HSE06计算的能带，使用252功能处理数据，得到带隙、CBM、VBM、Fermi\r\nEnergy等信息：\r\n1234567891011121314151617181920 ------------&gt;&gt;252 --&gt;&gt; (01) Reading Input Parameters From INCAR File. +---------------------------------------------------------------+ |       &gt;&gt;&gt; The Fermi Energy will be set to zero eV &lt;&lt;&lt;         | +---------------------------------------------------------------+ --&gt;&gt; (02) Reading Fermi-Level From FERMI_ENERGY.in File. --&gt;&gt; (03) Reading Energy-Levels From EIGENVAL File. --&gt;&gt; (04) Reading KPT-Params in the First Line of KPOINTS File. --&gt;&gt; (05) Reading K-Path From KPATH.in File. --&gt;&gt; (06) Written KLABELS File. +---------------------------- Tip ------------------------------+ |If You Want to Get Fine Band Structrue by Interpolating Method.| | You CAN set GET_INTERPOLATED_DATA = .TRUE. in ~/.vaspkit file.| +---------------------------------------------------------------+ --&gt;&gt; (07) Written BAND.dat File. --&gt;&gt; (08) Written REFORMATTED_BAND.dat File. --&gt;&gt; (09) Written KLINES.dat File. --&gt;&gt; (10) Written BAND_GAP File.\r\n绘图时我习惯把价带顶归零，即纵坐标为$\\rm\r\nE-E_{VBM}$，操作如下。\r\n把FERMI_ENERGY文件就拷贝一份，改名为FERMI_ENERGY.in。将文件FERMI_ENERGY.in中的费米能级数据改为价带顶数据，然后再重新运行252功能，此时得到的REFORMATTED_BAND.dat文件中的数据是归零的。\r\n接下来就是origin绘图了\r\n将REFORMATTED_BAND.dat文件拖入工作表内，确认只有一个X轴，剩下全是Y轴。新建一个sheet。打开KLABELS文本文件，手动复制数据，如下图\r\n\r\n\r\nsheet2\r\n\r\n\r\n\r\nsheet1\r\n\r\n接着选中sheet1表格中的所有数据，绘制折线图：\r\n\r\n\r\n很丑、、、\r\n\r\n设置一下横坐标，改成高对称点的样子，看图：\r\n\r\n\r\nsheet2第二列\r\n\r\n\r\n\r\nsheet2第一列\r\n\r\n这样横坐标就被设置好了：\r\n\r\n\r\n还是很丑\r\n\r\n接下来就是美化了，放一张最后画好的图吧：\r\n\r\n\r\nLi6PS5Cl能带图\r\n\r\n","dateCreated":"2025-08-31T17:40:00+08:00","dateModified":"2025-08-31T20:24:02+08:00","datePublished":"2025-08-31T17:40:00+08:00","description":"","headline":"能带的计算以及origin绘制能带图","image":[],"mainEntityOfPage":{"@type":"WebPage","@id":"https://hydrogen1222.xyz/2025/08/31/%E7%A7%91%E7%A0%94/VASP/Starry%20Sky/HSE06%E6%9D%82%E5%8C%96%E6%B3%9B%E5%87%BD%E8%AE%A1%E7%AE%97%E8%83%BD%E5%B8%A6%E4%BB%A5%E5%8F%8Aorigin%E4%BD%9C%E5%9B%BE/"},"publisher":{"@type":"Organization","name":"John Doe","sameAs":["https://github.com/hydrogen1222","https://user.qzone.qq.com/2170147489/infocenter"],"image":"https://www.gravatar.com/avatar/59bc94fdda371da7bfe585b96a3463b0","logo":{"@type":"ImageObject","url":"https://www.gravatar.com/avatar/59bc94fdda371da7bfe585b96a3463b0"}},"url":"https://hydrogen1222.xyz/2025/08/31/%E7%A7%91%E7%A0%94/VASP/Starry%20Sky/HSE06%E6%9D%82%E5%8C%96%E6%B3%9B%E5%87%BD%E8%AE%A1%E7%AE%97%E8%83%BD%E5%B8%A6%E4%BB%A5%E5%8F%8Aorigin%E4%BD%9C%E5%9B%BE/","keywords":"化学, 科研"}</script>
+    <meta name="description" content="终于也是把文献整理得差不多了，博客也翻新了一下，继续分享一些之前的计算。 我的计算体系是Argyrodite硫化物固态电解质体系，计算以$\rm Li_6PS_5Cl$为例吧。能带计算最好是使用primitive cell，即原胞。这是惯用晶胞或者超胞计算得到的能带是折叠的，固体物理的相关书籍中有提到，（当然计算成本也是不同的），参考公社论坛上的两篇讨论帖子：  http:&#x2F;&#x2F;bbs.k">
+<meta property="og:type" content="blog">
+<meta property="og:title" content="能带的计算以及origin绘制能带图">
+<meta property="og:url" content="https://hydrogen1222.xyz/2025/08/31/%E7%A7%91%E7%A0%94/VASP/Starry%20Sky/HSE06%E6%9D%82%E5%8C%96%E6%B3%9B%E5%87%BD%E8%AE%A1%E7%AE%97%E8%83%BD%E5%B8%A6%E4%BB%A5%E5%8F%8Aorigin%E4%BD%9C%E5%9B%BE/index.html">
+<meta property="og:site_name" content="Hexo">
+<meta property="og:description" content="终于也是把文献整理得差不多了，博客也翻新了一下，继续分享一些之前的计算。 我的计算体系是Argyrodite硫化物固态电解质体系，计算以$\rm Li_6PS_5Cl$为例吧。能带计算最好是使用primitive cell，即原胞。这是惯用晶胞或者超胞计算得到的能带是折叠的，固体物理的相关书籍中有提到，（当然计算成本也是不同的），参考公社论坛上的两篇讨论帖子：  http:&#x2F;&#x2F;bbs.k">
+<meta property="og:locale" content="en_US">
+<meta property="og:image" content="https://hydrogen1222.xyz/2025/08/31/%E7%A7%91%E7%A0%94/VASP/Starry%20Sky/HSE06%E6%9D%82%E5%8C%96%E6%B3%9B%E5%87%BD%E8%AE%A1%E7%AE%97%E8%83%BD%E5%B8%A6%E4%BB%A5%E5%8F%8Aorigin%E4%BD%9C%E5%9B%BE/image-20250831190815582-1756638505174-1-1756639170329-5.png">
+<meta property="og:image" content="https://hydrogen1222.xyz/2025/08/31/%E7%A7%91%E7%A0%94/VASP/Starry%20Sky/HSE06%E6%9D%82%E5%8C%96%E6%B3%9B%E5%87%BD%E8%AE%A1%E7%AE%97%E8%83%BD%E5%B8%A6%E4%BB%A5%E5%8F%8Aorigin%E4%BD%9C%E5%9B%BE/image-20250831190851837-1756639170329-6.png">
+<meta property="og:image" content="https://hydrogen1222.xyz/2025/08/31/%E7%A7%91%E7%A0%94/VASP/Starry%20Sky/HSE06%E6%9D%82%E5%8C%96%E6%B3%9B%E5%87%BD%E8%AE%A1%E7%AE%97%E8%83%BD%E5%B8%A6%E4%BB%A5%E5%8F%8Aorigin%E4%BD%9C%E5%9B%BE/image-20250831190947071-1756639170329-7.png">
+<meta property="og:image" content="https://hydrogen1222.xyz/2025/08/31/%E7%A7%91%E7%A0%94/VASP/Starry%20Sky/HSE06%E6%9D%82%E5%8C%96%E6%B3%9B%E5%87%BD%E8%AE%A1%E7%AE%97%E8%83%BD%E5%B8%A6%E4%BB%A5%E5%8F%8Aorigin%E4%BD%9C%E5%9B%BE/image-20250831191457282-1756639170329-8.png">
+<meta property="og:image" content="https://hydrogen1222.xyz/2025/08/31/%E7%A7%91%E7%A0%94/VASP/Starry%20Sky/HSE06%E6%9D%82%E5%8C%96%E6%B3%9B%E5%87%BD%E8%AE%A1%E7%AE%97%E8%83%BD%E5%B8%A6%E4%BB%A5%E5%8F%8Aorigin%E4%BD%9C%E5%9B%BE/image-20250831191522192-1756639170329-9.png">
+<meta property="og:image" content="https://hydrogen1222.xyz/2025/08/31/%E7%A7%91%E7%A0%94/VASP/Starry%20Sky/HSE06%E6%9D%82%E5%8C%96%E6%B3%9B%E5%87%BD%E8%AE%A1%E7%AE%97%E8%83%BD%E5%B8%A6%E4%BB%A5%E5%8F%8Aorigin%E4%BD%9C%E5%9B%BE/image-20250831191755306-1756639170329-10.png">
+<meta property="og:image" content="https://hydrogen1222.xyz/2025/08/31/%E7%A7%91%E7%A0%94/VASP/Starry%20Sky/HSE06%E6%9D%82%E5%8C%96%E6%B3%9B%E5%87%BD%E8%AE%A1%E7%AE%97%E8%83%BD%E5%B8%A6%E4%BB%A5%E5%8F%8Aorigin%E4%BD%9C%E5%9B%BE/%E5%9B%BE%E7%89%871-1756639170329-4.png">
+<meta property="article:published_time" content="2025-08-31T09:40:00.000Z">
+<meta property="article:modified_time" content="2025-08-31T12:24:02.155Z">
+<meta property="article:author" content="John Doe">
+<meta property="article:tag" content="化学">
+<meta property="article:tag" content="科研">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://hydrogen1222.xyz/2025/08/31/%E7%A7%91%E7%A0%94/VASP/Starry%20Sky/HSE06%E6%9D%82%E5%8C%96%E6%B3%9B%E5%87%BD%E8%AE%A1%E7%AE%97%E8%83%BD%E5%B8%A6%E4%BB%A5%E5%8F%8Aorigin%E4%BD%9C%E5%9B%BE/image-20250831190815582-1756638505174-1-1756639170329-5.png">
+    
+    
+        
+    
+    
+    
+    
+    
+    <!--STYLES-->
+    
+<link rel="stylesheet" href="/assets/css/all.css">
+
+    
+<link rel="stylesheet" href="/assets/css/jquery.fancybox.css">
+
+    
+<link rel="stylesheet" href="/assets/css/thumbs.css">
+
+    
+<link rel="stylesheet" href="/assets/css/tranquilpeak.css">
+
+    <!--STYLES END-->
+    
+
+    
+
+    
+        
+    
+
+
+
+
+<script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+<script>
+  MathJax = {
+    tex: {
+      inlineMath: [['$', '$'], ['\\(', '\\)']],
+      displayMath: [['$$', '$$'], ['\\[', '\\]']],
+      tags: 'ams'
+    },
+    svg: {
+      fontCache: 'global'
+    }
+  };
+</script>
+
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/lionsoul2014/kaiti-font/kaiti.css">
+
+
+
+
+<!-- hexo injector head_end start -->
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.12.0/dist/katex.min.css">
+
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/hexo-math@4.0.0/dist/style.css">
+<!-- hexo injector head_end end --></head>
+
+    <body>
+        <div id="blog">
+            <!-- Define author's picture -->
+
+
+    
+
+<header id="header" data-behavior="4">
+    <i id="btn-open-sidebar" class="fa fa-lg fa-bars"></i>
+    <div class="header-title">
+        <a
+            class="header-title-link"
+            href="/"
+            aria-label=""
+        >
+            Hexo
+        </a>
+    </div>
+    
+        
+            <a
+                class="header-right-picture "
+                href="#about"
+                aria-label="Open the link: /#about"
+            >
+        
+        
+        </a>
+    
+</header>
+
+            <!-- Define author's picture -->
+
+
+<nav id="sidebar" data-behavior="4">
+    <div class="sidebar-container">
+        
+        
+            <ul class="sidebar-buttons">
+            
+                <li class="sidebar-button">
+                    
+                        <a
+                            class="sidebar-button-link "
+                            href="/"
+                            
+                            rel="noopener"
+                            title="Home"
+                        >
+                        <i class="sidebar-button-icon fa fa-home" aria-hidden="true"></i>
+                        <span class="sidebar-button-desc">Home</span>
+                    </a>
+            </li>
+            
+                <li class="sidebar-button">
+                    
+                        <a
+                            class="sidebar-button-link "
+                            href="/all-categories"
+                            
+                            rel="noopener"
+                            title="Categories"
+                        >
+                        <i class="sidebar-button-icon fa fa-bookmark" aria-hidden="true"></i>
+                        <span class="sidebar-button-desc">Categories</span>
+                    </a>
+            </li>
+            
+                <li class="sidebar-button">
+                    
+                        <a
+                            class="sidebar-button-link "
+                            href="/all-tags"
+                            
+                            rel="noopener"
+                            title="Tags"
+                        >
+                        <i class="sidebar-button-icon fa fa-tags" aria-hidden="true"></i>
+                        <span class="sidebar-button-desc">Tags</span>
+                    </a>
+            </li>
+            
+                <li class="sidebar-button">
+                    
+                        <a
+                            class="sidebar-button-link "
+                            href="/all-archives"
+                            
+                            rel="noopener"
+                            title="Archives"
+                        >
+                        <i class="sidebar-button-icon fa fa-archive" aria-hidden="true"></i>
+                        <span class="sidebar-button-desc">Archives</span>
+                    </a>
+            </li>
+            
+                <li class="sidebar-button">
+                    
+                        <a
+                            class="sidebar-button-link "
+                            href="/about"
+                            
+                            rel="noopener"
+                            title="About"
+                        >
+                        <i class="sidebar-button-icon fa fa-question" aria-hidden="true"></i>
+                        <span class="sidebar-button-desc">About</span>
+                    </a>
+            </li>
+            
+        </ul>
+        
+            <ul class="sidebar-buttons">
+            
+                <li class="sidebar-button">
+                    
+                        <a
+                            class="sidebar-button-link "
+                            href="https://github.com/hydrogen1222"
+                            
+                                target="_blank"
+                            
+                            rel="noopener"
+                            title="GitHub"
+                        >
+                        <i class="sidebar-button-icon fab fa-github" aria-hidden="true"></i>
+                        <span class="sidebar-button-desc">GitHub</span>
+                    </a>
+            </li>
+            
+                <li class="sidebar-button">
+                    
+                        <a
+                            class="sidebar-button-link "
+                            href="https://user.qzone.qq.com/2170147489/infocenter"
+                            
+                                target="_blank"
+                            
+                            rel="noopener"
+                            title="QQ"
+                        >
+                        <i class="sidebar-button-icon fab fa-qq" aria-hidden="true"></i>
+                        <span class="sidebar-button-desc">QQ</span>
+                    </a>
+            </li>
+            
+        </ul>
+        
+    </div>
+</nav>
+
+            
+            <div id="main" data-behavior="4"
+                 class="
+                        hasCoverMetaIn
+                        ">
+                
+<article class="post">
+    
+    
+        <div class="post-header main-content-wrap text-left">
+    
+        <h1 class="post-title">
+            能带的计算以及origin绘制能带图
+        </h1>
+    
+    
+        <div class="post-meta">
+    <time datetime="2025-08-31T17:40:00+08:00">
+	
+		    Aug 31, 2025
+    	
+    </time>
+    
+        <span>in </span>
+        
+    <a class="category-link" href="/all-categories/%E4%BB%8E%E9%9B%B6%E5%BC%80%E5%A7%8B%E7%9A%84%E7%A7%91%E7%A0%94%E4%B9%8B%E6%97%85/">从零开始的科研之旅</a>, <a class="category-link" href="/all-categories/%E4%BB%8E%E9%9B%B6%E5%BC%80%E5%A7%8B%E7%9A%84%E7%A7%91%E7%A0%94%E4%B9%8B%E6%97%85/VASP/">VASP</a>
+
+
+    
+</div>
+
+    
+</div>
+
+    
+    <div class="post-content markdown">
+        <div class="main-content-wrap">
+            <p>终于也是把文献整理得差不多了，博客也翻新了一下，继续分享一些之前的计算。</p>
+<p>我的计算体系是Argyrodite硫化物固态电解质体系，计算以<span
+class="math inline">$\rm
+Li_6PS_5Cl$</span>为例吧。能带计算最好是使用primitive
+cell，即原胞。这是惯用晶胞或者超胞计算得到的能带是折叠的，固体物理的相关书籍中有提到，（当然计算成本也是不同的），参考公社论坛上的两篇讨论帖子：</p>
+<ul>
+<li>http://bbs.keinsci.com/thread-11373-1-1.html</li>
+<li>http://bbs.keinsci.com/thread-19361-1-1.html</li>
+</ul>
+<h1 id="原胞的变胞优化">原胞的变胞优化</h1>
+<p>计算使用我稍微熟一点的VASP来，首先从Materials
+Project网站下载晶体结构文件，下载primitive
+cell，如果已经有了conventional
+cell的cif文件，也可以使用vaspkit的602功能生成<code>PRIMCELL.vasp</code>原胞文件。</p>
+<p>然后进行原胞的变胞优化，除了POSCAR的剩下三个输入文件可以使用vaspkit方便地生成，使用101功能，选择lattice
+relaxation进行变胞优化，102功能生成自洽计算地K点，选择Gamma撒点方案，0.03间隙，原胞计算量比较小，间隙填小一点也无妨。</p>
+<p>笔者在Intel
+5218R的集群上进行计算，分配了40个物理核心，计算时在<code>INCAR</code>中设置<code>KPAR=2</code>和<code>NCORE=20</code>来最大化效率，一般而言<code>NPAR</code>参数不需要设置，<code>KPAR</code>和<code>NCORE</code>的参数设置众说纷纭，我参考的公社某一篇帖子里的经验，前者设置为2，后者设置为物理核心数的一般，当然这是对于CPU版本的VASP而言的。</p>
+<p>原胞的变胞优化用时很短：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"> reached required accuracy - stopping structural energy minimisation</span><br><span class="line">[ctan@baifq-hpc141 primitive_cell-opt]$ <span class="built_in">tail</span> OUTCAR</span><br><span class="line">                            User <span class="keyword">time</span> (sec):       88.516</span><br><span class="line">                          System <span class="keyword">time</span> (sec):        3.010</span><br><span class="line">                         Elapsed <span class="keyword">time</span> (sec):       94.030</span><br><span class="line"></span><br><span class="line">                   Maximum memory used (kb):      238296.</span><br><span class="line">                   Average memory used (kb):          N/A</span><br><span class="line"></span><br><span class="line">                          Minor page faults:        36126</span><br><span class="line">                          Major page faults:          669</span><br><span class="line">                 Voluntary context switches:         1271</span><br></pre></td></tr></table></figure>
+<p>在确认收敛并确认结构正常后进行能带的计算</p>
+<h1 id="pbe泛函计算能带">PBE泛函计算能带</h1>
+<blockquote>
+<p>能带计算的KPOINTS与普通计算的KPOINTS不一样，通常需要第一布里渊区内的一条或几条高对称点路径来计算能带性质</p>
+</blockquote>
+<p>VASP的计算中PBE泛函是被使用最广泛的，需要修改K点和输入文件。参考vaspkit官网的教程：http://vaspkit.cn/index.php/27.html</p>
+<p>PBE能带的计算<mark>可以<mark>分两步进行。</p>
+<p>首先进行自洽计算，此时也即（最常用的）静态计算，将变胞优化的<code>CONTCAR</code>更名为<code>POSCAR</code>，使用<code>vaspkit</code>的101功能，选择Static-Calculation，k点选择可以不变。</p>
+<p>接着进行能带计算，需要使用vaspkit的303功能生成高对称K点，将生成的<code>KPATH.in</code>文件更名为<code>KPOINTS</code></p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">(base) [storm@X16 temp]$ <span class="built_in">ls</span></span><br><span class="line">HIGH_SYMMETRY_POINTS  INCAR  KPATH.<span class="keyword">in</span>  KPOINTS  POSCAR  POTCAR  PRIMCELL.vasp  SYMMETRY  vmd-1.9.3</span><br></pre></td></tr></table></figure>
+<p>可以看到，303功能也生成了原胞结构，当然前面我们已经提到过。</p>
+<p>在进行能带计算的目录中，将上一步自洽计算的<code>CHGCAR</code>文件拷贝过来并在<code>INCAR</code>中设置电荷密度<mark>不更新<mark>，即<code>ICHARG=11</code>，这是必须的，为了加速计算，建议读取上一步的<code>WAVECAR</code>文件，虽然<code>ISTART</code>设置为1或者2程序都可以读取<code>WAVECAR</code>，但是为了保持整个计算任务中（第一步和第二步）的平面波基组一致，建议使用<code>ISTART=2</code>。</p>
+<p>此种方法计算能带分两步的原因是使用高密度 k
+点网格进行计算时耗时较长，因此用不耗时的普通静态计算多次迭代得到的<code>CHGCAR</code>和<code>WAVECAR</code>来加速高密度k点网格的计算。</p>
+<p>其实对于我的小体系，直接使用高密度k点网格进行静态计算也是完全可接受的，并且SCF
+和能带完全自洽，会更精确一些，用时并不长：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line">[ctan@baifq-hpc141 primitive_cell-band_PBE]$ <span class="built_in">ls</span></span><br><span class="line">4736.<span class="built_in">log</span>  CONTCAR   HIGH_SYMMETRY_POINTS  KPOINTS  PCDAT   PRIMCELL.vasp  slurm-4736.out  vasp.out     WAVECAR</span><br><span class="line">CHG       DOSCAR    INCAR                 OSZICAR  POSCAR  PROCAR         SYMMETRY        vaspout.h5   XDATCAR</span><br><span class="line">CHGCAR    EIGENVAL  KPATH.<span class="keyword">in</span>              OUTCAR   POTCAR  REPORT         vasp.err        vasprun.xml</span><br><span class="line">[ctan@baifq-hpc141 primitive_cell-band_PBE]$ <span class="built_in">tail</span> OUTCAR</span><br><span class="line">                            User <span class="keyword">time</span> (sec):      216.131</span><br><span class="line">                          System <span class="keyword">time</span> (sec):        4.733</span><br><span class="line">                         Elapsed <span class="keyword">time</span> (sec):      223.789</span><br><span class="line"></span><br><span class="line">                   Maximum memory used (kb):      427044.</span><br><span class="line">                   Average memory used (kb):          N/A</span><br><span class="line"></span><br><span class="line">                          Minor page faults:        28812</span><br><span class="line">                          Major page faults:          666</span><br><span class="line">                 Voluntary context switches:         1232</span><br></pre></td></tr></table></figure>
+<h1 id="hse06杂化泛函计算能带">HSE06杂化泛函计算能带</h1>
+<p>PBE最常被诟病的方面即能带计算，它常常低估带隙。By the way，Materials
+Project上的能带数据刚好能和我用PBE算出来的能带数据对上，明显小于HSE06泛函计算的数据，估计是使用PBE算的。</p>
+<p>HSE
+(Heyd–Scuseria–Ernzerhof)杂化泛函在2003年首次被提出（HSE03），在2006年HSE06被提出，它能更加精确地计算能带。使用HSE06杂化泛函做计算是<mark>十分昂贵<mark>的，用时是PBE泛函的<mark>数十倍不止<mark>。</p>
+<p>受vasp算法所限制，使用HSE06杂化泛函计算能带时<mark>只能使用自洽计算（此时为静态计算），不能进行非自洽计算<mark>。中文互联网上有一些教程是错误的，PBE可以自洽+非自洽两步，也可以自洽一步，但是HSE06杂化泛函只能一步自洽。<mark>不过可以在能带计算之前也先做一下静态计算（自洽计算），然后将产生的<code>WAVECAR</code>文件用于能带计算以加速<mark>。</p>
+<p>使用<code>vaspkit</code>的251功能生成所需要的<code>KPOINTS</code>文件，这是一个“混合”的文件：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br></pre></td><td class="code"><pre><span class="line"> ------------&gt;&gt;</span><br><span class="line">251</span><br><span class="line"> --&gt;&gt; (01) Reading Input Parameters From INCAR File.</span><br><span class="line"> ======================== K-Mesh Scheme ==========================</span><br><span class="line"> 1) Monkhorst-Pack Scheme</span><br><span class="line"> 2) Gamma Scheme</span><br><span class="line"></span><br><span class="line"> 0)   Quit</span><br><span class="line"> 9)   Back</span><br><span class="line"> -------------&gt;&gt;</span><br><span class="line">2</span><br><span class="line"> +---------------------------- Tip ------------------------------+</span><br><span class="line"> Input the K-spacing value <span class="keyword">for</span> SCF Calculation:</span><br><span class="line"> (Typical Value: 0.03-0.04 is Generally Precise Enough)</span><br><span class="line"> ------------&gt;&gt;</span><br><span class="line">0.03</span><br><span class="line"> Input the K-spacing value <span class="keyword">for</span> Band Calculation:</span><br><span class="line"> (Typical Value: 0.03-0.04 <span class="keyword">for</span> DFT and 0.04-0.06 <span class="keyword">for</span> hybrid DFT)</span><br><span class="line"> ------------&gt;&gt;</span><br><span class="line">0.03</span><br><span class="line"> +---------------------------------------------------------------+</span><br><span class="line"> --&gt;&gt; (02) Reading K-Path From KPATH.<span class="keyword">in</span> File.</span><br><span class="line"> +-------------------------- Summary ----------------------------+</span><br><span class="line"> K-Mesh <span class="keyword">for</span> SCF Calculation:    3    3    3</span><br><span class="line"> The Number of K-Points along K-Path No.1:  14</span><br><span class="line"> The Number of K-Points along K-Path No.2:   6</span><br><span class="line"> The Number of K-Points along K-Path No.3:  18</span><br><span class="line"> The Number of K-Points along K-Path No.4:  17</span><br><span class="line"> The Number of K-Points along K-Path No.5:   7</span><br><span class="line"> The Number of K-Points along K-Path No.6:   7</span><br><span class="line"> +---------------------------------------------------------------+</span><br><span class="line"> --&gt;&gt; (03) Written KPOINTS File.</span><br></pre></td></tr></table></figure>
+<p>首先需要生成自洽（静态）计算所需要的k点网格，然后生成能带计算的高密度k点网格。<code>INCAR</code>文件可以沿用普通静态计算的然后改一下泛函，也可以使用101功能生成HSE06
+Calculation的<code>INCAR</code>。</p>
+<p>HSE06杂化泛函极为昂贵，大概在第五个电子步时，用时超过8h仍未计算完，遂放弃。之前注册某家超算平台时送了一点机时，开通了GPU版本的vasp计算，发现快了不少：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line">General timing and accounting informations <span class="keyword">for</span> this job:</span><br><span class="line">========================================================</span><br><span class="line"> </span><br><span class="line">                 Total CPU <span class="keyword">time</span> used (sec):    22600.775</span><br><span class="line">                           User <span class="keyword">time</span> (sec):    10925.947</span><br><span class="line">                         System <span class="keyword">time</span> (sec):    11674.828</span><br><span class="line">                        Elapsed <span class="keyword">time</span> (sec):     7781.069</span><br><span class="line"> </span><br><span class="line">                  Maximum memory used (kb):     6086716.</span><br><span class="line">                  Average memory used (kb):          N/A</span><br><span class="line"> </span><br><span class="line">                         Minor page faults:      6831986</span><br><span class="line">                         Major page faults:          282</span><br><span class="line">                Voluntary context switches:     53436870</span><br><span class="line"></span><br><span class="line">PROFILE, used timers:     405</span><br><span class="line">=============================</span><br></pre></td></tr></table></figure>
+<h1 id="数据后处理与origin绘图">数据后处理与Origin绘图</h1>
+<p>能带计算结束后，将目录拷贝到可以使用vaspkit的机器上。</p>
+<p>对于PBE计算的能带，使用211功能处理数据，得到带隙、CBM、VBM、Fermi
+Energy等信息：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br></pre></td><td class="code"><pre><span class="line"> ------------&gt;&gt;</span><br><span class="line">21</span><br><span class="line"> ============================ Band Options =======================</span><br><span class="line"> 211) Band-Structure</span><br><span class="line"> 212) Projected Band-Structure of Only-One-Selected Atom</span><br><span class="line"> 213) Projected Band-Structure of Each Element</span><br><span class="line"> 214) Projected Band-Structure of Selected Atoms</span><br><span class="line"> 215) Projected Band-Structure by Element-Weights</span><br><span class="line"> 216) The Sum of Projected Band for Selected Atoms and Orbitals</span><br><span class="line"></span><br><span class="line"> 0)   Quit</span><br><span class="line"> 9)   Back</span><br><span class="line"> ------------&gt;&gt;</span><br><span class="line">211</span><br><span class="line"> --&gt;&gt; (01) Reading Input Parameters From INCAR File.</span><br><span class="line"> +---------------------------------------------------------------+</span><br><span class="line"> |       &gt;&gt;&gt; The Fermi Energy will be set to zero eV &lt;&lt;&lt;         |</span><br><span class="line"> +---------------------------------------------------------------+</span><br><span class="line"> --&gt;&gt; (02) Reading Fermi-Energy from DOSCAR File.</span><br><span class="line"> --&gt;&gt; (03) Reading Energy-Levels From EIGENVAL File.</span><br><span class="line"> --&gt;&gt; (04) Reading K-Path From KPOINTS File.</span><br><span class="line"> --&gt;&gt; (05) Written KLABELS File.</span><br><span class="line"> +---------------------------- Tip ------------------------------+</span><br><span class="line"> |If You Want to Get Fine Band Structrue by Interpolating Method.|</span><br><span class="line"> | You CAN set GET_INTERPOLATED_DATA = .TRUE. in ~/.vaspkit file.|</span><br><span class="line"> +---------------------------------------------------------------+</span><br><span class="line"> --&gt;&gt; (06) Written BAND.dat File.</span><br><span class="line"> --&gt;&gt; (07) Written REFORMATTED_BAND.dat File.</span><br><span class="line"> --&gt;&gt; (08) Written KLINES.dat File.</span><br><span class="line"> --&gt;&gt; (09) Written BAND_GAP File.</span><br></pre></td></tr></table></figure>
+<p>对于HSE06计算的能带，使用252功能处理数据，得到带隙、CBM、VBM、Fermi
+Energy等信息：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br></pre></td><td class="code"><pre><span class="line"> ------------&gt;&gt;</span><br><span class="line">252</span><br><span class="line"></span><br><span class="line"> --&gt;&gt; (01) Reading Input Parameters From INCAR File.</span><br><span class="line"> +---------------------------------------------------------------+</span><br><span class="line"> |       &gt;&gt;&gt; The Fermi Energy will be <span class="built_in">set</span> to zero eV &lt;&lt;&lt;         |</span><br><span class="line"> +---------------------------------------------------------------+</span><br><span class="line"> --&gt;&gt; (02) Reading Fermi-Level From FERMI_ENERGY.<span class="keyword">in</span> File.</span><br><span class="line"> --&gt;&gt; (03) Reading Energy-Levels From EIGENVAL File.</span><br><span class="line"> --&gt;&gt; (04) Reading KPT-Params <span class="keyword">in</span> the First Line of KPOINTS File.</span><br><span class="line"> --&gt;&gt; (05) Reading K-Path From KPATH.<span class="keyword">in</span> File.</span><br><span class="line"> --&gt;&gt; (06) Written KLABELS File.</span><br><span class="line"> +---------------------------- Tip ------------------------------+</span><br><span class="line"> |If You Want to Get Fine Band Structrue by Interpolating Method.|</span><br><span class="line"> | You CAN <span class="built_in">set</span> GET_INTERPOLATED_DATA = .TRUE. <span class="keyword">in</span> ~/.vaspkit file.|</span><br><span class="line"> +---------------------------------------------------------------+</span><br><span class="line"> --&gt;&gt; (07) Written BAND.dat File.</span><br><span class="line"> --&gt;&gt; (08) Written REFORMATTED_BAND.dat File.</span><br><span class="line"> --&gt;&gt; (09) Written KLINES.dat File.</span><br><span class="line"> --&gt;&gt; (10) Written BAND_GAP File.</span><br></pre></td></tr></table></figure>
+<p>绘图时我习惯把价带顶归零，即纵坐标为<span class="math inline">$\rm
+E-E_{VBM}$</span>，操作如下。</p>
+<p>把<code>FERMI_ENERGY</code>文件就拷贝一份，改名为<code>FERMI_ENERGY.in</code>。将文件<code>FERMI_ENERGY.in</code>中的费米能级数据改为价带顶数据，然后再重新运行252功能，此时得到的<code>REFORMATTED_BAND.dat</code>文件中的数据是归零的。</p>
+<p>接下来就是origin绘图了</p>
+<p>将<code>REFORMATTED_BAND.dat</code>文件拖入工作表内，确认只有一个X轴，剩下全是Y轴。新建一个sheet。打开<code>KLABELS</code>文本文件，手动复制数据，如下图</p>
+<figure>
+<img src="image-20250831190815582-1756638505174-1-1756639170329-5.png"
+alt="sheet2" />
+<figcaption aria-hidden="true">sheet2</figcaption>
+</figure>
+<figure>
+<img src="image-20250831190851837-1756639170329-6.png" alt="sheet1" />
+<figcaption aria-hidden="true">sheet1</figcaption>
+</figure>
+<p>接着选中sheet1表格中的所有数据，绘制折线图：</p>
+<figure>
+<img src="image-20250831190947071-1756639170329-7.png"
+alt="很丑、、、" />
+<figcaption aria-hidden="true">很丑、、、</figcaption>
+</figure>
+<p>设置一下横坐标，改成高对称点的样子，看图：</p>
+<figure>
+<img src="image-20250831191457282-1756639170329-8.png"
+alt="sheet2第二列" />
+<figcaption aria-hidden="true">sheet2第二列</figcaption>
+</figure>
+<figure>
+<img src="image-20250831191522192-1756639170329-9.png"
+alt="sheet2第一列" />
+<figcaption aria-hidden="true">sheet2第一列</figcaption>
+</figure>
+<p>这样横坐标就被设置好了：</p>
+<figure>
+<img src="image-20250831191755306-1756639170329-10.png"
+alt="还是很丑" />
+<figcaption aria-hidden="true">还是很丑</figcaption>
+</figure>
+<p>接下来就是美化了，放一张最后画好的图吧：</p>
+<figure>
+<img src="图片1-1756639170329-4.png" alt="Li6PS5Cl能带图" />
+<figcaption aria-hidden="true">Li6PS5Cl能带图</figcaption>
+</figure>
+
+            
+
+
+        </div>
+    </div>
+    <div id="post-footer" class="post-footer main-content-wrap">
+        
+            <div class="post-footer-tags">
+                <span class="text-color-light text-small">TAGGED IN</span><br/>
+                
+    <a class="tag tag--primary tag--small t-none-link" href="/all-tags/%E5%8C%96%E5%AD%A6/" rel="tag">化学</a> <a class="tag tag--primary tag--small t-none-link" href="/all-tags/%E7%A7%91%E7%A0%94/" rel="tag">科研</a>
+
+            </div>
+        
+        
+            <div class="post-actions-wrap">
+    <nav>
+        <ul class="post-actions post-action-nav">
+            <li class="post-action">
+                
+                    <a
+                        class="post-action-btn btn btn--disabled"
+                        aria-hidden="true"
+                    >
+                        
+                        <i class="fa fa-angle-left" aria-hidden="true"></i>
+                        <span class="hide-xs hide-sm text-small icon-ml">PREVIOUS</span>
+                    </a>
+            </li>
+            <li class="post-action">
+                
+                    
+                <a
+                    class="post-action-btn btn btn--default tooltip--top"
+                    href="/2025/08/31/hello-world/"
+                    data-tooltip="Hello World"
+                    aria-label="NEXT: Hello World"
+                >
+                    
+                        <span class="hide-xs hide-sm text-small icon-mr">NEXT</span>
+                        <i class="fa fa-angle-right" aria-hidden="true"></i>
+                    </a>
+            </li>
+        </ul>
+    </nav>
+    <ul class="post-actions post-action-share">
+        <li class="post-action hide-lg hide-md hide-sm">
+            <a
+                class="post-action-btn btn btn--default btn-open-shareoptions"
+                href="#btn-open-shareoptions"
+                aria-label="Share this post"
+            >
+                <i class="fa fa-share-alt" aria-hidden="true"></i>
+            </a>
+        </li>
+        
+            
+            
+            <li class="post-action hide-xs">
+                <a
+                    class="post-action-btn btn btn--default"
+                    target="new" href="https://www.facebook.com/sharer/sharer.php?u=https://hydrogen1222.xyz/2025/08/31/%E7%A7%91%E7%A0%94/VASP/Starry%20Sky/HSE06%E6%9D%82%E5%8C%96%E6%B3%9B%E5%87%BD%E8%AE%A1%E7%AE%97%E8%83%BD%E5%B8%A6%E4%BB%A5%E5%8F%8Aorigin%E4%BD%9C%E5%9B%BE/"
+                    title="Share on Facebook"
+                    aria-label="Share on Facebook"
+                >
+                    <i class="fab fa-facebook" aria-hidden="true"></i>
+                </a>
+            </li>
+        
+            
+            
+            <li class="post-action hide-xs">
+                <a
+                    class="post-action-btn btn btn--default"
+                    target="new" href="https://twitter.com/intent/tweet?text=https://hydrogen1222.xyz/2025/08/31/%E7%A7%91%E7%A0%94/VASP/Starry%20Sky/HSE06%E6%9D%82%E5%8C%96%E6%B3%9B%E5%87%BD%E8%AE%A1%E7%AE%97%E8%83%BD%E5%B8%A6%E4%BB%A5%E5%8F%8Aorigin%E4%BD%9C%E5%9B%BE/"
+                    title="Share on Twitter"
+                    aria-label="Share on Twitter"
+                >
+                    <i class="fab fa-twitter" aria-hidden="true"></i>
+                </a>
+            </li>
+        
+            
+            
+            <li class="post-action hide-xs">
+                <a
+                    class="post-action-btn btn btn--default"
+                    target="new" href="https://plus.google.com/share?url=https://hydrogen1222.xyz/2025/08/31/%E7%A7%91%E7%A0%94/VASP/Starry%20Sky/HSE06%E6%9D%82%E5%8C%96%E6%B3%9B%E5%87%BD%E8%AE%A1%E7%AE%97%E8%83%BD%E5%B8%A6%E4%BB%A5%E5%8F%8Aorigin%E4%BD%9C%E5%9B%BE/"
+                    title="Share on Google+"
+                    aria-label="Share on Google+"
+                >
+                    <i class="fab fa-google-plus" aria-hidden="true"></i>
+                </a>
+            </li>
+        
+        
+            
+        
+        <li class="post-action">
+            
+                <a class="post-action-btn btn btn--default" href="#" aria-label="Back to top">
+            
+                <i class="fa fa-list" aria-hidden="true"></i>
+            </a>
+        </li>
+    </ul>
+</div>
+
+
+        
+        
+            
+        
+    </div>
+</article>
+
+<script>
+document.addEventListener("DOMContentLoaded", function() {
+  const elements = document.querySelectorAll('.post-body'); // 取文章正文
+  elements.forEach(el => {
+    el.innerHTML = el.innerHTML.replace(/==([^=]+)==/g, '<mark>$1</mark>');
+  });
+});
+</script>
+
+
+                <footer id="footer" class="main-content-wrap">
+    <span class="copyrights">
+        Copyrights &copy; 2025 John Doe. All Rights Reserved.
+    </span>
+</footer>
+
+            </div>
+            
+                <div id="bottom-bar" class="post-bottom-bar" data-behavior="4">
+                    <div class="post-actions-wrap">
+    <nav>
+        <ul class="post-actions post-action-nav">
+            <li class="post-action">
+                
+                    <a
+                        class="post-action-btn btn btn--disabled"
+                        aria-hidden="true"
+                    >
+                        
+                        <i class="fa fa-angle-left" aria-hidden="true"></i>
+                        <span class="hide-xs hide-sm text-small icon-ml">PREVIOUS</span>
+                    </a>
+            </li>
+            <li class="post-action">
+                
+                    
+                <a
+                    class="post-action-btn btn btn--default tooltip--top"
+                    href="/2025/08/31/hello-world/"
+                    data-tooltip="Hello World"
+                    aria-label="NEXT: Hello World"
+                >
+                    
+                        <span class="hide-xs hide-sm text-small icon-mr">NEXT</span>
+                        <i class="fa fa-angle-right" aria-hidden="true"></i>
+                    </a>
+            </li>
+        </ul>
+    </nav>
+    <ul class="post-actions post-action-share">
+        <li class="post-action hide-lg hide-md hide-sm">
+            <a
+                class="post-action-btn btn btn--default btn-open-shareoptions"
+                href="#btn-open-shareoptions"
+                aria-label="Share this post"
+            >
+                <i class="fa fa-share-alt" aria-hidden="true"></i>
+            </a>
+        </li>
+        
+            
+            
+            <li class="post-action hide-xs">
+                <a
+                    class="post-action-btn btn btn--default"
+                    target="new" href="https://www.facebook.com/sharer/sharer.php?u=https://hydrogen1222.xyz/2025/08/31/%E7%A7%91%E7%A0%94/VASP/Starry%20Sky/HSE06%E6%9D%82%E5%8C%96%E6%B3%9B%E5%87%BD%E8%AE%A1%E7%AE%97%E8%83%BD%E5%B8%A6%E4%BB%A5%E5%8F%8Aorigin%E4%BD%9C%E5%9B%BE/"
+                    title="Share on Facebook"
+                    aria-label="Share on Facebook"
+                >
+                    <i class="fab fa-facebook" aria-hidden="true"></i>
+                </a>
+            </li>
+        
+            
+            
+            <li class="post-action hide-xs">
+                <a
+                    class="post-action-btn btn btn--default"
+                    target="new" href="https://twitter.com/intent/tweet?text=https://hydrogen1222.xyz/2025/08/31/%E7%A7%91%E7%A0%94/VASP/Starry%20Sky/HSE06%E6%9D%82%E5%8C%96%E6%B3%9B%E5%87%BD%E8%AE%A1%E7%AE%97%E8%83%BD%E5%B8%A6%E4%BB%A5%E5%8F%8Aorigin%E4%BD%9C%E5%9B%BE/"
+                    title="Share on Twitter"
+                    aria-label="Share on Twitter"
+                >
+                    <i class="fab fa-twitter" aria-hidden="true"></i>
+                </a>
+            </li>
+        
+            
+            
+            <li class="post-action hide-xs">
+                <a
+                    class="post-action-btn btn btn--default"
+                    target="new" href="https://plus.google.com/share?url=https://hydrogen1222.xyz/2025/08/31/%E7%A7%91%E7%A0%94/VASP/Starry%20Sky/HSE06%E6%9D%82%E5%8C%96%E6%B3%9B%E5%87%BD%E8%AE%A1%E7%AE%97%E8%83%BD%E5%B8%A6%E4%BB%A5%E5%8F%8Aorigin%E4%BD%9C%E5%9B%BE/"
+                    title="Share on Google+"
+                    aria-label="Share on Google+"
+                >
+                    <i class="fab fa-google-plus" aria-hidden="true"></i>
+                </a>
+            </li>
+        
+        
+            
+        
+        <li class="post-action">
+            
+                <a class="post-action-btn btn btn--default" href="#" aria-label="Back to top">
+            
+                <i class="fa fa-list" aria-hidden="true"></i>
+            </a>
+        </li>
+    </ul>
+</div>
+
+
+                </div>
+                
+    <div id="share-options-bar" class="share-options-bar" data-behavior="4">
+        <i id="btn-close-shareoptions" class="fa fa-times"></i>
+        <ul class="share-options">
+            
+                
+                
+                <li class="share-option">
+                    <a
+                        class="share-option-btn"
+                        target="new"
+                        href="https://www.facebook.com/sharer/sharer.php?u=https://hydrogen1222.xyz/2025/08/31/%E7%A7%91%E7%A0%94/VASP/Starry%20Sky/HSE06%E6%9D%82%E5%8C%96%E6%B3%9B%E5%87%BD%E8%AE%A1%E7%AE%97%E8%83%BD%E5%B8%A6%E4%BB%A5%E5%8F%8Aorigin%E4%BD%9C%E5%9B%BE/"
+                        aria-label="Share on Facebook"
+                    >
+                        <i class="fab fa-facebook" aria-hidden="true"></i><span>Share on Facebook</span>
+                    </a>
+                </li>
+            
+                
+                
+                <li class="share-option">
+                    <a
+                        class="share-option-btn"
+                        target="new"
+                        href="https://twitter.com/intent/tweet?text=https://hydrogen1222.xyz/2025/08/31/%E7%A7%91%E7%A0%94/VASP/Starry%20Sky/HSE06%E6%9D%82%E5%8C%96%E6%B3%9B%E5%87%BD%E8%AE%A1%E7%AE%97%E8%83%BD%E5%B8%A6%E4%BB%A5%E5%8F%8Aorigin%E4%BD%9C%E5%9B%BE/"
+                        aria-label="Share on Twitter"
+                    >
+                        <i class="fab fa-twitter" aria-hidden="true"></i><span>Share on Twitter</span>
+                    </a>
+                </li>
+            
+                
+                
+                <li class="share-option">
+                    <a
+                        class="share-option-btn"
+                        target="new"
+                        href="https://plus.google.com/share?url=https://hydrogen1222.xyz/2025/08/31/%E7%A7%91%E7%A0%94/VASP/Starry%20Sky/HSE06%E6%9D%82%E5%8C%96%E6%B3%9B%E5%87%BD%E8%AE%A1%E7%AE%97%E8%83%BD%E5%B8%A6%E4%BB%A5%E5%8F%8Aorigin%E4%BD%9C%E5%9B%BE/"
+                        aria-label="Share on Google+"
+                    >
+                        <i class="fab fa-google-plus" aria-hidden="true"></i><span>Share on Google+</span>
+                    </a>
+                </li>
+            
+        </ul>
+    </div>
+
+
+            
+        </div>
+        
+
+
+<div id="about">
+    <div id="about-card">
+        <div id="about-btn-close">
+            <i class="fa fa-times"></i>
+        </div>
+        
+            <h4 id="about-card-name">John Doe</h4>
+        
+            <div id="about-card-bio"><p>author.bio</p>
+</div>
+        
+        
+            <div id="about-card-job">
+                <i class="fa fa-briefcase"></i>
+                <br/>
+                <p>author.job</p>
+
+            </div>
+        
+        
+            <div id="about-card-location">
+                <i class="fa fa-map-marker-alt"></i>
+                <br/>
+                Changchun, China
+            </div>
+        
+    </div>
+</div>
+
+        
+        
+<div id="cover" style="background-image:url('/assets/images/cover.jpg');"></div>
+        <!--SCRIPTS-->
+
+<script src="/assets/js/script-akgy1kkmfssyzznzlvk9mjwcvnsn87aqalldnf43rojvlib0s8vpmeb5mayw.min.js"></script>
+
+<!--SCRIPTS END-->
+
+
+    
+
+
+
+
+<script src="/js/equals-mark.js"></script>
+
+
+    </body>
+</html>

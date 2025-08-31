@@ -243,6 +243,162 @@
                     
                         <a
                             class="link-unstyled"
+                            href="/2025/08/31/%E7%A7%91%E7%A0%94/VASP/Starry%20Sky/HSE06%E6%9D%82%E5%8C%96%E6%B3%9B%E5%87%BD%E8%AE%A1%E7%AE%97%E8%83%BD%E5%B8%A6%E4%BB%A5%E5%8F%8Aorigin%E4%BD%9C%E5%9B%BE/"
+                            aria-label=": 能带的计算以及origin绘制能带图"
+                        >
+                            能带的计算以及origin绘制能带图
+                        </a>
+                    
+                </h1>
+                <div class="postShorten-meta">
+    <time datetime="2025-08-31T17:40:00+08:00">
+	
+		    Aug 31, 2025
+    	
+    </time>
+    
+        <span>in </span>
+        
+    <a class="category-link" href="/all-categories/%E4%BB%8E%E9%9B%B6%E5%BC%80%E5%A7%8B%E7%9A%84%E7%A7%91%E7%A0%94%E4%B9%8B%E6%97%85/">从零开始的科研之旅</a>, <a class="category-link" href="/all-categories/%E4%BB%8E%E9%9B%B6%E5%BC%80%E5%A7%8B%E7%9A%84%E7%A7%91%E7%A0%94%E4%B9%8B%E6%97%85/VASP/">VASP</a>
+
+
+    
+</div>
+
+            </div>
+            
+                <div class="postShorten-content">
+                    <p>终于也是把文献整理得差不多了，博客也翻新了一下，继续分享一些之前的计算。</p>
+<p>我的计算体系是Argyrodite硫化物固态电解质体系，计算以<span
+class="math inline">$\rm
+Li_6PS_5Cl$</span>为例吧。能带计算最好是使用primitive
+cell，即原胞。这是惯用晶胞或者超胞计算得到的能带是折叠的，固体物理的相关书籍中有提到，（当然计算成本也是不同的），参考公社论坛上的两篇讨论帖子：</p>
+<ul>
+<li>http://bbs.keinsci.com/thread-11373-1-1.html</li>
+<li>http://bbs.keinsci.com/thread-19361-1-1.html</li>
+</ul>
+<h1 id="原胞的变胞优化">原胞的变胞优化</h1>
+<p>计算使用我稍微熟一点的VASP来，首先从Materials
+Project网站下载晶体结构文件，下载primitive
+cell，如果已经有了conventional
+cell的cif文件，也可以使用vaspkit的602功能生成<code>PRIMCELL.vasp</code>原胞文件。</p>
+<p>然后进行原胞的变胞优化，除了POSCAR的剩下三个输入文件可以使用vaspkit方便地生成，使用101功能，选择lattice
+relaxation进行变胞优化，102功能生成自洽计算地K点，选择Gamma撒点方案，0.03间隙，原胞计算量比较小，间隙填小一点也无妨。</p>
+<p>笔者在Intel
+5218R的集群上进行计算，分配了40个物理核心，计算时在<code>INCAR</code>中设置<code>KPAR=2</code>和<code>NCORE=20</code>来最大化效率，一般而言<code>NPAR</code>参数不需要设置，<code>KPAR</code>和<code>NCORE</code>的参数设置众说纷纭，我参考的公社某一篇帖子里的经验，前者设置为2，后者设置为物理核心数的一般，当然这是对于CPU版本的VASP而言的。</p>
+<p>原胞的变胞优化用时很短：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"> reached required accuracy - stopping structural energy minimisation</span><br><span class="line">[ctan@baifq-hpc141 primitive_cell-opt]$ <span class="built_in">tail</span> OUTCAR</span><br><span class="line">                            User <span class="keyword">time</span> (sec):       88.516</span><br><span class="line">                          System <span class="keyword">time</span> (sec):        3.010</span><br><span class="line">                         Elapsed <span class="keyword">time</span> (sec):       94.030</span><br><span class="line"></span><br><span class="line">                   Maximum memory used (kb):      238296.</span><br><span class="line">                   Average memory used (kb):          N/A</span><br><span class="line"></span><br><span class="line">                          Minor page faults:        36126</span><br><span class="line">                          Major page faults:          669</span><br><span class="line">                 Voluntary context switches:         1271</span><br></pre></td></tr></table></figure>
+<p>在确认收敛并确认结构正常后进行能带的计算</p>
+<h1 id="pbe泛函计算能带">PBE泛函计算能带</h1>
+<blockquote>
+<p>能带计算的KPOINTS与普通计算的KPOINTS不一样，通常需要第一布里渊区内的一条或几条高对称点路径来计算能带性质</p>
+</blockquote>
+<p>VASP的计算中PBE泛函是被使用最广泛的，需要修改K点和输入文件。参考vaspkit官网的教程：http://vaspkit.cn/index.php/27.html</p>
+<p>PBE能带的计算<mark>可以<mark>分两步进行。</p>
+<p>首先进行自洽计算，此时也即（最常用的）静态计算，将变胞优化的<code>CONTCAR</code>更名为<code>POSCAR</code>，使用<code>vaspkit</code>的101功能，选择Static-Calculation，k点选择可以不变。</p>
+<p>接着进行能带计算，需要使用vaspkit的303功能生成高对称K点，将生成的<code>KPATH.in</code>文件更名为<code>KPOINTS</code></p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">(base) [storm@X16 temp]$ <span class="built_in">ls</span></span><br><span class="line">HIGH_SYMMETRY_POINTS  INCAR  KPATH.<span class="keyword">in</span>  KPOINTS  POSCAR  POTCAR  PRIMCELL.vasp  SYMMETRY  vmd-1.9.3</span><br></pre></td></tr></table></figure>
+<p>可以看到，303功能也生成了原胞结构，当然前面我们已经提到过。</p>
+<p>在进行能带计算的目录中，将上一步自洽计算的<code>CHGCAR</code>文件拷贝过来并在<code>INCAR</code>中设置电荷密度<mark>不更新<mark>，即<code>ICHARG=11</code>，这是必须的，为了加速计算，建议读取上一步的<code>WAVECAR</code>文件，虽然<code>ISTART</code>设置为1或者2程序都可以读取<code>WAVECAR</code>，但是为了保持整个计算任务中（第一步和第二步）的平面波基组一致，建议使用<code>ISTART=2</code>。</p>
+<p>此种方法计算能带分两步的原因是使用高密度 k
+点网格进行计算时耗时较长，因此用不耗时的普通静态计算多次迭代得到的<code>CHGCAR</code>和<code>WAVECAR</code>来加速高密度k点网格的计算。</p>
+<p>其实对于我的小体系，直接使用高密度k点网格进行静态计算也是完全可接受的，并且SCF
+和能带完全自洽，会更精确一些，用时并不长：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line">[ctan@baifq-hpc141 primitive_cell-band_PBE]$ <span class="built_in">ls</span></span><br><span class="line">4736.<span class="built_in">log</span>  CONTCAR   HIGH_SYMMETRY_POINTS  KPOINTS  PCDAT   PRIMCELL.vasp  slurm-4736.out  vasp.out     WAVECAR</span><br><span class="line">CHG       DOSCAR    INCAR                 OSZICAR  POSCAR  PROCAR         SYMMETRY        vaspout.h5   XDATCAR</span><br><span class="line">CHGCAR    EIGENVAL  KPATH.<span class="keyword">in</span>              OUTCAR   POTCAR  REPORT         vasp.err        vasprun.xml</span><br><span class="line">[ctan@baifq-hpc141 primitive_cell-band_PBE]$ <span class="built_in">tail</span> OUTCAR</span><br><span class="line">                            User <span class="keyword">time</span> (sec):      216.131</span><br><span class="line">                          System <span class="keyword">time</span> (sec):        4.733</span><br><span class="line">                         Elapsed <span class="keyword">time</span> (sec):      223.789</span><br><span class="line"></span><br><span class="line">                   Maximum memory used (kb):      427044.</span><br><span class="line">                   Average memory used (kb):          N/A</span><br><span class="line"></span><br><span class="line">                          Minor page faults:        28812</span><br><span class="line">                          Major page faults:          666</span><br><span class="line">                 Voluntary context switches:         1232</span><br></pre></td></tr></table></figure>
+<h1 id="hse06杂化泛函计算能带">HSE06杂化泛函计算能带</h1>
+<p>PBE最常被诟病的方面即能带计算，它常常低估带隙。By the way，Materials
+Project上的能带数据刚好能和我用PBE算出来的能带数据对上，明显小于HSE06泛函计算的数据，估计是使用PBE算的。</p>
+<p>HSE
+(Heyd–Scuseria–Ernzerhof)杂化泛函在2003年首次被提出（HSE03），在2006年HSE06被提出，它能更加精确地计算能带。使用HSE06杂化泛函做计算是<mark>十分昂贵<mark>的，用时是PBE泛函的<mark>数十倍不止<mark>。</p>
+<p>受vasp算法所限制，使用HSE06杂化泛函计算能带时<mark>只能使用自洽计算（此时为静态计算），不能进行非自洽计算<mark>。中文互联网上有一些教程是错误的，PBE可以自洽+非自洽两步，也可以自洽一步，但是HSE06杂化泛函只能一步自洽。<mark>不过可以在能带计算之前也先做一下静态计算（自洽计算），然后将产生的<code>WAVECAR</code>文件用于能带计算以加速<mark>。</p>
+<p>使用<code>vaspkit</code>的251功能生成所需要的<code>KPOINTS</code>文件，这是一个“混合”的文件：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br></pre></td><td class="code"><pre><span class="line"> ------------&gt;&gt;</span><br><span class="line">251</span><br><span class="line"> --&gt;&gt; (01) Reading Input Parameters From INCAR File.</span><br><span class="line"> ======================== K-Mesh Scheme ==========================</span><br><span class="line"> 1) Monkhorst-Pack Scheme</span><br><span class="line"> 2) Gamma Scheme</span><br><span class="line"></span><br><span class="line"> 0)   Quit</span><br><span class="line"> 9)   Back</span><br><span class="line"> -------------&gt;&gt;</span><br><span class="line">2</span><br><span class="line"> +---------------------------- Tip ------------------------------+</span><br><span class="line"> Input the K-spacing value <span class="keyword">for</span> SCF Calculation:</span><br><span class="line"> (Typical Value: 0.03-0.04 is Generally Precise Enough)</span><br><span class="line"> ------------&gt;&gt;</span><br><span class="line">0.03</span><br><span class="line"> Input the K-spacing value <span class="keyword">for</span> Band Calculation:</span><br><span class="line"> (Typical Value: 0.03-0.04 <span class="keyword">for</span> DFT and 0.04-0.06 <span class="keyword">for</span> hybrid DFT)</span><br><span class="line"> ------------&gt;&gt;</span><br><span class="line">0.03</span><br><span class="line"> +---------------------------------------------------------------+</span><br><span class="line"> --&gt;&gt; (02) Reading K-Path From KPATH.<span class="keyword">in</span> File.</span><br><span class="line"> +-------------------------- Summary ----------------------------+</span><br><span class="line"> K-Mesh <span class="keyword">for</span> SCF Calculation:    3    3    3</span><br><span class="line"> The Number of K-Points along K-Path No.1:  14</span><br><span class="line"> The Number of K-Points along K-Path No.2:   6</span><br><span class="line"> The Number of K-Points along K-Path No.3:  18</span><br><span class="line"> The Number of K-Points along K-Path No.4:  17</span><br><span class="line"> The Number of K-Points along K-Path No.5:   7</span><br><span class="line"> The Number of K-Points along K-Path No.6:   7</span><br><span class="line"> +---------------------------------------------------------------+</span><br><span class="line"> --&gt;&gt; (03) Written KPOINTS File.</span><br></pre></td></tr></table></figure>
+<p>首先需要生成自洽（静态）计算所需要的k点网格，然后生成能带计算的高密度k点网格。<code>INCAR</code>文件可以沿用普通静态计算的然后改一下泛函，也可以使用101功能生成HSE06
+Calculation的<code>INCAR</code>。</p>
+<p>HSE06杂化泛函极为昂贵，大概在第五个电子步时，用时超过8h仍未计算完，遂放弃。之前注册某家超算平台时送了一点机时，开通了GPU版本的vasp计算，发现快了不少：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line">General timing and accounting informations <span class="keyword">for</span> this job:</span><br><span class="line">========================================================</span><br><span class="line"> </span><br><span class="line">                 Total CPU <span class="keyword">time</span> used (sec):    22600.775</span><br><span class="line">                           User <span class="keyword">time</span> (sec):    10925.947</span><br><span class="line">                         System <span class="keyword">time</span> (sec):    11674.828</span><br><span class="line">                        Elapsed <span class="keyword">time</span> (sec):     7781.069</span><br><span class="line"> </span><br><span class="line">                  Maximum memory used (kb):     6086716.</span><br><span class="line">                  Average memory used (kb):          N/A</span><br><span class="line"> </span><br><span class="line">                         Minor page faults:      6831986</span><br><span class="line">                         Major page faults:          282</span><br><span class="line">                Voluntary context switches:     53436870</span><br><span class="line"></span><br><span class="line">PROFILE, used timers:     405</span><br><span class="line">=============================</span><br></pre></td></tr></table></figure>
+<h1 id="数据后处理与origin绘图">数据后处理与Origin绘图</h1>
+<p>能带计算结束后，将目录拷贝到可以使用vaspkit的机器上。</p>
+<p>对于PBE计算的能带，使用211功能处理数据，得到带隙、CBM、VBM、Fermi
+Energy等信息：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br></pre></td><td class="code"><pre><span class="line"> ------------&gt;&gt;</span><br><span class="line">21</span><br><span class="line"> ============================ Band Options =======================</span><br><span class="line"> 211) Band-Structure</span><br><span class="line"> 212) Projected Band-Structure of Only-One-Selected Atom</span><br><span class="line"> 213) Projected Band-Structure of Each Element</span><br><span class="line"> 214) Projected Band-Structure of Selected Atoms</span><br><span class="line"> 215) Projected Band-Structure by Element-Weights</span><br><span class="line"> 216) The Sum of Projected Band for Selected Atoms and Orbitals</span><br><span class="line"></span><br><span class="line"> 0)   Quit</span><br><span class="line"> 9)   Back</span><br><span class="line"> ------------&gt;&gt;</span><br><span class="line">211</span><br><span class="line"> --&gt;&gt; (01) Reading Input Parameters From INCAR File.</span><br><span class="line"> +---------------------------------------------------------------+</span><br><span class="line"> |       &gt;&gt;&gt; The Fermi Energy will be set to zero eV &lt;&lt;&lt;         |</span><br><span class="line"> +---------------------------------------------------------------+</span><br><span class="line"> --&gt;&gt; (02) Reading Fermi-Energy from DOSCAR File.</span><br><span class="line"> --&gt;&gt; (03) Reading Energy-Levels From EIGENVAL File.</span><br><span class="line"> --&gt;&gt; (04) Reading K-Path From KPOINTS File.</span><br><span class="line"> --&gt;&gt; (05) Written KLABELS File.</span><br><span class="line"> +---------------------------- Tip ------------------------------+</span><br><span class="line"> |If You Want to Get Fine Band Structrue by Interpolating Method.|</span><br><span class="line"> | You CAN set GET_INTERPOLATED_DATA = .TRUE. in ~/.vaspkit file.|</span><br><span class="line"> +---------------------------------------------------------------+</span><br><span class="line"> --&gt;&gt; (06) Written BAND.dat File.</span><br><span class="line"> --&gt;&gt; (07) Written REFORMATTED_BAND.dat File.</span><br><span class="line"> --&gt;&gt; (08) Written KLINES.dat File.</span><br><span class="line"> --&gt;&gt; (09) Written BAND_GAP File.</span><br></pre></td></tr></table></figure>
+<p>对于HSE06计算的能带，使用252功能处理数据，得到带隙、CBM、VBM、Fermi
+Energy等信息：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br></pre></td><td class="code"><pre><span class="line"> ------------&gt;&gt;</span><br><span class="line">252</span><br><span class="line"></span><br><span class="line"> --&gt;&gt; (01) Reading Input Parameters From INCAR File.</span><br><span class="line"> +---------------------------------------------------------------+</span><br><span class="line"> |       &gt;&gt;&gt; The Fermi Energy will be <span class="built_in">set</span> to zero eV &lt;&lt;&lt;         |</span><br><span class="line"> +---------------------------------------------------------------+</span><br><span class="line"> --&gt;&gt; (02) Reading Fermi-Level From FERMI_ENERGY.<span class="keyword">in</span> File.</span><br><span class="line"> --&gt;&gt; (03) Reading Energy-Levels From EIGENVAL File.</span><br><span class="line"> --&gt;&gt; (04) Reading KPT-Params <span class="keyword">in</span> the First Line of KPOINTS File.</span><br><span class="line"> --&gt;&gt; (05) Reading K-Path From KPATH.<span class="keyword">in</span> File.</span><br><span class="line"> --&gt;&gt; (06) Written KLABELS File.</span><br><span class="line"> +---------------------------- Tip ------------------------------+</span><br><span class="line"> |If You Want to Get Fine Band Structrue by Interpolating Method.|</span><br><span class="line"> | You CAN <span class="built_in">set</span> GET_INTERPOLATED_DATA = .TRUE. <span class="keyword">in</span> ~/.vaspkit file.|</span><br><span class="line"> +---------------------------------------------------------------+</span><br><span class="line"> --&gt;&gt; (07) Written BAND.dat File.</span><br><span class="line"> --&gt;&gt; (08) Written REFORMATTED_BAND.dat File.</span><br><span class="line"> --&gt;&gt; (09) Written KLINES.dat File.</span><br><span class="line"> --&gt;&gt; (10) Written BAND_GAP File.</span><br></pre></td></tr></table></figure>
+<p>绘图时我习惯把价带顶归零，即纵坐标为<span class="math inline">$\rm
+E-E_{VBM}$</span>，操作如下。</p>
+<p>把<code>FERMI_ENERGY</code>文件就拷贝一份，改名为<code>FERMI_ENERGY.in</code>。将文件<code>FERMI_ENERGY.in</code>中的费米能级数据改为价带顶数据，然后再重新运行252功能，此时得到的<code>REFORMATTED_BAND.dat</code>文件中的数据是归零的。</p>
+<p>接下来就是origin绘图了</p>
+<p>将<code>REFORMATTED_BAND.dat</code>文件拖入工作表内，确认只有一个X轴，剩下全是Y轴。新建一个sheet。打开<code>KLABELS</code>文本文件，手动复制数据，如下图</p>
+<figure>
+<img src="image-20250831190815582-1756638505174-1-1756639170329-5.png"
+alt="sheet2" />
+<figcaption aria-hidden="true">sheet2</figcaption>
+</figure>
+<figure>
+<img src="image-20250831190851837-1756639170329-6.png" alt="sheet1" />
+<figcaption aria-hidden="true">sheet1</figcaption>
+</figure>
+<p>接着选中sheet1表格中的所有数据，绘制折线图：</p>
+<figure>
+<img src="image-20250831190947071-1756639170329-7.png"
+alt="很丑、、、" />
+<figcaption aria-hidden="true">很丑、、、</figcaption>
+</figure>
+<p>设置一下横坐标，改成高对称点的样子，看图：</p>
+<figure>
+<img src="image-20250831191457282-1756639170329-8.png"
+alt="sheet2第二列" />
+<figcaption aria-hidden="true">sheet2第二列</figcaption>
+</figure>
+<figure>
+<img src="image-20250831191522192-1756639170329-9.png"
+alt="sheet2第一列" />
+<figcaption aria-hidden="true">sheet2第一列</figcaption>
+</figure>
+<p>这样横坐标就被设置好了：</p>
+<figure>
+<img src="image-20250831191755306-1756639170329-10.png"
+alt="还是很丑" />
+<figcaption aria-hidden="true">还是很丑</figcaption>
+</figure>
+<p>接下来就是美化了，放一张最后画好的图吧：</p>
+<figure>
+<img src="图片1-1756639170329-4.png" alt="Li6PS5Cl能带图" />
+<figcaption aria-hidden="true">Li6PS5Cl能带图</figcaption>
+</figure>
+
+                    
+                        
+
+
+                    
+                    
+                        <p>
+                            <a
+                                href="/2025/08/31/%E7%A7%91%E7%A0%94/VASP/Starry%20Sky/HSE06%E6%9D%82%E5%8C%96%E6%B3%9B%E5%87%BD%E8%AE%A1%E7%AE%97%E8%83%BD%E5%B8%A6%E4%BB%A5%E5%8F%8Aorigin%E4%BD%9C%E5%9B%BE/#post-footer"
+                                class="postShorten-excerpt_link link"
+                                aria-label=""
+                            >
+                                Comment and share
+                            </a>
+                        </p>
+                    
+                </div>
+            
+        </div>
+        
+    </article>
+    
+    
+    <article class="postShorten postShorten--thumbnailimg-bottom">
+        <div class="postShorten-wrap">
+            
+            <div class="postShorten-header">
+                <h1 class="postShorten-title">
+                    
+                        <a
+                            class="link-unstyled"
                             href="/2025/08/12/%E7%A7%91%E7%A0%94/VASP/Starry%20Sky/vaspkit%E4%B8%ADCIF%E8%BD%ACPOSCAR%E8%84%9A%E6%9C%AC%E7%9A%84%E6%8A%A5%E9%94%99/"
                             aria-label=": np.asmatrix函数被废弃使得CIF转POSCAR脚本报错"
                         >
@@ -1318,515 +1474,6 @@ class="math inline"><sup>2</sup></span></p>
         
     </article>
     
-    
-    <article class="postShorten postShorten--thumbnailimg-bottom">
-        <div class="postShorten-wrap">
-            
-            <div class="postShorten-header">
-                <h1 class="postShorten-title">
-                    
-                        <a
-                            class="link-unstyled"
-                            href="/2025/04/29/%E7%A7%91%E7%A0%94/VASP/Starry%20Sky/POTCAR%E8%B5%9D%E5%8A%BF%E7%9A%84%E9%80%89%E5%8F%96/"
-                            aria-label=": POTCAR赝势的选取"
-                        >
-                            POTCAR赝势的选取
-                        </a>
-                    
-                </h1>
-                <div class="postShorten-meta">
-    <time datetime="2025-04-29T20:45:00+08:00">
-	
-		    Apr 29, 2025
-    	
-    </time>
-    
-        <span>in </span>
-        
-    <a class="category-link" href="/all-categories/%E4%BB%8E%E9%9B%B6%E5%BC%80%E5%A7%8B%E7%9A%84%E7%A7%91%E7%A0%94%E4%B9%8B%E6%97%85/">从零开始的科研之旅</a>, <a class="category-link" href="/all-categories/%E4%BB%8E%E9%9B%B6%E5%BC%80%E5%A7%8B%E7%9A%84%E7%A7%91%E7%A0%94%E4%B9%8B%E6%97%85/VASP/">VASP</a>
-
-
-    
-</div>
-
-            </div>
-            
-                <div class="postShorten-content">
-                    <p>本文为一个查阅性的记录文章，也可以说是搬运，内容取自<strong>侯柱锋</strong>老师的<code>使用VASP的个人经验手册</code></p>
-<table>
-<colgroup>
-<col style="width: 5%" />
-<col style="width: 18%" />
-<col style="width: 18%" />
-<col style="width: 15%" />
-<col style="width: 43%" />
-</colgroup>
-<thead>
-<tr>
-<th>元素</th>
-<th>普通赝势 (eV)</th>
-<th>高硬赝势 (eV)</th>
-<th>软赝势 (eV)</th>
-<th>d 电子作为半芯态来处理赝势 (eV)</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td>B</td>
-<td><strong>318</strong></td>
-<td>700 (B_h)</td>
-<td>250 (B_s)</td>
-<td>-</td>
-</tr>
-<tr>
-<td>C</td>
-<td><strong>400</strong></td>
-<td>700 (C_h)</td>
-<td>273 (C_s)</td>
-<td>-</td>
-</tr>
-<tr>
-<td>N</td>
-<td><strong>400</strong></td>
-<td>700 (N_h)</td>
-<td>250 (N_s)</td>
-<td>-</td>
-</tr>
-<tr>
-<td>O</td>
-<td><strong>400</strong></td>
-<td>700 (O_h)</td>
-<td>250 (O_s)</td>
-<td>-</td>
-</tr>
-<tr>
-<td>F</td>
-<td><strong>400</strong></td>
-<td>700 (F_h)</td>
-<td>250 (F_s)</td>
-<td>-</td>
-</tr>
-<tr>
-<td>Al</td>
-<td><strong>240</strong></td>
-<td>295 (Al_h)</td>
-<td>-</td>
-<td>-</td>
-</tr>
-<tr>
-<td>Si</td>
-<td><strong>245</strong></td>
-<td>380 (Si_h)</td>
-<td>-</td>
-<td>-</td>
-</tr>
-<tr>
-<td>P</td>
-<td><strong>270</strong></td>
-<td>390 (P_h)</td>
-<td>-</td>
-<td>-</td>
-</tr>
-<tr>
-<td>S</td>
-<td><strong>280</strong></td>
-<td>402 (S_h)</td>
-<td>-</td>
-<td>-</td>
-</tr>
-<tr>
-<td>Cl</td>
-<td><strong>280</strong></td>
-<td>409 (Cl_h)</td>
-<td>-</td>
-<td>-</td>
-</tr>
-<tr>
-<td>Ga</td>
-<td>134</td>
-<td>404 (Ga_h)</td>
-<td>-</td>
-<td><strong>282 (Ga_d)</strong></td>
-</tr>
-<tr>
-<td>Ge</td>
-<td>173</td>
-<td>410 (Ge_h)</td>
-<td>-</td>
-<td><strong>287 (Ge_d)</strong></td>
-</tr>
-<tr>
-<td>As</td>
-<td><strong>208</strong></td>
-<td>-</td>
-<td>-</td>
-<td>-</td>
-</tr>
-<tr>
-<td>Se</td>
-<td><strong>211</strong></td>
-<td>-</td>
-<td>-</td>
-<td>-</td>
-</tr>
-<tr>
-<td>Br</td>
-<td><strong>216</strong></td>
-<td>-</td>
-<td>-</td>
-<td>-</td>
-</tr>
-<tr>
-<td>In</td>
-<td>95</td>
-<td>-</td>
-<td>-</td>
-<td><strong>239 (In_d)</strong></td>
-</tr>
-<tr>
-<td>Sn</td>
-<td>103</td>
-<td>-</td>
-<td>-</td>
-<td><strong>241 (Sn_d)</strong></td>
-</tr>
-<tr>
-<td>Sb</td>
-<td><strong>172</strong></td>
-<td>-</td>
-<td>-</td>
-<td>-</td>
-</tr>
-<tr>
-<td>Te</td>
-<td><strong>174</strong></td>
-<td>-</td>
-<td>-</td>
-<td>-</td>
-</tr>
-<tr>
-<td>I</td>
-<td><strong>175</strong></td>
-<td>-</td>
-<td>-</td>
-<td>-</td>
-</tr>
-<tr>
-<td>Tl</td>
-<td>95</td>
-<td>-</td>
-<td>-</td>
-<td><strong>239 (Tl_d)</strong></td>
-</tr>
-<tr>
-<td>Pb</td>
-<td>98</td>
-<td>-</td>
-<td>-</td>
-<td><strong>237 (Pb_d)</strong></td>
-</tr>
-<tr>
-<td>Bi</td>
-<td>105</td>
-<td>-</td>
-<td>-</td>
-<td><strong>242 (Bi_d)</strong></td>
-</tr>
-</tbody>
-</table>
-<table>
-<colgroup>
-<col style="width: 6%" />
-<col style="width: 25%" />
-<col style="width: 25%" />
-<col style="width: 43%" />
-</colgroup>
-<thead>
-<tr>
-<th>元素</th>
-<th>X——普通赝势 (eV)</th>
-<th>X_h——硬赝势 (eV)</th>
-<th>其他赝势 (eV)</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td>H</td>
-<td><strong>250</strong></td>
-<td>700 (H_h)</td>
-<td>-</td>
-</tr>
-<tr>
-<td>Li</td>
-<td>140</td>
-<td>-</td>
-<td><strong>271 (Li_sv)</strong></td>
-</tr>
-<tr>
-<td>Be</td>
-<td><strong>300</strong></td>
-<td>-</td>
-<td>308 (Be_sv)</td>
-</tr>
-<tr>
-<td>Na</td>
-<td>81</td>
-<td>-</td>
-<td><strong>300 (Na_pv)</strong>, 700 (Na_sv)</td>
-</tr>
-<tr>
-<td>Mg</td>
-<td><strong>210</strong></td>
-<td>-</td>
-<td>265 (Mg_pv)</td>
-</tr>
-<tr>
-<td>K</td>
-<td>-</td>
-<td>-</td>
-<td>150 (K_pv), <strong>259 (K_sv)</strong></td>
-</tr>
-<tr>
-<td>Ca</td>
-<td>-</td>
-<td>-</td>
-<td><strong>150 (Ca_pv)</strong>, 290 (Ca_sv)</td>
-</tr>
-<tr>
-<td>Rb</td>
-<td>-</td>
-<td>-</td>
-<td>121 (Rb_pv), <strong>220 (Rb_sv)</strong></td>
-</tr>
-<tr>
-<td>Sr</td>
-<td>-</td>
-<td>-</td>
-<td><strong>226 (Sr_sv)</strong></td>
-</tr>
-<tr>
-<td>Cs</td>
-<td>-</td>
-<td>-</td>
-<td><strong>220 (Cs_sv)</strong></td>
-</tr>
-<tr>
-<td>Ba</td>
-<td>-</td>
-<td>-</td>
-<td><strong>187 (Ba_sv)</strong></td>
-</tr>
-</tbody>
-</table>
-<table>
-<thead>
-<tr>
-<th>元素</th>
-<th>普通赝势 (eV)</th>
-<th>X_pv赝势 (eV)</th>
-<th>X_sv赝势 (eV)</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td>Sc</td>
-<td>-</td>
-<td>-</td>
-<td><strong>222 (Sc_sv)</strong></td>
-</tr>
-<tr>
-<td>Ti</td>
-<td>178</td>
-<td><strong>222 (Ti_pv)</strong></td>
-<td>-</td>
-</tr>
-<tr>
-<td>V</td>
-<td>192</td>
-<td><strong>263 (V_pv)</strong></td>
-<td>-</td>
-</tr>
-<tr>
-<td>Cr</td>
-<td>227</td>
-<td><strong>265 (Cr_pv)</strong></td>
-<td>-</td>
-</tr>
-<tr>
-<td>Mn</td>
-<td><strong>269</strong></td>
-<td>269 (Mn_pv)</td>
-<td>-</td>
-</tr>
-<tr>
-<td>Fe</td>
-<td><strong>267</strong></td>
-<td>293 (Fe_pv)</td>
-<td>-</td>
-</tr>
-<tr>
-<td>Co</td>
-<td><strong>267</strong></td>
-<td>-</td>
-<td>-</td>
-</tr>
-<tr>
-<td>Ni</td>
-<td><strong>269</strong></td>
-<td>367 (Ni_pv)</td>
-<td>-</td>
-</tr>
-<tr>
-<td>Cu</td>
-<td><strong>273</strong></td>
-<td>368 (Cu_pv)</td>
-<td>-</td>
-</tr>
-<tr>
-<td>Zn</td>
-<td><strong>276</strong></td>
-<td>-</td>
-<td>-</td>
-</tr>
-<tr>
-<td>Y</td>
-<td>-</td>
-<td>-</td>
-<td><strong>211 (Y_sv)</strong></td>
-</tr>
-<tr>
-<td>Zr</td>
-<td>-</td>
-<td>-</td>
-<td><strong>229 (Zr_sv)</strong></td>
-</tr>
-<tr>
-<td>Nb</td>
-<td>-</td>
-<td><strong>207 (Nb_pv)</strong></td>
-<td>-</td>
-</tr>
-<tr>
-<td>Mo</td>
-<td>224</td>
-<td><strong>224 (Mo_pv)</strong></td>
-<td>-</td>
-</tr>
-<tr>
-<td>Tc</td>
-<td>228</td>
-<td><strong>228 (Tc_pv)</strong></td>
-<td>-</td>
-</tr>
-<tr>
-<td>Ru</td>
-<td><strong>213</strong></td>
-<td>230 (Ru_pv)</td>
-<td>-</td>
-</tr>
-<tr>
-<td>Rh</td>
-<td><strong>228</strong></td>
-<td>271 (Rh_pv)</td>
-<td>-</td>
-</tr>
-<tr>
-<td>Pd</td>
-<td><strong>250</strong></td>
-<td>350 (Pd_pv)</td>
-<td>-</td>
-</tr>
-<tr>
-<td>Ag</td>
-<td><strong>249</strong></td>
-<td>-</td>
-<td>-</td>
-</tr>
-<tr>
-<td>Cd</td>
-<td><strong>274</strong></td>
-<td>-</td>
-<td>-</td>
-</tr>
-<tr>
-<td>Hf</td>
-<td>220</td>
-<td><strong>220 (Hf_pv)</strong></td>
-<td>-</td>
-</tr>
-<tr>
-<td>Ta</td>
-<td>223</td>
-<td><strong>223 (Ta_pv)</strong></td>
-<td>-</td>
-</tr>
-<tr>
-<td>W</td>
-<td>223</td>
-<td><strong>223 (W_pv)</strong></td>
-<td>-</td>
-</tr>
-<tr>
-<td>Re</td>
-<td><strong>226</strong></td>
-<td>226 (Re_pv)</td>
-<td>-</td>
-</tr>
-<tr>
-<td>Os</td>
-<td>228</td>
-<td><strong>228 (Os_pv)</strong></td>
-<td>-</td>
-</tr>
-<tr>
-<td>Ir</td>
-<td><strong>210</strong></td>
-<td>-</td>
-<td>-</td>
-</tr>
-<tr>
-<td>Pt</td>
-<td><strong>230</strong></td>
-<td>-</td>
-<td>-</td>
-</tr>
-<tr>
-<td>Au</td>
-<td><strong>229</strong></td>
-<td>-</td>
-<td>-</td>
-</tr>
-<tr>
-<td>Hg</td>
-<td><strong>233</strong></td>
-<td>-</td>
-<td>-</td>
-</tr>
-</tbody>
-</table>
-
-                    
-                        
-
-
-                    
-                    
-                        <p>
-                            <a
-                                href="/2025/04/29/%E7%A7%91%E7%A0%94/VASP/Starry%20Sky/POTCAR%E8%B5%9D%E5%8A%BF%E7%9A%84%E9%80%89%E5%8F%96/#post-footer"
-                                class="postShorten-excerpt_link link"
-                                aria-label=""
-                            >
-                                Comment and share
-                            </a>
-                        </p>
-                    
-                </div>
-            
-        </div>
-        
-    </article>
-    
     <div class="pagination-bar">
     <ul class="pagination">
         
@@ -1842,7 +1489,7 @@ class="math inline"><sup>2</sup></span></p>
             </a>
           </li>
         
-        <li class="pagination-number">page 1 of 2</li>
+        <li class="pagination-number">page 1 of 3</li>
     </ul>
 </div>
 

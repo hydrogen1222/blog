@@ -243,6 +243,67 @@
                     
                         <a
                             class="link-unstyled"
+                            href="/2025/04/14/%E7%A7%91%E7%A0%94/VASP/Starry%20Sky/VASP%E4%B8%AD%E7%9A%84%E5%90%84%E7%A7%8D%E6%8A%A5%E9%94%99/"
+                            aria-label=": VASP中的各种报错"
+                        >
+                            VASP中的各种报错
+                        </a>
+                    
+                </h1>
+                <div class="postShorten-meta">
+    <time datetime="2025-04-14T16:40:00+08:00">
+	
+		    Apr 14, 2025
+    	
+    </time>
+    
+        <span>in </span>
+        
+    <a class="category-link" href="/all-categories/%E4%BB%8E%E9%9B%B6%E5%BC%80%E5%A7%8B%E7%9A%84%E7%A7%91%E7%A0%94%E4%B9%8B%E6%97%85/">从零开始的科研之旅</a>, <a class="category-link" href="/all-categories/%E4%BB%8E%E9%9B%B6%E5%BC%80%E5%A7%8B%E7%9A%84%E7%A7%91%E7%A0%94%E4%B9%8B%E6%97%85/VASP/">VASP</a>
+
+
+    
+</div>
+
+            </div>
+            
+                <div class="postShorten-content">
+                    <p>如题，记录一下在计算时遇到的各种报错</p>
+<h2 id="section">2025.05.14</h2>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line"> -----------------------------------------------------------------------------</span><br><span class="line">|                                                                             |</span><br><span class="line">|     EEEEEEE  RRRRRR   RRRRRR   OOOOOOO  RRRRRR      <span class="comment">###     ###     ###     |</span></span><br><span class="line">|     E        R     R  R     R  O     O  R     R     <span class="comment">###     ###     ###     |</span></span><br><span class="line">|     E        R     R  R     R  O     O  R     R     <span class="comment">###     ###     ###     |</span></span><br><span class="line">|     EEEEE    RRRRRR   RRRRRR   O     O  RRRRRR       <span class="comment">#       #       #      |</span></span><br><span class="line">|     E        R   R    R   R    O     O  R   R                               |</span><br><span class="line">|     E        R    R   R    R   O     O  R    R      <span class="comment">###     ###     ###     |</span></span><br><span class="line">|     EEEEEEE  R     R  R     R  OOOOOOO  R     R     <span class="comment">###     ###     ###     |</span></span><br><span class="line">|                                                                             |</span><br><span class="line">|     ERROR FEXCF: supplied exchange-correlation table                        |</span><br><span class="line">|      is too small, maximal index : 7355                                     |</span><br><span class="line">|                                                                             |</span><br><span class="line">|       ----&gt;  I REFUSE TO CONTINUE WITH THIS SICK JOB ... BYE!!! &lt;----       |</span><br><span class="line">|                                                                             |</span><br><span class="line"> -----------------------------------------------------------------------------</span><br></pre></td></tr></table></figure>
+<p>删除<code>NPAR = 1</code>参数</p>
+
+                    
+                        
+
+
+                    
+                    
+                        <p>
+                            <a
+                                href="/2025/04/14/%E7%A7%91%E7%A0%94/VASP/Starry%20Sky/VASP%E4%B8%AD%E7%9A%84%E5%90%84%E7%A7%8D%E6%8A%A5%E9%94%99/#post-footer"
+                                class="postShorten-excerpt_link link"
+                                aria-label=""
+                            >
+                                Comment and share
+                            </a>
+                        </p>
+                    
+                </div>
+            
+        </div>
+        
+    </article>
+    
+    
+    <article class="postShorten postShorten--thumbnailimg-bottom">
+        <div class="postShorten-wrap">
+            
+            <div class="postShorten-header">
+                <h1 class="postShorten-title">
+                    
+                        <a
+                            class="link-unstyled"
                             href="/2025/04/14/%E7%A7%91%E7%A0%94/VASP/Starry%20Sky/Vasp-note/"
                             aria-label=": VASP学习笔记"
                         >
@@ -404,7 +465,7 @@ $$</span></p>
 <p>默认值</p>
 <ul>
 <li>如果存在WAVECAR则读取: ISTART = 1</li>
-<li>如果不存在WAVECAR，从头算: ISTART = 0</li>
+<li>强制不读取WAVECAR，从头算: ISTART = 0</li>
 </ul>
 <p>ISTART = 2，读取WAVECAR，截断能原胞不发生改变</p>
 <h3 id="icharg确定-vasp-如何构造初始电荷密度">ICHARG——确定 VASP
