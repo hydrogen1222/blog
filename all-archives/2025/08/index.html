@@ -283,7 +283,7 @@ Project网站下载晶体结构文件，下载primitive
 cell，如果已经有了conventional
 cell的cif文件，也可以使用vaspkit的602功能生成<code>PRIMCELL.vasp</code>原胞文件。</p>
 <p>然后进行原胞的变胞优化，除了POSCAR的剩下三个输入文件可以使用vaspkit方便地生成，使用101功能，选择lattice
-relaxation进行变胞优化，102功能生成自洽计算地K点，选择Gamma撒点方案，0.03间隙，原胞计算量比较小，间隙填小一点也无妨。</p>
+relaxation进行变胞优化，102功能生成自洽计算的K点，选择Gamma撒点方案，0.03间隙，原胞计算量比较小，间隙填小一点也无妨。</p>
 <p>笔者在Intel
 5218R的集群上进行计算，分配了40个物理核心，计算时在<code>INCAR</code>中设置<code>KPAR=2</code>和<code>NCORE=20</code>来最大化效率，一般而言<code>NPAR</code>参数不需要设置，<code>KPAR</code>和<code>NCORE</code>的参数设置众说纷纭，我参考的公社某一篇帖子里的经验，前者设置为2，后者设置为物理核心数的一般，当然这是对于CPU版本的VASP而言的。</p>
 <p>原胞的变胞优化用时很短：</p>
@@ -377,80 +377,6 @@ alt="还是很丑" />
                         <p>
                             <a
                                 href="/2025/08/31/%E7%A7%91%E7%A0%94/VASP/Starry%20Sky/HSE06%E6%9D%82%E5%8C%96%E6%B3%9B%E5%87%BD%E8%AE%A1%E7%AE%97%E8%83%BD%E5%B8%A6%E4%BB%A5%E5%8F%8Aorigin%E4%BD%9C%E5%9B%BE/#post-footer"
-                                class="postShorten-excerpt_link link"
-                                aria-label=""
-                            >
-                                Comment and share
-                            </a>
-                        </p>
-                    
-                </div>
-            
-        </div>
-        
-    </article>
-    
-    
-    <article class="postShorten postShorten--thumbnailimg-bottom">
-        <div class="postShorten-wrap">
-            
-            <div class="postShorten-header">
-                <h1 class="postShorten-title">
-                    
-                        <a
-                            class="link-unstyled"
-                            href="/2025/08/31/hello-world/"
-                            aria-label=": Hello World"
-                        >
-                            Hello World
-                        </a>
-                    
-                </h1>
-                <div class="postShorten-meta">
-    <time datetime="2025-08-31T10:45:04+08:00">
-	
-		    Aug 31, 2025
-    	
-    </time>
-    
-</div>
-
-            </div>
-            
-                <div class="postShorten-content">
-                    <p>Welcome to <a target="_blank" rel="noopener" href="https://hexo.io/">Hexo</a>! This is your very
-first post. Check <a target="_blank" rel="noopener" href="https://hexo.io/docs/">documentation</a> for
-more info. If you get any problems when using Hexo, you can find the
-answer in <a
-target="_blank" rel="noopener" href="https://hexo.io/docs/troubleshooting.html">troubleshooting</a> or
-you can ask me on <a
-target="_blank" rel="noopener" href="https://github.com/hexojs/hexo/issues">GitHub</a>.</p>
-<h2 id="quick-start">Quick Start</h2>
-<h3 id="create-a-new-post">Create a new post</h3>
-<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ hexo new <span class="string">&quot;My New Post&quot;</span></span><br></pre></td></tr></table></figure>
-<p>More info: <a
-target="_blank" rel="noopener" href="https://hexo.io/docs/writing.html">Writing</a></p>
-<h3 id="run-server">Run server</h3>
-<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ hexo server</span><br></pre></td></tr></table></figure>
-<p>More info: <a target="_blank" rel="noopener" href="https://hexo.io/docs/server.html">Server</a></p>
-<h3 id="generate-static-files">Generate static files</h3>
-<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ hexo generate</span><br></pre></td></tr></table></figure>
-<p>More info: <a
-target="_blank" rel="noopener" href="https://hexo.io/docs/generating.html">Generating</a></p>
-<h3 id="deploy-to-remote-sites">Deploy to remote sites</h3>
-<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ hexo deploy</span><br></pre></td></tr></table></figure>
-<p>More info: <a
-target="_blank" rel="noopener" href="https://hexo.io/docs/one-command-deployment.html">Deployment</a></p>
-
-                    
-                        
-
-
-                    
-                    
-                        <p>
-                            <a
-                                href="/2025/08/31/hello-world/#post-footer"
                                 class="postShorten-excerpt_link link"
                                 aria-label=""
                             >

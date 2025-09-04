@@ -243,6 +243,131 @@
                     
                         <a
                             class="link-unstyled"
+                            href="/2025/09/04/%E7%A7%91%E7%A0%94/VASP/Starry%20Sky/AIMD%E6%A8%A1%E6%8B%9F%E5%9B%BA%E6%80%81%E7%94%B5%E8%A7%A3%E8%B4%A8%E7%A6%BB%E5%AD%90%E7%94%B5%E5%AF%BC%E7%8E%87/"
+                            aria-label=": VASP进行AIMD模拟固态电解质离子电导率的计算"
+                        >
+                            VASP进行AIMD模拟固态电解质离子电导率的计算
+                        </a>
+                    
+                </h1>
+                <div class="postShorten-meta">
+    <time datetime="2025-09-04T10:51:00+08:00">
+	
+		    Sep 04, 2025
+    	
+    </time>
+    
+        <span>in </span>
+        
+    <a class="category-link" href="/all-categories/%E4%BB%8E%E9%9B%B6%E5%BC%80%E5%A7%8B%E7%9A%84%E7%A7%91%E7%A0%94%E4%B9%8B%E6%97%85/">从零开始的科研之旅</a>, <a class="category-link" href="/all-categories/%E4%BB%8E%E9%9B%B6%E5%BC%80%E5%A7%8B%E7%9A%84%E7%A7%91%E7%A0%94%E4%B9%8B%E6%97%85/VASP/">VASP</a>
+
+
+    
+</div>
+
+            </div>
+            
+                <div class="postShorten-content">
+                    <p>使用<code>VASP</code>计算离子电导率，需要进行从头算分子动力学(AIMD)模拟，对象为<span
+class="math inline">$\rm Li_6PS_5Cl$</span>
+Li-Argyrodite型硫化物固态电解质。</p>
+<h1 id="收敛性测试">收敛性测试</h1>
+<p>在进行昂贵的AIMD模拟之前需要进行收敛性测试，测试最优的<code>ENCUT</code>、k点等参数。如果设置太小则有失精度，设置太大又增加成本，收敛性测试的脚本网上应该能找到，我之前用<code>Claude</code>写了一个，发到了公社论坛上面：http://bbs.keinsci.com/thread-55151-1-1.html</p>
+<h1 id="变胞优化">变胞优化</h1>
+<p>一个能量较低、结构合理的起始三维构型是进行MD模拟的第一步，本次模拟使用变胞优化后的惯用晶胞进行。</p>
+<h1 id="aimd">AIMD</h1>
+<p>分子动力学模拟的基本步骤如下图：</p>
+<figure>
+<img src="image-20250521165107751-1756610630995-25-1756959539810-3.png"
+alt="生产流程图" />
+<figcaption aria-hidden="true">生产流程图</figcaption>
+</figure>
+<p>这次的AIMD跑的很短，总共30ps(30000fs)，15000步，即每步2fs(POTIM =
+2)。在30ps长的AIMD的模拟中，最初的一段时间体系并未达到平衡，因而需要舍弃，真正的AIMD有效数据此时间段向后截取。</p>
+<p>以下是本次AIMD的<code>INCAR</code>:</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br></pre></td><td class="code"><pre><span class="line">Global Parameters</span><br><span class="line">ISTART =  1            (Read existing wavefunction, if there)</span><br><span class="line">ISPIN  =  1            (Non-Spin polarised DFT)</span><br><span class="line"># ICHARG =  11         (Non-self-consistent: GGA/LDA band structures)</span><br><span class="line">LREAL  = .FALSE.       (Projection operators: automatic)</span><br><span class="line">ENCUT  =  510        (Cut-off energy for plane wave basis set, in eV)</span><br><span class="line"># PREC   =  Accurate   (Precision level: Normal or Accurate, set Accurate when perform structure lattice relaxation calculation)</span><br><span class="line">#LWAVE  = .TRUE.        (Write WAVECAR or not)</span><br><span class="line">#LCHARG = .TRUE.        (Write CHGCAR or not)</span><br><span class="line">ADDGRID= .TRUE.        (Increase grid, helps GGA convergence)</span><br><span class="line">LASPH  = .TRUE.        (Give more accurate total energies and band structure calculations)</span><br><span class="line">PREC   = Normal      (Accurate strictly avoids any aliasing or wrap around errors)</span><br><span class="line"># LVTOT  = .TRUE.      (Write total electrostatic potential into LOCPOT or not)</span><br><span class="line"># LVHAR  = .TRUE.      (Write ionic + Hartree electrostatic potential into LOCPOT or not)</span><br><span class="line"># NELECT =             (No. of electrons: charged cells, be careful)</span><br><span class="line"># LPLANE = .TRUE.      (Real space distribution, supercells)</span><br><span class="line"># NWRITE = 2           (Medium-level output)</span><br><span class="line"># KPAR   = 2           (Divides k-grid into separate groups)</span><br><span class="line"># NGXF    = 300        (FFT grid mesh density for nice charge/potential plots)</span><br><span class="line"># NGYF    = 300        (FFT grid mesh density for nice charge/potential plots)</span><br><span class="line"># NGZF    = 300        (FFT grid mesh density for nice charge/potential plots)</span><br><span class="line"></span><br><span class="line">Electronic Relaxation</span><br><span class="line">ISMEAR =  0</span><br><span class="line">SIGMA  =  0.05</span><br><span class="line">EDIFF  =  1E-06</span><br><span class="line">ALGO = VeryFast</span><br><span class="line">Molecular Dynamics</span><br><span class="line">IBRION =  0            (Activate MD)</span><br><span class="line">NSW    =  15000          (Max ionic steps)</span><br><span class="line">EDIFFG = -1E-02        (Ionic convergence, eV/A)</span><br><span class="line">POTIM  =  2            (Timestep in fs)</span><br><span class="line">SMASS  =  0.12            (MD Algorithm: -3-microcanonical ensemble, 0-canonical ensemble)</span><br><span class="line">TEBEG  =  300     (Start temperature K)</span><br><span class="line">TEEND  =  300     (Final temperature K)</span><br><span class="line">MDALGO =  2          (Thermostat)</span><br><span class="line">ISYM   =  0          (Switch symmetry off)</span><br><span class="line">NWRITE =  0            (For long MD-runs use NWRITE=0 or NWRITE=1)</span><br><span class="line">KPAR = 2</span><br><span class="line">NCORE = 20</span><br></pre></td></tr></table></figure>
+<p>BTW，这里的<code>SMASS</code>参数可以设置0。我先进行了2000fs左右的预模拟，如下：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">[ctan@baifq-hpc141 SMASS]$ grep SMASS OUTCAR</span><br><span class="line">   SMASS = 0            (MD Algorithm: -3-microcanonical ensemble, 0-canonical ensemble)</span><br><span class="line">   SMASS  =   0.12    Nose mass-parameter (am)</span><br></pre></td></tr></table></figure>
+<p><code>OUTCAR</code>中给出的<code>SMASS</code>值是0.12，设置为0也可以。</p>
+<p>简单介绍一下其他参数：</p>
+<ul>
+<li><code>MDALGO</code>设置为2，可以控制使用Nose-Hoover热浴</li>
+<li><code>TEBEG</code>初始温度</li>
+<li><code>TEEND</code>终止温度</li>
+<li><code>IBRION</code>设置为-1启用分子动力学模拟</li>
+</ul>
+<p>接着就开始漫长的模拟吧，大概模拟了八天左右：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">[ctan@baifq-hpc141 pre-pro]$ <span class="built_in">tail</span> OUTCAR</span><br><span class="line">                            User <span class="keyword">time</span> (sec):   854845.149</span><br><span class="line">                          System <span class="keyword">time</span> (sec):    17398.447</span><br><span class="line">                         Elapsed <span class="keyword">time</span> (sec):   882414.331</span><br><span class="line"></span><br><span class="line">                   Maximum memory used (kb):      464952.</span><br><span class="line">                   Average memory used (kb):          N/A</span><br><span class="line"></span><br><span class="line">                          Minor page faults:      1437354</span><br><span class="line">                          Major page faults:          688</span><br><span class="line">                 Voluntary context switches:         9709</span><br></pre></td></tr></table></figure>
+<h1 id="aimd后处理">AIMD后处理</h1>
+<p>本次模拟的目的主要是为了得到离子电导率，模拟结束之后可以使用<code>vaspkit</code>方便地计算扩散系数，否则可能需要使用<code>pymatgen</code>自己编写代码。</p>
+<p>首先使用下面的代码查看体系在合适趋于平衡，来自github上的一个老师，主业是https://github.com/tamaswells/XDATCAR_toolkit</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br><span class="line">89</span><br><span class="line">90</span><br><span class="line">91</span><br><span class="line">92</span><br><span class="line">93</span><br><span class="line">94</span><br><span class="line">95</span><br><span class="line">96</span><br><span class="line">97</span><br><span class="line">98</span><br><span class="line">99</span><br><span class="line">100</span><br><span class="line">101</span><br><span class="line">102</span><br><span class="line">103</span><br><span class="line">104</span><br><span class="line">105</span><br><span class="line">106</span><br><span class="line">107</span><br><span class="line">108</span><br><span class="line">109</span><br><span class="line">110</span><br><span class="line">111</span><br><span class="line">112</span><br><span class="line">113</span><br><span class="line">114</span><br><span class="line">115</span><br><span class="line">116</span><br><span class="line">117</span><br><span class="line">118</span><br><span class="line">119</span><br><span class="line">120</span><br><span class="line">121</span><br><span class="line">122</span><br><span class="line">123</span><br><span class="line">124</span><br><span class="line">125</span><br><span class="line">126</span><br><span class="line">127</span><br><span class="line">128</span><br><span class="line">129</span><br><span class="line">130</span><br><span class="line">131</span><br><span class="line">132</span><br><span class="line">133</span><br><span class="line">134</span><br><span class="line">135</span><br><span class="line">136</span><br><span class="line">137</span><br><span class="line">138</span><br><span class="line">139</span><br><span class="line">140</span><br><span class="line">141</span><br><span class="line">142</span><br><span class="line">143</span><br><span class="line">144</span><br><span class="line">145</span><br><span class="line">146</span><br><span class="line">147</span><br><span class="line">148</span><br><span class="line">149</span><br><span class="line">150</span><br><span class="line">151</span><br><span class="line">152</span><br><span class="line">153</span><br><span class="line">154</span><br><span class="line">155</span><br><span class="line">156</span><br><span class="line">157</span><br><span class="line">158</span><br><span class="line">159</span><br><span class="line">160</span><br><span class="line">161</span><br><span class="line">162</span><br><span class="line">163</span><br><span class="line">164</span><br><span class="line">165</span><br><span class="line">166</span><br><span class="line">167</span><br><span class="line">168</span><br><span class="line">169</span><br><span class="line">170</span><br><span class="line">171</span><br><span class="line">172</span><br><span class="line">173</span><br><span class="line">174</span><br><span class="line">175</span><br><span class="line">176</span><br><span class="line">177</span><br><span class="line">178</span><br><span class="line">179</span><br><span class="line">180</span><br><span class="line">181</span><br><span class="line">182</span><br><span class="line">183</span><br><span class="line">184</span><br><span class="line">185</span><br><span class="line">186</span><br><span class="line">187</span><br><span class="line">188</span><br><span class="line">189</span><br><span class="line">190</span><br><span class="line">191</span><br><span class="line">192</span><br><span class="line">193</span><br><span class="line">194</span><br><span class="line">195</span><br><span class="line">196</span><br><span class="line">197</span><br><span class="line">198</span><br><span class="line">199</span><br><span class="line">200</span><br><span class="line">201</span><br><span class="line">202</span><br><span class="line">203</span><br><span class="line">204</span><br><span class="line">205</span><br><span class="line">206</span><br><span class="line">207</span><br><span class="line">208</span><br><span class="line">209</span><br><span class="line">210</span><br><span class="line">211</span><br><span class="line">212</span><br><span class="line">213</span><br><span class="line">214</span><br><span class="line">215</span><br><span class="line">216</span><br><span class="line">217</span><br><span class="line">218</span><br><span class="line">219</span><br><span class="line">220</span><br><span class="line">221</span><br><span class="line">222</span><br><span class="line">223</span><br><span class="line">224</span><br><span class="line">225</span><br><span class="line">226</span><br><span class="line">227</span><br><span class="line">228</span><br><span class="line">229</span><br><span class="line">230</span><br><span class="line">231</span><br><span class="line">232</span><br><span class="line">233</span><br><span class="line">234</span><br><span class="line">235</span><br><span class="line">236</span><br><span class="line">237</span><br><span class="line">238</span><br><span class="line">239</span><br><span class="line">240</span><br><span class="line">241</span><br><span class="line">242</span><br><span class="line">243</span><br><span class="line">244</span><br><span class="line">245</span><br><span class="line">246</span><br><span class="line">247</span><br><span class="line">248</span><br><span class="line">249</span><br><span class="line">250</span><br><span class="line">251</span><br><span class="line">252</span><br><span class="line">253</span><br><span class="line">254</span><br><span class="line">255</span><br><span class="line">256</span><br><span class="line">257</span><br><span class="line">258</span><br><span class="line">259</span><br><span class="line">260</span><br><span class="line">261</span><br><span class="line">262</span><br><span class="line">263</span><br><span class="line">264</span><br><span class="line">265</span><br><span class="line">266</span><br><span class="line">267</span><br><span class="line">268</span><br><span class="line">269</span><br><span class="line">270</span><br><span class="line">271</span><br><span class="line">272</span><br><span class="line">273</span><br><span class="line">274</span><br><span class="line">275</span><br><span class="line">276</span><br><span class="line">277</span><br><span class="line">278</span><br><span class="line">279</span><br><span class="line">280</span><br><span class="line">281</span><br><span class="line">282</span><br><span class="line">283</span><br><span class="line">284</span><br><span class="line">285</span><br><span class="line">286</span><br><span class="line">287</span><br><span class="line">288</span><br><span class="line">289</span><br><span class="line">290</span><br><span class="line">291</span><br><span class="line">292</span><br><span class="line">293</span><br><span class="line">294</span><br><span class="line">295</span><br><span class="line">296</span><br><span class="line">297</span><br><span class="line">298</span><br><span class="line">299</span><br><span class="line">300</span><br><span class="line">301</span><br><span class="line">302</span><br><span class="line">303</span><br><span class="line">304</span><br><span class="line">305</span><br><span class="line">306</span><br><span class="line">307</span><br><span class="line">308</span><br><span class="line">309</span><br><span class="line">310</span><br><span class="line">311</span><br><span class="line">312</span><br><span class="line">313</span><br><span class="line">314</span><br><span class="line">315</span><br><span class="line">316</span><br><span class="line">317</span><br><span class="line">318</span><br><span class="line">319</span><br><span class="line">320</span><br><span class="line">321</span><br><span class="line">322</span><br><span class="line">323</span><br><span class="line">324</span><br><span class="line">325</span><br><span class="line">326</span><br><span class="line">327</span><br><span class="line">328</span><br><span class="line">329</span><br><span class="line">330</span><br><span class="line">331</span><br><span class="line">332</span><br><span class="line">333</span><br><span class="line">334</span><br><span class="line">335</span><br><span class="line">336</span><br><span class="line">337</span><br><span class="line">338</span><br><span class="line">339</span><br><span class="line">340</span><br><span class="line">341</span><br><span class="line">342</span><br><span class="line">343</span><br><span class="line">344</span><br><span class="line">345</span><br><span class="line">346</span><br><span class="line">347</span><br><span class="line">348</span><br><span class="line">349</span><br><span class="line">350</span><br><span class="line">351</span><br><span class="line">352</span><br><span class="line">353</span><br><span class="line">354</span><br><span class="line">355</span><br><span class="line">356</span><br><span class="line">357</span><br><span class="line">358</span><br><span class="line">359</span><br><span class="line">360</span><br><span class="line">361</span><br><span class="line">362</span><br><span class="line">363</span><br><span class="line">364</span><br><span class="line">365</span><br><span class="line">366</span><br><span class="line">367</span><br><span class="line">368</span><br><span class="line">369</span><br><span class="line">370</span><br><span class="line">371</span><br><span class="line">372</span><br><span class="line">373</span><br><span class="line">374</span><br><span class="line">375</span><br><span class="line">376</span><br><span class="line">377</span><br><span class="line">378</span><br><span class="line">379</span><br><span class="line">380</span><br><span class="line">381</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">#!/bin/python</span></span><br><span class="line"><span class="comment"># -*- coding:utf-8 -*-</span></span><br><span class="line"><span class="comment">#Convert XDATCAR to PDB and extract energy &amp; temperature profile for AIMD simulations</span></span><br><span class="line"><span class="comment"># -h for help;-b for frame started;-e for frame ended;;-p for PDB conversion  </span></span><br><span class="line"><span class="comment">#by nxu tamas@zju.edu.cn</span></span><br><span class="line"><span class="comment">#version 1.2</span></span><br><span class="line"><span class="comment">#date 2019.4.9</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> os</span><br><span class="line"><span class="keyword">import</span> shutil</span><br><span class="line"><span class="keyword">import</span> numpy <span class="keyword">as</span> np</span><br><span class="line"><span class="keyword">import</span> matplotlib <span class="keyword">as</span> mpl</span><br><span class="line"><span class="keyword">import</span> math</span><br><span class="line">mpl.use(<span class="string">&#x27;Agg&#x27;</span>) <span class="comment">#silent mode</span></span><br><span class="line"><span class="keyword">from</span> matplotlib <span class="keyword">import</span> pyplot <span class="keyword">as</span> plt</span><br><span class="line"><span class="keyword">from</span> optparse <span class="keyword">import</span> OptionParser  </span><br><span class="line"><span class="keyword">import</span> sys</span><br><span class="line"><span class="keyword">from</span> copy <span class="keyword">import</span> deepcopy</span><br><span class="line"></span><br><span class="line"><span class="keyword">class</span> <span class="title class_">debug</span>(<span class="title class_ inherited__">object</span>):</span><br><span class="line">    <span class="keyword">def</span> <span class="title function_">__init__</span>(<span class="params">self,info=<span class="string">&#x27;debug&#x27;</span></span>):</span><br><span class="line">        <span class="variable language_">self</span>.info=info</span><br><span class="line">    <span class="keyword">def</span> <span class="title function_">__call__</span>(<span class="params">self,func</span>):</span><br><span class="line">        <span class="keyword">def</span> <span class="title function_">wrapper</span>(<span class="params">*args,**kwargs</span>):</span><br><span class="line">            <span class="built_in">print</span>(<span class="string">&#x27;[&#123;info&#125;] Now entering function &#123;function&#125;.....&#x27;</span> \</span><br><span class="line">                .<span class="built_in">format</span>(info=<span class="variable language_">self</span>.info,function=<span class="built_in">getattr</span>(func,<span class="string">&quot;__name__&quot;</span>)))</span><br><span class="line">            <span class="keyword">return</span> func(*args,**kwargs)</span><br><span class="line">        <span class="keyword">return</span> wrapper</span><br><span class="line"></span><br><span class="line"><span class="keyword">class</span> <span class="title class_">Energy_Temp</span>(<span class="title class_ inherited__">object</span>):</span><br><span class="line">    <span class="keyword">def</span> <span class="title function_">__init__</span>(<span class="params">self</span>):</span><br><span class="line">        <span class="string">&#x27;Read vasp MD energies and temperature.&#x27;</span></span><br><span class="line">        <span class="variable language_">self</span>.temp=[]</span><br><span class="line">        <span class="variable language_">self</span>.energy=[]</span><br><span class="line">        <span class="variable language_">self</span>.energy_extract()</span><br><span class="line">            </span><br><span class="line">    <span class="keyword">def</span> <span class="title function_">energy_extract</span>(<span class="params">self</span>):</span><br><span class="line">        <span class="built_in">print</span>(<span class="string">&#x27;Now reading vasp MD energies and temperature.&#x27;</span>)        </span><br><span class="line">        <span class="keyword">if</span> os.path.exists(<span class="string">&quot;OSZICAR&quot;</span>):</span><br><span class="line">            oszicar=<span class="built_in">open</span>(<span class="string">&quot;OSZICAR&quot;</span>,<span class="string">&#x27;r&#x27;</span>)</span><br><span class="line">            <span class="keyword">for</span> index,line <span class="keyword">in</span> <span class="built_in">enumerate</span>(oszicar):</span><br><span class="line">                <span class="keyword">if</span> <span class="string">&quot;E0=&quot;</span> <span class="keyword">in</span> line:</span><br><span class="line">                    <span class="variable language_">self</span>.temp.append(<span class="built_in">float</span>(line.split()[<span class="number">2</span>]))</span><br><span class="line">                    <span class="variable language_">self</span>.energy.append(<span class="built_in">float</span>(line.split()[<span class="number">4</span>]))</span><br><span class="line">            oszicar.close()</span><br><span class="line">            <span class="comment">#return (self.temp,self.energy)                         </span></span><br><span class="line">        <span class="keyword">else</span>:</span><br><span class="line">            <span class="keyword">raise</span> IOError(<span class="string">&#x27;OSZICAR does not exist!&#x27;</span>)</span><br><span class="line"></span><br><span class="line"><span class="keyword">class</span> <span class="title class_">XDATCAR</span>(<span class="title class_ inherited__">Energy_Temp</span>):</span><br><span class="line">    <span class="keyword">def</span> <span class="title function_">__init__</span>(<span class="params">self</span>):</span><br><span class="line">        <span class="string">&#x27;Read lattice information and atomic coordinate.&#x27;</span></span><br><span class="line">        <span class="built_in">super</span>(XDATCAR,<span class="variable language_">self</span>).__init__()</span><br><span class="line">        <span class="built_in">print</span>(<span class="string">&#x27;Now reading vasp XDATCAR.&#x27;</span>)       </span><br><span class="line">        <span class="variable language_">self</span>.lattice=np.zeros((<span class="number">3</span>,<span class="number">3</span>))</span><br><span class="line">        <span class="variable language_">self</span>.NPT=<span class="literal">False</span></span><br><span class="line">        <span class="variable language_">self</span>.frames=<span class="number">0</span></span><br><span class="line">        <span class="variable language_">self</span>._timestep=<span class="number">1</span>  <span class="comment"># timestep 1fs</span></span><br><span class="line">        <span class="variable language_">self</span>.alpha=<span class="number">0.0</span></span><br><span class="line">        <span class="variable language_">self</span>.beta=<span class="number">0.0</span></span><br><span class="line">        <span class="variable language_">self</span>.gamma=<span class="number">0.0</span></span><br><span class="line">        <span class="variable language_">self</span>.current_frame=<span class="number">0</span></span><br><span class="line">        </span><br><span class="line">        <span class="variable language_">self</span>._lattice1=<span class="number">0.0</span></span><br><span class="line">        <span class="variable language_">self</span>._lattice2=<span class="number">0.0</span></span><br><span class="line">        <span class="variable language_">self</span>._lattice3=<span class="number">0.0</span></span><br><span class="line">        <span class="variable language_">self</span>._lattice=np.zeros(<span class="number">3</span>)</span><br><span class="line">        <span class="variable language_">self</span>.format_trans=<span class="literal">False</span></span><br><span class="line"></span><br><span class="line"><span class="meta">        @property </span></span><br><span class="line">        <span class="keyword">def</span> <span class="title function_">timestep</span>(<span class="params">self</span>):</span><br><span class="line">            <span class="keyword">return</span> <span class="variable language_">self</span>._timestep</span><br><span class="line"><span class="meta">        @timestep.setter</span></span><br><span class="line">        <span class="keyword">def</span> <span class="title function_">timestep</span>(<span class="params">self,new_time_step</span>):</span><br><span class="line">            <span class="variable language_">self</span>._timestep=new_time_step</span><br><span class="line">            </span><br><span class="line">        <span class="keyword">if</span> os.path.exists(<span class="string">&quot;XDATCAR&quot;</span>):</span><br><span class="line">            <span class="variable language_">self</span>.XDATCAR=<span class="built_in">open</span>(<span class="string">&quot;XDATCAR&quot;</span>,<span class="string">&#x27;r&#x27;</span>)</span><br><span class="line">        <span class="keyword">else</span>:</span><br><span class="line">            <span class="keyword">raise</span> IOError(<span class="string">&#x27;XDATCAR does not exist!&#x27;</span>)</span><br><span class="line">        title=<span class="variable language_">self</span>.XDATCAR.readline().strip()</span><br><span class="line">        <span class="keyword">for</span> index,line <span class="keyword">in</span> <span class="built_in">enumerate</span>(<span class="variable language_">self</span>.XDATCAR):</span><br><span class="line">            <span class="keyword">if</span> <span class="string">&quot;Direct&quot;</span> <span class="keyword">in</span> line:</span><br><span class="line">                <span class="variable language_">self</span>.frames+=<span class="number">1</span></span><br><span class="line">            <span class="comment"># elif title in line:</span></span><br><span class="line">            <span class="comment">#     self.NPT=True</span></span><br><span class="line">        <span class="variable language_">self</span>.XDATCAR.seek(<span class="number">0</span>)</span><br><span class="line">        <span class="variable language_">self</span>.lattice_read()</span><br><span class="line">        <span class="variable language_">self</span>.XDATCAR.readline()</span><br><span class="line">        <span class="keyword">for</span> i <span class="keyword">in</span> <span class="built_in">range</span>(<span class="variable language_">self</span>.total_atom):</span><br><span class="line">            <span class="variable language_">self</span>.XDATCAR.readline()</span><br><span class="line"></span><br><span class="line">        <span class="keyword">if</span> <span class="string">&quot;Direct configuration&quot;</span> <span class="keyword">not</span> <span class="keyword">in</span> <span class="variable language_">self</span>.XDATCAR.readline():</span><br><span class="line">        	<span class="variable language_">self</span>.NPT=<span class="literal">True</span>	</span><br><span class="line">        <span class="comment">#self.frames=len([&#x27;Direct&#x27; for line in self.XDATCAR if &quot;Direct&quot; in line])</span></span><br><span class="line">        <span class="built_in">print</span>(<span class="string">&#x27;Total frames &#123;0&#125;, NpT is &#123;1&#125;&#x27;</span>.<span class="built_in">format</span>(<span class="variable language_">self</span>.frames,<span class="variable language_">self</span>.NPT))</span><br><span class="line">        <span class="comment"># assert len(self.energy)==self.frames, \</span></span><br><span class="line">        <span class="comment">#     &#x27;Number of XDATCAR frames does not equal to that of Energy terms in OSZICAR&#x27;   </span></span><br><span class="line">        <span class="variable language_">self</span>.XDATCAR.seek(<span class="number">0</span>)</span><br><span class="line">        <span class="variable language_">self</span>.lowrange=<span class="number">0</span>;<span class="variable language_">self</span>.uprange=<span class="variable language_">self</span>.frames-<span class="number">1</span></span><br><span class="line">        <span class="keyword">if</span> <span class="variable language_">self</span>.NPT == <span class="literal">False</span>: <span class="variable language_">self</span>.lattice_read()</span><br><span class="line">        </span><br><span class="line">    <span class="keyword">def</span> <span class="title function_">step_select</span>(<span class="params">self,selected_step</span>): <span class="comment"># &#x27;t&gt;100ps and t &lt; 1000ps&#x27;</span></span><br><span class="line">        <span class="string">&#x27;eg. t &gt; 100 and t &lt; 1000&#x27;</span></span><br><span class="line">        <span class="keyword">assert</span> <span class="built_in">isinstance</span>(selected_step,<span class="built_in">str</span>),<span class="string">&#x27;Selected timestep must be in a &quot;string&quot;&#x27;</span></span><br><span class="line">        <span class="keyword">if</span> <span class="string">&#x27;and&#x27;</span> <span class="keyword">in</span> selected_step:</span><br><span class="line">            conditions=selected_step.split(<span class="string">&quot;and&quot;</span>)</span><br><span class="line">        <span class="keyword">else</span>:</span><br><span class="line">            conditions=[selected_step]</span><br><span class="line">        <span class="keyword">for</span> condition <span class="keyword">in</span> conditions:</span><br><span class="line">            <span class="keyword">try</span>:</span><br><span class="line">                <span class="keyword">if</span> <span class="string">&#x27;&gt;=&#x27;</span> <span class="keyword">in</span> condition:</span><br><span class="line">                    ranges=<span class="built_in">int</span>(condition.split(<span class="string">&#x27;&gt;=&#x27;</span>)[<span class="number">1</span>].strip())</span><br><span class="line">                    <span class="variable language_">self</span>.lowrange=ranges-<span class="number">1</span></span><br><span class="line">                <span class="keyword">elif</span> <span class="string">&#x27;&lt;=&#x27;</span> <span class="keyword">in</span> condition:</span><br><span class="line">                    ranges=<span class="built_in">int</span>(condition.split(<span class="string">&#x27;&lt;=&#x27;</span>)[<span class="number">1</span>].strip())</span><br><span class="line">                    <span class="variable language_">self</span>.uprange=ranges-<span class="number">1</span></span><br><span class="line">                <span class="keyword">elif</span> <span class="string">&#x27;&gt;&#x27;</span> <span class="keyword">in</span> condition:</span><br><span class="line">                    ranges=<span class="built_in">int</span>(condition.split(<span class="string">&#x27;&gt;&#x27;</span>)[<span class="number">1</span>].strip())</span><br><span class="line">                    <span class="variable language_">self</span>.lowrange=ranges</span><br><span class="line">                <span class="keyword">elif</span> <span class="string">&#x27;&lt;&#x27;</span> <span class="keyword">in</span> condition:</span><br><span class="line">                    ranges=<span class="built_in">int</span>(condition.split(<span class="string">&#x27;&lt;&#x27;</span>)[<span class="number">1</span>].strip())</span><br><span class="line">                    <span class="variable language_">self</span>.uprange=ranges-<span class="number">2</span></span><br><span class="line">                <span class="keyword">else</span>:</span><br><span class="line">                    <span class="built_in">print</span>(<span class="string">&#x27;Selected timestep is invaid!&#x27;</span>);<span class="keyword">continue</span></span><br><span class="line">            <span class="keyword">except</span> ValueError:</span><br><span class="line">                <span class="built_in">print</span>(<span class="string">&#x27;Selected timestep is invaid!&#x27;</span>) </span><br><span class="line">                sys.exit(<span class="number">0</span>)</span><br><span class="line">            <span class="keyword">if</span> (<span class="variable language_">self</span>.lowrange &gt;= <span class="variable language_">self</span>.frames-<span class="number">1</span>) <span class="keyword">or</span> (<span class="variable language_">self</span>.uprange &lt; <span class="number">0</span>):</span><br><span class="line">                <span class="keyword">raise</span> ValueError(<span class="string">&#x27;Selected timestep is wrong!&#x27;</span>)</span><br><span class="line">            <span class="keyword">if</span> <span class="variable language_">self</span>.lowrange &lt; <span class="number">0</span>: <span class="variable language_">self</span>.lowrange= <span class="number">0</span></span><br><span class="line">            <span class="keyword">if</span> <span class="variable language_">self</span>.uprange &gt; <span class="variable language_">self</span>.frames-<span class="number">1</span>: <span class="variable language_">self</span>.uprange= <span class="variable language_">self</span>.frames-<span class="number">1</span>          </span><br><span class="line">                </span><br><span class="line">    <span class="keyword">def</span> <span class="title function_">lattice_read</span>(<span class="params">self</span>):    </span><br><span class="line">        <span class="variable language_">self</span>.title=<span class="variable language_">self</span>.XDATCAR.readline().rstrip(<span class="string">&#x27;\r\n&#x27;</span>).rstrip(<span class="string">&#x27;\n&#x27;</span>)</span><br><span class="line">        <span class="variable language_">self</span>.scaling_factor=<span class="built_in">float</span>(<span class="variable language_">self</span>.XDATCAR.readline())</span><br><span class="line">        <span class="keyword">for</span> i <span class="keyword">in</span> <span class="built_in">range</span>(<span class="number">3</span>):</span><br><span class="line">            <span class="variable language_">self</span>.lattice[i]=np.array([<span class="built_in">float</span>(j) <span class="keyword">for</span> j <span class="keyword">in</span> <span class="variable language_">self</span>.XDATCAR.readline().split()])</span><br><span class="line">        <span class="variable language_">self</span>.lattice*=<span class="variable language_">self</span>.scaling_factor</span><br><span class="line">        <span class="variable language_">self</span>._lattice1=np.sqrt(np.<span class="built_in">sum</span>(np.square(<span class="variable language_">self</span>.lattice[<span class="number">0</span>])))</span><br><span class="line">        <span class="variable language_">self</span>._lattice2=np.sqrt(np.<span class="built_in">sum</span>(np.square(<span class="variable language_">self</span>.lattice[<span class="number">1</span>])))</span><br><span class="line">        <span class="variable language_">self</span>._lattice3=np.sqrt(np.<span class="built_in">sum</span>(np.square(<span class="variable language_">self</span>.lattice[<span class="number">2</span>])))</span><br><span class="line">        <span class="variable language_">self</span>._lattice[<span class="number">0</span>]=<span class="variable language_">self</span>._lattice1</span><br><span class="line">        <span class="variable language_">self</span>._lattice[<span class="number">1</span>]=<span class="variable language_">self</span>._lattice2</span><br><span class="line">        <span class="variable language_">self</span>._lattice[<span class="number">2</span>]=<span class="variable language_">self</span>._lattice3</span><br><span class="line">        <span class="variable language_">self</span>.alpha=math.acos(np.dot(<span class="variable language_">self</span>.lattice[<span class="number">1</span>],<span class="variable language_">self</span>.lattice[<span class="number">2</span>]) \</span><br><span class="line">            /<span class="built_in">float</span>((<span class="variable language_">self</span>._lattice2*<span class="variable language_">self</span>._lattice3)))/np.pi*<span class="number">180.0</span></span><br><span class="line">        <span class="variable language_">self</span>.beta=math.acos(np.dot(<span class="variable language_">self</span>.lattice[<span class="number">0</span>],<span class="variable language_">self</span>.lattice[<span class="number">2</span>]) \</span><br><span class="line">            /<span class="built_in">float</span>((<span class="variable language_">self</span>._lattice1*<span class="variable language_">self</span>._lattice3)))/np.pi*<span class="number">180.0</span></span><br><span class="line">        <span class="variable language_">self</span>.gamma=math.acos(np.dot(<span class="variable language_">self</span>.lattice[<span class="number">0</span>],<span class="variable language_">self</span>.lattice[<span class="number">1</span>]) \</span><br><span class="line">            /<span class="built_in">float</span>((<span class="variable language_">self</span>._lattice1*<span class="variable language_">self</span>._lattice2)))/np.pi*<span class="number">180.0</span></span><br><span class="line">        <span class="variable language_">self</span>.element_list=[j <span class="keyword">for</span> j <span class="keyword">in</span> <span class="variable language_">self</span>.XDATCAR.readline().split()]</span><br><span class="line">        <span class="keyword">try</span>:</span><br><span class="line">            <span class="variable language_">self</span>.element_amount=[<span class="built_in">int</span>(j) <span class="keyword">for</span> j <span class="keyword">in</span> <span class="variable language_">self</span>.XDATCAR.readline().split()]</span><br><span class="line">        <span class="keyword">except</span> ValueError:</span><br><span class="line">            <span class="keyword">raise</span> ValueError(<span class="string">&#x27;VASP 5.x XDATCAR is needed!&#x27;</span>)</span><br><span class="line">        <span class="variable language_">self</span>.total_elements=[]</span><br><span class="line">        <span class="keyword">for</span> i <span class="keyword">in</span> <span class="built_in">range</span>(<span class="built_in">len</span>(<span class="variable language_">self</span>.element_amount)):</span><br><span class="line">            <span class="variable language_">self</span>.total_elements.extend([<span class="variable language_">self</span>.element_list[i]]*<span class="variable language_">self</span>.element_amount[i])</span><br><span class="line">        <span class="comment">#print(self.total_elements)</span></span><br><span class="line">        <span class="variable language_">self</span>.total_atom=<span class="built_in">sum</span>(<span class="variable language_">self</span>.element_amount)</span><br><span class="line">        <span class="variable language_">self</span>.atomic_position=np.zeros((<span class="variable language_">self</span>.total_atom,<span class="number">3</span>))</span><br><span class="line"></span><br><span class="line">    <span class="keyword">def</span> <span class="title function_">__iter__</span>(<span class="params">self</span>):</span><br><span class="line">        <span class="keyword">return</span> <span class="variable language_">self</span></span><br><span class="line"></span><br><span class="line">    <span class="keyword">def</span> <span class="title function_">__next__</span>(<span class="params">self</span>):</span><br><span class="line">        <span class="variable language_">self</span>.<span class="built_in">next</span>()</span><br><span class="line"></span><br><span class="line">    <span class="keyword">def</span> <span class="title function_">skiplines_</span>(<span class="params">self</span>):</span><br><span class="line">        <span class="keyword">if</span> <span class="variable language_">self</span>.NPT == <span class="literal">True</span>: <span class="variable language_">self</span>.lattice_read() </span><br><span class="line">        <span class="variable language_">self</span>.XDATCAR.readline()</span><br><span class="line">        <span class="keyword">for</span> i <span class="keyword">in</span> <span class="built_in">range</span>(<span class="variable language_">self</span>.total_atom):</span><br><span class="line">            <span class="variable language_">self</span>.XDATCAR.readline()</span><br><span class="line"></span><br><span class="line">    <span class="keyword">def</span> <span class="title function_">next</span>(<span class="params">self</span>):</span><br><span class="line">        <span class="keyword">if</span> <span class="variable language_">self</span>.NPT == <span class="literal">True</span>: <span class="variable language_">self</span>.lattice_read() </span><br><span class="line">        <span class="variable language_">self</span>.XDATCAR.readline()</span><br><span class="line">        <span class="keyword">for</span> i <span class="keyword">in</span> <span class="built_in">range</span>(<span class="variable language_">self</span>.total_atom):</span><br><span class="line">            line_tmp=<span class="variable language_">self</span>.XDATCAR.readline()</span><br><span class="line">            <span class="variable language_">self</span>.atomic_position[i]=np.array([<span class="built_in">float</span>(j) <span class="keyword">for</span> j <span class="keyword">in</span> line_tmp.split()[<span class="number">0</span>:<span class="number">3</span>]])         </span><br><span class="line">        <span class="variable language_">self</span>.cartesian_position=np.dot(<span class="variable language_">self</span>.atomic_position,<span class="variable language_">self</span>.lattice)</span><br><span class="line">        <span class="variable language_">self</span>.current_frame+=<span class="number">1</span></span><br><span class="line">        <span class="comment">#</span></span><br><span class="line">        <span class="comment">#self.cartesian_position*=self.scaling_factor</span></span><br><span class="line">        <span class="keyword">return</span> <span class="variable language_">self</span>.cartesian_position</span><br><span class="line"></span><br><span class="line">    <span class="keyword">def</span> <span class="title function_">writepdb</span>(<span class="params">self,pdb_frame</span>):</span><br><span class="line">        tobewriten=[]</span><br><span class="line">        tobewriten.append(<span class="string">&quot;MODEL         %r&quot;</span> %(pdb_frame))</span><br><span class="line">        tobewriten.append(<span class="string">&quot;REMARK   Converted from XDATCAR file&quot;</span>)</span><br><span class="line">        tobewriten.append(<span class="string">&quot;REMARK   Converted using VASPKIT&quot;</span>)</span><br><span class="line">        tobewriten.append(<span class="string">&#x27;CRYST1&#123;0:9.3f&#125;&#123;1:9.3f&#125;&#123;2:9.3f&#125;&#123;3:7.2f&#125;&#123;4:7.2f&#125;&#123;5:7.2f&#125;&#x27;</span> .<span class="built_in">format</span>(<span class="variable language_">self</span>._lattice1,\</span><br><span class="line">            <span class="variable language_">self</span>._lattice2,<span class="variable language_">self</span>._lattice3,<span class="variable language_">self</span>.alpha,<span class="variable language_">self</span>.beta,<span class="variable language_">self</span>.gamma))</span><br><span class="line">        <span class="comment">#print(len(self.total_elements))</span></span><br><span class="line">        <span class="keyword">for</span> i <span class="keyword">in</span> <span class="built_in">range</span>(<span class="built_in">len</span>(<span class="variable language_">self</span>.total_elements)):</span><br><span class="line">            tobewriten.append(<span class="string">&#x27;%4s%7d%4s%5s%6d%4s%8.3f%8.3f%8.3f%6.2f%6.2f%12s&#x27;</span> \</span><br><span class="line">                %(<span class="string">&quot;ATOM&quot;</span>,i+<span class="number">1</span>,<span class="variable language_">self</span>.total_elements[i],<span class="string">&quot;MOL&quot;</span>,<span class="number">1</span>,<span class="string">&#x27;    &#x27;</span>,<span class="variable language_">self</span>.cartesian_position[i][<span class="number">0</span>],\</span><br><span class="line">                <span class="variable language_">self</span>.cartesian_position[i][<span class="number">1</span>],<span class="variable language_">self</span>.cartesian_position[i][<span class="number">2</span>],<span class="number">1.0</span>,<span class="number">0.0</span>,<span class="variable language_">self</span>.total_elements[i]))</span><br><span class="line">        tobewriten.append(<span class="string">&#x27;TER&#x27;</span>)</span><br><span class="line">        tobewriten.append(<span class="string">&#x27;ENDMDL&#x27;</span>)</span><br><span class="line">        <span class="keyword">with</span> <span class="built_in">open</span>(<span class="string">&#x27;XDATCAR.pdb&#x27;</span>,<span class="string">&#x27;a+&#x27;</span>) <span class="keyword">as</span> pdbwriter:</span><br><span class="line">            tobewriten=[i+<span class="string">&#x27;\n&#x27;</span> <span class="keyword">for</span> i <span class="keyword">in</span> tobewriten]</span><br><span class="line">            pdbwriter.writelines(tobewriten)</span><br><span class="line"></span><br><span class="line">    <span class="keyword">def</span> <span class="title function_">unswrapPBC</span>(<span class="params">self,prev_atomic_cartesian</span>):</span><br><span class="line">        diff= <span class="variable language_">self</span>.cartesian_position-prev_atomic_cartesian</span><br><span class="line">        prev_atomic_cartesian=deepcopy(<span class="variable language_">self</span>.cartesian_position) </span><br><span class="line">        xx=np.where(diff[:,<span class="number">0</span>]&gt;(<span class="variable language_">self</span>._lattice1/<span class="number">2</span>),diff[:,<span class="number">0</span>]-<span class="variable language_">self</span>._lattice1\</span><br><span class="line">            ,np.where(diff[:,<span class="number">0</span>]&lt;-(<span class="variable language_">self</span>._lattice1/<span class="number">2</span>),diff[:,<span class="number">0</span>]+<span class="variable language_">self</span>._lattice1\</span><br><span class="line">                ,diff[:,<span class="number">0</span>]))</span><br><span class="line">        yy=np.where(diff[:,<span class="number">1</span>]&gt;(<span class="variable language_">self</span>._lattice2/<span class="number">2</span>),diff[:,<span class="number">1</span>]-<span class="variable language_">self</span>._lattice2\</span><br><span class="line">            ,np.where(diff[:,<span class="number">1</span>]&lt;-(<span class="variable language_">self</span>._lattice2/<span class="number">2</span>),diff[:,<span class="number">1</span>]+<span class="variable language_">self</span>._lattice2\</span><br><span class="line">                ,diff[:,<span class="number">1</span>]))</span><br><span class="line">        zz=np.where(diff[:,<span class="number">2</span>]&gt;(<span class="variable language_">self</span>._lattice3/<span class="number">2</span>),diff[:,<span class="number">2</span>]-<span class="variable language_">self</span>._lattice3\</span><br><span class="line">            ,np.where(diff[:,<span class="number">2</span>]&lt;-(<span class="variable language_">self</span>._lattice3/<span class="number">2</span>),diff[:,<span class="number">2</span>]+<span class="variable language_">self</span>._lattice3\</span><br><span class="line">                ,diff[:,<span class="number">2</span>]))</span><br><span class="line">        xx=xx.reshape(-<span class="number">1</span>,<span class="number">1</span>);yy=yy.reshape(-<span class="number">1</span>,<span class="number">1</span>);zz=zz.reshape(-<span class="number">1</span>,<span class="number">1</span>)</span><br><span class="line">        <span class="keyword">return</span> (prev_atomic_cartesian,np.concatenate([xx,yy,zz],axis=<span class="number">1</span>))</span><br><span class="line"></span><br><span class="line">    <span class="keyword">def</span> <span class="title function_">reset_cartesian</span>(<span class="params">self,real_atomic_cartesian,center_atom</span>):</span><br><span class="line">        <span class="keyword">if</span> center_atom &gt; <span class="built_in">len</span>(real_atomic_cartesian)-<span class="number">1</span>:</span><br><span class="line">            <span class="keyword">raise</span> SystemError(<span class="string">&quot;Selected atom does not exist!&quot;</span>)</span><br><span class="line">        <span class="keyword">for</span> i <span class="keyword">in</span> <span class="built_in">range</span>(<span class="number">0</span>,<span class="built_in">len</span>(real_atomic_cartesian)):</span><br><span class="line">            <span class="keyword">for</span> j <span class="keyword">in</span> <span class="built_in">range</span>(<span class="number">3</span>):</span><br><span class="line">                <span class="keyword">if</span> (real_atomic_cartesian[i][j]-real_atomic_cartesian[center_atom][j])&gt;<span class="variable language_">self</span>._lattice[j]/<span class="number">2</span>:</span><br><span class="line">                    real_atomic_cartesian[i][j]-=<span class="variable language_">self</span>._lattice[j]</span><br><span class="line">                <span class="keyword">if</span> (real_atomic_cartesian[i][j]-real_atomic_cartesian[center_atom][j])&lt;-<span class="variable language_">self</span>._lattice[j]/<span class="number">2</span>:</span><br><span class="line">                    real_atomic_cartesian[i][j]+=<span class="variable language_">self</span>._lattice[j]                </span><br><span class="line">        <span class="keyword">return</span> real_atomic_cartesian</span><br><span class="line">                    </span><br><span class="line">    <span class="keyword">def</span> <span class="title function_">__call__</span>(<span class="params">self,selected_step</span>):</span><br><span class="line">        <span class="variable language_">self</span>.step_select(selected_step)</span><br><span class="line">    <span class="keyword">def</span> <span class="title function_">__str__</span>(<span class="params">self</span>):</span><br><span class="line">        <span class="keyword">return</span> (<span class="string">&#x27;Read lattice information and atomic coordinate.&#x27;</span>)</span><br><span class="line">    __repr__=__str__</span><br><span class="line">    </span><br><span class="line"><span class="keyword">class</span> <span class="title class_">plot</span>(<span class="title class_ inherited__">object</span>):</span><br><span class="line">    <span class="string">&#x27;Plot MD temperature and energy profile&#x27;</span></span><br><span class="line">    <span class="keyword">def</span> <span class="title function_">__init__</span>(<span class="params">self,lwd,font,dpi,figsize,XDATCAR_inst=<span class="literal">None</span></span>):</span><br><span class="line">        <span class="variable language_">self</span>.XDATCAR_inst=XDATCAR_inst;<span class="variable language_">self</span>.timestep=<span class="variable language_">self</span>.XDATCAR_inst.timestep</span><br><span class="line">        <span class="variable language_">self</span>.time_range=(<span class="variable language_">self</span>.XDATCAR_inst.lowrange,<span class="variable language_">self</span>.XDATCAR_inst.uprange+<span class="number">1</span>)</span><br><span class="line">        <span class="variable language_">self</span>.lwd=lwd;<span class="variable language_">self</span>.font=font;<span class="variable language_">self</span>.dpi=dpi;<span class="variable language_">self</span>.figsize=figsize</span><br><span class="line"></span><br><span class="line">    <span class="comment">#@debug(info=&#x27;debug&#x27;)</span></span><br><span class="line">    <span class="keyword">def</span> <span class="title function_">plotfigure</span>(<span class="params">self,title=<span class="string">&#x27;MD temperature and energy profile&#x27;</span></span>):</span><br><span class="line">        <span class="keyword">from</span> matplotlib <span class="keyword">import</span> pyplot <span class="keyword">as</span> plt</span><br><span class="line">        <span class="variable language_">self</span>.newtemp=<span class="variable language_">self</span>.XDATCAR_inst.temp;<span class="variable language_">self</span>.newenergy=<span class="variable language_">self</span>.XDATCAR_inst.energy</span><br><span class="line">        xdata=np.arange(<span class="variable language_">self</span>.time_range[<span class="number">0</span>],<span class="variable language_">self</span>.time_range[<span class="number">1</span>])*<span class="variable language_">self</span>.timestep</span><br><span class="line">        axe = plt.subplot(<span class="number">121</span>)</span><br><span class="line">        <span class="variable language_">self</span>.newtemp=<span class="variable language_">self</span>.newtemp[<span class="variable language_">self</span>.time_range[<span class="number">0</span>]:<span class="variable language_">self</span>.time_range[<span class="number">1</span>]]</span><br><span class="line">        axe.plot(xdata,<span class="variable language_">self</span>.newtemp, \</span><br><span class="line">                 color=<span class="string">&#x27;black&#x27;</span>, lw=<span class="variable language_">self</span>.lwd, linestyle=<span class="string">&#x27;-&#x27;</span>, alpha=<span class="number">1</span>)</span><br><span class="line">        <span class="keyword">with</span> <span class="built_in">open</span>(<span class="string">&quot;Temperature.dat&quot;</span>,<span class="string">&#x27;w&#x27;</span>) <span class="keyword">as</span> writer:</span><br><span class="line">            writer.write(<span class="string">&quot;Time(fs)   Temperature(K)\n&quot;</span>)</span><br><span class="line">            <span class="keyword">for</span> line <span class="keyword">in</span> <span class="built_in">range</span>(<span class="built_in">len</span>(xdata)):</span><br><span class="line">                writer.write(<span class="string">&quot;&#123;0:f&#125;  &#123;1:f&#125;\n&quot;</span> .<span class="built_in">format</span>(xdata[line],<span class="variable language_">self</span>.newtemp[line]))</span><br><span class="line">        axe.set_xlabel(<span class="string">r&#x27;$Time$ (fs)&#x27;</span>,fontdict=<span class="variable language_">self</span>.font)</span><br><span class="line">        axe.set_ylabel(<span class="string">r&#x27;$Temperature$ (K)&#x27;</span>,fontdict=<span class="variable language_">self</span>.font)</span><br><span class="line">        axe.set_xlim((<span class="variable language_">self</span>.time_range[<span class="number">0</span>]*<span class="variable language_">self</span>.timestep, <span class="variable language_">self</span>.time_range[<span class="number">1</span>]*<span class="variable language_">self</span>.timestep))</span><br><span class="line">        axe.set_title(<span class="string">&#x27;MD temperature profile&#x27;</span>)</span><br><span class="line">        </span><br><span class="line">        axe1 = plt.subplot(<span class="number">122</span>)</span><br><span class="line">        <span class="variable language_">self</span>.newenergy=<span class="variable language_">self</span>.newenergy[<span class="variable language_">self</span>.time_range[<span class="number">0</span>]:<span class="variable language_">self</span>.time_range[<span class="number">1</span>]]</span><br><span class="line">        axe1.plot(xdata,<span class="variable language_">self</span>.newenergy, \</span><br><span class="line">                 color=<span class="string">&#x27;black&#x27;</span>, lw=<span class="variable language_">self</span>.lwd, linestyle=<span class="string">&#x27;-&#x27;</span>, alpha=<span class="number">1</span>)</span><br><span class="line">        <span class="keyword">with</span> <span class="built_in">open</span>(<span class="string">&quot;Energy.dat&quot;</span>,<span class="string">&#x27;w&#x27;</span>) <span class="keyword">as</span> writer:</span><br><span class="line">            writer.write(<span class="string">&quot;Time(fs)   Energy(ev)\n&quot;</span>)</span><br><span class="line">            <span class="keyword">for</span> line <span class="keyword">in</span> <span class="built_in">range</span>(<span class="built_in">len</span>(xdata)):</span><br><span class="line">                writer.write(<span class="string">&quot;&#123;0:f&#125;  &#123;1:f&#125;\n&quot;</span> .<span class="built_in">format</span>(xdata[line],<span class="variable language_">self</span>.newenergy[line]))        </span><br><span class="line">        axe1.set_xlabel(<span class="string">r&#x27;$Time$ (fs)&#x27;</span>,fontdict=<span class="variable language_">self</span>.font)</span><br><span class="line">        axe1.set_ylabel(<span class="string">r&#x27;$Energy$ (ev)&#x27;</span>,fontdict=<span class="variable language_">self</span>.font)</span><br><span class="line">        axe1.set_xlim((<span class="variable language_">self</span>.time_range[<span class="number">0</span>]*<span class="variable language_">self</span>.timestep, <span class="variable language_">self</span>.time_range[<span class="number">1</span>]*<span class="variable language_">self</span>.timestep))</span><br><span class="line">        axe1.set_title(<span class="string">&#x27;MD energy profile&#x27;</span>)</span><br><span class="line">        <span class="comment">#plt.suptitle(title)</span></span><br><span class="line">        fig = plt.gcf()</span><br><span class="line">        fig.set_size_inches(<span class="variable language_">self</span>.figsize)</span><br><span class="line">        plt.tight_layout() </span><br><span class="line">        plt.savefig(<span class="string">&#x27;ENERGY.png&#x27;</span>,bbox_inches=<span class="string">&#x27;tight&#x27;</span>,pad_inches=<span class="number">0.1</span>,dpi=<span class="variable language_">self</span>.dpi)</span><br><span class="line">        </span><br><span class="line">        </span><br><span class="line"><span class="keyword">if</span> __name__ == <span class="string">&quot;__main__&quot;</span>:</span><br><span class="line">    parser = OptionParser()  </span><br><span class="line">    parser.add_option(<span class="string">&quot;-b&quot;</span>, <span class="string">&quot;--begin&quot;</span>,  </span><br><span class="line">                       dest=<span class="string">&quot;begin&quot;</span>, default=<span class="number">1</span>,  </span><br><span class="line">                      <span class="built_in">help</span>=<span class="string">&quot;frames begin&quot;</span>) </span><br><span class="line"></span><br><span class="line">    parser.add_option(<span class="string">&quot;-e&quot;</span>, <span class="string">&quot;--end&quot;</span>,  </span><br><span class="line">                      dest=<span class="string">&quot;end&quot;</span>, default=<span class="string">&#x27;false&#x27;</span>,  </span><br><span class="line">                      <span class="built_in">help</span>=<span class="string">&quot;frames end&quot;</span>) </span><br><span class="line"></span><br><span class="line">    parser.add_option(<span class="string">&quot;-t&quot;</span>, <span class="string">&quot;--timestep&quot;</span>,  </span><br><span class="line">                      dest=<span class="string">&quot;timestep&quot;</span>, default=<span class="number">1.0</span>,  </span><br><span class="line">                      <span class="built_in">help</span>=<span class="string">&quot;timestep per frame&quot;</span>) </span><br><span class="line"></span><br><span class="line">    parser.add_option(<span class="string">&quot;-p&quot;</span>, <span class="string">&quot;--pdb&quot;</span>,  </span><br><span class="line">                      action=<span class="string">&quot;store_true&quot;</span>, dest=<span class="string">&quot;format_trans&quot;</span>, default=<span class="literal">False</span>,  </span><br><span class="line">                      <span class="built_in">help</span>=<span class="string">&quot;choose whether to convert XDATCAR to PDB!&quot;</span>) </span><br><span class="line"></span><br><span class="line">    parser.add_option(<span class="string">&quot;--pbc&quot;</span>,  </span><br><span class="line">                      action=<span class="string">&quot;store_true&quot;</span>, dest=<span class="string">&quot;periodic&quot;</span>, default=<span class="literal">False</span>,  </span><br><span class="line">                      <span class="built_in">help</span>=<span class="string">&quot;choose whether to swrap PBC images!&quot;</span>) </span><br><span class="line"></span><br><span class="line">    parser.add_option(<span class="string">&quot;-i&quot;</span>, <span class="string">&quot;--index&quot;</span>, </span><br><span class="line">                      dest=<span class="string">&quot;index&quot;</span>, default=-<span class="number">1</span>,  </span><br><span class="line">                      <span class="built_in">help</span>=<span class="string">&quot;choose which atom to center whole molecule!&quot;</span>) </span><br><span class="line"></span><br><span class="line">    parser.add_option(<span class="string">&quot;--interval&quot;</span>, </span><br><span class="line">                      dest=<span class="string">&quot;interval&quot;</span>, default=<span class="number">1</span>,  </span><br><span class="line">                      <span class="built_in">help</span>=<span class="string">&quot;extract frames interval!&quot;</span>) </span><br><span class="line"></span><br><span class="line">    (options,args) = parser.parse_args()</span><br><span class="line">    <span class="keyword">try</span>:</span><br><span class="line">        <span class="built_in">float</span>(options.timestep)</span><br><span class="line">        <span class="built_in">int</span>(options.index)</span><br><span class="line">        _interval=<span class="built_in">int</span>(options.interval)</span><br><span class="line">        <span class="built_in">int</span>(options.begin)</span><br><span class="line">        <span class="keyword">if</span> options.end != <span class="string">&#x27;false&#x27;</span>: <span class="built_in">int</span>(options.end)</span><br><span class="line">    <span class="keyword">except</span>:</span><br><span class="line">        <span class="keyword">raise</span> ValueError(<span class="string">&#x27;wrong arguments&#x27;</span>)</span><br><span class="line">    XDATCAR_inst=XDATCAR()</span><br><span class="line">    XDATCAR_iter=<span class="built_in">iter</span>(XDATCAR_inst)</span><br><span class="line">    <span class="keyword">if</span> options.format_trans:</span><br><span class="line">        XDATCAR_inst.format_trans=<span class="literal">True</span></span><br><span class="line">        <span class="keyword">if</span> os.path.exists(<span class="string">&quot;XDATCAR.pdb&quot;</span>):</span><br><span class="line">            shutil.copyfile(<span class="string">&quot;XDATCAR.pdb&quot;</span>,<span class="string">&quot;XDATCAR-bak.pdb&quot;</span>)</span><br><span class="line">            os.remove(<span class="string">&quot;XDATCAR.pdb&quot;</span>)</span><br><span class="line">    <span class="keyword">else</span>:</span><br><span class="line">        XDATCAR_inst.format_trans=<span class="literal">False</span></span><br><span class="line">    XDATCAR_inst.timestep=<span class="built_in">float</span>(options.timestep)   <span class="comment">#timestep 1fs</span></span><br><span class="line">    <span class="keyword">if</span> options.end == <span class="string">&#x27;false&#x27;</span>:</span><br><span class="line">        XDATCAR_inst(<span class="string">&#x27;t&gt;= %r&#x27;</span> %(<span class="built_in">int</span>(options.begin)))</span><br><span class="line">    <span class="keyword">else</span>:</span><br><span class="line">        XDATCAR_inst(<span class="string">&#x27;t&gt;= %r and t &lt;= %r&#x27;</span> %(<span class="built_in">int</span>(options.begin),<span class="built_in">int</span>(options.end))) <span class="comment"># frame 10~300  corresponding to 20~600fs</span></span><br><span class="line">    <span class="keyword">if</span> _interval &gt;(XDATCAR_inst.uprange-XDATCAR_inst.lowrange):</span><br><span class="line">        <span class="keyword">raise</span> SystemError(<span class="string">&#x27;Trajectory interval exceed selected time range!&#x27;</span>)</span><br><span class="line">    <span class="keyword">elif</span> _interval&lt;=<span class="number">1</span>:</span><br><span class="line">        _interval=<span class="number">1</span></span><br><span class="line">    count=<span class="number">0</span> </span><br><span class="line">    current_pdb=<span class="number">1</span>  </span><br><span class="line">    <span class="keyword">for</span> i <span class="keyword">in</span> <span class="built_in">range</span>(XDATCAR_inst.uprange+<span class="number">1</span>): </span><br><span class="line">        <span class="keyword">if</span> (i&gt;=XDATCAR_inst.lowrange):</span><br><span class="line">            cartesian_position=XDATCAR_iter.<span class="built_in">next</span>()</span><br><span class="line">            <span class="keyword">if</span> count % _interval == <span class="number">0</span>:</span><br><span class="line">                <span class="keyword">if</span> options.format_trans == <span class="literal">True</span>: </span><br><span class="line">                    <span class="keyword">if</span> options.periodic == <span class="literal">True</span>: </span><br><span class="line">                        <span class="keyword">if</span> i == XDATCAR_inst.lowrange:</span><br><span class="line">                            real_atomic_cartesian=deepcopy(cartesian_position)</span><br><span class="line">                            <span class="keyword">if</span> <span class="built_in">int</span>(options.index) != -<span class="number">1</span>:</span><br><span class="line">                                real_atomic_cartesian=XDATCAR_inst.reset_cartesian(real_atomic_cartesian,<span class="built_in">int</span>(options.index)-<span class="number">1</span>)</span><br><span class="line">                            XDATCAR_inst.cartesian_position=real_atomic_cartesian</span><br><span class="line">                            prev_atomic_cartesian=deepcopy(cartesian_position)</span><br><span class="line">                        <span class="keyword">else</span>:</span><br><span class="line">                            prev_atomic_cartesian,diffs=XDATCAR_inst.unswrapPBC(prev_atomic_cartesian)</span><br><span class="line">                            real_atomic_cartesian+=diffs</span><br><span class="line">                            XDATCAR_inst.cartesian_position=real_atomic_cartesian              </span><br><span class="line">                    XDATCAR_inst.writepdb(current_pdb)</span><br><span class="line">                    current_pdb+=<span class="number">1</span></span><br><span class="line">            count+=<span class="number">1</span></span><br><span class="line">        <span class="keyword">else</span>:</span><br><span class="line">            XDATCAR_iter.skiplines_()</span><br><span class="line"></span><br><span class="line">    newtemp=XDATCAR_inst.temp</span><br><span class="line">    newenergy=XDATCAR_inst.energy</span><br><span class="line">    <span class="built_in">print</span>(<span class="string">&#x27;Finish reading XDATCAR.&#x27;</span>)</span><br><span class="line"></span><br><span class="line">    timestep=XDATCAR_inst.timestep</span><br><span class="line">    <span class="built_in">print</span>(<span class="string">&#x27;Selected time-range:&#123;0&#125;~&#123;1&#125;fs&#x27;</span>.<span class="built_in">format</span>((XDATCAR_inst.lowrange)*timestep,\</span><br><span class="line">                        (XDATCAR_inst.uprange)*timestep))</span><br><span class="line">    XDATCAR_inst.XDATCAR.close()</span><br><span class="line">    <span class="built_in">print</span>(<span class="string">&#x27;Timestep for new PDB trajectory is :&#123;0&#125;fs&#x27;</span>.<span class="built_in">format</span>(timestep*_interval))  </span><br><span class="line">    lwd = <span class="number">0.2</span>  <span class="comment"># Control width of line</span></span><br><span class="line">    dpi=<span class="number">300</span>          <span class="comment"># figure_resolution</span></span><br><span class="line">    figsize=(<span class="number">5</span>,<span class="number">4</span>)   <span class="comment">#figure_inches</span></span><br><span class="line">    font = &#123;<span class="string">&#x27;family&#x27;</span> : <span class="string">&#x27;arial&#x27;</span>, </span><br><span class="line">        <span class="string">&#x27;color&#x27;</span>  : <span class="string">&#x27;black&#x27;</span>,</span><br><span class="line">        <span class="string">&#x27;weight&#x27;</span> : <span class="string">&#x27;normal&#x27;</span>,</span><br><span class="line">        <span class="string">&#x27;size&#x27;</span> : <span class="number">13.0</span>,</span><br><span class="line">        &#125;       <span class="comment">#FONT_setup</span></span><br><span class="line">    plots=plot(lwd,font,dpi,figsize,XDATCAR_inst)</span><br><span class="line">    plots.plotfigure()</span><br></pre></td></tr></table></figure>
+<p>运行<code>python</code>程序：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line">(base) [storm@X16 vaspkit]$ python <span class="number">1.</span>py</span><br><span class="line">Now reading vasp MD energies <span class="keyword">and</span> temperature.</span><br><span class="line">Now reading vasp XDATCAR.</span><br><span class="line">Total frames <span class="number">15000</span>, NpT <span class="keyword">is</span> <span class="literal">False</span></span><br><span class="line">Finish reading XDATCAR.</span><br><span class="line">Selected time-<span class="built_in">range</span>:<span class="number">0.0</span>~<span class="number">14999.0</span>fs</span><br><span class="line">Timestep <span class="keyword">for</span> new PDB trajectory <span class="keyword">is</span> :<span class="number">1.0</span>fs</span><br><span class="line">findfont: Font family <span class="string">&#x27;arial&#x27;</span> <span class="keyword">not</span> found.</span><br><span class="line">findfont: Font family [<span class="string">&#x27;arial&#x27;</span>] <span class="keyword">not</span> found. Falling back to DejaVu Sans.</span><br><span class="line">findfont: Font family <span class="string">&#x27;arial&#x27;</span> <span class="keyword">not</span> found.</span><br><span class="line">findfont: Font family <span class="string">&#x27;arial&#x27;</span> <span class="keyword">not</span> found.</span><br><span class="line">findfont: Font family <span class="string">&#x27;arial&#x27;</span> <span class="keyword">not</span> found.</span><br></pre></td></tr></table></figure>
+<p>查看温度和能量曲线，如下图</p>
+<figure>
+<img src="ENERGY-1756959539810-4.png" alt="温度和能量曲线" />
+<figcaption aria-hidden="true">温度和能量曲线</figcaption>
+</figure>
+<p>大概在5800fs时候体系达到平衡，于是可以使用5800fs的数据进行后处理，使用vaspkit的722功能</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br></pre></td><td class="code"><pre><span class="line"> ------------&gt;&gt;</span><br><span class="line">722</span><br><span class="line"> ===================== Selected Options ==========================</span><br><span class="line"> 1) Select Atoms by Atomic Indices/Labels</span><br><span class="line"> 2) Select Atoms by Layers</span><br><span class="line"> 3) Select Atoms by Heights</span><br><span class="line"> 4) Select Atoms by SELECTED_ATOMS_LIST File</span><br><span class="line"></span><br><span class="line"> 0) Quit</span><br><span class="line"> 9) Back</span><br><span class="line"> ------------&gt;&gt;</span><br><span class="line">1</span><br><span class="line"> +---------------------------------------------------------------+</span><br><span class="line"> The selected atoms will be listed <span class="keyword">in</span> SELECTED_ATOMS_LIST file.</span><br><span class="line"> Input element-symbol and/or atom-indexes to choose [1 &lt;= &amp; &lt;= 52]</span><br><span class="line"> (Free-format input, e.g., 1 3 1-4 H O Au all inverse)</span><br><span class="line"></span><br><span class="line"> ------------&gt;&gt;</span><br><span class="line">Li</span><br><span class="line"> --&gt;&gt; (01) Written SELECTED_ATOMS_LIST File.</span><br><span class="line"> --&gt;&gt; (02) Reading Input Parameters From INCAR File.</span><br><span class="line"> --&gt;&gt; (03) Reading Atomic Relaxations From XDATCAR File.</span><br><span class="line"> How many initial frames <span class="keyword">do</span> you want to skip? [Typical value: &lt; 1000]</span><br><span class="line"></span><br><span class="line"> ------------&gt;&gt;</span><br><span class="line">2900</span><br><span class="line"> Which frames will be used to calculate? [Typical value: &lt;=5]</span><br><span class="line"> (e.g., 10 means the 1st, 11st, 21st, ... frame will be used)</span><br><span class="line"></span><br><span class="line"> ------------&gt;&gt;</span><br><span class="line">1</span><br><span class="line"> --&gt;&gt; (04) Written MSD.dat and DIFFUSION_COEFFICIENT.dat Files.</span><br><span class="line"> o---------------------------------------------------------------o</span><br><span class="line"> |                       * ACKNOWLEDGMENTS *                     |</span><br><span class="line"> | Other Contributors (<span class="keyword">in</span> no particular order): Peng-Fei LIU,    |</span><br><span class="line"> | Xue-Fei LIU, Dao-Xiong WU, Zhao-Fu ZHANG, Tian WANG, Qiang LI,|</span><br><span class="line"> | Ya-Chao LIU, Jiang-Shan ZHAO, Qi-Jing ZHENG, Yue QIU and You! |</span><br><span class="line"> | Advisors: Wen-Tong GENG, Yoshiyuki KAWAZOE                    |</span><br><span class="line"> :) Any Suggestions <span class="keyword">for</span> Improvement are Welcome and Appreciated (:</span><br><span class="line"> |---------------------------------------------------------------|</span><br><span class="line"> |                          * CITATIONS *                        |</span><br><span class="line"> | When using VASPKIT <span class="keyword">in</span> your research PLEASE cite the paper:    |</span><br><span class="line"> | [1] V. WANG, N. XU, J.-C. LIU, G. TANG, W.-T. GENG, VASPKIT: A|</span><br><span class="line"> | User-Friendly Interface Facilitating High-Throughput Computing|</span><br><span class="line"> | and Analysis Using VASP Code, Computer Physics Communications |</span><br><span class="line"> | 267, 108033, (2021), DOI: 10.1016/j.cpc.2021.108033           |</span><br><span class="line"> o---------------------------------------------------------------o</span><br></pre></td></tr></table></figure>
+<p>722功能可以得到MSD，均方位移，接着可以使用723功能得到扩散系数：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br></pre></td><td class="code"><pre><span class="line">723</span><br><span class="line"></span><br><span class="line"> +---------------------------- Tip ------------------------------+</span><br><span class="line">  Please First Run vaspkit with Task 722/721 to Get MSD.dat File.</span><br><span class="line"> +---------------------------------------------------------------+</span><br><span class="line"> --&gt;&gt; (01) Reading Input Parameters From INCAR File.</span><br><span class="line"> --&gt;&gt; (02) Reading Mean Squared Displacement From MSD.dat File.</span><br><span class="line"> Please input the <span class="keyword">time</span> steps to <span class="keyword">do</span> linear fitting. [2&lt; &amp; &lt;12100]</span><br><span class="line"></span><br><span class="line"> ------------&gt;&gt;</span><br><span class="line">2,12100</span><br><span class="line"> Please input the ionic valency (e.g., 1 2 3)</span><br><span class="line"></span><br><span class="line"> ------------&gt;&gt;</span><br><span class="line">1</span><br><span class="line"> --&gt;&gt; (03) Written MSD_FIT.dat File.</span><br><span class="line"> +-------------------------- Summary ----------------------------+</span><br><span class="line">  Warning! The following values are roughly estimated.</span><br><span class="line">  Plot MSD.dat and MSD_FIT.dat files to Evaluate Fitting Precision!</span><br><span class="line">                                Temperature (K):  300.00</span><br><span class="line">  Diffusion Coefficient <span class="keyword">in</span> x direction (cm^2/s):  0.3511E-05</span><br><span class="line">  Diffusion Coefficient <span class="keyword">in</span> y direction (cm^2/s):  0.3611E-05</span><br><span class="line">  Diffusion Coefficient <span class="keyword">in</span> z direction (cm^2/s):  0.3542E-05</span><br><span class="line">         Average Diffusion Coefficient (cm^2/s):  0.3555E-05</span><br><span class="line">       Ionic Mobility <span class="keyword">in</span> x direction (cm^2/s/V):  0.1358E-03</span><br><span class="line">       Ionic Mobility <span class="keyword">in</span> y direction (cm^2/s/V):  0.1397E-03</span><br><span class="line">       Ionic Mobility <span class="keyword">in</span> z direction (cm^2/s/V):  0.1370E-03</span><br><span class="line">              Average Ionic Mobility (cm^2/s/V):  0.1375E-03</span><br></pre></td></tr></table></figure>
+<p>MSD数据是5800fs-15000fs的，所以723功能计算扩散系数的时候默认读取的这个区间，因此<code>Please input the time steps to do linear fitting</code>选择全部范围就行，最后可以看到锂离子的扩散系数是<span
+class="math inline">$\rm 3.555\times 10^{-6} cm^2/s$</span></p>
+<p>根据Nernst-Einstein方程计算离子电导率： <span class="math display">$$
+\begin{align}
+\sigma&amp;=\dfrac{ne^2Z^2}{k_BT}D_s\\
+\end{align}
+$$</span> 其中的n为数密度，单位体积中的锂离子数量</p>
+<figure>
+<img src="image-20250904121159800-1756959539857-5.png"
+alt="image-20250904121159800" />
+<figcaption aria-hidden="true">image-20250904121159800</figcaption>
+</figure>
+<p><span
+class="math inline"><em>k</em><sub><em>B</em></sub></span>为玻尔兹曼常数，Z为离子所带电荷，<span
+class="math inline"><em>D</em><sub><em>s</em></sub></span>为扩散系数，离子电导率可计算为
+<span class="math display">$$
+\begin{align}
+\sigma&amp;=\dfrac{\dfrac{24}{1076\times(10^{-8})^3}\times
+(1.602\times10^{-19})^2\times 1^2}{1.380\times10^{-23} \times 300}\times
+3.555\times10^{-6}\\
+&amp;=0.49 \rm mS/cm
+\end{align}
+$$</span></p>
+
+                    
+                        
+
+
+                    
+                    
+                        <p>
+                            <a
+                                href="/2025/09/04/%E7%A7%91%E7%A0%94/VASP/Starry%20Sky/AIMD%E6%A8%A1%E6%8B%9F%E5%9B%BA%E6%80%81%E7%94%B5%E8%A7%A3%E8%B4%A8%E7%A6%BB%E5%AD%90%E7%94%B5%E5%AF%BC%E7%8E%87/#post-footer"
+                                class="postShorten-excerpt_link link"
+                                aria-label=""
+                            >
+                                Comment and share
+                            </a>
+                        </p>
+                    
+                </div>
+            
+        </div>
+        
+    </article>
+    
+    
+    <article class="postShorten postShorten--thumbnailimg-bottom">
+        <div class="postShorten-wrap">
+            
+            <div class="postShorten-header">
+                <h1 class="postShorten-title">
+                    
+                        <a
+                            class="link-unstyled"
                             href="/2025/08/31/%E7%A7%91%E7%A0%94/VASP/Starry%20Sky/HSE06%E6%9D%82%E5%8C%96%E6%B3%9B%E5%87%BD%E8%AE%A1%E7%AE%97%E8%83%BD%E5%B8%A6%E4%BB%A5%E5%8F%8Aorigin%E4%BD%9C%E5%9B%BE/"
                             aria-label=": 能带的计算以及origin绘制能带图"
                         >
@@ -283,7 +408,7 @@ Project网站下载晶体结构文件，下载primitive
 cell，如果已经有了conventional
 cell的cif文件，也可以使用vaspkit的602功能生成<code>PRIMCELL.vasp</code>原胞文件。</p>
 <p>然后进行原胞的变胞优化，除了POSCAR的剩下三个输入文件可以使用vaspkit方便地生成，使用101功能，选择lattice
-relaxation进行变胞优化，102功能生成自洽计算地K点，选择Gamma撒点方案，0.03间隙，原胞计算量比较小，间隙填小一点也无妨。</p>
+relaxation进行变胞优化，102功能生成自洽计算的K点，选择Gamma撒点方案，0.03间隙，原胞计算量比较小，间隙填小一点也无妨。</p>
 <p>笔者在Intel
 5218R的集群上进行计算，分配了40个物理核心，计算时在<code>INCAR</code>中设置<code>KPAR=2</code>和<code>NCORE=20</code>来最大化效率，一般而言<code>NPAR</code>参数不需要设置，<code>KPAR</code>和<code>NCORE</code>的参数设置众说纷纭，我参考的公社某一篇帖子里的经验，前者设置为2，后者设置为物理核心数的一般，当然这是对于CPU版本的VASP而言的。</p>
 <p>原胞的变胞优化用时很短：</p>
@@ -2232,663 +2357,6 @@ alt="根据电荷等值面着色的ESP图" />
                         <p>
                             <a
                                 href="/2025/05/30/%E9%87%8F%E5%AD%90%E5%8C%96%E5%AD%A6/%E4%BD%BF%E7%94%A8Multiwfn+VMD%E7%BB%98%E5%88%B6%E5%88%86%E5%AD%90%E7%9A%84%E8%A1%A8%E9%9D%A2%E9%9D%99%E7%94%B5%E5%8A%BF%E5%9B%BE/#post-footer"
-                                class="postShorten-excerpt_link link"
-                                aria-label=""
-                            >
-                                Comment and share
-                            </a>
-                        </p>
-                    
-                </div>
-            
-        </div>
-        
-    </article>
-    
-    
-    <article class="postShorten postShorten--thumbnailimg-bottom">
-        <div class="postShorten-wrap">
-            
-            <div class="postShorten-header">
-                <h1 class="postShorten-title">
-                    
-                        <a
-                            class="link-unstyled"
-                            href="/2025/05/27/%E7%A7%91%E7%A0%94/first%20stage/%E7%94%B5%E5%8C%96%E5%AD%A6%E9%98%BB%E6%8A%97%E8%B0%B1/"
-                            aria-label=": 从零开始的电化学阻抗谱原理"
-                        >
-                            从零开始的电化学阻抗谱原理
-                        </a>
-                    
-                </h1>
-                <div class="postShorten-meta">
-    <time datetime="2025-05-27T20:13:00+08:00">
-	
-		    May 27, 2025
-    	
-    </time>
-    
-        <span>in </span>
-        
-    <a class="category-link" href="/all-categories/%E4%BB%8E%E9%9B%B6%E5%BC%80%E5%A7%8B%E7%9A%84%E7%A7%91%E7%A0%94%E4%B9%8B%E6%97%85/">从零开始的科研之旅</a>, <a class="category-link" href="/all-categories/%E4%BB%8E%E9%9B%B6%E5%BC%80%E5%A7%8B%E7%9A%84%E7%A7%91%E7%A0%94%E4%B9%8B%E6%97%85/first-stage/">first stage</a>
-
-
-    
-</div>
-
-            </div>
-            
-                <div class="postShorten-content">
-                    <h2 id="什么是电化学阻抗谱">什么是电化学阻抗谱？</h2>
-<p>有一种叫做<strong>黑箱</strong>的未知特性系统。可采用一系列测量方法，通过施加输入信号并检测输出响应来探查黑箱。例如，假设将黑箱置于暗室中，然后施加特定波长的光照。若观察到响应信号（如电流），则可判定箱内物质具有光活性。输入与输出之间的关系称为“传递函数”，阻抗谱是传递函数的一种特例。</p>
-<p>阻抗：电路中电阻、电感、电容对交流电个阻碍作用个统称。阻抗是一个复数，实部称为电阻，虚部称为电抗。电化学过程主要涉及电荷在电极和电解质界面上的传输和存储。例如，电极表面的双电层效应会形成双电层电容，电解质中的离子扩散也会导致电容行为。这些机制使电容成为电化学系统中主要的电抗元件。
-相比之下，电感通常与磁场的变化相关，比如电流通过线圈时产生的磁场。然而，在常规的电化学系统中，磁场变化通常不显著，因此电感的影响非常小，通常电化学系统中考虑电阻、容抗而不考虑感抗。</p>
-<p>电化学阻抗谱（EIS）通过施加交流电压（或电流）并测量产生的电流（或电压），能够研究电极和电化学池的电化学特性，利用等效电路进行分析，可以确定与电极电化学反应相关的重要参数，如电荷转移电阻、双电层电容和Warburg阻抗</p>
-<h2 id="阻抗的复数表达形式">阻抗的复数表达形式</h2>
-<p>交流电（AC）电路中的电流、电压以及阻抗通常使用复数来表示，主要原因有两个：</p>
-<ol type="1">
-<li>交流信号（以及许多其他正弦波现象）具有一个幅值和一个相位，它们分别与复数的模和幅角非常相似</li>
-<li>复数的基本运算，如加法、减法、乘法和除法，更容易执行和编程</li>
-</ol>
-<p><strong>注意：</strong></p>
-<ul>
-<li>因为符号<span class="math inline"><em>i</em></span>
-在交流电路中用于表示电流，这里我们用<span
-class="math inline"><em>j</em></span>作为虚数单位，即<span
-class="math inline"><em>j</em><sup>2</sup> = −1</span></li>
-<li>符号 <span class="math inline">ℜ<em>e</em></span>代表复数的实部</li>
-</ul>
-<h3 id="预备知识">预备知识</h3>
-<p><strong>复数的标准形式</strong> <span
-class="math display"><em>Z</em> = <em>a</em> + <em>b</em><em>j</em></span>
-<strong>复数的模</strong> <span class="math display">$$
-\lvert Z \rvert =\sqrt {a^2+b^2}
-$$</span></p>
-<p><strong>欧拉公式</strong> <span
-class="math display"><em>e</em><sup><em>i</em><em>x</em></sup> = cos <em>x</em> + <em>i</em>sin <em>x</em></span>
-<strong>复数的指数形式</strong> <span
-class="math display"><em>Z</em> = <em>r</em><em>e</em><sup><em>j</em><em>θ</em></sup> = <em>r</em>cos <em>θ</em> + <em>r</em><em>j</em>sin <em>θ</em></span>
-<strong>取实数部分：</strong> <span
-class="math display">ℜ<em>e</em>(<em>r</em><em>e</em><sup><em>j</em><em>θ</em></sup>) = <em>r</em>cos <em>θ</em></span></p>
-<p><strong>单变量复函数<span
-class="math inline"><em>f</em>(<em>t</em>)</span>的导数的实部等于<span
-class="math inline"><em>f</em>(<em>t</em>)</span>的实部的导数，证明如下：</strong>
-$$ <span class="math display">$$
-**复函数$f(t)$的不定积分的实部等于$f(t)$的实部的不定积分，证明如下**
-$$</span> $$</p>
-<h3 id="复数形式的阻抗">复数形式的阻抗</h3>
-<ul>
-<li><strong>电压源</strong></li>
-</ul>
-<p><span
-class="math display"><em>v</em>(<em>t</em>) = <em>V</em><sub>0</sub>cos (<em>ω</em><em>t</em>) = ℜ<em>e</em>(<em>V</em><sub>0</sub>cos (<em>ω</em><em>t</em>) + <em>V</em><sub>0</sub><em>j</em>sin (<em>ω</em><em>t</em>)) = ℜ<em>e</em>(<em>V</em><sub>0</sub><em>e</em><sup><em>j</em><em>ω</em><em>t</em></sup>)</span></p>
-<ul>
-<li><strong>电阻</strong></li>
-</ul>
-<p>对于如下图的交变电路</p>
-<figure>
-<img src="resistor-circuit-1756610307135-1.png"
-alt="交变电路中的电阻" />
-<figcaption aria-hidden="true">交变电路中的电阻</figcaption>
-</figure>
-<p>定义<span
-class="math inline"><em>Z</em><sub><em>R</em></sub> = <em>R</em></span>，那么电流<span
-class="math inline">$i=\Re e(\dfrac{V_R}{R})$</span>或<span
-class="math inline">$I=\dfrac{V_R}{Z_R}$</span></p>
-<ul>
-<li><strong>电容</strong></li>
-</ul>
-<figure>
-<img src="capacitor-circuit-1756610307135-2.png"
-alt="交变电路中的电容" />
-<figcaption aria-hidden="true">交变电路中的电容</figcaption>
-</figure>
-<p>电容上电流的定义为：<span class="math inline">$I=C(\dfrac{d
-v(t)}{dt})$</span>，则有如下推导： <span class="math display">$$
-\begin{align}
-v(t)=&amp;\dfrac{1}{C}\int i dt\\
-v(t)=&amp;V_0\cos (\omega t)=\Re e(V_0e^{j\omega t})\\
-\Re e(V_0e^{j\omega t})=&amp;\dfrac{1}{C}\int idt\\
-\dfrac{d}{dt}(\Re e(V_0e^{j\omega
-t}))=&amp;\dfrac{d}{dt}(\dfrac{1}{C}\int idt)\\
-\Re e(j\omega V_0e^{j\omega t})=&amp;\dfrac{1}{C}i\\
-i=&amp;\Re e(j\omega CV_0e^{j\omega t})
-\end{align}
-$$</span> 电容器C两端的电压为<span
-class="math inline"><em>V</em><sub><em>C</em></sub> = <em>V</em><sub>0</sub><em>e</em><sup><em>j</em><em>ω</em><em>t</em></sup></span>，那么电容对电流的阻碍作用<span
-class="math inline">$Z_C=\dfrac{1}{j\omega C}=-\dfrac{j}{\omega
-C}$</span></p>
-<p><strong>与电阻的阻抗（电阻）<span
-class="math inline"><em>Z</em><sub><em>R</em></sub></span>不同，电容的阻抗（容抗）<span
-class="math inline"><em>Z</em><sub><em>C</em></sub></span>是一个纯虚数</strong></p>
-<ul>
-<li>电感</li>
-</ul>
-<p><strong>在电化学系统中，电感并不常见</strong></p>
-<figure>
-<img src="inductor-circuit-1756610307135-3.png"
-alt="交变电路中的电感" />
-<figcaption aria-hidden="true">交变电路中的电感</figcaption>
-</figure>
-<p><strong>电感<span class="math inline"><em>L</em></span>上的电流<span
-class="math inline"><em>i</em></span>和电压<span
-class="math inline"><em>v</em>(<em>t</em>)</span>之间的关系为：</strong><span
-class="math inline">$v(t)=L\dfrac{di}{dt}$</span>，则有： <span
-class="math display">$$
-\begin{align}
-\Re e(V_0e^{j\omega t})=&amp;L\dfrac{di}{dt}\\
-\int \Re e(V_0e^{j\omega t})=&amp;\int L\dfrac{di}{dt}dt\\
-\Re e(\dfrac{1}{j\omega}V_0e^{j\omega t})=&amp;Li\\
-i=&amp;\Re e(\dfrac{1}{j\omega L}V_0e^{j\omega t})
-\end{align}
-$$</span> 电感的对电流的阻碍作用为：<span
-class="math inline"><em>Z</em><sub><em>L</em></sub> = <em>j</em><em>ω</em><em>L</em></span>，<strong>类似的，电感的阻抗（感抗）也是一个纯虚数</strong></p>
-<h2 id="交变电路中的电阻和电容">交变电路中的电阻和电容</h2>
-<p><strong>电压源为：<span
-class="math inline"><em>E</em>(<em>t</em>) = <em>E</em><sub>0</sub>sin (<em>ω</em><em>t</em>)</span></strong></p>
-<p>电容表现出与电阻相似的行为，即电压与电流的幅值比恒定，但电流相位相对于外加电压存在-90°偏移:<span
-class="math inline">$I=E_0\omega C\sin(\omega
-t-\dfrac{\pi}{2})$</span></p>
-<figure>
-<img src="22-66071fig01RGB-1756610307135-4.jpg"
-alt="施加的正弦电压E(t)与(a)电阻和(b)电容中产生的电流(t)之间的关系。" />
-<figcaption
-aria-hidden="true">施加的正弦电压E(t)与(a)电阻和(b)电容中产生的电流(t)之间的关系。</figcaption>
-</figure>
-<p>电阻和电容的电流响应可用两个参数表征：</p>
-<ul>
-<li>阻抗模量<span class="math inline">|<em>Z</em>|</span>
-<ul>
-<li>电阻：<span
-class="math inline">|<em>Z</em><sub><em>R</em></sub>|</span>恒定</li>
-<li>电容：<span class="math inline">$\lvert Z_C \rvert=\dfrac{1}\omega
-C{}$</span></li>
-</ul></li>
-<li>电压与电流之间的相位差<span class="math inline"><em>θ</em></span>
-<ul>
-<li>电阻：<span
-class="math inline"><em>θ</em> = 0<sup>∘</sup></span></li>
-<li>电容：<span
-class="math inline"><em>θ</em> = −90<sup>∘</sup></span></li>
-</ul></li>
-</ul>
-<p><strong>使用阻抗表达式<span
-class="math inline"><em>Z</em> = |<em>Z</em>|(cos <em>θ</em> + sin <em>θ</em>)</span>，在交流测量中可以统一处理这两种电路元件</strong></p>
-<p>电阻和电容的串联电路比较简单，而并联的情况稍复杂，讨论一下：</p>
-<figure>
-<img src="22-66071fig02RGB-1756610307135-6.jpg"
-alt="施加正弦电压E(t)与并联RC电路响应电流(t)的关系。总电流是流经电阻R(t)和电容C(t)的电流之和" />
-<figcaption
-aria-hidden="true">施加正弦电压E(t)与并联RC电路响应电流(t)的关系。总电流是流经电阻R(t)和电容C(t)的电流之和</figcaption>
-</figure>
-<p>总阻抗： <span class="math display">$$
-\begin{align}
-\dfrac{1}{Z}=&amp;\dfrac{1}{Z'}+\dfrac{1}{Z''}\\
-=&amp;\dfrac{1}{R}+j\omega C\\
-Z=&amp;\dfrac{1}{\dfrac{1}{R}+j\omega C}\\
-=&amp;\dfrac{R}{1+(\omega CR)^2}-\dfrac{\omega CR^2 j}{1+(\omega
-CR)^2}\\
-\lvert Z \rvert=&amp;\sqrt{Z'^2+Z''^2}\\
-=&amp;\dfrac{R}{\sqrt{1+(\omega CR)^2}}
-\end{align}
-$$</span> <strong>总结一下串联和并联 RC 电路的复阻抗特性：</strong></p>
-<table>
-<colgroup>
-<col style="width: 4%" />
-<col style="width: 20%" />
-<col style="width: 15%" />
-<col style="width: 19%" />
-<col style="width: 22%" />
-<col style="width: 16%" />
-</colgroup>
-<thead>
-<tr>
-<th></th>
-<th><span
-class="math inline"><em>Z</em> = <em>Z</em><sup>′</sup> + <em>j</em><em>Z</em><sup>″</sup></span></th>
-<th><span
-class="math inline"><em>Z</em><sup>′</sup> = |<em>Z</em>|cos <em>θ</em></span></th>
-<th><span
-class="math inline"><em>Z</em><sup>″</sup> = |<em>Z</em>|sin <em>θ</em></span></th>
-<th><span class="math inline">$\lvert Z \rvert
-=\sqrt{Z'^2+Z''^2}$</span></th>
-<th><span
-class="math inline">$\theta=\tan^{-1}\dfrac{Z''}{Z'}$</span></th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td>串联RC电路</td>
-<td><span class="math inline">$R-\dfrac{j}{\omega C}$</span></td>
-<td><span class="math inline"><em>R</em></span></td>
-<td><span class="math inline">$-\dfrac{1}{\omega C}$</span></td>
-<td><span
-class="math inline">$\sqrt{R^2+\dfrac{1}{\omega^2C^2}}$</span></td>
-<td><span class="math inline">$\tan^{-1}(-\dfrac{1}{\omega
-RC})$</span></td>
-</tr>
-<tr>
-<td>并联RC电路</td>
-<td><span class="math inline">$(\dfrac{1}{R}-\dfrac{\omega
-C}{j})^{-1}$</span></td>
-<td><span class="math inline">$\dfrac{R}{(\omega RC)^2+1}$</span></td>
-<td><span class="math inline">$\dfrac{-\omega R^2C}{(\omega
-RC)^2+1}$</span></td>
-<td><span
-class="math inline">$\dfrac{1}{\sqrt{\dfrac{1}{R^2}+\omega^2C^2}}$</span></td>
-<td><span
-class="math inline">tan<sup>−1</sup>(<em>ω</em><em>R</em><em>C</em>)</span></td>
-</tr>
-</tbody>
-</table>
-<h2 id="阻抗的图解">阻抗的图解</h2>
-<p>如上所述，阻抗<span
-class="math inline"><em>Z</em></span>既可用阻抗模值<span
-class="math inline">|<em>Z</em>(<em>ω</em>)|</span>和相位角<span
-class="math inline"><em>θ</em>(<em>ω</em>)</span>表示，也可用阻抗的实部<span
-class="math inline"><em>Z</em><sup>′</sup>(<em>ω</em>)</span>和虚部<span
-class="math inline"><em>Z</em><sup>″</sup>(<em>ω</em>)</span>表示，分别对应两种图：Bode图和Nyquist图</p>
-<figure>
-<img src="22-66071fig03-1756610307135-5.jpg"
-alt="(a)串联与(b)并联 RC 电路的波特图。虚线标示频率 f = 1/(2πRC)处相位角θ = −45°的位置。" />
-<figcaption aria-hidden="true">(a)串联与(b)并联 RC
-电路的波特图。虚线标示频率 f = 1/(2πRC)处相位角θ =
-−45°的位置。</figcaption>
-</figure>
-<figure>
-<img src="22-66071fig04-1756610307135-7.jpg"
-alt="(a)串联与(b)并联 RC 电路的Nyquist图。虚线标示频率 f=1/(2πRC)对应的相位角θ=-45°位置。" />
-<figcaption aria-hidden="true">(a)串联与(b)并联 RC
-电路的Nyquist图。虚线标示频率
-f=1/(2πRC)对应的相位角θ=-45°位置。</figcaption>
-</figure>
-<p>串联RC电路的阻抗是<span
-class="math inline"><em>Z</em><sub><em>R</em></sub></span>与<span
-class="math inline"><em>Z</em><sub><em>C</em></sub></span>之和。因此在高频区，由于<span
-class="math inline"><em>Z</em><sub><em>R</em></sub> ≫ <em>Z</em><sub><em>C</em></sub></span>
-，电路阻抗等于电阻R；而在低频区，由于<span
-class="math inline"><em>Z</em><sub><em>R</em></sub> ≪ <em>Z</em><sub><em>C</em></sub></span>
-，阻抗等于<span
-class="math inline"><em>Z</em><sub><em>C</em></sub></span>
-。如Bode图所示，串联RC电路在高频区表现为电阻特性（|Z|与频率无关，相位角θ为
-0°），在低频区表现为电容特性（|Z|与频率成反比，相位角θ为−90°）。Nyquist图中，串联
-RC 电路的阻抗轨迹为一条从实轴垂直延伸的直线，与实轴交点的值等于
-R。该电路的时间常数为RC，意味着当频率<span
-class="math inline">$ω=\dfrac{1}{RC}$</span>时，<span
-class="math inline">|<em>Z</em><sub><em>R</em></sub>| = |<em>Z</em><sub><em>C</em></sub>|</span>且相位角<span
-class="math inline"><em>θ</em> = −45°</span></p>
-<p>并联RC电路的阻抗Z通过公式<span
-class="math inline">$\frac{1}{Z}=\frac{1}{Z_R}+\frac{1}{Z_C}$</span>计算。因此，并联
-RC 电路，阻抗较小的电路元件特性会显现。在高频区，并联RC电路的Z 等于<span
-class="math inline"><em>Z</em><sub><em>C</em></sub></span>
-；而在低频区则等于<span
-class="math inline"><em>Z</em><sub><em>R</em></sub></span>，这与串联RC电路的情况相反。在并联
-RC 电路的Nyquist图中，阻抗轨迹 Z 呈现为半圆形，圆弧直径等于
-R。该电路的时间常数<span
-class="math inline"><em>τ</em> = <em>R</em><em>C</em></span>，与串联电路相同。当频率<span
-class="math inline">$\omega =\frac{1}{RC}$</span>时，<span
-class="math inline">|<em>Z</em><sub><em>R</em></sub>| = |<em>Z</em><sub><em>C</em></sub>|</span>且相位角<span
-class="math inline"><em>θ</em> = −45°</span>，此时对应Nyquist图中圆弧的顶点。</p>
-<p>与Bode图相比，Nyquist图更适合通过轨迹形状来辨识电路结构。但需指出的是，当两个并联
-RC
-电路的时间常数相近时，即便其电阻和电容值不同，它们的半圆也难以区分。如下图所示，当两个并联
-RC
-电路的时间常数仅相差10倍时，可观察到由两段圆弧重叠形成的畸变半圆。只有当时间常数差异达到
-100
-倍以上时，两段圆弧才能被清晰区分。因此在构建等效电路时，仅依Nyquist图并不可取，必须验证该等效电路能否合理解释目标电化学现象中的每个基本过程</p>
-<figure>
-<img src="22-66071fig06RGB-1756610307135-8.jpg"
-alt="不同电容值 C 下的电路Nyquist图：(a) C=0.2 毫法，(b) 1 毫法，(c) 5 毫法，(d) 10 毫法。两个并联 RC 电路的时间常数比分别为：(a) 250，(b) 50，(c) 10，(d) 5。" />
-<figcaption aria-hidden="true">不同电容值 C 下的电路Nyquist图：(a) C=0.2
-毫法，(b) 1 毫法，(c) 5 毫法，(d) 10 毫法。两个并联 RC
-电路的时间常数比分别为：(a) 250，(b) 50，(c) 10，(d) 5。</figcaption>
-</figure>
-<h3
-id="下面列举一些常见的电路模型以及相应的nyquistbode图吧">下面列举一些常见的电路模型以及相应的Nyquist、Bode图吧</h3>
-<figure>
-<img src="images_large_tg2c00070_0008-1756610307135-9.jpeg"
-alt="images_large_tg2c00070_0008" />
-<figcaption aria-hidden="true">images_large_tg2c00070_0008</figcaption>
-</figure>
-<ul>
-<li>电感的Nyquist图在第四象限</li>
-<li>“电阻等价于点”</li>
-<li>“电容等价于垂直线”</li>
-</ul>
-<figure>
-<img src="images_large_tg2c00070_0009-1756610307135-10.jpeg"
-alt="images_large_tg2c00070_0009" />
-<figcaption aria-hidden="true">images_large_tg2c00070_0009</figcaption>
-</figure>
-<ul>
-<li>电容和电阻的并联反映到Nyquist图上即为一个半圆弧</li>
-<li>有几个电阻-电容并联电路就有可能出现几个半圆弧</li>
-<li>电阻<span
-class="math inline">$\rm{R}_0$</span>+电阻-电容并联电路就等价于将半圆弧向右平移<span
-class="math inline">$\rm{R_0}$</span>个单位</li>
-</ul>
-<figure>
-<img src="images_large_tg2c00070_0013-1756610307135-11.jpeg"
-alt="images_large_tg2c00070_001" />
-<figcaption aria-hidden="true">images_large_tg2c00070_001</figcaption>
-</figure>
-<p>定义法拉第阻抗<span
-class="math inline"><em>Z</em><sub><em>f</em></sub> = <em>R</em><sub><em>c</em><em>t</em></sub> + <em>Z</em><sub><em>W</em></sub></span></p>
-<ul>
-<li>上图左侧为理想高频部分，此时电荷转移电阻<span
-class="math inline"><em>R</em><sub><em>c</em><em>t</em></sub></span>很大，阻抗由电荷转移主导</li>
-<li>上图右侧为理想低频部分，此时“电容断路（电容特性：通高频阻低频）”，阻抗由物质扩散主导（溶液离子扩散、固体电解质中离子扩散等等）</li>
-<li>如果是一个频率非常广泛的、既包含高频又包含低频的电化学阻抗测试，那么Nyquist图中可能同时出现高频部分的半圆弧和低频部分的直线，如下图所示</li>
-</ul>
-<figure>
-<img src="images_large_tg2c00070_0014-1756610307135-12.jpeg"
-alt="images_large_tg2c00070_0014" />
-<figcaption aria-hidden="true">images_large_tg2c00070_0014</figcaption>
-</figure>
-<h3 id="电极的等效电路">电极的等效电路</h3>
-<p>在电化学阻抗谱（EIS）中，电极的电化学行为通常由包含电阻和电容的等效电路表示。其中，Randles
-电路常被用作电极的等效电路模型</p>
-<figure>
-<img src="22-66071fig07-1756610307135-13.jpg"
-alt="Randles的Nyquist图" />
-<figcaption aria-hidden="true">Randles的Nyquist图</figcaption>
-</figure>
-<ul>
-<li>定义法拉第阻抗<span
-class="math inline"><em>Z</em><sub><em>f</em></sub> = <em>R</em><sub><em>c</em><em>t</em></sub> + <em>Z</em><sub><em>W</em></sub></span></li>
-<li>溶液电阻<span
-class="math inline"><em>R</em><sub><em>s</em></sub></span>：即使使用参比电极，IR降也不可忽略。电解质传导过程中涉及的电阻称为溶液电阻（<span
-class="math inline"><em>R</em><sub><em>s</em></sub></span> ），
-可通过Nyquist奎斯特图中高频极限处与实轴的交点获得</li>
-<li>电荷转移电阻<span
-class="math inline"><em>R</em><sub><em>c</em><em>t</em></sub></span>：当过电位较大时，电极发生极化，过电位与电流之间呈现指数依赖，而当电极电位接近平衡电位时，过电位与电流的指数关系可简化为线性关系。因此，在极低过电位区域（&lt;10
-mV）内，电极表现为电阻特性，其电阻值称为电荷转移电阻，对应于Nyquist奎斯特图中半圆的直径。由于电荷转移电阻的概念仅适用于获得线性关系的极小过电位区域，因此电化学阻抗谱中的电压振幅通常设置为≤10
-mV。</li>
-<li>双电层电容<span
-class="math inline"><em>C</em><sub><em>d</em><em>l</em></sub></span>：电极与电解质界面处的电双层类似于电容器，虽然无法直接从Nyquist图中确定<span
-class="math inline"><em>C</em><sub><em>d</em><em>l</em></sub></span>
-的数值，但如果确定了<span
-class="math inline"><em>R</em><sub><em>c</em><em>t</em></sub></span>
-，则可通过以下关系式利用圆弧顶点频率对应并联电路的时间常数计算出<span
-class="math inline"><em>C</em><sub><em>d</em><em>l</em></sub></span>
-：<span
-class="math inline"><em>τ</em> = <em>R</em><sub><em>c</em><em>t</em></sub> × <em>C</em><sub><em>d</em><em>l</em></sub></span></li>
-<li>Wurburg阻抗：源于电解液中活性物质的扩散过程。在半无限扩散条件下，<span
-class="math inline"><em>Z</em><sub><em>W</em></sub></span>可通过以下方程表示：</li>
-</ul>
-<p><span class="math display">$$
-Z_W=\dfrac{RT}{n^2F^2Ac\sqrt{D}}\cdot\dfrac{1}{\sqrt{\omega}}\cdot\dfrac{1-j}{\sqrt{2}}
-$$</span></p>
-<p>其中，n为反应中转移的电子数，A
-为电极的几何面积，c为活性物质的浓度，D为扩散系数。Wurburg阻抗可用一个电容器与电阻器无限级联的电路表示。在Wurburg阻抗中，Z’和-Z’‘相等，因此在Nyquist图中可观察到一条斜率为-45°的直线。通过绘制
-Z’和
-Z’’随ω变化的关系曲线，可从两条平行直线的斜率确定扩散系数。值得注意的是，该式源自能斯特方程中浓度电势依赖项(<span
-class="math inline">$\dfrac{\partial E}{\partial
-c}$</span>)。对于不符合能斯特方程的电极（如发生固态扩散的电极），必须考虑(<span
-class="math inline">$\dfrac{\partial E}{\partial
-c}$</span>)项才能计算扩散系数</p>
-<p>如下图所示，当扩散系数 D
-增大时，活性物质能快速响应电极表面浓度变化而迅速补充至电极界面。因此较大的
-D 值会导致<span
-class="math inline"><em>Z</em><sub><em>W</em></sub></span>值减小。反之，<span
-class="math inline"><em>Z</em><sub><em>W</em></sub></span>随D值减小而增大，从而使直线向低频方向移动。最终在Bode图中，<span
-class="math inline"><em>Z</em><sub><em>W</em></sub></span>的线性区会与并联RC电路引起的|Z|变化区域重叠。这一现象在下下图（😛）所示的Nyquist图中更为明显：当
-D 值较大时，-45°斜率的直线与圆弧可清晰区分；但随着 D
-值减小，圆弧与直线开始重叠。这种重叠现象表明活性物质的扩散速度低于电荷转移反应的时间常数，本质上意味着扩散过程成为速率控制步骤。</p>
-<figure>
-<img src="22-66071fig08RGB-1756610307135-14.jpg"
-alt="不同 RT/(n2F2AcD^0.5 )值下 Randles电路的 Bode 图：(a) 1, (b) 10, (c) 100, (d) 300 Ω s −0.5" />
-<figcaption aria-hidden="true">不同 RT/(n<sup>2F</sup>2AcD^0.5 )值下
-Randles电路的 Bode 图：(a) 1, (b) 10, (c) 100, (d) 300 Ω s
-−0.5</figcaption>
-</figure>
-<figure>
-<img src="22-66071fig09RGB-1756610307135-15.jpg"
-alt="不同 RT/(n2F2AcD^0.5 )值下 Randles电路的Nyquist图：(a) 1, (b) 10, (c) 100, (d) 300 Ω·s −0.5" />
-<figcaption aria-hidden="true">不同 RT/(n<sup>2F</sup>2AcD^0.5 )值下
-Randles电路的Nyquist图：(a) 1, (b) 10, (c) 100, (d) 300 Ω·s
-−0.5</figcaption>
-</figure>
-<p><strong>一个性能良好的固态电解质材料，其离子电导率应当较大，扩散系数D应当较大，那么Nyquist图应当接近于a或b的形貌</strong></p>
-<h3
-id="从理想电极到真实电极常相位元件cpe">从理想电极到真实电极——常相位元件CPE</h3>
-<p>CPE被定义为： <span class="math display">$$
-Z_{CPE}=\dfrac{1}{Y_O(j\omega)^n}
-$$</span></p>
-<p><span
-class="math display"><em>θ</em> = 90<sup>∘</sup>(1 − <em>n</em>)</span></p>
-<p>其中θ是与理想情况（φ=90°）的相位偏差，n 是从 0 到 1
-的常数，定义了与理想行为的偏差</p>
-<table>
-<colgroup>
-<col style="width: 4%" />
-<col style="width: 19%" />
-<col style="width: 17%" />
-<col style="width: 58%" />
-</colgroup>
-<thead>
-<tr>
-<th style="text-align: left;">n</th>
-<th style="text-align: left;">相位角φ（理想行为）</th>
-<th style="text-align: left;">与理想行为的偏差θ</th>
-<th style="text-align: left;">阻抗方程</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td style="text-align: left;">1</td>
-<td style="text-align: left;">90</td>
-<td style="text-align: left;">0</td>
-<td style="text-align: left;"><span
-class="math inline">$Z(\omega)=\dfrac{1}{j\omega
-\rm{C_{dl}}}$</span></td>
-</tr>
-<tr>
-<td style="text-align: left;">0.9</td>
-<td style="text-align: left;">81</td>
-<td style="text-align: left;">9</td>
-<td style="text-align: left;"><span
-class="math inline">$Z_{\omega}=\dfrac{1}{Y_O(j\omega)^{0.9}}$</span></td>
-</tr>
-<tr>
-<td style="text-align: left;">0.8</td>
-<td style="text-align: left;">72</td>
-<td style="text-align: left;">18</td>
-<td style="text-align: left;"><span
-class="math inline">$Z_{\omega}=\dfrac{1}{Y_O(j\omega)^{0.8}}$</span></td>
-</tr>
-<tr>
-<td style="text-align: left;">0</td>
-<td style="text-align: left;">0</td>
-<td style="text-align: left;">90</td>
-<td style="text-align: left;"><span
-class="math inline">$Z_{\omega}=\dfrac{1}{Y_O(j\omega)^{0}}=\dfrac{1}{Y_O}=R$</span></td>
-</tr>
-<tr>
-<td style="text-align: left;">0.5</td>
-<td style="text-align: left;">45</td>
-<td style="text-align: left;">45</td>
-<td style="text-align: left;"><span
-class="math inline">$Z(\omega)=\dfrac{1}{Y_O}\sqrt{j\omega}$</span></td>
-</tr>
-</tbody>
-</table>
-<p>两个极端情况：</p>
-<ul>
-<li>n=1，CPE表现为理想电容器</li>
-<li>n=0，CPE 表现为电阻器</li>
-<li>n=0.5，<span
-class="math inline">$Z(\omega)=\dfrac{1}{Y_O}\sqrt{j\omega}$</span>，即等价于
-Warburg 阻抗</li>
-</ul>
-<h2
-id="用传输线模型来直观理解扩散阻抗">用传输线模型来直观理解扩散阻抗</h2>
-<p>Warburg阻抗是一个复杂的元素，它表示氧化还原物质向电极表面的质量传递，并被描绘为奈奎斯特图的低频范围上的-45°线。这种行为是指化学物质的时间相关（非稳态）半无限扩散，如下图A所示，在电极/电解质界面处存在单个边界，距离
-x=0。朝向本体溶液，并且在静止条件下，扩散层扩展到由电化学电池的尺寸限定的无限长度（x→∞），同时浓度梯度随时间下降。</p>
-<p>将扩散层视为由无数个 “电阻（<span
-class="math inline"><em>R</em><sub><em>d</em></sub></span>）-
-电容（<span
-class="math inline"><em>C</em><sub><em>d</em></sub></span>）”
-单元串联，其中：</p>
-<ul>
-<li><p><span
-class="math inline"><em>R</em><sub><em>d</em></sub></span>：单位长度的扩散电阻（反映扩散阻力）</p></li>
-<li><p><span
-class="math inline"><em>C</em><sub><em>d</em></sub></span>：单位长度的
-“化学电容”（反映浓度存储能力）</p></li>
-<li><p>半无限扩散——无限长传输线，阻抗为Warburg直线</p></li>
-<li><p>有限扩散——有限长传输线，末端接电阻（投射）或电容（反射）</p>
-<ul>
-<li>当有限扩散区对扩散物质可渗透时，随着时间和电流流过电化学电池，建立了稳态浓度梯度（dC/dx=常数）。这是透射或可渗透边界的情况。</li>
-<li>当有限扩散区在一段时间后对扩散物质不渗透时，电荷转移是不可能的，并且扩散物质的浓度梯度变为零（dC/dx=0）。这是反射或不渗透边界的情况</li>
-</ul></li>
-</ul>
-<figure>
-<img src="images_large_tg2c00070_0018-1756610307135-17.jpeg"
-alt="A）电化学电池的半无限区，（B）半无限区的传输线（TL）描述，（C）t&lt;td 跨度处的有限边界扩散，（D）透射，和（E）t&gt;td 处的反射边界" />
-<figcaption
-aria-hidden="true">A）电化学电池的半无限区，（B）半无限区的传输线（TL）描述，（C）t&lt;td
-跨度处的有限边界扩散，（D）透射，和（E）t&gt;td
-处的反射边界</figcaption>
-</figure>
-<p>==具有透射边界的有限长度线性扩散的典型例子包括固体氧化物或聚合物膜燃料电池，和旋转盘电极实验中的扩散层==</p>
-<h2 id="固态电解质的阻抗谱分析">固态电解质的阻抗谱分析</h2>
-<p>以陶瓷固态电解质为例，<strong>假设其仅存在单离子传输而不具有电子导电性</strong></p>
-<p><strong>在极高频率区域（&gt;1 MHz）的阻抗数据对于通过 EIS
-测量分析固体电解质至关重要</strong>，这与其它材料的 EIS
-分析存在显著差异。若某固体电解质的体相离子电导率为<span
-class="math inline">10<sup>−4</sup><em>S</em> ⋅ <em>c</em><em>m</em><sup>−1</sup></span>
-，且离子迁移相关电容为<span
-class="math inline">10<sup>−11</sup><em>F</em> ⋅ <em>c</em><em>m</em><sup>−2</sup></span>
-，则对应<span
-class="math inline">1/(2<em>π</em> × <em>τ</em>)</span>（<span
-class="math inline"><em>τ</em></span>：时间常数）的特征频率约为∼<span
-class="math inline">10<sup>7</sup></span>Hz（10
-MHz）。若未对该频率区域采取特殊防护措施进行EIS测量，高频区的阻抗数据将会缺失，仅能观测到部分圆弧。在此情况下，EIS数据中包含的来自电缆和电池的电子电阻分量无法消除。此外，由晶粒内部电阻和晶界电阻构成的离子电阻也无法分离，从而导致固体电解质重要信息的丢失。</p>
-<p>由于大多数陶瓷固体电解质是由不同尺寸和取向的晶粒聚集而成的多晶材料，除了晶粒内部电阻外，离子在晶粒间界面处的传输电阻对离子电导率具有重要影响。晶粒内部电阻<span
-class="math inline">$R_{\rm{gi}}$</span>
-（又称体电阻）是材料固有的离子传输阻力。因此，<strong>若测试样品不含孔隙，通过晶粒内部电阻倒数计算得到的体离子电导率等于该固体电解质单晶的离子电导率</strong>。晶界电阻<span
-class="math inline">$R_{\rm{gb}}$</span>
-表示离子穿越晶粒间界面（晶界）及/或位于晶界的化学组成不同微相时所受的传输阻力。下图展示了陶瓷固体电解质的等效电路及Nyquist图，该电路由两个串联的并联
-RC 回路构成：一个电阻对应<span class="math inline">$R_{\rm{gi}}$</span>
-，另一个对应<span class="math inline">$R_{\rm{gb}}$</span>
-。由于两个并联RC电路具有不同的时间常数<span
-class="math inline">（<em>τ</em> = <em>R</em> × <em>C</em>）</span>，电化学阻抗谱能够分别测定这两个电阻值。</p>
-<figure>
-<img src="22-66080fig01-1756610307135-16.jpg"
-alt="由两个并联RC电路组成的固体电解质等效电路，分别对应晶粒内部与晶界的串联连接。(b)是根据(a)所示等效电路计算得出的固体电解质典型Nyquist图。需注意，为简化起见图中省略了电极响应部分。" />
-<figcaption
-aria-hidden="true">由两个并联RC电路组成的固体电解质等效电路，分别对应晶粒内部与晶界的串联连接。(b)是根据(a)所示等效电路计算得出的固体电解质典型Nyquist图。需注意，为简化起见图中省略了电极响应部分。</figcaption>
-</figure>
-<p>由于开发和改进陶瓷固体电解质最有效的方法是通过降低<span
-class="math inline">$\rm{R_{gb}}$</span>
-使离子电导率接近单晶水平，因此分离<span
-class="math inline">$\rm{R_{gi}}$</span> 和<span
-class="math inline">$\rm{R_{gb}}$</span>
-并分别评估它们至关重要。要通过高频区半圆直径确定<span
-class="math inline">$\rm{R_{gi}}$</span>
-，应通过增加电解质厚度、减小电极面积或降低测量温度来降低特征频率。然而这些方法存在局限性，例如当电极面积小于样品几何面积时会干扰样品中的电流分布，因此需要测量直至高频区的阻抗数据。本文介绍了我们测量固体电解质高达
-100 MHz 高频阻抗的方法。</p>
-<p>在固体电解质的电化学阻抗谱（EIS）测量中，通常采用电极/电解质/电极的三明治结构组件。这种配置的优势在于能够实现简单的两端测量（<strong>注：设备与电极之间需连接两根电压线和两根电流线，共计四根电缆</strong>）。采用电极/电解质/电极结构进行EIS测量时，电极材料的选择至关重要。电极材料需满足以下必要条件：能够构建稳定界面且不与电解质发生化学反应，同时具备足够的电子导电性。金或铂等贵金属常被用作阻塞电极，某些情况下也会采用能与移动离子发生可逆反应的可逆电极。圆盘状固体电解质样品通常通过粉末压片成型，必要时还需进行煅烧处理。
-样品的相对密度最好大于 90%，理想情况下应超过 95%。</p>
-<p>在电极涂覆工艺中，有两个关键因素会影响固体电解质的阻抗测量结果。其一是电极厚度：过薄的电极可能导致阻抗数据偏离原始值，进而造成对固体电解质离子传输行为的误判。其二是固体电解质的表面状态，该因素会显著影响阻抗测量。本节将详细阐述这两个因素如何影响阻抗数据。</p>
-<p>下图展示了不同电极厚度及固体电解质表面是否抛光处理的氟离子导体Nyquist图。所有情况下均采用溅射法沉积直径为7mm
-的铂电极。阻抗测试使用 Keysight E4990A
-阻抗分析仪在室温空气环境下完成。所有Nyquist图均呈现两个特征：由晶粒内部与晶界电阻（具有相近时间常数）形成的畸变弧线（两个半圆弧融合），以及低频区对应阻塞电极与固体电解质界面电容特性的直线段。不同电极厚度的Nyquist图存在显著差异：对于
-200 nm 厚电极（图
-2a），离子传输电阻（晶粒内部与晶界电阻）形成的阻抗弧起始于坐标原点；而
-50 nm 薄电极（图
-2b）的阻抗弧则发生水平偏移，且由阻抗弧外推得到的高频极限阻抗值偏离原点。
-这种因电极厚度不同而产生的差异可归因于样品中的电流分布；对于较薄的电极，其横向电阻不容忽视</p>
-<figure>
-<img src="22-66080fig02RGB-1756610307135-18.jpg"
-alt="采用铂电极的氟离子传导固体电解质的Nyquist图：(a) 200 纳米厚度电极，(b) 50 纳米厚度电极。(c) 样品表面抛光后 50 纳米铂电极的Nyquist图。右侧为放大视图以便观察。圆圈表示测量值，虚线表示拟合曲线。" />
-<figcaption
-aria-hidden="true">采用铂电极的氟离子传导固体电解质的Nyquist图：(a) 200
-纳米厚度电极，(b) 50 纳米厚度电极。(c) 样品表面抛光后 50
-纳米铂电极的Nyquist图。右侧为放大视图以便观察。圆圈表示测量值，虚线表示拟合曲线。</figcaption>
-</figure>
-<p>如上图，当样品<strong>经 2000 目砂纸抛光并</strong>沉积 50
-纳米铂电极后，所得阻抗弧严重偏离原点。这表明抛光过程引入了除离子传输过程之外的额外电阻。此外，抛光样品的离子传导过程对应阻抗弧略有扩大，直线斜率趋于平缓。这种斜率变化反映了抛光前后样品阻塞行为的差异：抛光样品在&lt;1
-MHz
-频率区间出现与阻塞行为重叠的寄生电阻。<strong>固态电解质抛光前后的阻抗行为变化归因于抛光过程中（为去除煅烧样品表面偏析层而进行的）样品表面劣化</strong>。</p>
-<p>为消除电缆电感对高频测量的干扰，设备与电解池（样品）之间的连接电缆应尽可能缩短。建议采用特性阻抗为
-50Ω的同轴电缆，并将其紧贴样品安装。此外，必须合理设置电流回流路径。对于高达
-100MHz
-的高频测量，需确保电缆不会引起相位差畸变。在进行高频测量前，应对系统进行开路/短路/负载校准</p>
-<h2 id="离子电导率的计算">离子电导率的计算</h2>
-<p><span class="math display">$$
-\sigma'(\omega)=\dfrac{L}{S}\times\dfrac{Z'(\omega)}{\vert Z'(\omega)
-\rvert ^2}
-$$</span></p>
-<p>对于使用固态电解质模具进行电化学阻抗谱测试的情况，离子电导率的计算公式为：
-<span class="math display">$$
-\sigma =\dfrac{L}{S\times R}
-$$</span> 其中<span
-class="math inline"><em>L</em></span>为固态电解质pellet圆片厚度，<span
-class="math inline"><em>S</em></span>为圆片pellet的面积，<span
-class="math inline"><em>R</em></span>为电阻（Nyquist图拐点处的横坐标）</p>
-<h2
-id="实战演练以rmli_5.5ps_4.5cl_1.5的电化学阻抗谱图为例">实战演练——以<span
-class="math inline">$\rm{Li_{5.5}PS_{4.5}Cl_{1.5}}$</span>的电化学阻抗谱图为例</h2>
-<figure>
-<img src="TEST-1756610307135-19.png" alt="之前测的阻抗偶" />
-<figcaption aria-hidden="true">之前测的阻抗偶</figcaption>
-</figure>
-<p>这是之前测试的图，简单画了一下，2Tons（249MPa）压力下的测试结果。可以看到，这与常见的阻抗谱差别非常大，并没有出现超高频的半圆弧，只出现了低频的扩散部分和中高频的拐点。这是收阻抗仪的最高频率所限，使用的阻抗仪最高频只能达到约1MHz左右，对于10mS/cm的固态电解质，想要完整的测出半圆弧可能需要100MHz甚至更高的频率</p>
-<figure>
-<img src="image-20250612163437996-1756610307135-21.png"
-alt="image-20250612163437996" />
-<figcaption aria-hidden="true">image-20250612163437996</figcaption>
-</figure>
-<ul>
-<li>由于设备频率上限较低，只能得到粒子抵抗和粒界阻抗的总值</li>
-<li>活化能分析中无法判断随温度变化特性值发生变化的是粒子阻抗还是粒界阻抗</li>
-<li>在通过变温方式尝试分离粒子阻抗和粒界阻抗时，可控温度范围有限，且无法对变温引起的参数条件变化进行校正</li>
-</ul>
-<p>==此外，交变电流源的最高频率不等于最高有效频率==，有效的最高频率常常受限于测试端子类型和连线长度，在进行变温控制的时候，==夹具及导线材料的介电常数因为温度变化而变化，如果不及时矫正阻抗会使结果产生较大偏离==</p>
-<figure>
-<img src="image-20250612164042178-1756610307135-20.png"
-alt="image-20250612164042178" />
-<figcaption aria-hidden="true">image-20250612164042178</figcaption>
-</figure>
-<p>下图展示了超高有效频率下的LLTO型固态电解质的阻抗谱</p>
-<figure>
-<img src="image-20250612164142858-1756610307135-22.png"
-alt="image-20250612164142858" />
-<figcaption aria-hidden="true">image-20250612164142858</figcaption>
-</figure>
-<h2 id="参考资料">参考资料</h2>
-<ol type="1">
-<li>Lazanas, A. Ch.; Prodromidis, M. I. Electrochemical Impedance
-Spectroscopy─a Tutorial. ACS Meas. Sci. Au 2023, 3 (3), 162–193.
-https://doi.org/10.1021/acsmeasuresciau.2c00070.</li>
-<li>Lazanas, A. Ch.; Prodromidis, M. I. Correction to “Electrochemical
-Impedance Spectroscopy─a Tutorial.” ACS Meas. Sci. Au 2025, 5 (1),
-156–156. https://doi.org/10.1021/acsmeasuresciau.5c00007.</li>
-<li>Ariyoshi, K.; Mineshige, A.; Takeno, M.; Fukutsuka, T.; Abe, T.;
-Uchida, S.; Siroma, Z. Electrochemical Impedance Spectroscopy Part 2:
-Applications. Electrochemistry 2022, 90 (10), 102008–102008.
-https://doi.org/10.5796/electrochemistry.22-66080.</li>
-<li>Ariyoshi, K.; Siroma, Z.; Mineshige, A.; Takeno, M.; Fukutsuka, T.;
-Abe, T.; Uchida, S. Electrochemical Impedance Spectroscopy Part 1:
-Fundamentals. Electrochemistry 2022, 90 (10), 102007–102007.
-https://doi.org/10.5796/electrochemistry.22-66071.</li>
-<li>Hu, W.; Peng, Y.; Wei, Y.; Yang, Y. Application of Electrochemical
-Impedance Spectroscopy to Degradation and Aging Research of Lithium-Ion
-Batteries. J. Phys. Chem. C 2023, 127 (9), 4465–4495.
-https://doi.org/10.1021/acs.jpcc.3c00033.</li>
-</ol>
-
-                    
-                        
-
-
-                    
-                    
-                        <p>
-                            <a
-                                href="/2025/05/27/%E7%A7%91%E7%A0%94/first%20stage/%E7%94%B5%E5%8C%96%E5%AD%A6%E9%98%BB%E6%8A%97%E8%B0%B1/#post-footer"
                                 class="postShorten-excerpt_link link"
                                 aria-label=""
                             >
