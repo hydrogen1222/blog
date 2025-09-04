@@ -242,6 +242,75 @@
                     
                         <a
                             class="link-unstyled"
+                            href="/2025/06/23/%E9%87%8F%E5%AD%90%E5%8C%96%E5%AD%A6/%E4%BD%BF%E7%94%A8IRI%E5%88%86%E6%9E%90%E4%BD%93%E7%B3%BB%E7%9A%84%E5%BC%B1%E7%9B%B8%E4%BA%92%E4%BD%9C%E7%94%A8/"
+                            aria-label=": 使用IRI方法进行弱相互作用分析"
+                        >
+                            使用IRI方法进行弱相互作用分析
+                        </a>
+                    
+                </h1>
+                <div class="postShorten-meta">
+    <time datetime="2025-06-23T09:20:02+08:00">
+	
+		    Jun 23, 2025
+    	
+    </time>
+    
+        <span>in </span>
+        
+    <a class="category-link" href="/all-categories/%E4%BB%8E%E9%9B%B6%E5%BC%80%E5%A7%8B%E7%9A%84%E7%A7%91%E7%A0%94%E4%B9%8B%E6%97%85/">从零开始的科研之旅</a>, <a class="category-link" href="/all-categories/%E4%BB%8E%E9%9B%B6%E5%BC%80%E5%A7%8B%E7%9A%84%E7%A7%91%E7%A0%94%E4%B9%8B%E6%97%85/first-stage/">first stage</a>
+
+
+    
+</div>
+
+            </div>
+            
+                <div class="postShorten-content">
+                    <h2 id="iri等值面图">IRI等值面图</h2>
+<p>启动Multiwfn，载入输入文件，我使用的输入文件是<code>.fchk</code>文件，别的如<code>.wfn</code>文件等也可以</p>
+<p>使用功能<code>20 Visual study of weak interaction</code>，进行弱相互作用分析，选择<code>4 IRI: Interaction region indicator analysis (Chemistry-Methods, 1, 231)</code>进行IRI分析，选择精度，这里我选的是高精度<code>3 High quality grid,   covering whole system, about 1728000 points in total</code>（精度是根据格点数目确定的，对于巨大体系可能高精度也不够用需要手动指定格点数目）</p>
+<figure>
+<img src="image-20250628101522602.png" alt="已完成IRI分析" />
+<figcaption aria-hidden="true">已完成IRI分析</figcaption>
+</figure>
+<p>至此，格点计算已经完成，然后我们导出数据<code>3 Output cube files to func1.cub and func2.cub in current folder</code>，借助<code>VMD</code>
+分子可视化程序画出更好看的图，将载入文件所在文件夹下导出的<code>func1.cub</code>和<code>func2.cub</code>(这两个文件分别记录的是sign(<span
+class="math inline"><em>λ</em><sub>2</sub></span>)ρ和IRI格点数据)复制到VMD程序的根目录并在根目录下新建一个脚本文件，名为<code>IRIfill.vmd</code>，内容为：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><span class="line">mol new func1.cub</span><br><span class="line">mol addfile func2.cub</span><br><span class="line">mol delrep 0 top</span><br><span class="line">mol representation CPK 1.0 0.3 18.0 16.0</span><br><span class="line">mol addrep top</span><br><span class="line">mol representation Isosurface 1.0 1 0 0 1 1</span><br><span class="line">mol color Volume 0</span><br><span class="line">mol addrep top</span><br><span class="line">mol scaleminmax top 1 -0.04 0.02</span><br><span class="line">mol modstyle 0 top CPK 0.700000 0.300000 18.000000 16.000000</span><br><span class="line">color scale midpoint 0.666</span><br><span class="line">color scale method BGR</span><br><span class="line">color Display Background white</span><br><span class="line">axes location Off</span><br><span class="line">display depthcue off</span><br><span class="line">display rendermode GLSL</span><br><span class="line">light 3 on</span><br><span class="line">color Element N iceblue</span><br><span class="line">mol modcolor 0 top Element</span><br></pre></td></tr></table></figure>
+<p>然后启动VMD，在文本窗口中输入<code>source IRIfill.vmd</code>，</p>
+
+                    
+                        
+
+
+                    
+                    
+                        <p>
+                            <a
+                                href="/2025/06/23/%E9%87%8F%E5%AD%90%E5%8C%96%E5%AD%A6/%E4%BD%BF%E7%94%A8IRI%E5%88%86%E6%9E%90%E4%BD%93%E7%B3%BB%E7%9A%84%E5%BC%B1%E7%9B%B8%E4%BA%92%E4%BD%9C%E7%94%A8/#post-footer"
+                                class="postShorten-excerpt_link link"
+                                aria-label=""
+                            >
+                                Comment and share
+                            </a>
+                        </p>
+                    
+                </div>
+            
+        </div>
+        
+    </article>
+    
+    
+    <article class="postShorten postShorten--thumbnailimg-bottom">
+        <div class="postShorten-wrap">
+            
+            <div class="postShorten-header">
+                <h1 class="postShorten-title">
+                    
+                        <a
+                            class="link-unstyled"
                             href="/2025/06/06/%E7%A7%91%E7%A0%94/first%20stage/%E5%85%B3%E4%BA%8ERietveld%E7%B2%BE%E4%BF%AE/"
                             aria-label=": 从零开始的Rietveld精修"
                         >
@@ -1974,104 +2043,6 @@ class="math inline">$\frac{3}{4},\frac{3}{4},\frac{1}{4}$</span>)与Sn(0.5,0.5,0
                         <p>
                             <a
                                 href="/2025/05/14/%E7%A7%91%E7%A0%94/VASP/Starry%20Sky/%E5%88%9D%E5%AD%A6ELF%E7%94%B5%E5%AD%90%E5%B1%80%E5%9F%9F%E5%8C%96%E5%87%BD%E6%95%B0%E7%9A%84%E8%AE%A1%E7%AE%97%E4%B8%8E%E5%88%86%E6%9E%90/#post-footer"
-                                class="postShorten-excerpt_link link"
-                                aria-label=""
-                            >
-                                Comment and share
-                            </a>
-                        </p>
-                    
-                </div>
-            
-        </div>
-        
-    </article>
-    
-    
-    <article class="postShorten postShorten--thumbnailimg-bottom">
-        <div class="postShorten-wrap">
-            
-            <div class="postShorten-header">
-                <h1 class="postShorten-title">
-                    
-                        <a
-                            class="link-unstyled"
-                            href="/2025/05/12/%E7%A7%91%E7%A0%94/VASP/2025-04-21-2025%E5%B9%B44%E6%9C%88Intel%E5%B9%B3%E5%8F%B0VASP.6.4.3%E7%9A%84%E7%BC%96%E8%AF%91%E5%AE%89%E8%A3%85/"
-                            aria-label=": 2025年5月Intel平台VASP.6.4.3的编译安装"
-                        >
-                            2025年5月Intel平台VASP.6.4.3的编译安装
-                        </a>
-                    
-                </h1>
-                <div class="postShorten-meta">
-    <time datetime="2025-05-12T22:40:00+08:00">
-	
-		    May 12, 2025
-    	
-    </time>
-    
-        <span>in </span>
-        
-    <a class="category-link" href="/all-categories/%E4%BB%8E%E9%9B%B6%E5%BC%80%E5%A7%8B%E7%9A%84%E7%A7%91%E7%A0%94%E4%B9%8B%E6%97%85/">从零开始的科研之旅</a>, <a class="category-link" href="/all-categories/%E4%BB%8E%E9%9B%B6%E5%BC%80%E5%A7%8B%E7%9A%84%E7%A7%91%E7%A0%94%E4%B9%8B%E6%97%85/VASP/">VASP</a>
-
-
-    
-</div>
-
-            </div>
-            
-                <div class="postShorten-content">
-                    <h1
-id="年5月intel平台vasp.6.4.3的编译安装">2025年5月Intel平台VASP.6.4.3的编译安装</h1>
-<hr />
-<h2 id="wsl的安装">WSL的安装</h2>
-<p>选择<code>Arch Linux</code>，个人比较熟悉，仅供学习使用不作为稳定的生产力环境，配置如下，两颗E5
-2676 v3</p>
-<figure>
-<img src="image-20250421212627422-1756610835113-1.png"
-alt="洋垃圾配置" />
-<figcaption aria-hidden="true">洋垃圾配置</figcaption>
-</figure>
-<p>打开<code>powershell</code>或者<code>终端</code>，输入<code>wsl --install archlinux</code>以自动安装，这一步需要使用代理(MAGIC)，主机上使用<code>Clash-Verge</code>进行代理（运气好也能连上），<code>终端</code>中输入：</p>
-<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">set</span> http_proxy=http://127.0.0.1:7897 <span class="comment">#自己使用的端口是7897，http代理</span></span><br><span class="line"><span class="built_in">set</span> https_proxy=http://127.0.0.1:7897 <span class="comment">#自己使用的端口是7897，https代理</span></span><br></pre></td></tr></table></figure>
-<p>如果没有条件使用代理，也可以手动安装，参考<code>Arch Wiki</code>，https://wiki.archlinuxcn.org/wiki/%E5%9C%A8_WSL_%E4%B8%8A%E5%AE%89%E8%A3%85_Arch_Linux，手动下载<code>.wsl</code>镜像，然后安装</p>
-<p>笔者计算机C盘性能太差，于是想要将wsl2迁移到另一个分区</p>
-<p>安装成功</p>
-<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br></pre></td><td class="code"><pre><span class="line">[root@NAS ~]# fastfetch</span><br><span class="line">                  -`                     root@NAS</span><br><span class="line">                 .o+`                    --------</span><br><span class="line">                `ooo/                    OS: Arch Linux x86_64</span><br><span class="line">               `+oooo:                   Host: Windows Subsystem <span class="keyword">for</span> Linux - archlinux (2.4.12)</span><br><span class="line">              `+oooooo:                  Kernel: Linux 5.15.167.4-microsoft-standard-WSL2</span><br><span class="line">              -+oooooo+:                 Uptime: 5 hours, 16 mins</span><br><span class="line">            `/:-:++oooo+:                Packages: 155 (pacman)</span><br><span class="line">           `/++++/+++++++:               Shell: bash 5.2.37</span><br><span class="line">          `/++++++++++++++:              WM: WSLg 1.0.65 (Wayland)</span><br><span class="line">         `/+++ooooooooooooo/`            Terminal: xterm-256color</span><br><span class="line">        ooosssso++osssssso+`           CPU: Intel(R) Xeon(R) E5-2676 v3 (48) @ 2.39 GHz</span><br><span class="line">       .oossssso-````/ossssss+`          Memory: 1.09 GiB / 15.57 GiB (7%)</span><br><span class="line">      -osssssso.      :ssssssso.         Swap: 304.95 MiB / 4.00 GiB (7%)</span><br><span class="line">     :osssssss/        osssso+++.        Disk (/): 18.67 GiB / 1006.85 GiB (2%) - ext4</span><br><span class="line">    /ossssssss/        +ssssooo/-        Disk (/mnt/c): 159.05 GiB / 237.01 GiB (67%) - 9p</span><br><span class="line">  `/ossssso+/:-        -:/+osssso+-      Disk (/mnt/d): 13.16 TiB / 14.55 TiB (90%) - 9p</span><br><span class="line"> `+sso+:-`                 `.-/+oso:     Disk (/mnt/e): 1.70 TiB / 3.64 TiB (47%) - 9p</span><br><span class="line">`++:.                           `-/+/    Disk (/mnt/f): 49.45 GiB / 476.94 GiB (10%) - 9p</span><br><span class="line">.`                                 `/    Disk (/mnt/g): 25.16 TiB / 29.10 TiB (86%) - 9p</span><br><span class="line">                                         Local IP (eth0): 172.31.36.99/20</span><br><span class="line">                                         Locale: en_US.UTF-8</span><br></pre></td></tr></table></figure>
-<h2 id="编译器的安装">编译器的安装</h2>
-<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">pacman -S make</span><br><span class="line">pacman -S cmake</span><br><span class="line">pacman -S gcc</span><br><span class="line">pacman -S gcc-fortran</span><br><span class="line"><span class="comment">####发现gcc和gfortran编译器太新，会编报错(C23)，故降级软件包</span></span><br><span class="line"><span class="comment">#添加中科大源来安装yay</span></span><br><span class="line">pacman -Syy yay</span><br><span class="line">yay -S downgrade <span class="comment">#安装降级工具</span></span><br><span class="line">downgrade -S gcc-libs <span class="comment">#选择12.1.0版本，安装gcc的依赖</span></span><br><span class="line">downgrade -S gcc <span class="comment">#安装gcc，选择12.1.0版本</span></span><br><span class="line">downgrade -S gcc-fortran <span class="comment">#安装gforran，选择12.1.0版本</span></span><br></pre></td></tr></table></figure>
-<p>前往Intel官网下载oneAPI BaseTool
-kithttps://www.intel.com/content/www/us/en/developer/tools/oneapi/base-toolkit-download.html?packages=oneapi-toolkit&amp;oneapi-toolkit-os=linux&amp;oneapi-lin=online</p>
-<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">chmod</span> +x xxxxxxxxxx.sh <span class="comment">#赋予下载下来的sh文件可执行权限</span></span><br><span class="line">xxxx.sh <span class="comment">#运行sh文件</span></span><br></pre></td></tr></table></figure>
-<p>oneAPI BaseTool kit不需要全部安装，只需安装MKL部分，</p>
-<p>HPC也只需安装一部分</p>
-<p>此处博主踩了较多的坑：</p>
-<ul>
-<li>编译器采用2022版，不可采用过新编译器
-<ul>
-<li>2024年10月后，Intel删除了ifort编译器</li>
-</ul></li>
-<li>gcc编译器不可太新，否则编译某些<code>fortran</code>模块会报错，博主从14降级到了12.1.0</li>
-</ul>
-<h2 id="vasp.6.4.3的编译安装">VASP.6.4.3的编译安装</h2>
-<p>源码包可以去各大私密性较强的论坛或者微信公众号获取，仅供个人学习使用，不用于学术、商业用途</p>
-<p>选择<code>arch/</code>目录中的模板<code>makefile.include.intel</code>，复制到<code>.</code>(上一层目录)，并修改名称为<code>makefile.include</code>，修改目录如下</p>
-<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># Default precompiler options</span></span><br><span class="line">CPP_OPTIONS = -DHOST=\&quot;LinuxIFC\&quot; \</span><br><span class="line">              -DMPI -DMPI_BLOCK=8000 -Duse_collective \</span><br><span class="line">              -DscaLAPACK \</span><br><span class="line">              -DCACHE_SIZE=4000 \</span><br><span class="line">              -Davoidalloc \</span><br><span class="line">              -Dvasp6 \</span><br><span class="line">              -Duse_bse_te \</span><br><span class="line">              -Dtbdyn \</span><br><span class="line">              -Dfock_dblbuf</span><br><span class="line"></span><br><span class="line">CPP         = fpp -f_com=no -free -w0  $*$(FUFFIX) $*$(SUFFIX) $(CPP_OPTIONS)</span><br><span class="line"></span><br><span class="line">FC          = mpiifort</span><br><span class="line">FCL         = mpiifort</span><br><span class="line"></span><br><span class="line">FREE        = -free -names lowercase</span><br><span class="line"></span><br><span class="line">FFLAGS      = -assume byterecl -w</span><br><span class="line"></span><br><span class="line">OFLAG       = -O2 -xhost  <span class="comment">#添加-xhost标记</span></span><br><span class="line">OFLAG_IN    = $(OFLAG)</span><br><span class="line">DEBUG       = -O0</span><br><span class="line"></span><br><span class="line">OBJECTS     = fftmpiw.o fftmpi_map.o fftw3d.o fft3dlib.o</span><br><span class="line">OBJECTS_O1 += fftw3d.o fftmpi.o fftmpiw.o</span><br><span class="line">OBJECTS_O2 += fft3dlib.o</span><br><span class="line"></span><br><span class="line"><span class="comment"># For what used to be vasp.5.lib</span></span><br><span class="line">CPP_LIB     = $(CPP)</span><br><span class="line">FC_LIB      = $(FC)</span><br><span class="line">CC_LIB      = icc</span><br><span class="line">CFLAGS_LIB  = -O</span><br><span class="line">FFLAGS_LIB  = -O1</span><br><span class="line">FREE_LIB    = $(FREE)</span><br><span class="line"></span><br><span class="line">OBJECTS_LIB = linpack_double.o</span><br><span class="line"></span><br><span class="line"><span class="comment"># For the parser library</span></span><br><span class="line">CXX_PARS    = icpc</span><br><span class="line">LLIBS       = -lstdc++</span><br><span class="line"></span><br><span class="line"><span class="comment">##</span></span><br><span class="line"><span class="comment">## Customize as of this point! Of course you may change the preceding</span></span><br><span class="line"><span class="comment">## part of this file as well if you like, but it should rarely be</span></span><br><span class="line"><span class="comment">## necessary ...</span></span><br><span class="line"><span class="comment">##</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># When compiling on the target machine itself, change this to the</span></span><br><span class="line"><span class="comment"># relevant target when cross-compiling for another architecture</span></span><br><span class="line">VASP_TARGET_CPU ?= -xHOST</span><br><span class="line">FFLAGS     += $(VASP_TARGET_CPU)</span><br><span class="line"></span><br><span class="line"><span class="comment"># Intel MKL (FFTW, BLAS, LAPACK, and scaLAPACK)</span></span><br><span class="line"><span class="comment"># (Note: for Intel Parallel Studio&#x27;s MKL use -mkl instead of -qmkl)</span></span><br><span class="line">FCL        += -qmkl=sequential</span><br><span class="line">MKLROOT    ?= /opt/intel/oneapi/mkl/2022.1.0 <span class="comment">#一定要添加MKLROOT的目录，否则会报错</span></span><br><span class="line"></span><br><span class="line"></span><br><span class="line">/home/storm/intel/oneapi/mkl/2022.1.0</span><br><span class="line">LLIBS      += -L$(MKLROOT)/lib/intel64 -lmkl_scalapack_lp64 -lmkl_blacs_intelmpi_lp64</span><br><span class="line">INCS        =-I$(MKLROOT)/include/fftw</span><br><span class="line"></span><br><span class="line"><span class="comment"># HDF5-support (optional but strongly recommended)</span></span><br><span class="line"><span class="comment">#CPP_OPTIONS+= -DVASP_HDF5</span></span><br><span class="line"><span class="comment">#HDF5_ROOT  ?= /path/to/your/hdf5/installation</span></span><br><span class="line"><span class="comment">#LLIBS      += -L$(HDF5_ROOT)/lib -lhdf5_fortran</span></span><br><span class="line"><span class="comment">#INCS       += -I$(HDF5_ROOT)/include</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># For the VASP-2-Wannier90 interface (optional)</span></span><br><span class="line"><span class="comment">#CPP_OPTIONS    += -DVASP2WANNIER90</span></span><br><span class="line"><span class="comment">#WANNIER90_ROOT ?= /path/to/your/wannier90/installation</span></span><br><span class="line"><span class="comment">#LLIBS          += -L$(WANNIER90_ROOT)/lib -lwannier</span></span><br></pre></td></tr></table></figure>
-<p>然后开始编译</p>
-<p>发现使用命令<code>make all -j48</code>会编译报错</p>
-<p>于是改为官方wiki的命令<code>make DEPS=1 -j48</code>，编译成功</p>
-<h2 id="测试">测试</h2>
-<p><code>make test</code>进行测试，有一些报错，懒得管了、、、能跑就行</p>
-
-                    
-                        
-
-
-                    
-                    
-                        <p>
-                            <a
-                                href="/2025/05/12/%E7%A7%91%E7%A0%94/VASP/2025-04-21-2025%E5%B9%B44%E6%9C%88Intel%E5%B9%B3%E5%8F%B0VASP.6.4.3%E7%9A%84%E7%BC%96%E8%AF%91%E5%AE%89%E8%A3%85/#post-footer"
                                 class="postShorten-excerpt_link link"
                                 aria-label=""
                             >

@@ -242,6 +242,99 @@
                     
                         <a
                             class="link-unstyled"
+                            href="/2025/04/14/%E7%A7%91%E7%A0%94/VASP/formula/"
+                            aria-label=": 一些简单的Linux命令"
+                        >
+                            一些简单的Linux命令
+                        </a>
+                    
+                </h1>
+                <div class="postShorten-meta">
+    <time datetime="2025-04-14T16:40:40+08:00">
+	
+		    Apr 14, 2025
+    	
+    </time>
+    
+        <span>in </span>
+        
+    <a class="category-link" href="/all-categories/%E4%BB%8E%E9%9B%B6%E5%BC%80%E5%A7%8B%E7%9A%84%E7%A7%91%E7%A0%94%E4%B9%8B%E6%97%85/">从零开始的科研之旅</a>, <a class="category-link" href="/all-categories/%E4%BB%8E%E9%9B%B6%E5%BC%80%E5%A7%8B%E7%9A%84%E7%A7%91%E7%A0%94%E4%B9%8B%E6%97%85/VASP/">VASP</a>
+
+
+    
+</div>
+
+            </div>
+            
+                <div class="postShorten-content">
+                    <p>使用for循环批量创建文件夹</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">for</span> i <span class="keyword">in</span> &#123;2..9&#125;; <span class="keyword">do</span> <span class="built_in">cp</span> 0.01 0.0<span class="variable">$i</span> -r ; <span class="keyword">done</span></span><br></pre></td></tr></table></figure>
+<p>使用sed命令不打开文件而进行替换</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">sed <span class="string">&#x27;3s/0.01/0.02/g&#x27;</span> ICNAR</span><br></pre></td></tr></table></figure>
+<blockquote>
+<p>对第三行(3)出现的所有0.01(g,全局替换)进行替换(s表示替换操作)，替换为0.02，只输出替换后的结果</p>
+<p>sed ‘3/0.01/0.02/g’ INCAR &gt; INCAR最后什么也没有</p>
+<p>加上-i参数可以直接进行编辑</p>
+</blockquote>
+<p>结合for循环和sed批量命名</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">[storm@cachyos-x8664 ex03]$ <span class="keyword">for</span> i <span class="keyword">in</span> *; <span class="keyword">do</span> sed -i <span class="string">&quot;3s/0.05/<span class="variable">$i</span>/g&quot;</span> <span class="variable">$i</span>/INCAR ; <span class="keyword">done</span></span><br><span class="line">[storm@cachyos-x8664 ex03]$ grep SIGMA */INCAR</span><br><span class="line">0.01/INCAR:SIGMA = 0.01</span><br><span class="line">0.02/INCAR:SIGMA = 0.02</span><br><span class="line">0.03/INCAR:SIGMA = 0.03</span><br><span class="line">0.04/INCAR:SIGMA = 0.04</span><br><span class="line">0.05/INCAR:SIGMA = 0.05</span><br><span class="line">0.06/INCAR:SIGMA = 0.06</span><br><span class="line">0.07/INCAR:SIGMA = 0.07</span><br><span class="line">0.08/INCAR:SIGMA = 0.08</span><br><span class="line">0.09/INCAR:SIGMA = 0.09</span><br></pre></td></tr></table></figure>
+<blockquote>
+<p>使用双引号以读取变量的值</p>
+</blockquote>
+<p>注意这里使用的是英文括号而不是花括号</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">for</span> i <span class="keyword">in</span> $(<span class="built_in">seq</span> 8 2 16); <span class="keyword">do</span> <span class="built_in">cp</span> 888/POSCAR <span class="variable">$&#123;i&#125;</span><span class="variable">$&#123;i&#125;</span><span class="variable">$&#123;i&#125;</span>/POSCAR; <span class="keyword">done</span></span><br></pre></td></tr></table></figure>
+<p>“提交任务的命令”</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">yhbatch -p gsc -N 1 -J <span class="built_in">test</span> job_sub </span><br></pre></td></tr></table></figure>
+<p>找能量的命令</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">grep  without OUTCAR | <span class="built_in">tail</span> -n 1</span><br><span class="line">grep <span class="string">&#x27;  without&#x27;</span> OUTCAR | <span class="built_in">tail</span> -n 1  <span class="comment"># 本人常用的是这个</span></span><br><span class="line">grep sigma OUTCAR | <span class="built_in">tail</span> -n 1 </span><br></pre></td></tr></table></figure>
+<p>提交任务，多个文件夹</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">for</span> i <span class="keyword">in</span> *; <span class="keyword">do</span> <span class="built_in">cd</span> <span class="variable">$i</span> ; vasp1; <span class="built_in">cd</span> <span class="variable">$OLDPWD</span>; <span class="keyword">done</span></span><br></pre></td></tr></table></figure>
+<blockquote>
+<p>alias vasp1=‘mpirun -n 8 vasp’</p>
+</blockquote>
+<p>输出时间信息</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">for</span> i <span class="keyword">in</span> *0; <span class="keyword">do</span> <span class="built_in">echo</span> -e  <span class="variable">$i</span> <span class="string">&quot;\t&quot;</span> $(grep User <span class="variable">$i</span>/OUTCAR | awk <span class="string">&#x27;&#123;print $4&#125;&#x27;</span>); <span class="keyword">done</span></span><br></pre></td></tr></table></figure>
+<p>绘图脚本</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> matplotlib.pyplot <span class="keyword">as</span> plt</span><br><span class="line"><span class="keyword">import</span> numpy <span class="keyword">as</span> np</span><br><span class="line"></span><br><span class="line">x,y = np.loadtxt(<span class="string">&#x27;data.dat&#x27;</span>, delimiter =  <span class="string">&#x27;,&#x27;</span>,</span><br><span class="line">      usecols=(<span class="number">0</span>,<span class="number">1</span>), unpack=<span class="literal">True</span>)</span><br><span class="line">plt.xlabel(<span class="string">&#x27;ENCUT / eV&#x27;</span>)</span><br><span class="line">plt.ylabel(<span class="string">&#x27;Ttme / S&#x27;</span>)</span><br><span class="line">plt.plot(x,y, <span class="string">&#x27;rs-&#x27;</span>, linewidth=<span class="number">2.0</span>)</span><br><span class="line">plt.show()</span><br></pre></td></tr></table></figure>
+<p>在vim中进行替换</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">: 10,30s/$/T T T/g</span><br></pre></td></tr></table></figure>
+<blockquote>
+<p>$表示每一行的末尾</p>
+</blockquote>
+<p>提取能量（用制表符TAB进行分隔）</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">for</span> i <span class="keyword">in</span> [0-9]*/; <span class="keyword">do</span></span><br><span class="line">  <span class="built_in">dir</span>=<span class="variable">$&#123;i%/&#125;</span></span><br><span class="line">  energy=$(grep <span class="string">&#x27;  without&#x27;</span> <span class="string">&quot;<span class="variable">$dir</span>/OUTCAR&quot;</span> | <span class="built_in">tail</span> -n 1 | awk <span class="string">&#x27;&#123;print $7&#125;&#x27;</span>)</span><br><span class="line">  <span class="built_in">printf</span> <span class="string">&quot;%s\t%s\n&quot;</span> <span class="string">&quot;<span class="variable">$dir</span>&quot;</span> <span class="string">&quot;<span class="variable">$energy</span>&quot;</span></span><br><span class="line"><span class="keyword">done</span> &gt; data</span><br></pre></td></tr></table></figure>
+
+                    
+                        
+
+
+                    
+                    
+                        <p>
+                            <a
+                                href="/2025/04/14/%E7%A7%91%E7%A0%94/VASP/formula/#post-footer"
+                                class="postShorten-excerpt_link link"
+                                aria-label=""
+                            >
+                                Comment and share
+                            </a>
+                        </p>
+                    
+                </div>
+            
+        </div>
+        
+    </article>
+    
+    
+    <article class="postShorten postShorten--thumbnailimg-bottom">
+        <div class="postShorten-wrap">
+            
+            <div class="postShorten-header">
+                <h1 class="postShorten-title">
+                    
+                        <a
+                            class="link-unstyled"
                             href="/2025/04/14/%E7%A7%91%E7%A0%94/VASP/Starry%20Sky/VASP%E4%B8%AD%E7%9A%84%E5%90%84%E7%A7%8D%E6%8A%A5%E9%94%99/"
                             aria-label=": VASP中的各种报错"
                         >
@@ -2268,376 +2361,6 @@ paying my rent in person.</p>
                         <p>
                             <a
                                 href="/2025/03/22/Stormy%20English/%E8%B5%96%E4%B8%96%E9%9B%84%E9%AB%98%E7%BA%A7%E7%BE%8E%E8%AF%AD%E6%95%99%E7%A8%8B/Lesson%207/#post-footer"
-                                class="postShorten-excerpt_link link"
-                                aria-label=""
-                            >
-                                Comment and share
-                            </a>
-                        </p>
-                    
-                </div>
-            
-        </div>
-        
-    </article>
-    
-    
-    <article class="postShorten postShorten--thumbnailimg-bottom">
-        <div class="postShorten-wrap">
-            
-            <div class="postShorten-header">
-                <h1 class="postShorten-title">
-                    
-                        <a
-                            class="link-unstyled"
-                            href="/2025/03/21/%E9%AB%98%E5%88%86%E5%AD%90%E7%89%A9%E7%90%86/%E9%AB%98%E7%89%A9%E7%AC%AC%E4%B8%89%E7%AB%A0/"
-                            aria-label=": 高分子溶液"
-                        >
-                            高分子溶液
-                        </a>
-                    
-                </h1>
-                <div class="postShorten-meta">
-    <time datetime="2025-03-21T20:48:29+08:00">
-	
-		    Mar 21, 2025
-    	
-    </time>
-    
-        <span>in </span>
-        
-    <a class="category-link" href="/all-categories/%E9%AB%98%E5%88%86%E5%AD%90%E7%89%A9%E7%90%86/">高分子物理</a>
-
-
-    
-</div>
-
-            </div>
-            
-                <div class="postShorten-content">
-                    <h1 id="高分子溶液">高分子溶液</h1>
-<p>溶液：溶质+溶剂</p>
-<ul>
-<li>气态溶液（混合气体）</li>
-<li>液态溶液</li>
-<li>固态溶液（如合金）</li>
-</ul>
-<p><strong>高分子溶液</strong>：高聚物以分子状态分散在溶剂中所形成的均相混合物，<strong>热力学上稳定</strong>的二元或多元体系</p>
-<ul>
-<li>未硫化的天然橡胶（生胶）+汽油，苯、甲苯</li>
-<li>HDPE+四氢萘</li>
-<li>聚乙烯醇+水</li>
-</ul>
-<p>高分子溶液的用途</p>
-<ul>
-<li>稀溶液（C&lt;1%）：例如分子量测定
-<ul>
-<li>热力学性质的研究</li>
-<li>动力学性质的研究（溶液的沉降，扩散，粘度等）</li>
-<li>高分子在溶液中的形态尺寸（柔顺性，支化情况
-等）研究其相互作用（包括高分子链段间，链段与溶剂分子间的相互作用）</li>
-<li>测量分子量，分子量分布，测定内聚能密度，计算 硫化胶的交联密度等</li>
-</ul></li>
-<li>浓溶液（C&gt;5%）：纺丝、油漆、胶粘剂、增塑</li>
-</ul>
-<figure>
-<img src="image-20250321205656885.png" alt="浓溶液的用途" />
-<figcaption aria-hidden="true">浓溶液的用途</figcaption>
-</figure>
-<p>==浓溶液和稀溶液最本质的区别==：稀溶液中单个大分子链线团是孤立存在的，相互之间没有交叠；而在浓厚体系中，大分子链之间发生聚集和缠结。</p>
-<h2 id="高分子的溶解">高分子的溶解</h2>
-<h3 id="溶解过程">溶解过程</h3>
-<ul>
-<li>小分子溶解：溶质向溶剂中扩散</li>
-<li>高分子溶解：
-<ul>
-<li>线形无定形高分子
-<ul>
-<li>混合初期：单项扩散，溶胀</li>
-<li>混合后期：双向扩散，溶解</li>
-</ul></li>
-<li><figure>
-<img src="image-20250321210055090.png" alt="先溶胀，后溶解" />
-<figcaption aria-hidden="true">先溶胀，后溶解</figcaption>
-</figure></li>
-<li>线形结晶高分子——先溶胀无定形区，在晶体熔点附近的温度使晶体解体后溶解
-<ul>
-<li><figure>
-<img
-src="param($match)%20#%20URL%20瑙ｇ爜%20%5BSystem.Uri%5D::UnescapeDataString($match.Value)%20/image-20250321210140742.png"
-alt="先熔融，后溶解" />
-<figcaption aria-hidden="true">先熔融，后溶解</figcaption>
-</figure></li>
-</ul></li>
-<li>交联高分子——达到溶胀平衡后分子扩散即告停止，<strong>只溶胀，不完全溶解</strong>
-<ul>
-<li><strong>可溶部分：溶胶</strong></li>
-<li>**不可溶部分：凝胶、只能溶胀</li>
-<li>高度交联（C阶热固性树脂）：不溶胀**</li>
-</ul></li>
-</ul></li>
-</ul>
-<h3 id="溶剂的选择">溶剂的选择</h3>
-<ul>
-<li><p>极性相近</p>
-<figure>
-<img src="image-20250321210504152.png" alt="高分子和溶剂的极性相似" />
-<figcaption aria-hidden="true">高分子和溶剂的极性相似</figcaption>
-</figure></li>
-<li><p>溶剂化作用——具有相异电性的两种基团，极性强弱越接近，彼此间相互作用越强、结合力越大。</p></li>
-</ul>
-<figure>
-<img src="image-20250321210606908.png" alt="溶剂化作用" />
-<figcaption aria-hidden="true">溶剂化作用</figcaption>
-</figure>
-<p>==溶剂-高分子相互作用&gt;高分子-高分子间相互作用==</p>
-<ul>
-<li>内聚能密度或溶度参数相近</li>
-</ul>
-<p><span class="math display">$$
-\Delta \rm{E}=\Delta \rm{H}-\rm{RT}
-$$</span></p>
-<p><span class="math display">$$
-\rm{CED=\dfrac{\Delta E}{V_0}}
-$$</span></p>
-<p><span class="math display">$$
-\rm{\delta=\sqrt{CED}=\dfrac{\sum
-F(基团摩尔引力常数)}{V}=\dfrac{\rho\sum F}{M_0}}
-$$</span></p>
-<figure>
-<img src="image-20250410162632079.png" alt="溶度参数计算实例" />
-<figcaption aria-hidden="true">溶度参数计算实例</figcaption>
-</figure>
-<figure>
-<img src="image-20250321211331133.png" alt="image-20250321211331133" />
-<figcaption aria-hidden="true">image-20250321211331133</figcaption>
-</figure>
-<p>溶度参数是具有加和性的 <span
-class="math display"><em>δ</em><sub><em>m</em></sub> = <em>δ</em><sub>1</sub><em>ϕ</em><sub>1</sub> + <em>δ</em><sub>2</sub><em>ϕ</em><sub>2</sub></span>
-==选择同高分子溶质溶度参数相近的溶剂通常有利于溶解==</p>
-<figure>
-<img src="image-20250410162925461.png" alt="计算实例" />
-<figcaption aria-hidden="true">计算实例</figcaption>
-</figure>
-<p>==真实的溶解情况需要将三种因素综合考虑==</p>
-<ul>
-<li><strong>PAN（聚丙烯腈、强极性）：</strong>包括合成纤维（如腈纶，也称人造羊毛）。溶于DMF（二甲基甲酰胺）、乙腈（强极性），但不溶解于与它δ值相近的乙醇、甲醇等。因为PAN极性很强，而乙醇、甲醇等溶剂极性太弱。**</li>
-<li>**
-<strong>PS（聚苯乙烯、弱极性）：</strong>脆性塑料。溶于甲苯、氯仿、苯胺（弱极性）和苯（非极性）。不能溶解在与它δ值相近的丙酮中，因为PS弱极性，而丙酮强极性。</li>
-</ul>
-<h3 id="热力学分析">热力学分析</h3>
-<p><span class="math display">$$
-\rm{\Delta G_m=\Delta H_m -T \Delta S_m}
-$$</span></p>
-<ul>
-<li><p>极性高分子+极性溶液</p>
-<ul>
-<li>溶解放热，<span class="math inline">$\rm{\Delta G_m
-&lt;0}$</span>，溶解过程==能自发进行==</li>
-</ul></li>
-<li><p>非极性溶液——Hildebrand公式</p>
-<ul>
-<li></li>
-</ul>
-<p><span class="math display">$$
-\rm{\Delta  H_m=V\phi_1\phi_2(\delta_1-\delta_2)^2}
-$$</span></p>
-<ul>
-<li><span
-class="math inline">$\rm{ΔH_M}$</span>越小越好即溶度参数尽可能接近</li>
-</ul></li>
-</ul>
-<h4 id="练习题">练习题</h4>
-<figure>
-<img src="image-20250410163916863.png" alt="练习题" />
-<figcaption aria-hidden="true">练习题</figcaption>
-</figure>
-<h2 id="高分子溶液的热力学理论">高分子溶液的热力学理论</h2>
-<p>二元混合体系中两种分子中各含<span
-class="math inline"><em>x</em><sub><em>A</em></sub></span>和<span
-class="math inline"><em>x</em><sub><em>B</em></sub></span>个单元，可有三种不同情况</p>
-<table>
-<thead>
-<tr>
-<th>溶液</th>
-<th><span
-class="math inline"><em>X</em><sub><em>A</em></sub></span></th>
-<th><span
-class="math inline"><em>X</em><sub><em>B</em></sub></span></th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td>小分子溶液</td>
-<td>1</td>
-<td>1</td>
-</tr>
-<tr>
-<td>高分子溶液</td>
-<td>1</td>
-<td>x</td>
-</tr>
-<tr>
-<td>高分子共混</td>
-<td><span class="math inline"><em>x</em><sub>1</sub></span></td>
-<td><span class="math inline"><em>x</em><sub>2</sub></span></td>
-</tr>
-</tbody>
-</table>
-<p>理想溶液的热力学性质 <span class="math display">$$
-\rm{\Delta S_m=-k[N_1\ln X_1+N_2\ln X_2]}
-$$</span></p>
-<p><span class="math display">$$
-\rm{\Delta H_m=0}
-$$</span></p>
-<p><span class="math display">$$
-\rm{\Delta V_m=0}
-$$</span></p>
-<p><span class="math display">$$
-\rm{\Delta P=P_1^0X_2}
-$$</span></p>
-<h3 id="flory-huggins理论">Flory-Huggins理论</h3>
-<p>基本假定：</p>
-<ul>
-<li>i.溶液体系虚拟为似晶格结构。一个溶剂分子占一个晶格，一个高分子分为<em>x</em>
-个链段、占<em>x</em> 个相连的晶格。</li>
-<li>ii.等几率。溶剂与链段占某个任选格子的几率正比于其在体系中的分数。</li>
-<li>iii.等构象能。高分子链构象能相等。</li>
-</ul>
-<h4 id="混合熵">混合熵</h4>
-<p><span class="math display">$$
-\mathrm{\Delta S_m=S_{溶液}-S_{高分子}=-k=[N_1\ln
-{\dfrac{N_1}{N_1+xN_2}}+N_2\ln{\dfrac{xN_2}{N_1+xN_2}}]}
-$$</span></p>
-<p><span class="math display">$$
-\phi_1=\dfrac{N_1}{N_1+xN_2}
-$$</span></p>
-<p><span class="math display">$$
-\phi_2=\dfrac{xN_2}{N_1+xN_2}
-$$</span></p>
-<p>混合体系中溶剂分子的体积分数为<span
-class="math inline"><em>ϕ</em><sub>1</sub></span>，高分子为<span
-class="math inline"><em>ϕ</em><sub>2</sub></span></p>
-<h4 id="混合焓-混合自由能">混合焓、 混合自由能</h4>
-<p>混合焓： <span
-class="math display"><em>Δ</em><em>H</em><sub><em>M</em></sub> = (<em>Z</em> − 2)<em>Δ</em><em>ε</em><sub>12</sub><em>N</em><sub>1</sub><em>ϕ</em><sub>2</sub> = <em>R</em><em>T</em><em>χ</em><sub>1</sub><em>n</em><sub>1</sub><em>ϕ</em><sub>2</sub></span>
-Flory-Huggins相互作用参数：高分子与溶剂混合过程中相互作用能的变化 <span
-class="math display">$$
-\chi_1=\dfrac{(Z-2)\Delta \varepsilon_{12}}{kT}
-$$</span></p>
-<table>
-<thead>
-<tr>
-<th>溶剂类型</th>
-<th><span
-class="math inline"><em>Δ</em><em>ε</em><sub>12</sub></span></th>
-<th><span class="math inline"><em>χ</em></span></th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td>良溶剂</td>
-<td><span
-class="math inline"><em>Δ</em><em>ε</em><sub>12</sub></span>&lt;0</td>
-<td><span class="math inline"><em>χ</em></span>&lt;0</td>
-</tr>
-<tr>
-<td>无热溶剂</td>
-<td><span
-class="math inline"><em>Δ</em><em>ε</em><sub>12</sub></span>=0</td>
-<td><span class="math inline"><em>χ</em></span>=0</td>
-</tr>
-<tr>
-<td>亚良溶剂</td>
-<td><span
-class="math inline"><em>Δ</em><em>ε</em><sub>12</sub></span>&gt;0</td>
-<td><span class="math inline"><em>χ</em></span>&gt;0</td>
-</tr>
-</tbody>
-</table>
-<p>混合自由能 <span
-class="math display"><em>Δ</em><em>G</em><sub><em>M</em></sub> = <em>R</em><em>T</em>[<em>n</em><sub>1</sub>ln <em>ϕ</em><sub>1</sub> + <em>n</em><sub>2</sub>ln <em>ϕ</em><sub>2</sub> + <em>χ</em><sub>1</sub><em>n</em><sub>1</sub><em>ϕ</em><sub>2</sub>]</span></p>
-<h4 id="偏摩尔量">偏摩尔量</h4>
-<p>在无限大的溶液体系中加入1摩尔溶质或溶剂引起热力学函数的变化称为偏摩尔量
-<span class="math display">$$
-溶剂的化学位：\Delta \mu_1=RT[\ln
-\phi_1+(1-\dfrac{1}{x})\phi_2+\chi_1\phi_1^2]
-$$</span></p>
-<h3 id="flory-krigbaum理论">Flory-Krigbaum理论</h3>
-<p>超量化学位 <span class="math display">$$
-\Delta \mu_1^E=-RT\Psi_1(1-\dfrac{\Theta}{T})\phi_2^2
-$$</span></p>
-<p><span class="math display">$$
-\Theta=\dfrac{T\kappa_1}{\Psi_1}
-$$</span></p>
-<p>一维溶胀因子<span class="math inline"><em>α</em></span></p>
-<ul>
-<li><span class="math inline"><em>α</em></span>的值描述了溶剂的性质</li>
-<li>==<span class="math inline"><em>α</em></span>越大，溶剂越良； <span
-class="math inline"><em>α</em></span>越小，溶剂越差==</li>
-<li>==<span
-class="math inline"><em>α</em></span>=1时线团为无扰尺寸，溶剂为<span
-class="math inline"><em>Θ</em></span>溶剂==</li>
-</ul>
-<p><span
-class="math inline"><em>Θ</em></span>状态——无绕状态，可==看作==理想状态</p>
-<p>此时的溶液称为Θ 溶液, 溶剂称为Θ 溶剂达到Θ 条件的温度称为Θ
-温度，具有以下性质 <span class="math display">$$
-\chi_1=\dfrac{1}{2}, \Delta \mu^E=0, \Delta G_a=0, u=0, \alpha=1
-$$</span></p>
-<h2 id="相平衡">相平衡</h2>
-<h3 id="渗透压">渗透压</h3>
-<p><span class="math display">$$
-\Pi=-\dfrac{1}{V^{'}}[\mu_1-\mu_{10}]=-\dfrac{\Delta \mu_1}{V_1^{'}}
-$$</span></p>
-<p>以<span class="math inline"><em>π</em></span>/(RTc)对浓度c作图，
-可得一条直线。 斜率为<span
-class="math inline"><em>A</em><sub>2</sub></span>,
-由截距可得数均分子量<br />
-<span class="math display">$$
-\dfrac{\pi}{RTc}=[\dfrac{1}{\overline{M_n}}+A_2c]
-$$</span></p>
-<p><span class="math display">$$
-A_2=(\dfrac{1}{2}-\chi)\dfrac{v_2^2}{v_1}
-$$</span></p>
-<ul>
-<li>良溶剂中，<span
-class="math inline"><em>A</em><sub>2</sub></span>&gt;0</li>
-<li><span class="math inline"><em>Θ</em></span>溶剂中，<span
-class="math inline"><em>A</em><sub>2</sub></span>=0</li>
-<li>不良溶剂中，<span
-class="math inline"><em>A</em><sub>2</sub></span>&lt;0</li>
-</ul>
-<h3 id="相分离">相分离</h3>
-<p><span class="math display">$$
-\phi_{2c}=\dfrac{1}{1+\sqrt{x}}
-$$</span></p>
-<p><span class="math display">$$
-\chi_{1c}=\dfrac{1}{2x}(1+\sqrt{x})^2
-$$</span></p>
-<figure>
-<img src="image-20250410172139490.png" alt="结论" />
-<figcaption aria-hidden="true">结论</figcaption>
-</figure>
-<h3 id="习题">习题</h3>
-<figure>
-<img src="image-20250410172736567.png" alt="1" />
-<figcaption aria-hidden="true">1</figcaption>
-</figure>
-<figure>
-<img src="image-20250410172906109.png" alt="2" />
-<figcaption aria-hidden="true">2</figcaption>
-</figure>
-
-                    
-                        
-
-
-                    
-                    
-                        <p>
-                            <a
-                                href="/2025/03/21/%E9%AB%98%E5%88%86%E5%AD%90%E7%89%A9%E7%90%86/%E9%AB%98%E7%89%A9%E7%AC%AC%E4%B8%89%E7%AB%A0/#post-footer"
                                 class="postShorten-excerpt_link link"
                                 aria-label=""
                             >

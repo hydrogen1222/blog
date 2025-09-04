@@ -242,6 +242,104 @@
                     
                         <a
                             class="link-unstyled"
+                            href="/2025/05/12/%E7%A7%91%E7%A0%94/VASP/2025-04-21-2025%E5%B9%B44%E6%9C%88Intel%E5%B9%B3%E5%8F%B0VASP.6.4.3%E7%9A%84%E7%BC%96%E8%AF%91%E5%AE%89%E8%A3%85/"
+                            aria-label=": 2025年5月Intel平台VASP.6.4.3的编译安装"
+                        >
+                            2025年5月Intel平台VASP.6.4.3的编译安装
+                        </a>
+                    
+                </h1>
+                <div class="postShorten-meta">
+    <time datetime="2025-05-12T22:40:00+08:00">
+	
+		    May 12, 2025
+    	
+    </time>
+    
+        <span>in </span>
+        
+    <a class="category-link" href="/all-categories/%E4%BB%8E%E9%9B%B6%E5%BC%80%E5%A7%8B%E7%9A%84%E7%A7%91%E7%A0%94%E4%B9%8B%E6%97%85/">从零开始的科研之旅</a>, <a class="category-link" href="/all-categories/%E4%BB%8E%E9%9B%B6%E5%BC%80%E5%A7%8B%E7%9A%84%E7%A7%91%E7%A0%94%E4%B9%8B%E6%97%85/VASP/">VASP</a>
+
+
+    
+</div>
+
+            </div>
+            
+                <div class="postShorten-content">
+                    <h1
+id="年5月intel平台vasp.6.4.3的编译安装">2025年5月Intel平台VASP.6.4.3的编译安装</h1>
+<hr />
+<h2 id="wsl的安装">WSL的安装</h2>
+<p>选择<code>Arch Linux</code>，个人比较熟悉，仅供学习使用不作为稳定的生产力环境，配置如下，两颗E5
+2676 v3</p>
+<figure>
+<img src="image-20250421212627422-1756610835113-1.png"
+alt="洋垃圾配置" />
+<figcaption aria-hidden="true">洋垃圾配置</figcaption>
+</figure>
+<p>打开<code>powershell</code>或者<code>终端</code>，输入<code>wsl --install archlinux</code>以自动安装，这一步需要使用代理(MAGIC)，主机上使用<code>Clash-Verge</code>进行代理（运气好也能连上），<code>终端</code>中输入：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">set</span> http_proxy=http://127.0.0.1:7897 <span class="comment">#自己使用的端口是7897，http代理</span></span><br><span class="line"><span class="built_in">set</span> https_proxy=http://127.0.0.1:7897 <span class="comment">#自己使用的端口是7897，https代理</span></span><br></pre></td></tr></table></figure>
+<p>如果没有条件使用代理，也可以手动安装，参考<code>Arch Wiki</code>，https://wiki.archlinuxcn.org/wiki/%E5%9C%A8_WSL_%E4%B8%8A%E5%AE%89%E8%A3%85_Arch_Linux，手动下载<code>.wsl</code>镜像，然后安装</p>
+<p>笔者计算机C盘性能太差，于是想要将wsl2迁移到另一个分区</p>
+<p>安装成功</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br></pre></td><td class="code"><pre><span class="line">[root@NAS ~]# fastfetch</span><br><span class="line">                  -`                     root@NAS</span><br><span class="line">                 .o+`                    --------</span><br><span class="line">                `ooo/                    OS: Arch Linux x86_64</span><br><span class="line">               `+oooo:                   Host: Windows Subsystem <span class="keyword">for</span> Linux - archlinux (2.4.12)</span><br><span class="line">              `+oooooo:                  Kernel: Linux 5.15.167.4-microsoft-standard-WSL2</span><br><span class="line">              -+oooooo+:                 Uptime: 5 hours, 16 mins</span><br><span class="line">            `/:-:++oooo+:                Packages: 155 (pacman)</span><br><span class="line">           `/++++/+++++++:               Shell: bash 5.2.37</span><br><span class="line">          `/++++++++++++++:              WM: WSLg 1.0.65 (Wayland)</span><br><span class="line">         `/+++ooooooooooooo/`            Terminal: xterm-256color</span><br><span class="line">        ooosssso++osssssso+`           CPU: Intel(R) Xeon(R) E5-2676 v3 (48) @ 2.39 GHz</span><br><span class="line">       .oossssso-````/ossssss+`          Memory: 1.09 GiB / 15.57 GiB (7%)</span><br><span class="line">      -osssssso.      :ssssssso.         Swap: 304.95 MiB / 4.00 GiB (7%)</span><br><span class="line">     :osssssss/        osssso+++.        Disk (/): 18.67 GiB / 1006.85 GiB (2%) - ext4</span><br><span class="line">    /ossssssss/        +ssssooo/-        Disk (/mnt/c): 159.05 GiB / 237.01 GiB (67%) - 9p</span><br><span class="line">  `/ossssso+/:-        -:/+osssso+-      Disk (/mnt/d): 13.16 TiB / 14.55 TiB (90%) - 9p</span><br><span class="line"> `+sso+:-`                 `.-/+oso:     Disk (/mnt/e): 1.70 TiB / 3.64 TiB (47%) - 9p</span><br><span class="line">`++:.                           `-/+/    Disk (/mnt/f): 49.45 GiB / 476.94 GiB (10%) - 9p</span><br><span class="line">.`                                 `/    Disk (/mnt/g): 25.16 TiB / 29.10 TiB (86%) - 9p</span><br><span class="line">                                         Local IP (eth0): 172.31.36.99/20</span><br><span class="line">                                         Locale: en_US.UTF-8</span><br></pre></td></tr></table></figure>
+<h2 id="编译器的安装">编译器的安装</h2>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">pacman -S make</span><br><span class="line">pacman -S cmake</span><br><span class="line">pacman -S gcc</span><br><span class="line">pacman -S gcc-fortran</span><br><span class="line"><span class="comment">####发现gcc和gfortran编译器太新，会编报错(C23)，故降级软件包</span></span><br><span class="line"><span class="comment">#添加中科大源来安装yay</span></span><br><span class="line">pacman -Syy yay</span><br><span class="line">yay -S downgrade <span class="comment">#安装降级工具</span></span><br><span class="line">downgrade -S gcc-libs <span class="comment">#选择12.1.0版本，安装gcc的依赖</span></span><br><span class="line">downgrade -S gcc <span class="comment">#安装gcc，选择12.1.0版本</span></span><br><span class="line">downgrade -S gcc-fortran <span class="comment">#安装gforran，选择12.1.0版本</span></span><br></pre></td></tr></table></figure>
+<p>前往Intel官网下载oneAPI BaseTool
+kithttps://www.intel.com/content/www/us/en/developer/tools/oneapi/base-toolkit-download.html?packages=oneapi-toolkit&amp;oneapi-toolkit-os=linux&amp;oneapi-lin=online</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">chmod</span> +x xxxxxxxxxx.sh <span class="comment">#赋予下载下来的sh文件可执行权限</span></span><br><span class="line">xxxx.sh <span class="comment">#运行sh文件</span></span><br></pre></td></tr></table></figure>
+<p>oneAPI BaseTool kit不需要全部安装，只需安装MKL部分，</p>
+<p>HPC也只需安装一部分</p>
+<p>此处博主踩了较多的坑：</p>
+<ul>
+<li>编译器采用2022版，不可采用过新编译器
+<ul>
+<li>2024年10月后，Intel删除了ifort编译器</li>
+</ul></li>
+<li>gcc编译器不可太新，否则编译某些<code>fortran</code>模块会报错，博主从14降级到了12.1.0</li>
+</ul>
+<h2 id="vasp.6.4.3的编译安装">VASP.6.4.3的编译安装</h2>
+<p>源码包可以去各大私密性较强的论坛或者微信公众号获取，仅供个人学习使用，不用于学术、商业用途</p>
+<p>选择<code>arch/</code>目录中的模板<code>makefile.include.intel</code>，复制到<code>.</code>(上一层目录)，并修改名称为<code>makefile.include</code>，修改目录如下</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># Default precompiler options</span></span><br><span class="line">CPP_OPTIONS = -DHOST=\&quot;LinuxIFC\&quot; \</span><br><span class="line">              -DMPI -DMPI_BLOCK=8000 -Duse_collective \</span><br><span class="line">              -DscaLAPACK \</span><br><span class="line">              -DCACHE_SIZE=4000 \</span><br><span class="line">              -Davoidalloc \</span><br><span class="line">              -Dvasp6 \</span><br><span class="line">              -Duse_bse_te \</span><br><span class="line">              -Dtbdyn \</span><br><span class="line">              -Dfock_dblbuf</span><br><span class="line"></span><br><span class="line">CPP         = fpp -f_com=no -free -w0  $*$(FUFFIX) $*$(SUFFIX) $(CPP_OPTIONS)</span><br><span class="line"></span><br><span class="line">FC          = mpiifort</span><br><span class="line">FCL         = mpiifort</span><br><span class="line"></span><br><span class="line">FREE        = -free -names lowercase</span><br><span class="line"></span><br><span class="line">FFLAGS      = -assume byterecl -w</span><br><span class="line"></span><br><span class="line">OFLAG       = -O2 -xhost  <span class="comment">#添加-xhost标记</span></span><br><span class="line">OFLAG_IN    = $(OFLAG)</span><br><span class="line">DEBUG       = -O0</span><br><span class="line"></span><br><span class="line">OBJECTS     = fftmpiw.o fftmpi_map.o fftw3d.o fft3dlib.o</span><br><span class="line">OBJECTS_O1 += fftw3d.o fftmpi.o fftmpiw.o</span><br><span class="line">OBJECTS_O2 += fft3dlib.o</span><br><span class="line"></span><br><span class="line"><span class="comment"># For what used to be vasp.5.lib</span></span><br><span class="line">CPP_LIB     = $(CPP)</span><br><span class="line">FC_LIB      = $(FC)</span><br><span class="line">CC_LIB      = icc</span><br><span class="line">CFLAGS_LIB  = -O</span><br><span class="line">FFLAGS_LIB  = -O1</span><br><span class="line">FREE_LIB    = $(FREE)</span><br><span class="line"></span><br><span class="line">OBJECTS_LIB = linpack_double.o</span><br><span class="line"></span><br><span class="line"><span class="comment"># For the parser library</span></span><br><span class="line">CXX_PARS    = icpc</span><br><span class="line">LLIBS       = -lstdc++</span><br><span class="line"></span><br><span class="line"><span class="comment">##</span></span><br><span class="line"><span class="comment">## Customize as of this point! Of course you may change the preceding</span></span><br><span class="line"><span class="comment">## part of this file as well if you like, but it should rarely be</span></span><br><span class="line"><span class="comment">## necessary ...</span></span><br><span class="line"><span class="comment">##</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># When compiling on the target machine itself, change this to the</span></span><br><span class="line"><span class="comment"># relevant target when cross-compiling for another architecture</span></span><br><span class="line">VASP_TARGET_CPU ?= -xHOST</span><br><span class="line">FFLAGS     += $(VASP_TARGET_CPU)</span><br><span class="line"></span><br><span class="line"><span class="comment"># Intel MKL (FFTW, BLAS, LAPACK, and scaLAPACK)</span></span><br><span class="line"><span class="comment"># (Note: for Intel Parallel Studio&#x27;s MKL use -mkl instead of -qmkl)</span></span><br><span class="line">FCL        += -qmkl=sequential</span><br><span class="line">MKLROOT    ?= /opt/intel/oneapi/mkl/2022.1.0 <span class="comment">#一定要添加MKLROOT的目录，否则会报错</span></span><br><span class="line"></span><br><span class="line"></span><br><span class="line">/home/storm/intel/oneapi/mkl/2022.1.0</span><br><span class="line">LLIBS      += -L$(MKLROOT)/lib/intel64 -lmkl_scalapack_lp64 -lmkl_blacs_intelmpi_lp64</span><br><span class="line">INCS        =-I$(MKLROOT)/include/fftw</span><br><span class="line"></span><br><span class="line"><span class="comment"># HDF5-support (optional but strongly recommended)</span></span><br><span class="line"><span class="comment">#CPP_OPTIONS+= -DVASP_HDF5</span></span><br><span class="line"><span class="comment">#HDF5_ROOT  ?= /path/to/your/hdf5/installation</span></span><br><span class="line"><span class="comment">#LLIBS      += -L$(HDF5_ROOT)/lib -lhdf5_fortran</span></span><br><span class="line"><span class="comment">#INCS       += -I$(HDF5_ROOT)/include</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># For the VASP-2-Wannier90 interface (optional)</span></span><br><span class="line"><span class="comment">#CPP_OPTIONS    += -DVASP2WANNIER90</span></span><br><span class="line"><span class="comment">#WANNIER90_ROOT ?= /path/to/your/wannier90/installation</span></span><br><span class="line"><span class="comment">#LLIBS          += -L$(WANNIER90_ROOT)/lib -lwannier</span></span><br></pre></td></tr></table></figure>
+<p>然后开始编译</p>
+<p>发现使用命令<code>make all -j48</code>会编译报错</p>
+<p>于是改为官方wiki的命令<code>make DEPS=1 -j48</code>，编译成功</p>
+<h2 id="测试">测试</h2>
+<p><code>make test</code>进行测试，有一些报错，懒得管了、、、能跑就行</p>
+
+                    
+                        
+
+
+                    
+                    
+                        <p>
+                            <a
+                                href="/2025/05/12/%E7%A7%91%E7%A0%94/VASP/2025-04-21-2025%E5%B9%B44%E6%9C%88Intel%E5%B9%B3%E5%8F%B0VASP.6.4.3%E7%9A%84%E7%BC%96%E8%AF%91%E5%AE%89%E8%A3%85/#post-footer"
+                                class="postShorten-excerpt_link link"
+                                aria-label=""
+                            >
+                                Comment and share
+                            </a>
+                        </p>
+                    
+                </div>
+            
+        </div>
+        
+    </article>
+    
+    
+    <article class="postShorten postShorten--thumbnailimg-bottom">
+        <div class="postShorten-wrap">
+            
+            <div class="postShorten-header">
+                <h1 class="postShorten-title">
+                    
+                        <a
+                            class="link-unstyled"
                             href="/2025/05/12/%E7%A7%91%E7%A0%94/VASP/Starry%20Sky/Vaspkit%E7%9A%84%E4%BD%BF%E7%94%A8/"
                             aria-label=": Vaspkit的使用"
                         >
@@ -1570,168 +1668,6 @@ alt="python环境下进行基本运算" />
                         <p>
                             <a
                                 href="/2025/04/27/%E7%A7%91%E7%A0%94/VASP/Starry%20Sky/Cu(111)%E6%99%B6%E9%9D%A2%E7%9A%84%E4%BC%98%E5%8C%96%E8%AE%A1%E7%AE%97/#post-footer"
-                                class="postShorten-excerpt_link link"
-                                aria-label=""
-                            >
-                                Comment and share
-                            </a>
-                        </p>
-                    
-                </div>
-            
-        </div>
-        
-    </article>
-    
-    
-    <article class="postShorten postShorten--thumbnailimg-bottom">
-        <div class="postShorten-wrap">
-            
-            <div class="postShorten-header">
-                <h1 class="postShorten-title">
-                    
-                        <a
-                            class="link-unstyled"
-                            href="/2025/04/23/%E7%A7%91%E7%A0%94/VASP/Starry%20Sky/Cu(111)%E7%9A%84%E5%8D%95%E7%82%B9%E8%AE%A1%E7%AE%97/"
-                            aria-label=": Cu(111) slab模型的单点计算"
-                        >
-                            Cu(111) slab模型的单点计算
-                        </a>
-                    
-                </h1>
-                <div class="postShorten-meta">
-    <time datetime="2025-04-23T10:48:00+08:00">
-	
-		    Apr 23, 2025
-    	
-    </time>
-    
-        <span>in </span>
-        
-    <a class="category-link" href="/all-categories/%E4%BB%8E%E9%9B%B6%E5%BC%80%E5%A7%8B%E7%9A%84%E7%A7%91%E7%A0%94%E4%B9%8B%E6%97%85/">从零开始的科研之旅</a>, <a class="category-link" href="/all-categories/%E4%BB%8E%E9%9B%B6%E5%BC%80%E5%A7%8B%E7%9A%84%E7%A7%91%E7%A0%94%E4%B9%8B%E6%97%85/VASP/">VASP</a>
-
-
-    
-</div>
-
-            </div>
-            
-                <div class="postShorten-content">
-                    <p>首先对Cu单胞进行结构优化（bulk计算），然后使用优化的结构进行切割，再进行计算（由于晶胞已经优化过，所以本次计算其实是单点计算）。大师兄提到：</p>
-<blockquote>
-<p>Cu(111) slab
-模型（POSCAR）的制作流程（复习一下）。<strong>注意：</strong>前面我们用的是Conventional
-cell，下面用的是Primitive Cell。
-一般来说用<code>Conventional cell</code>，
-FCC的金属可以用<code>Primitive Cell</code>
-但对于其他体系，通过<code>Primitive Cell</code>切出来表面模型有问题</p>
-</blockquote>
-<p>我准备两种都验证一下。</p>
-<h2 id="使用conventional-cell建立slab模型">使用Conventional
-Cell建立slab模型</h2>
-<h3 id="切割结构">切割结构</h3>
-<p>将bulk计算完毕的CONTCAR文件用Vesta打开，再转换为<code>.cif</code>文件使用Materials
-Studio打开</p>
-<ul>
-<li>Step1：Build-Surface-Cleave Surface</li>
-</ul>
-<p><code>Angstrom</code>是单位<code>埃</code>，需要切割的晶面是(111)，相应的平面方程为<span
-class="math inline"><em>x</em> + <em>y</em> + <em>z</em> − 1 = 0</span>，使用点到直线的距离公式即可求出晶面间距离，，即厚度<code>thickness</code></p>
-<p>PS：之前<code>111</code>晶面是啥都给整忘了，算个点到直线的距离也能算错，真该抽自己两巴掌回去恶补<code>高等数学</code>😭</p>
-<p>以下是来自维基百科的关于米勒指数以及<code>111</code>晶面的介绍，很形象了</p>
-<figure>
-<img src="Indices_miller_plan_exemple_cube-1756610698112-29.png"
-alt="米勒指数以及111晶面" />
-<figcaption aria-hidden="true">米勒指数以及111晶面</figcaption>
-</figure>
-<figure>
-<img src="1-1756610698112-30.png" alt="GeoGebra计算器" />
-<figcaption aria-hidden="true">GeoGebra计算器</figcaption>
-</figure>
-<p>平面ABC为：<span
-class="math inline"><em>x</em> + <em>y</em> + <em>z</em> − 1 = 0</span>，点D为(1,1,0)</p>
-<p>算一下厚度： <span class="math display">$$
-d=\dfrac{|Ax_0+By_0+Cz_0|}{\sqrt{A^2+B^2+C^2}}=\dfrac{1}{\sqrt{3}}a\approx
-\dfrac{1}{\sqrt{3}}\times 3.63468 \approx 2.0984
-$$</span> <img src="image-20250426174733986-1756610698112-33.png"
-alt="Cleave Surface in Materials Studio" /></p>
-<p>在切割晶面时，<code>thickness</code>设置为4.0 (<span
-class="math inline">4.0 = 1.0 × 4</span>)，即四倍的晶胞参数、四层原子，按一下<code>TAB</code>，软件软件会自动计算四层原子的真是厚度（单位：Angstrom埃），大约是<span
-class="math inline">8.394 ≈ 4 × 2.0984</span>，这与我们手动计算的晶面间距离2.0984的四倍相符</p>
-<ul>
-<li>Step2：添加真空层，Build-Crystal-Build vacuum slab-Vacuum
-orientation：C</li>
-</ul>
-<figure>
-<img src="image-20250423111821857-1756610698112-31.png"
-alt="添加真空层" />
-<figcaption aria-hidden="true">添加真空层</figcaption>
-</figure>
-<ul>
-<li>Step3：右键-lattice parameters</li>
-</ul>
-<figure>
-<img src="image-20250423110528280-1756610698112-32.png"
-alt="设置Z轴方向为真空层" />
-<figcaption aria-hidden="true">设置Z轴方向为真空层</figcaption>
-</figure>
-<p>导出为<code>.cif</code>，vesta打开转换为<code>POSCAR</code>,</p>
-<p><code>INCAR</code>如下</p>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line">System = Cu-conventional-slab</span><br><span class="line">ISMEAR = 1</span><br><span class="line">SIGMA = 0.1</span><br><span class="line">ALGO = Fast</span><br><span class="line">ENCUT = 450 # the system is too huge to adopt huge ENCUT</span><br><span class="line">EDIFF = 1E-5</span><br><span class="line">LDIPOL = .TRUE.</span><br><span class="line">IDIPOL = 3</span><br><span class="line">NWRITE = 0</span><br><span class="line">LWAVE = .FALSE.</span><br><span class="line">LCHARG = .FALSE.</span><br><span class="line">NCORE = 20</span><br></pre></td></tr></table></figure>
-<p>Slab模型虽然是代表表面，但是实际上在z方向是固体-真空-固体-真空-…的交替。如果我们建立的Slab模型在z方向是非对称的，模型就会产生一个沿z方向的偶极。偶极会产生静电势，静电势接着会影响模型的镜像（周期性边界条件）。最后算出来的模型的总能量和力与真实情况是不相符的。因此我们需要方法去矫正这种虚假的静电影响。</p>
-<p>一种常用的方法就是偶极矫正，在真空部分加入一个超窄的但是方向相反的偶极。这样一来，固体模型产生的偶极和真空中的偶极就会相互抵消。模型和其镜像之间的静电势影响就会抵消</p>
-<p>微调<code>KPOINTS</code></p>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">K-POINTS</span><br><span class="line"> 0</span><br><span class="line">Gamma</span><br><span class="line">  13 13 1</span><br><span class="line">  0 0 0</span><br></pre></td></tr></table></figure>
-<h3 id="计算结果">计算结果</h3>
-<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">[ctan@baifq-hpc141 Cu-conventional-slab]$ grep <span class="string">&#x27;  without&#x27;</span> OUTCAR</span><br><span class="line">  energy  without entropy=      -55.91176854  energy(sigma-&gt;0) =      -55.91397643</span><br></pre></td></tr></table></figure>
-<p>PS：最近学迷糊了，关于<code>收敛</code>脑海中有一个极其不正且的理解</p>
-<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br></pre></td><td class="code"><pre><span class="line">[ctan@baifq-hpc141 bulk-calc]$ grep accuracy OUTCAR</span><br><span class="line"> reached required accuracy - stopping structural energy minimisation</span><br><span class="line">[ctan@baifq-hpc141 bulk-calc]$ <span class="built_in">cat</span> OSZICAR</span><br><span class="line">       N       E                     dE             d eps       ncg     rms          rms(c)</span><br><span class="line">DAV:   1     0.103476848532E+03    0.10348E+03   -0.27847E+04  6720   0.246E+03</span><br><span class="line">DAV:   2    -0.180387697818E+02   -0.12152E+03   -0.12091E+03  7280   0.155E+02</span><br><span class="line">DAV:   3    -0.185227503579E+02   -0.48398E+00   -0.48396E+00 10160   0.132E+01</span><br><span class="line">DAV:   4    -0.185240376489E+02   -0.12873E-02   -0.12873E-02  8200   0.464E-01</span><br><span class="line">DAV:   5    -0.185240414620E+02   -0.38131E-05   -0.38134E-05 10480   0.143E-02    0.154E+01</span><br><span class="line">DAV:   6    -0.164394189736E+02    0.20846E+01   -0.72731E+01  6800   0.881E+01    0.783E+00</span><br><span class="line">DAV:   7    -0.149577606472E+02    0.14817E+01   -0.11165E+01  6720   0.344E+01    0.111E+00</span><br><span class="line">DAV:   8    -0.149148685722E+02    0.42892E-01   -0.18431E-02  7280   0.139E+00    0.620E-01</span><br><span class="line">DAV:   9    -0.149081819010E+02    0.66867E-02   -0.51836E-02  8440   0.220E+00    0.636E-02</span><br><span class="line">DAV:  10    -0.149081753161E+02    0.65849E-05   -0.22202E-04  9000   0.149E-01    0.115E-02</span><br><span class="line">DAV:  11    -0.149081715196E+02    0.37964E-05   -0.16862E-06  8520   0.968E-03    0.844E-04</span><br><span class="line">DAV:  12    -0.149081716052E+02   -0.85577E-07   -0.88627E-08  4640   0.248E-03</span><br><span class="line">   1 F= -.14908172E+02 E0= -.14905377E+02  d E =-.149082E+02</span><br><span class="line">       N       E                     dE             d eps       ncg     rms          rms(c)</span><br><span class="line">DAV:   1    -0.149363274123E+02   -0.28156E-01   -0.51946E-01  6720   0.830E+00    0.131E+00</span><br><span class="line">DAV:   2    -0.149199449776E+02    0.16382E-01   -0.41291E-01  6720   0.646E+00    0.538E-01</span><br><span class="line">DAV:   3    -0.149119014518E+02    0.80435E-02   -0.68998E-02  6720   0.271E+00    0.192E-01</span><br><span class="line">DAV:   4    -0.149112107699E+02    0.69068E-03   -0.11896E-03  9800   0.216E-01    0.117E-02</span><br><span class="line">DAV:   5    -0.149112123403E+02   -0.15704E-05   -0.80430E-06  7320   0.267E-02    0.594E-03</span><br><span class="line">DAV:   6    -0.149112142891E+02   -0.19488E-05   -0.13229E-06  4760   0.997E-03    0.128E-04</span><br><span class="line">DAV:   7    -0.149112142406E+02    0.48522E-07   -0.22610E-08  3560   0.101E-03</span><br><span class="line">   2 F= -.14911214E+02 E0= -.14908447E+02  d E =-.304264E-02</span><br><span class="line">       N       E                     dE             d eps       ncg     rms          rms(c)</span><br><span class="line">DAV:   1    -0.150389301673E+02   -0.12772E+00   -0.26022E+00  6720   0.187E+01    0.290E+00</span><br><span class="line">DAV:   2    -0.149566578541E+02    0.82272E-01   -0.20265E+00  6720   0.143E+01    0.119E+00</span><br><span class="line">DAV:   3    -0.149175257623E+02    0.39132E-01   -0.34317E-01  6720   0.604E+00    0.437E-01</span><br><span class="line">DAV:   4    -0.149140056079E+02    0.35202E-02   -0.72028E-03 10080   0.565E-01    0.378E-02</span><br><span class="line">DAV:   5    -0.149139977907E+02    0.78172E-05   -0.11528E-04  7840   0.108E-01    0.134E-02</span><br><span class="line">DAV:   6    -0.149140005388E+02   -0.27480E-05   -0.66656E-06  7680   0.220E-02    0.371E-04</span><br><span class="line">DAV:   7    -0.149140005655E+02   -0.26792E-07   -0.64306E-08  3960   0.196E-03</span><br><span class="line">   3 F= -.14914001E+02 E0= -.14911298E+02  d E =-.582896E-02</span><br></pre></td></tr></table></figure>
-<p>这是上一节里的关于bulk计算（结构优化）的部分内容，可以看到，<code>reached required accuracy - stopping structural energy minimisation</code>——离子步已经收敛，在之后的<code>OSZICAR</code>里，电子步迭代最多7步，并未超过设置的最大电子步数目。因此对于bulk计算，==电子步和离子步都收敛==</p>
-<p>而对于slab模型的单点计算，我也傻傻的这么做😢</p>
-<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br></pre></td><td class="code"><pre><span class="line">[ctan@baifq-hpc141 conventional-slab-static]$ grep accuracy OUTCAR</span><br><span class="line">[ctan@baifq-hpc141 conventional-slab-static]$ <span class="built_in">cat</span> OSZICAR</span><br><span class="line">       N       E                     dE             d eps       ncg     rms          rms(c)</span><br><span class="line">DAV:   1     0.178654188479E+04    0.17865E+04   -0.88940E+04 10388   0.264E+03</span><br><span class="line">DAV:   2     0.200572973408E+03   -0.15860E+04   -0.15355E+04 10388   0.519E+02</span><br><span class="line">DAV:   3    -0.535557174826E+02   -0.25413E+03   -0.23428E+03 10438   0.249E+02</span><br><span class="line">DAV:   4    -0.683234131101E+02   -0.14768E+02   -0.14274E+02 11572   0.815E+01</span><br><span class="line">DAV:   5    -0.687193157556E+02   -0.39590E+00   -0.39405E+00 12400   0.117E+01    0.292E+01</span><br><span class="line">RMM:   6    -0.611494529970E+02    0.75699E+01   -0.15131E+02 11054   0.104E+02    0.161E+01</span><br><span class="line">RMM:   7    -0.558685188476E+02    0.52809E+01   -0.32335E+01 10772   0.530E+01    0.226E+00</span><br><span class="line">RMM:   8    -0.559296519539E+02   -0.61133E-01   -0.22789E+00 11552   0.614E+00    0.111E+00</span><br><span class="line">RMM:   9    -0.559488617332E+02   -0.19210E-01   -0.37622E-01 11539   0.361E+00    0.509E-01</span><br><span class="line">RMM:  10    -0.559454147061E+02    0.34470E-02   -0.13294E-01 12844   0.193E+00    0.214E-01</span><br><span class="line">RMM:  11    -0.559437301097E+02    0.16846E-02   -0.22655E-02 12875   0.691E-01    0.208E-01</span><br><span class="line">RMM:  12    -0.559413428432E+02    0.23873E-02   -0.55145E-03 11960   0.354E-01    0.586E-02</span><br><span class="line">RMM:  13    -0.559414638149E+02   -0.12097E-03   -0.17465E-03 13023   0.187E-01    0.323E-02</span><br><span class="line">RMM:  14    -0.559411451635E+02    0.31865E-03   -0.83089E-04 11756   0.134E-01    0.373E-02</span><br><span class="line">RMM:  15    -0.559412390394E+02   -0.93876E-04   -0.47990E-04 11372   0.168E-01    0.284E-02</span><br><span class="line">RMM:  16    -0.559414153722E+02   -0.17633E-03   -0.21175E-04 11475   0.107E-01    0.129E-02</span><br><span class="line">RMM:  17    -0.559414836424E+02   -0.68270E-04   -0.10022E-04 11751   0.526E-02    0.889E-03</span><br><span class="line">RMM:  18    -0.559415856898E+02   -0.10205E-03   -0.51724E-05 11898   0.366E-02    0.682E-03</span><br><span class="line">RMM:  19    -0.559416259149E+02   -0.40225E-04   -0.26297E-05 11504   0.350E-02    0.861E-03</span><br><span class="line">RMM:  20    -0.559416406670E+02   -0.14752E-04   -0.10748E-05 11263   0.208E-02    0.367E-03</span><br><span class="line">RMM:  21    -0.559416498741E+02   -0.92071E-05   -0.47420E-06  8911   0.102E-02    0.119E-03</span><br><span class="line">RMM:  22    -0.559416543655E+02   -0.44914E-05   -0.22030E-06  7155   0.977E-03    0.193E-03</span><br><span class="line">RMM:  23    -0.559416573370E+02   -0.29715E-05   -0.14726E-06  6702   0.894E-03    0.135E-03</span><br><span class="line">RMM:  24    -0.559416575122E+02   -0.17515E-06   -0.44209E-07  6318   0.507E-03</span><br><span class="line">   1 F= -.55941658E+02 E0= -.55944345E+02  d E =0.806296E-02</span><br></pre></td></tr></table></figure>
-<p>不管怎么修改<code>ALGO</code>、<code>ENCUT</code>等参数，<code>grep accuracy OUTCAR</code>始终不返回<code>reached required accuracy - stopping structural energy minimisation</code>，后来我才意识到，这是==单点计算==，<code>NSW = 0</code>，并不会进行离子步迭代呀，所以我们只需关注电子步收敛即可，很明显电子步收敛，<code>OUTCAR</code>里的信息也可说明</p>
-<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">[ctan@baifq-hpc141 conventional-slab-static]$ grep abort OUTCAR</span><br><span class="line">------------------------ aborting loop because EDIFF is reached ----------------------------------------</span><br></pre></td></tr></table></figure>
-<p><strong>This is definitely a stupid, stupid and stupid
-mistake</strong>😭</p>
-<p>就写到这，吃饭去了，待会还要回实验室</p>
-<h2 id="使用primitive-cell">使用Primitive Cell</h2>
-<p>使用<code>bulk计算</code>且收敛的<code>CONTCAR</code>进行slab模型的建立，操作还是类似的</p>
-<p>值得注意的是，需要先==find
-symmetry==，然后才能转换为<code>primitive cell</code></p>
-<figure>
-<img src="image-20250426191515563-1756610698112-34.png"
-alt="降低对称性之前" />
-<figcaption aria-hidden="true">降低对称性之前</figcaption>
-</figure>
-<figure>
-<img src="image-20250426191902480-1756610698112-35.png"
-alt="find symmetry" />
-<figcaption aria-hidden="true">find symmetry</figcaption>
-</figure>
-<p>然后<code>impose symmetry</code>，接着再转换为<code>primitive cell</code>，然后建立slab模型</p>
-<p><code>POSCAR</code>会有些不同</p>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line">CONTCAR\(1\1\1)</span><br><span class="line">1.0</span><br><span class="line">        2.5701000690         0.0000000000         0.0000000000</span><br><span class="line">       -1.2850500345         2.2257719501         0.0000000000</span><br><span class="line">        0.0000000000         0.0000000000        21.2954006195</span><br><span class="line">   Cu</span><br><span class="line">    4</span><br><span class="line">Direct</span><br><span class="line">     0.000000000         0.000000000         0.000000000</span><br><span class="line">     0.666670000         0.333330000         0.098540000</span><br><span class="line">     0.333330000         0.666670000         0.197080000</span><br><span class="line">     0.000000000         0.000000000         0.295620000</span><br></pre></td></tr></table></figure>
-<p>计算后的能量也有所不同：</p>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">(base) storm@DESKTOP-HE4FQ8Q:~/my-learn/ex42/Cu-primitive-slab$ grep &#x27;  without&#x27; OUTCAR</span><br><span class="line">  energy  without entropy=      -13.97087892  energy(sigma-&gt;0) =      -13.97120814</span><br></pre></td></tr></table></figure>
-<p>值得一提的是，在白老师的计算集群上运行时报错了(<code>vasp.6.4.2</code>)</p>
-<p>如果截断能<code>ENCUT</code>过小可能报错<code>Error EDDDAV: Call to ZHEGV failed. Returncode = 7 1 8</code></p>
-<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br></pre></td><td class="code"><pre><span class="line">[ctan@baifq-hpc141 Cu-primmitive-slab]$ <span class="built_in">ls</span></span><br><span class="line">INCAR  KPOINTS  POSCAR  POTCAR</span><br><span class="line">[ctan@baifq-hpc141 Cu-primmitive-slab]$ clear</span><br><span class="line">[ctan@baifq-hpc141 Cu-primmitive-slab]$ sbatch vasp</span><br><span class="line">Submitted batch job 4321</span><br><span class="line">[ctan@baifq-hpc141 Cu-primmitive-slab]$ <span class="built_in">tail</span> -f OUTCAR</span><br><span class="line">--------------------------------------- Ionic step        1  -------------------------------------------</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"></span><br><span class="line"></span><br><span class="line">--------------------------------------- Iteration      1(   1)  ---------------------------------------</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">    POTLOK:  cpu <span class="keyword">time</span>      0.0215: real <span class="keyword">time</span>      0.0258</span><br><span class="line">    SETDIJ:  cpu <span class="keyword">time</span>      0.0109: real <span class="keyword">time</span>      0.0118</span><br><span class="line">     EDDAV:  cpu <span class="keyword">time</span>      0.7451: real <span class="keyword">time</span>      0.7613</span><br><span class="line">       DOS:  cpu <span class="keyword">time</span>      0.0052: real <span class="keyword">time</span>      0.0060</span><br><span class="line">    --------------------------------------------</span><br><span class="line">      LOOP:  cpu <span class="keyword">time</span>      0.7826: real <span class="keyword">time</span>      0.8050</span><br><span class="line"></span><br><span class="line"> eigenvalue-minimisations  :  2548</span><br><span class="line"> total energy-change (2. order) : 0.3445715E+03  (-0.1837296E+04)</span><br><span class="line"> number of electron      44.0000000 magnetization</span><br><span class="line"> augmentation part       44.0000000 magnetization</span><br><span class="line"></span><br><span class="line"> DIPCOR: dipole corrections <span class="keyword">for</span> dipol</span><br><span class="line"> direction  3 min pos   155,</span><br><span class="line"> dipolmoment           0.000000      0.000000      0.000026 electrons x Angstroem</span><br><span class="line"> Tr[quadrupol]       -31.061780</span><br><span class="line"></span><br><span class="line"> energy correction <span class="keyword">for</span> charged system         0.000000 eV</span><br><span class="line"> dipol+quadrupol energy correction           -0.000000 eV</span><br><span class="line"> added-field ion interaction          0.001451 eV  (added to PSCEN)</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"> Free energy of the ion-electron system (eV)</span><br><span class="line">  ---------------------------------------------------</span><br><span class="line">  alpha Z        PSCENC =        96.14159556</span><br><span class="line">  Ewald energy   TEWEN  =     16384.30326894</span><br><span class="line">  -Hartree energ DENC   =    -21746.47963692</span><br><span class="line">  -exchange      EXHF   =         0.00000000</span><br><span class="line">  -V(xc)+E(xc)   XCENC  =       182.01436818</span><br><span class="line">  PAW double counting   =      4912.82663951    -5336.19386850</span><br><span class="line">  entropy T*S    EENTRO =         0.00034874</span><br><span class="line">  eigenvalues    EBANDS =       288.07434016</span><br><span class="line">  atomic energy  EATOM  =      5563.88447798</span><br><span class="line">  Solvation  Ediel_sol  =         0.00000000</span><br><span class="line">  ---------------------------------------------------</span><br><span class="line">  free energy    TOTEN  =       344.57153365 eV</span><br><span class="line"></span><br><span class="line">  energy without entropy =      344.57118491  energy(sigma-&gt;0) =      344.57141740</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">--------------------------------------------------------------------------------------------------------</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"></span><br><span class="line"></span><br><span class="line">--------------------------------------- Iteration      1(   2)  ---------------------------------------</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"> -----------------------------------------------------------------------------</span><br><span class="line">|                                                                             |</span><br><span class="line">|     EEEEEEE  RRRRRR   RRRRRR   OOOOOOO  RRRRRR      <span class="comment">###     ###     ###     |</span></span><br><span class="line">|     E        R     R  R     R  O     O  R     R     <span class="comment">###     ###     ###     |</span></span><br><span class="line">|     E        R     R  R     R  O     O  R     R     <span class="comment">###     ###     ###     |</span></span><br><span class="line">|     EEEEE    RRRRRR   RRRRRR   O     O  RRRRRR       <span class="comment">#       #       #      |</span></span><br><span class="line">|     E        R   R    R   R    O     O  R   R                               |</span><br><span class="line">|     E        R    R   R    R   O     O  R    R      <span class="comment">###     ###     ###     |</span></span><br><span class="line">|     EEEEEEE  R     R  R     R  OOOOOOO  R     R     <span class="comment">###     ###     ###     |</span></span><br><span class="line">|                                                                             |</span><br><span class="line">|     Error EDDDAV: Call to ZHEGV failed. Returncode = 7 1 8                  |</span><br><span class="line">|                                                                             |</span><br><span class="line">|       ----&gt;  I REFUSE TO CONTINUE WITH THIS SICK JOB ... BYE!!! &lt;----       |</span><br><span class="line">|                                                                             |</span><br><span class="line"> -----------------------------------------------------------------------------</span><br></pre></td></tr></table></figure>
-<h3 id="小结">小结</h3>
-<ul>
-<li>此计算是在bulk计算的基础上(<strong>最优结构</strong>)进行的单点计算，计算时<strong>不能进行离子弛豫，不能进行离子步迭代</strong>，默认<code>NSW=0</code></li>
-<li>不进行离子弛豫，那么自然不能设置离子步收敛条件，不能设置<code>EDIFFG</code></li>
-<li>如果不报错运行但结果不收敛可试着增大电子步数<code>NSW</code>以及截断能<code>ENCUT</code></li>
-</ul>
-
-                    
-                        
-
-
-                    
-                    
-                        <p>
-                            <a
-                                href="/2025/04/23/%E7%A7%91%E7%A0%94/VASP/Starry%20Sky/Cu(111)%E7%9A%84%E5%8D%95%E7%82%B9%E8%AE%A1%E7%AE%97/#post-footer"
                                 class="postShorten-excerpt_link link"
                                 aria-label=""
                             >
