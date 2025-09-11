@@ -243,6 +243,106 @@
                     
                         <a
                             class="link-unstyled"
+                            href="/2025/04/17/%E7%A7%91%E7%A0%94/VASP/2025%E5%B9%B45%E6%9C%88AMD%E5%B9%B3%E5%8F%B0%E4%B8%8BVASP%E7%9A%84%E7%BC%96%E8%AF%91%E5%AE%89%E8%A3%85/"
+                            aria-label=": 2025年4月AMD平台下VASP的编译安装"
+                        >
+                            2025年4月AMD平台下VASP的编译安装
+                        </a>
+                    
+                </h1>
+                <div class="postShorten-meta">
+    <time datetime="2025-04-17T23:40:00+08:00">
+	
+		    Apr 17, 2025
+    	
+    </time>
+    
+        <span>in </span>
+        
+    <a class="category-link" href="/all-categories/%E4%BB%8E%E9%9B%B6%E5%BC%80%E5%A7%8B%E7%9A%84%E7%A7%91%E7%A0%94%E4%B9%8B%E6%97%85/">从零开始的科研之旅</a>, <a class="category-link" href="/all-categories/%E4%BB%8E%E9%9B%B6%E5%BC%80%E5%A7%8B%E7%9A%84%E7%A7%91%E7%A0%94%E4%B9%8B%E6%97%85/VASP/">VASP</a>
+
+
+    
+</div>
+
+            </div>
+            
+                <div class="postShorten-content">
+                    <h1
+id="年4月amd平台下vasp的编译安装">2025年4月AMD平台下VASP的编译安装</h1>
+<h2 id="wsl2安装">WSL2安装</h2>
+<p>本次安装选择的Ubuntu作为发行版，使用人数较多，解决方案较多</p>
+<figure>
+<img src="image-20250417225652853-1756610753766-1.png"
+alt="Ubuntu 24.04.1 on AMD 7840HS" />
+<figcaption aria-hidden="true">Ubuntu 24.04.1 on AMD 7840HS</figcaption>
+</figure>
+<p>更新源</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">sudo</span> apt update</span><br></pre></td></tr></table></figure>
+<h2 id="安装编译器">安装编译器</h2>
+<h3 id="aocc">AOCC</h3>
+<p>下载aocc-compiler-5.0.0.tar，解压</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">tar -xvf aocc-compiler-5.0.0.tar <span class="comment">#解压</span></span><br><span class="line"><span class="built_in">cd</span> aocc-compiler-3.2.0 <span class="comment">#进入目录</span></span><br><span class="line">install.sh <span class="comment">#如果没有可执行权限请赋予可执行权限, chmod +x install.sh</span></span><br><span class="line"><span class="built_in">source</span> .setenv_AOCC.sh <span class="comment">#这一行可以写入~/.bashrc，然后source ~/.bashrc，刷新一下环境变量</span></span><br></pre></td></tr></table></figure>
+<h3 id="aocl">AOCL</h3>
+<p>下载AOCL 5.0 binary packages compiled with AOCC 5.0</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">tar -zxvf XXX.tar.gz <span class="comment">#解压tar.gz包，如果报错请查询Linux下的解压命令，up记不太清了、、、  </span></span><br><span class="line"><span class="built_in">cd</span> XXX</span><br><span class="line">install.sh -t /home/XXX <span class="comment">#安装，可以指定安装目录，up安装在/home目录下的某个文件夹里的，这样不需要管理员权限、</span></span><br></pre></td></tr></table></figure>
+<h2 id="安装openmpi">安装OpenMPI</h2>
+<p>在安装OpenMPI之前请确保AOCC、AOCL以及必备的依赖已安装完全</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">which</span> clang <span class="comment">#检查clang</span></span><br><span class="line"><span class="built_in">which</span> clang++ <span class="comment">#检查clang++</span></span><br><span class="line"><span class="built_in">which</span> flang <span class="comment">#检查flang</span></span><br><span class="line">以上三个来自于AOCC和AOCL</span><br><span class="line"><span class="built_in">which</span> c <span class="comment">#检查有没有C</span></span><br><span class="line"><span class="built_in">which</span> c++ <span class="comment">#检查有没有C++</span></span><br><span class="line"><span class="built_in">sudo</span> apt install g++</span><br><span class="line"><span class="built_in">sudo</span> apt install gcc</span><br></pre></td></tr></table></figure>
+<p>下载OpenMPI的稳定版本，然后解压，进入目录</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">configure CC=clang CXX=clang++ FC=flang --prefix=/xxxx <span class="comment">#可以手动指定/xxx目录</span></span><br><span class="line">make -j4 <span class="comment">#以4核心编译，大小可调，比如16核处理器就改成make -j16</span></span><br><span class="line">make install <span class="comment">#编译安装</span></span><br></pre></td></tr></table></figure>
+<p>OpenMPI安装时报错很可能是由于依赖问题造成的，建议安装之前<code>sudo apt install g++ cmake gcc</code></p>
+<p>在<code>~/.bashrc</code>中添加环境变量</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">MPI_HOME=/xxx/; make <span class="comment">#这一步容易出错，记得添加对目录</span></span><br><span class="line"><span class="built_in">export</span> PATH=<span class="variable">$&#123;MPI_HOME&#125;</span>/bin:<span class="variable">$PATH</span></span><br><span class="line"><span class="built_in">export</span> LD_LIBRARY_PATH=<span class="variable">$&#123;MPI_HOME&#125;</span>/lib:<span class="variable">$LD_LIBRARY_PATH</span></span><br><span class="line"><span class="built_in">export</span> MANPATH=<span class="variable">$&#123;MPI_HOME&#125;</span>/share/man:<span class="variable">$MANPATH</span></span><br></pre></td></tr></table></figure>
+<p>安装完后检查一下<code>which mpirun</code></p>
+<h2 id="编译vasp">编译VASP</h2>
+<p>不提供源码包，可以尝试去各种论坛，微信公众号搜索，仅供学习使用</p>
+<p>本次使用的源码包是vasp.6.4.2.tgz</p>
+<p>编译之前首先要选择模板，也就是makefile.include，将/vasp.x.x.x/arch文件夹下的<code>makefile.include.aocc_ompi_aocl</code>复制一份到/vasp.x.x.x根目录，因为本次平台是AMD
+ZEN4，安装了AOCC，AOCL和OpenMPI，所以选择此模板，接下来修改模板</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># Default precompiler options</span></span><br><span class="line">CPP_OPTIONS = -DHOST=\&quot;LinuxGNU\&quot; \</span><br><span class="line">              -DMPI -DMPI_BLOCK=8000 -Duse_collective \</span><br><span class="line">              -DscaLAPACK \</span><br><span class="line">              -DCACHE_SIZE=4000 \</span><br><span class="line">              -Davoidalloc \</span><br><span class="line">              -Dvasp6 \</span><br><span class="line">              -Duse_bse_te \</span><br><span class="line">              -Dtbdyn \</span><br><span class="line">              -Dfock_dblbuf</span><br><span class="line"></span><br><span class="line">CPP         = flang -E -ffree-form -C -w $*$(FUFFIX) &gt;$*$(SUFFIX) $(CPP_OPTIONS)</span><br><span class="line"></span><br><span class="line">FC          = mpif90</span><br><span class="line">FCL         = mpif90</span><br><span class="line"></span><br><span class="line">FREE        = -ffree-form -ffree-line-length-none</span><br><span class="line"></span><br><span class="line">FFLAGS      = -w -fno-fortran-main -Mbackslash</span><br><span class="line"></span><br><span class="line">OFLAG       = -O2</span><br><span class="line">OFLAG_IN    = $(OFLAG)</span><br><span class="line">DEBUG       = -O0</span><br><span class="line"></span><br><span class="line">OBJECTS     = fftmpiw.o fftmpi_map.o fftw3d.o fft3dlib.o</span><br><span class="line">OBJECTS_O1 += fftw3d.o fftmpi.o fftmpiw.o</span><br><span class="line">OBJECTS_O2 += fft3dlib.o</span><br><span class="line"></span><br><span class="line"><span class="comment"># For what used to be vasp.5.lib</span></span><br><span class="line">CPP_LIB     = $(CPP)</span><br><span class="line">FC_LIB      = $(FC)</span><br><span class="line">CC_LIB      = clang</span><br><span class="line">CFLAGS_LIB  = -O</span><br><span class="line">FFLAGS_LIB  = -O1</span><br><span class="line">FREE_LIB    = $(FREE)</span><br><span class="line"></span><br><span class="line">OBJECTS_LIB = linpack_double.o</span><br><span class="line"></span><br><span class="line"><span class="comment"># For the parser library</span></span><br><span class="line">CXX_PARS    = clang++</span><br><span class="line">LLIBS       = -lstdc++</span><br><span class="line"></span><br><span class="line"><span class="comment">##</span></span><br><span class="line"><span class="comment">## Customize as of this point! Of course you may change the preceding</span></span><br><span class="line"><span class="comment">## part of this file as well if you like, but it should rarely be</span></span><br><span class="line"><span class="comment">## necessary ...</span></span><br><span class="line"><span class="comment">##</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># When compiling on the target machine itself, change this to the</span></span><br><span class="line"><span class="comment"># relevant target when cross-compiling for another architecture</span></span><br><span class="line">VASP_TARGET_CPU ?= -march=znver4 <span class="comment">#7840HS belongs to ZEN4 platform</span></span><br><span class="line">FFLAGS     += $(VASP_TARGET_CPU)</span><br><span class="line"></span><br><span class="line"><span class="comment"># BLAS (mandatory)</span></span><br><span class="line">AMDBLIS_ROOT ?= /home/storm/AOCL_INSTALL/5.0.0/aocc <span class="comment">#Installation category of AOCL</span></span><br><span class="line">BLAS        = -L<span class="variable">$&#123;AMDBLIS_ROOT&#125;</span>/lib -lblis</span><br><span class="line"></span><br><span class="line"><span class="comment"># LAPACK (mandatory)</span></span><br><span class="line">AMDLIBFLAME_ROOT ?= /home/storm/AOCL_INSTALL/5.0.0/aocc <span class="comment">#Installation category of AOCL</span></span><br><span class="line">LAPACK      = -L<span class="variable">$&#123;AMDLIBFLAME_ROOT&#125;</span>/lib -lflame</span><br><span class="line"></span><br><span class="line"><span class="comment"># scaLAPACK (mandatory)</span></span><br><span class="line">AMDSCALAPACK_ROOT ?= /home/storm/AOCL_INSTALL/5.0.0/aocc <span class="comment">#Installation category of AOCL</span></span><br><span class="line">SCALAPACK   = -L<span class="variable">$&#123;AMDSCALAPACK_ROOT&#125;</span>/lib -lscalapack</span><br><span class="line"></span><br><span class="line">LLIBS      += $(SCALAPACK) $(LAPACK) $(BLAS)</span><br><span class="line"></span><br><span class="line"><span class="comment"># FFTW (mandatory)</span></span><br><span class="line">AMDFFTW_ROOT  ?= /home/storm/AOCL_INSTALL/5.0.0/aocc <span class="comment">#Installation category of AOCL</span></span><br><span class="line">LLIBS      += -L$(AMDFFTW_ROOT)/lib -lfftw3</span><br><span class="line">INCS       += -I$(AMDFFTW_ROOT)/include</span><br><span class="line"></span><br><span class="line"><span class="comment"># HDF5-support (optional but strongly recommended)</span></span><br><span class="line"><span class="comment">#CPP_OPTIONS+= -DVASP_HDF5</span></span><br><span class="line"><span class="comment">#HDF5_ROOT  ?= /path/to/your/hdf5/installation</span></span><br><span class="line"><span class="comment">#LLIBS      += -L$(HDF5_ROOT)/lib -lhdf5_fortran</span></span><br><span class="line"><span class="comment">#INCS       += -I$(HDF5_ROOT)/include</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># For the VASP-2-Wannier90 interface (optional)</span></span><br><span class="line"><span class="comment">#CPP_OPTIONS    += -DVASP2WANNIER90</span></span><br><span class="line"><span class="comment">#WANNIER90_ROOT ?= /path/to/your/wannier90/installation</span></span><br><span class="line"><span class="comment">#LLIBS          += -L$(WANNIER90_ROOT)/lib -lwannier</span></span><br></pre></td></tr></table></figure>
+<p>然后运行<code>make all</code>即可，官网给的命令是并行安装<code>make DEPS=1 -Jn &lt;target&gt;</code>，我自己尝试并行安装后测试<code>make test</code>会报错，所以<code>make all</code>，这样去测试全部通过不报错</p>
+<h2 id="测试安装">测试安装</h2>
+<p>为了测试是否正确安装，可以进行测试</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">make <span class="built_in">test</span></span><br></pre></td></tr></table></figure>
+<h2 id="添加到环境变量">添加到环境变量</h2>
+<p>官方提供的是源码包，通过编译，我们得到了CPU可执行的二进制包，再二进制包的目录下(bin/目录下)，我可以同在终端中直接输入二进制包的名字来直接执行(VASP编译会产生三个二进制包：vasp_std,
+vasp_gam,
+vasp_ncl)，比如在bin/目录下直接输入vasp_std就可以看到VASP的标志，但是为了随时随地在任意目录下也能执行计算，因此需要将bin/目录添加到环境变量里(前提是make
+test不报错)</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">export</span> PATH=<span class="variable">$PATH</span>:/path/to/vasp.x.x.x/bin</span><br><span class="line"><span class="built_in">source</span> ~/.bashrc</span><br></pre></td></tr></table></figure>
+
+                    
+                        
+
+
+                    
+                    
+                        <p>
+                            <a
+                                href="/2025/04/17/%E7%A7%91%E7%A0%94/VASP/2025%E5%B9%B45%E6%9C%88AMD%E5%B9%B3%E5%8F%B0%E4%B8%8BVASP%E7%9A%84%E7%BC%96%E8%AF%91%E5%AE%89%E8%A3%85/#post-footer"
+                                class="postShorten-excerpt_link link"
+                                aria-label=""
+                            >
+                                Comment and share
+                            </a>
+                        </p>
+                    
+                </div>
+            
+        </div>
+        
+    </article>
+    
+    
+    <article class="postShorten postShorten--thumbnailimg-bottom">
+        <div class="postShorten-wrap">
+            
+            <div class="postShorten-header">
+                <h1 class="postShorten-title">
+                    
+                        <a
+                            class="link-unstyled"
                             href="/2025/04/14/%E7%A7%91%E7%A0%94/VASP/formula/"
                             aria-label=": 一些简单的Linux命令"
                         >
@@ -314,67 +414,6 @@
                         <p>
                             <a
                                 href="/2025/04/14/%E7%A7%91%E7%A0%94/VASP/formula/#post-footer"
-                                class="postShorten-excerpt_link link"
-                                aria-label=""
-                            >
-                                Comment and share
-                            </a>
-                        </p>
-                    
-                </div>
-            
-        </div>
-        
-    </article>
-    
-    
-    <article class="postShorten postShorten--thumbnailimg-bottom">
-        <div class="postShorten-wrap">
-            
-            <div class="postShorten-header">
-                <h1 class="postShorten-title">
-                    
-                        <a
-                            class="link-unstyled"
-                            href="/2025/04/14/%E7%A7%91%E7%A0%94/VASP/Starry%20Sky/VASP%E4%B8%AD%E7%9A%84%E5%90%84%E7%A7%8D%E6%8A%A5%E9%94%99/"
-                            aria-label=": VASP中的各种报错"
-                        >
-                            VASP中的各种报错
-                        </a>
-                    
-                </h1>
-                <div class="postShorten-meta">
-    <time datetime="2025-04-14T16:40:00+08:00">
-	
-		    Apr 14, 2025
-    	
-    </time>
-    
-        <span>in </span>
-        
-    <a class="category-link" href="/all-categories/%E4%BB%8E%E9%9B%B6%E5%BC%80%E5%A7%8B%E7%9A%84%E7%A7%91%E7%A0%94%E4%B9%8B%E6%97%85/">从零开始的科研之旅</a>, <a class="category-link" href="/all-categories/%E4%BB%8E%E9%9B%B6%E5%BC%80%E5%A7%8B%E7%9A%84%E7%A7%91%E7%A0%94%E4%B9%8B%E6%97%85/VASP/">VASP</a>
-
-
-    
-</div>
-
-            </div>
-            
-                <div class="postShorten-content">
-                    <p>如题，记录一下在计算时遇到的各种报错</p>
-<h2 id="section">2025.05.14</h2>
-<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line"> -----------------------------------------------------------------------------</span><br><span class="line">|                                                                             |</span><br><span class="line">|     EEEEEEE  RRRRRR   RRRRRR   OOOOOOO  RRRRRR      <span class="comment">###     ###     ###     |</span></span><br><span class="line">|     E        R     R  R     R  O     O  R     R     <span class="comment">###     ###     ###     |</span></span><br><span class="line">|     E        R     R  R     R  O     O  R     R     <span class="comment">###     ###     ###     |</span></span><br><span class="line">|     EEEEE    RRRRRR   RRRRRR   O     O  RRRRRR       <span class="comment">#       #       #      |</span></span><br><span class="line">|     E        R   R    R   R    O     O  R   R                               |</span><br><span class="line">|     E        R    R   R    R   O     O  R    R      <span class="comment">###     ###     ###     |</span></span><br><span class="line">|     EEEEEEE  R     R  R     R  OOOOOOO  R     R     <span class="comment">###     ###     ###     |</span></span><br><span class="line">|                                                                             |</span><br><span class="line">|     ERROR FEXCF: supplied exchange-correlation table                        |</span><br><span class="line">|      is too small, maximal index : 7355                                     |</span><br><span class="line">|                                                                             |</span><br><span class="line">|       ----&gt;  I REFUSE TO CONTINUE WITH THIS SICK JOB ... BYE!!! &lt;----       |</span><br><span class="line">|                                                                             |</span><br><span class="line"> -----------------------------------------------------------------------------</span><br></pre></td></tr></table></figure>
-<p>删除<code>NPAR = 1</code>参数</p>
-
-                    
-                        
-
-
-                    
-                    
-                        <p>
-                            <a
-                                href="/2025/04/14/%E7%A7%91%E7%A0%94/VASP/Starry%20Sky/VASP%E4%B8%AD%E7%9A%84%E5%90%84%E7%A7%8D%E6%8A%A5%E9%94%99/#post-footer"
                                 class="postShorten-excerpt_link link"
                                 aria-label=""
                             >
@@ -1002,6 +1041,67 @@ self-consistent screening (TS-SCS)</strong>方法。</li>
                         <p>
                             <a
                                 href="/2025/04/14/%E7%A7%91%E7%A0%94/VASP/Starry%20Sky/Vasp-note/#post-footer"
+                                class="postShorten-excerpt_link link"
+                                aria-label=""
+                            >
+                                Comment and share
+                            </a>
+                        </p>
+                    
+                </div>
+            
+        </div>
+        
+    </article>
+    
+    
+    <article class="postShorten postShorten--thumbnailimg-bottom">
+        <div class="postShorten-wrap">
+            
+            <div class="postShorten-header">
+                <h1 class="postShorten-title">
+                    
+                        <a
+                            class="link-unstyled"
+                            href="/2025/04/14/%E7%A7%91%E7%A0%94/VASP/Starry%20Sky/VASP%E4%B8%AD%E7%9A%84%E5%90%84%E7%A7%8D%E6%8A%A5%E9%94%99/"
+                            aria-label=": VASP中的各种报错"
+                        >
+                            VASP中的各种报错
+                        </a>
+                    
+                </h1>
+                <div class="postShorten-meta">
+    <time datetime="2025-04-14T16:40:00+08:00">
+	
+		    Apr 14, 2025
+    	
+    </time>
+    
+        <span>in </span>
+        
+    <a class="category-link" href="/all-categories/%E4%BB%8E%E9%9B%B6%E5%BC%80%E5%A7%8B%E7%9A%84%E7%A7%91%E7%A0%94%E4%B9%8B%E6%97%85/">从零开始的科研之旅</a>, <a class="category-link" href="/all-categories/%E4%BB%8E%E9%9B%B6%E5%BC%80%E5%A7%8B%E7%9A%84%E7%A7%91%E7%A0%94%E4%B9%8B%E6%97%85/VASP/">VASP</a>
+
+
+    
+</div>
+
+            </div>
+            
+                <div class="postShorten-content">
+                    <p>如题，记录一下在计算时遇到的各种报错</p>
+<h2 id="section">2025.05.14</h2>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line"> -----------------------------------------------------------------------------</span><br><span class="line">|                                                                             |</span><br><span class="line">|     EEEEEEE  RRRRRR   RRRRRR   OOOOOOO  RRRRRR      <span class="comment">###     ###     ###     |</span></span><br><span class="line">|     E        R     R  R     R  O     O  R     R     <span class="comment">###     ###     ###     |</span></span><br><span class="line">|     E        R     R  R     R  O     O  R     R     <span class="comment">###     ###     ###     |</span></span><br><span class="line">|     EEEEE    RRRRRR   RRRRRR   O     O  RRRRRR       <span class="comment">#       #       #      |</span></span><br><span class="line">|     E        R   R    R   R    O     O  R   R                               |</span><br><span class="line">|     E        R    R   R    R   O     O  R    R      <span class="comment">###     ###     ###     |</span></span><br><span class="line">|     EEEEEEE  R     R  R     R  OOOOOOO  R     R     <span class="comment">###     ###     ###     |</span></span><br><span class="line">|                                                                             |</span><br><span class="line">|     ERROR FEXCF: supplied exchange-correlation table                        |</span><br><span class="line">|      is too small, maximal index : 7355                                     |</span><br><span class="line">|                                                                             |</span><br><span class="line">|       ----&gt;  I REFUSE TO CONTINUE WITH THIS SICK JOB ... BYE!!! &lt;----       |</span><br><span class="line">|                                                                             |</span><br><span class="line"> -----------------------------------------------------------------------------</span><br></pre></td></tr></table></figure>
+<p>删除<code>NPAR = 1</code>参数</p>
+
+                    
+                        
+
+
+                    
+                    
+                        <p>
+                            <a
+                                href="/2025/04/14/%E7%A7%91%E7%A0%94/VASP/Starry%20Sky/VASP%E4%B8%AD%E7%9A%84%E5%90%84%E7%A7%8D%E6%8A%A5%E9%94%99/#post-footer"
                                 class="postShorten-excerpt_link link"
                                 aria-label=""
                             >

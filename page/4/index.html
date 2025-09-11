@@ -242,6 +242,198 @@
                     
                         <a
                             class="link-unstyled"
+                            href="/2025/04/27/%E7%A7%91%E7%A0%94/VASP/Starry%20Sky/%E4%BB%A5p(1x1)Cu(111)%E4%B8%BA%E4%BE%8B%E5%88%86%E6%9E%90%E8%A1%A8%E9%9D%A2%E5%BC%9B%E8%B1%AB%E7%9A%84%E7%BB%93%E6%9E%9C/"
+                            aria-label=": 以p(1x1)Cu(111)为例分析表面弛豫的结果"
+                        >
+                            以p(1x1)Cu(111)为例分析表面弛豫的结果
+                        </a>
+                    
+                </h1>
+                <div class="postShorten-meta">
+    <time datetime="2025-04-27T21:21:00+08:00">
+	
+		    Apr 27, 2025
+    	
+    </time>
+    
+        <span>in </span>
+        
+    <a class="category-link" href="/all-categories/%E4%BB%8E%E9%9B%B6%E5%BC%80%E5%A7%8B%E7%9A%84%E7%A7%91%E7%A0%94%E4%B9%8B%E6%97%85/">从零开始的科研之旅</a>, <a class="category-link" href="/all-categories/%E4%BB%8E%E9%9B%B6%E5%BC%80%E5%A7%8B%E7%9A%84%E7%A7%91%E7%A0%94%E4%B9%8B%E6%97%85/VASP/">VASP</a>
+
+
+    
+</div>
+
+            </div>
+            
+                <div class="postShorten-content">
+                    <p>本文其实没啥新的内容，只是对上两节的一个总结分析</p>
+<p>在表面弛豫前（slab模型优化计算前）</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line">SYSTEM = p(1x1)Cu(111)</span><br><span class="line">1.0</span><br><span class="line">        2.5701000690         0.0000000000         0.0000000000</span><br><span class="line">       -1.2850500345         2.2257719501         0.0000000000</span><br><span class="line">        0.0000000000         0.0000000000        21.2954006195</span><br><span class="line">   Cu</span><br><span class="line">    4</span><br><span class="line">Selective Dynamics</span><br><span class="line">Direct</span><br><span class="line">     0.000000000         0.000000000         0.000000000 F F F</span><br><span class="line">     0.666670000         0.333330000         0.098540000 F F F</span><br><span class="line">     0.333330000         0.666670000         0.197080000 T T T</span><br><span class="line">     0.000000000         0.000000000         0.295620000 T T T</span><br></pre></td></tr></table></figure>
+<p>优化计算后</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br></pre></td><td class="code"><pre><span class="line">SYSTEM = p(1x1)Cu(111)</span><br><span class="line">1.0</span><br><span class="line">        2.5701000690         0.0000000000         0.0000000000</span><br><span class="line">       -1.2850500345         2.2257719501         0.0000000000</span><br><span class="line">        0.0000000000         0.0000000000        21.2954006195</span><br><span class="line">   Cu</span><br><span class="line">    4</span><br><span class="line">Selective Dynamics</span><br><span class="line">Direct</span><br><span class="line">     0.000000000         0.000000000         0.000000000 F F F</span><br><span class="line">     0.666670000         0.333330000         0.098540000 F F F</span><br><span class="line">     0.333330000         0.666670000         0.197080000 T T T</span><br><span class="line">     0.000000000         0.000000000         0.295620000 T T T</span><br><span class="line">[ctan@baifq-hpc141 primitive-slab-opt-1]$ cat CONTCAR</span><br><span class="line">CONTCAR\(1\1\1)</span><br><span class="line">   1.00000000000000</span><br><span class="line">     2.5701000690000000    0.0000000000000000    0.0000000000000000</span><br><span class="line">    -1.2850500345000000    2.2257719501000000    0.0000000000000000</span><br><span class="line">     0.0000000000000000    0.0000000000000000   21.2954006195000005</span><br><span class="line">  Cu/0e71e558f37</span><br><span class="line">               4</span><br><span class="line">Selective dynamics</span><br><span class="line">Direct</span><br><span class="line">  0.0000000000000000  0.0000000000000000  0.0000000000000000   F   F   F</span><br><span class="line">  0.6666700000000034  0.3333299999999966  0.0985399999999998   F   F   F</span><br><span class="line">  0.3333311322281505  0.6666688677718494  0.1972481653092927   T   T   T</span><br><span class="line"> -0.0000004145140272  0.0000004145140272  0.2951613337135311   T   T   T</span><br><span class="line"></span><br><span class="line">  0.00000000E+00  0.00000000E+00  0.00000000E+00</span><br><span class="line">  0.00000000E+00  0.00000000E+00  0.00000000E+00</span><br><span class="line">  0.00000000E+00  0.00000000E+00  0.00000000E+00</span><br><span class="line">  0.00000000E+00  0.00000000E+00  0.00000000E+00</span><br></pre></td></tr></table></figure>
+<h2 id="工作站离线状态下numpy-on-python2地安装">工作站离线状态下numpy on
+python2地安装</h2>
+<p>这两个文件中的坐标都是分数坐标，不太利于分析位置变化，需要将分数坐标转化为笛卡尔坐标，使用大师兄的脚本来进行转换，</p>
+<p>用的是<code>python2</code></p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br><span class="line">89</span><br><span class="line">90</span><br><span class="line">91</span><br><span class="line">92</span><br><span class="line">93</span><br><span class="line">94</span><br><span class="line">95</span><br><span class="line">96</span><br><span class="line">97</span><br><span class="line">98</span><br><span class="line">99</span><br><span class="line">100</span><br><span class="line">101</span><br><span class="line">102</span><br><span class="line">103</span><br><span class="line">104</span><br><span class="line">105</span><br><span class="line">106</span><br><span class="line">107</span><br><span class="line">108</span><br><span class="line">109</span><br><span class="line">110</span><br><span class="line">111</span><br><span class="line">112</span><br><span class="line">113</span><br><span class="line">114</span><br><span class="line">115</span><br><span class="line">116</span><br><span class="line">117</span><br><span class="line">118</span><br><span class="line">119</span><br><span class="line">120</span><br><span class="line">121</span><br><span class="line">122</span><br><span class="line">123</span><br><span class="line">124</span><br><span class="line">125</span><br><span class="line">126</span><br><span class="line">127</span><br><span class="line">128</span><br><span class="line">129</span><br><span class="line">130</span><br><span class="line">131</span><br><span class="line">132</span><br><span class="line">133</span><br><span class="line">134</span><br><span class="line">135</span><br><span class="line">136</span><br><span class="line">137</span><br><span class="line">138</span><br><span class="line">139</span><br><span class="line">140</span><br><span class="line">141</span><br><span class="line">142</span><br><span class="line">143</span><br><span class="line">144</span><br><span class="line">145</span><br><span class="line">146</span><br><span class="line">147</span><br><span class="line">148</span><br><span class="line">149</span><br><span class="line">150</span><br><span class="line">151</span><br><span class="line">152</span><br><span class="line">153</span><br><span class="line">154</span><br><span class="line">155</span><br><span class="line">156</span><br><span class="line">157</span><br><span class="line">158</span><br><span class="line">159</span><br><span class="line">160</span><br><span class="line">161</span><br><span class="line">162</span><br><span class="line">163</span><br><span class="line">164</span><br><span class="line">165</span><br><span class="line">166</span><br><span class="line">167</span><br><span class="line">168</span><br><span class="line">169</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">#!/usr/bin/env python</span></span><br><span class="line"><span class="comment"># -*- coding: utf-8 -*-</span></span><br><span class="line"><span class="comment">#Convert direc coordiation to cartesian Writen By Qiang and Xu Nan</span></span><br><span class="line"><span class="string">&quot;&quot;&quot;</span></span><br><span class="line"><span class="string">The right input way to run this script is : </span></span><br><span class="line"><span class="string">      </span></span><br><span class="line"><span class="string">python dire2cart.py CONTCAR 3 </span></span><br><span class="line"><span class="string"></span></span><br><span class="line"><span class="string">CONTCAR will be converted from Direct to Cartesian and 3 layers will be fixed.  </span></span><br><span class="line"><span class="string"></span></span><br><span class="line"><span class="string">If you do not want to fix layers and keep the same as before, run command:</span></span><br><span class="line"><span class="string">    </span></span><br><span class="line"><span class="string">python dire2cat.py CONTCAR    </span></span><br><span class="line"><span class="string"></span></span><br><span class="line"><span class="string">&quot;&quot;&quot;</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> sys</span><br><span class="line"><span class="keyword">import</span> os</span><br><span class="line"><span class="keyword">import</span> numpy <span class="keyword">as</span> np </span><br><span class="line"></span><br><span class="line"><span class="built_in">print</span> <span class="string">&#x27;Please read the head part of this script and get more information!&#x27;</span></span><br><span class="line"><span class="built_in">print</span> <span class="string">&quot;&quot;&quot;</span></span><br><span class="line"><span class="string">###################################</span></span><br><span class="line"><span class="string">#                                 #</span></span><br><span class="line"><span class="string">#for VASP 5.2 or higher versions  #</span></span><br><span class="line"><span class="string">#                                 #</span></span><br><span class="line"><span class="string">###################################</span></span><br><span class="line"><span class="string">&quot;&quot;&quot;</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">if</span> <span class="built_in">len</span>(sys.argv) &lt;= <span class="number">1</span>:</span><br><span class="line">    <span class="built_in">print</span>(<span class="string">&#x27;\n&#x27;</span> + <span class="string">&#x27; Warning! &#x27;</span> * <span class="number">3</span> + <span class="string">&#x27;\n&#x27;</span>)</span><br><span class="line">    <span class="built_in">print</span>(<span class="string">&#x27;You did not select the inputfile to be converted. \n By defalut, we are going to convert your CONTCAR.\n&#x27;</span>)</span><br><span class="line">    </span><br><span class="line">    <span class="keyword">if</span> <span class="keyword">not</span> os.path.isfile(<span class="string">&quot;POSCAR&quot;</span>) <span class="keyword">and</span> <span class="keyword">not</span> os.path.isfile(<span class="string">&quot;CONTCAR&quot;</span>):</span><br><span class="line">        <span class="built_in">print</span>(<span class="string">&quot;Error:&quot;</span> * <span class="number">3</span> + <span class="string">&quot;\n Can not find neither POSCAR nor CONTCAR!!\n&quot;</span>)</span><br><span class="line">        exit()</span><br><span class="line">    <span class="keyword">else</span>:</span><br><span class="line">        <span class="keyword">if</span> os.path.isfile(<span class="string">&quot;CONTCAR&quot;</span>):</span><br><span class="line">            script = sys.argv[<span class="number">0</span>]</span><br><span class="line">            file_to_be_converted = <span class="string">&quot;CONTCAR&quot;</span></span><br><span class="line">            <span class="built_in">print</span> <span class="string">&quot;\n Convertion starts........\n&quot;</span></span><br><span class="line">    </span><br><span class="line">        <span class="keyword">else</span>:</span><br><span class="line">            script = sys.argv[<span class="number">0</span>]</span><br><span class="line">            file_to_be_converted = <span class="string">&quot;POSCAR&quot;</span></span><br><span class="line">            <span class="built_in">print</span> <span class="string">&quot;\n There is no CONTCAR in your directory. \n \n POSCAR Convertion starts........\n&quot;</span></span><br><span class="line">            </span><br><span class="line"><span class="keyword">if</span> <span class="built_in">len</span>(sys.argv) == <span class="number">2</span>:</span><br><span class="line">    <span class="built_in">print</span>(<span class="string">&quot;\n%s Convertion starts......&quot;</span> %sys.argv[<span class="number">1</span>]) </span><br><span class="line">    script, file_to_be_converted = sys.argv[:<span class="number">2</span>]</span><br><span class="line"><span class="keyword">else</span>:</span><br><span class="line">    <span class="built_in">print</span>(<span class="string">&quot;\n%s Convertion starts......\n&quot;</span> %sys.argv[<span class="number">1</span>]) </span><br><span class="line">    script, file_to_be_converted, fixedlayer = sys.argv[:<span class="number">3</span>]</span><br><span class="line">    fixedlayer = <span class="built_in">int</span>(fixedlayer)</span><br><span class="line"></span><br><span class="line"><span class="keyword">def</span> <span class="title function_">get_infor</span>():</span><br><span class="line">    f = <span class="built_in">open</span>(file_to_be_converted, <span class="string">&#x27;r&#x27;</span>)</span><br><span class="line">    lines = f.readlines()</span><br><span class="line">    f.close()</span><br><span class="line">    num_atoms = <span class="built_in">sum</span>([<span class="built_in">int</span>(x) <span class="keyword">for</span> x <span class="keyword">in</span> lines[<span class="number">6</span>].split()])</span><br><span class="line">    <span class="keyword">if</span> lines[<span class="number">7</span>][<span class="number">0</span>]  == <span class="string">&#x27;S&#x27;</span> <span class="keyword">or</span> lines[<span class="number">7</span>][<span class="number">0</span>]  == <span class="string">&#x27;s&#x27;</span>:  <span class="comment"># # With Selected T T T, coordination starts from line 9</span></span><br><span class="line">        start_num = <span class="number">9</span></span><br><span class="line">        <span class="keyword">if</span> lines[<span class="number">8</span>][<span class="number">0</span>]  == <span class="string">&#x27;D&#x27;</span> <span class="keyword">or</span> lines[<span class="number">8</span>][<span class="number">0</span>]  == <span class="string">&#x27;d&#x27;</span>:</span><br><span class="line">            is_direct = <span class="literal">True</span> </span><br><span class="line">        <span class="keyword">else</span>:</span><br><span class="line">            is_direct = <span class="literal">False</span></span><br><span class="line">    <span class="keyword">else</span>: </span><br><span class="line">        start_num = <span class="number">8</span></span><br><span class="line">        <span class="built_in">print</span> <span class="string">&#x27;----------------------------------------------------&#x27;</span></span><br><span class="line">        <span class="built_in">print</span> <span class="string">&#x27;Pay Attetion! There is no TTT in  %s   &#x27;</span> %(file_to_be_converted)</span><br><span class="line">        <span class="built_in">print</span> <span class="string">&#x27;----------------------------------------------------&#x27;</span></span><br><span class="line">        <span class="keyword">if</span>  lines[<span class="number">7</span>][<span class="number">0</span>]  == <span class="string">&#x27;D&#x27;</span> <span class="keyword">or</span> lines[<span class="number">7</span>][<span class="number">0</span>]  == <span class="string">&#x27;d&#x27;</span>:</span><br><span class="line">            is_direct = <span class="literal">True</span> </span><br><span class="line">        <span class="keyword">else</span>:</span><br><span class="line">            is_direct = <span class="literal">False</span></span><br><span class="line">    a = []</span><br><span class="line">    b = []</span><br><span class="line">    c = []</span><br><span class="line">    <span class="keyword">if</span> is_direct:         </span><br><span class="line">        <span class="keyword">for</span> i <span class="keyword">in</span> np.arange(<span class="number">2</span>,<span class="number">5</span>):</span><br><span class="line">            line = [<span class="built_in">float</span>(i) <span class="keyword">for</span> i <span class="keyword">in</span> lines[i].strip().split()]</span><br><span class="line">            a.append(line[<span class="number">0</span>])</span><br><span class="line">            b.append(line[<span class="number">1</span>])</span><br><span class="line">            c.append(line[<span class="number">2</span>])</span><br><span class="line">        vector = np.array([a,b,c])</span><br><span class="line">    <span class="keyword">else</span>: </span><br><span class="line">        vector = np.array([[<span class="number">1</span>, <span class="number">0</span> , <span class="number">0</span>], [<span class="number">0</span>, <span class="number">1</span>, <span class="number">0</span>], [<span class="number">0</span>, <span class="number">0</span>, <span class="number">1</span>]])</span><br><span class="line">    <span class="keyword">return</span> vector, lines, start_num, num_atoms, is_direct</span><br><span class="line"></span><br><span class="line"><span class="keyword">def</span> <span class="title function_">determinelayers</span>(<span class="params">z_cartesian</span>):</span><br><span class="line">    threshold = <span class="number">0.5</span>  </span><br><span class="line">    seq = <span class="built_in">sorted</span>(z_cartesian)</span><br><span class="line">    <span class="built_in">min</span> = seq[<span class="number">0</span>]</span><br><span class="line">    layerscount = &#123;&#125;</span><br><span class="line">    sets = [<span class="built_in">min</span>]</span><br><span class="line">    <span class="keyword">for</span> j <span class="keyword">in</span> <span class="built_in">range</span>(<span class="built_in">len</span>(seq)):</span><br><span class="line">        <span class="keyword">if</span> <span class="built_in">abs</span>(seq[j]-<span class="built_in">min</span>) &gt;= threshold:</span><br><span class="line">            <span class="built_in">min</span> = seq[j]</span><br><span class="line">            sets.append(<span class="built_in">min</span>)</span><br><span class="line"></span><br><span class="line">    <span class="keyword">for</span> i <span class="keyword">in</span> <span class="built_in">range</span>(<span class="number">1</span>,<span class="built_in">len</span>(sets)+<span class="number">1</span>):</span><br><span class="line">        layerscount[i] = []            </span><br><span class="line">        <span class="keyword">for</span> k <span class="keyword">in</span> <span class="built_in">range</span>(<span class="built_in">len</span>(z_cartesian)):   </span><br><span class="line">            <span class="keyword">if</span> <span class="built_in">abs</span>(z_cartesian[k]-sets[i-<span class="number">1</span>]) &lt;= threshold:</span><br><span class="line">                layerscount[i].append(k)</span><br><span class="line"></span><br><span class="line">    <span class="keyword">return</span> layerscount</span><br><span class="line"></span><br><span class="line"><span class="keyword">def</span> <span class="title function_">convert</span>():</span><br><span class="line">    x_cartesian = []</span><br><span class="line">    y_cartesian = []</span><br><span class="line">    z_cartesian = []</span><br><span class="line">    tf = []</span><br><span class="line">    <span class="keyword">for</span> i <span class="keyword">in</span> <span class="built_in">range</span>(start_num, num_atoms + start_num):</span><br><span class="line">        line_data =  [<span class="built_in">float</span>(ele) <span class="keyword">for</span> ele <span class="keyword">in</span> lines[i].split()[<span class="number">0</span>:<span class="number">3</span>]]</span><br><span class="line">        line_data = np.array([line_data])</span><br><span class="line">        x, y, z = [<span class="built_in">sum</span>(k) <span class="keyword">for</span> k <span class="keyword">in</span> line_data * vector ]     </span><br><span class="line">        x_cartesian.append(x)</span><br><span class="line">        y_cartesian.append(y)</span><br><span class="line">        z_cartesian.append(z)</span><br><span class="line">         </span><br><span class="line">        <span class="keyword">if</span> start_num == <span class="number">9</span> : <span class="comment"># if  T T T exist, the start_num will be 9        </span></span><br><span class="line">            tf.append((lines[i].split()[<span class="number">3</span>:]))</span><br><span class="line">        <span class="keyword">else</span>:</span><br><span class="line">            tf.append(<span class="string">&#x27; &#x27;</span>)   <span class="comment"># if there is no T T T, use space instead. </span></span><br><span class="line"></span><br><span class="line">    layerscount =determinelayers(z_cartesian)</span><br><span class="line">    </span><br><span class="line">    file_out = <span class="built_in">open</span>(file_to_be_converted+<span class="string">&#x27;_C&#x27;</span>, <span class="string">&#x27;w&#x27;</span>)</span><br><span class="line">    <span class="keyword">for</span> i <span class="keyword">in</span> <span class="built_in">range</span>(<span class="number">0</span>,<span class="number">7</span>):</span><br><span class="line">        file_out.write(lines[i].rstrip() + <span class="string">&#x27;\n&#x27;</span>)  <span class="comment"># first 7 lines are kept the same </span></span><br><span class="line">    </span><br><span class="line">    <span class="built_in">print</span> <span class="string">&#x27;\n Find %s layers!&#x27;</span> * <span class="number">3</span> %(<span class="built_in">len</span>(layerscount), <span class="built_in">len</span>(layerscount), <span class="built_in">len</span>(layerscount))</span><br><span class="line">    </span><br><span class="line">    <span class="keyword">if</span> <span class="built_in">len</span>(sys.argv) &gt;= <span class="number">3</span>:  <span class="comment"># This means that the nuber for fixing layers is given by the user.</span></span><br><span class="line">        file_out.write(<span class="string">&#x27;Selective\n&#x27;</span>)  </span><br><span class="line">        file_out.write(<span class="string">&#x27;Cartesian&#x27;</span> + <span class="string">&#x27;\n&#x27;</span>) </span><br><span class="line">        <span class="keyword">for</span> i <span class="keyword">in</span> <span class="built_in">range</span>(<span class="number">1</span>,<span class="built_in">len</span>(layerscount)+<span class="number">1</span>):</span><br><span class="line">            <span class="keyword">if</span> i &lt;= fixedlayer: </span><br><span class="line">                <span class="keyword">for</span> j <span class="keyword">in</span> layerscount[i]:</span><br><span class="line">                    tf[j] = [<span class="string">&#x27;F&#x27;</span>,<span class="string">&#x27;F&#x27;</span>,<span class="string">&#x27;F&#x27;</span>]</span><br><span class="line">            <span class="keyword">else</span>:</span><br><span class="line">                <span class="keyword">for</span> k <span class="keyword">in</span> layerscount[i]:</span><br><span class="line">                    tf[k] = [<span class="string">&#x27;T&#x27;</span>,<span class="string">&#x27;T&#x27;</span>,<span class="string">&#x27;T&#x27;</span>]                    </span><br><span class="line">    <span class="keyword">else</span>:</span><br><span class="line">        <span class="keyword">if</span> start_num == <span class="number">9</span>:  <span class="comment"># 9 means there are T T T or F F F in the file</span></span><br><span class="line">            file_out.write(<span class="string">&#x27;Selective\n&#x27;</span>)</span><br><span class="line">            file_out.write(<span class="string">&#x27;Cartesian&#x27;</span> + <span class="string">&#x27;\n&#x27;</span>)        </span><br><span class="line">        <span class="keyword">else</span>:</span><br><span class="line">            file_out.write(<span class="string">&#x27;Cartesian&#x27;</span> + <span class="string">&#x27;\n&#x27;</span>) </span><br><span class="line">    </span><br><span class="line">    <span class="keyword">for</span> i <span class="keyword">in</span> <span class="built_in">range</span>(<span class="number">0</span>,<span class="built_in">len</span>(x_cartesian)):</span><br><span class="line">        file_out.write(<span class="string">&quot;\t%+-3.10f   %+-3.10f   %+-3.10f  %s\n&quot;</span> %(x_cartesian[i], y_cartesian[i], z_cartesian[i], <span class="string">&#x27; &#x27;</span>.join(tf[i])))</span><br><span class="line">        </span><br><span class="line">    file_out.close()</span><br><span class="line">    </span><br><span class="line">vector, lines, start_num, num_atoms, is_direct = get_infor()</span><br><span class="line"></span><br><span class="line"><span class="keyword">if</span> is_direct : </span><br><span class="line">    <span class="built_in">print</span> <span class="string">&quot;\n%s has Direct Coordinates, Contersion starts.... &quot;</span>  %(file_to_be_converted)</span><br><span class="line">    convert()</span><br><span class="line"><span class="keyword">else</span>:</span><br><span class="line">    <span class="built_in">print</span> <span class="string">&quot;\n%s has Cartesian Coordinates Already! We are going to fix layers only.&quot;</span>  %(file_to_be_converted)</span><br><span class="line">    convert()</span><br><span class="line">    </span><br><span class="line"><span class="built_in">print</span> <span class="string">&#x27;-----------------------------------------------------\n&#x27;</span></span><br><span class="line"><span class="built_in">print</span> <span class="string">&#x27;\n %s with Cartesian Coordiates is named as  %s_C\n&#x27;</span> %(file_to_be_converted, file_to_be_converted)</span><br><span class="line"><span class="built_in">print</span> <span class="string">&#x27;-----------------------------------------------------\n&#x27;</span></span><br><span class="line"></span><br></pre></td></tr></table></figure>
+<p>脚本会调用到<code>numpy</code>库，然而集群上并没有连接互联网，所以没有办法通过<code>pip2 install numpy</code>来安装，只能手动上传<code>.whl</code>文件或者源码编译等。</p>
+<p>进入<code>python2</code>环境，输入<code>import pip;print(pip.pep425tags.get_supported())</code>来查看支持的<code>.whl</code>文件版本</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">[ctan@baifq-hpc141 primitive-slab-opt-<span class="number">1</span>]$ python2</span><br><span class="line">Python <span class="number">2.7</span><span class="number">.18</span> (default, Oct <span class="number">23</span> <span class="number">2023</span>, <span class="number">20</span>:01:03)</span><br><span class="line">[GCC <span class="number">8.5</span><span class="number">.0</span> <span class="number">20210514</span> (Red Hat <span class="number">8.5</span><span class="number">.0</span>-<span class="number">18</span>)] on linux2</span><br><span class="line"><span class="type">Type</span> <span class="string">&quot;help&quot;</span>, <span class="string">&quot;copyright&quot;</span>, <span class="string">&quot;credits&quot;</span> <span class="keyword">or</span> <span class="string">&quot;license&quot;</span> <span class="keyword">for</span> more information.</span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span><span class="keyword">import</span> pip;<span class="built_in">print</span>(pip.pep425tags.get_supported())</span><br><span class="line">[(<span class="string">&#x27;cp27&#x27;</span>, <span class="string">&#x27;cp27mu&#x27;</span>, <span class="string">&#x27;manylinux1_x86_64&#x27;</span>), (<span class="string">&#x27;cp27&#x27;</span>, <span class="string">&#x27;cp27mu&#x27;</span>, <span class="string">&#x27;linux_x86_64&#x27;</span>), (<span class="string">&#x27;cp27&#x27;</span>, <span class="string">&#x27;none&#x27;</span>, <span class="string">&#x27;manylinux1_x86_64&#x27;</span>), (<span class="string">&#x27;cp27&#x27;</span>, <span class="string">&#x27;none&#x27;</span>, <span class="string">&#x27;linux_x86_64&#x27;</span>), (<span class="string">&#x27;py2&#x27;</span>, <span class="string">&#x27;none&#x27;</span>, <span class="string">&#x27;manylinux1_x86_64&#x27;</span>), (<span class="string">&#x27;py2&#x27;</span>, <span class="string">&#x27;none&#x27;</span>, <span class="string">&#x27;linux_x86_64&#x27;</span>), (<span class="string">&#x27;cp27&#x27;</span>, <span class="string">&#x27;none&#x27;</span>, <span class="string">&#x27;any&#x27;</span>), (<span class="string">&#x27;cp2&#x27;</span>, <span class="string">&#x27;none&#x27;</span>, <span class="string">&#x27;any&#x27;</span>), (<span class="string">&#x27;py27&#x27;</span>, <span class="string">&#x27;none&#x27;</span>, <span class="string">&#x27;any&#x27;</span>), (<span class="string">&#x27;py2&#x27;</span>, <span class="string">&#x27;none&#x27;</span>, <span class="string">&#x27;any&#x27;</span>), (<span class="string">&#x27;py26&#x27;</span>, <span class="string">&#x27;none&#x27;</span>, <span class="string">&#x27;any&#x27;</span>), (<span class="string">&#x27;py25&#x27;</span>, <span class="string">&#x27;none&#x27;</span>, <span class="string">&#x27;any&#x27;</span>), (<span class="string">&#x27;py24&#x27;</span>, <span class="string">&#x27;none&#x27;</span>, <span class="string">&#x27;any&#x27;</span>), (<span class="string">&#x27;py23&#x27;</span>, <span class="string">&#x27;none&#x27;</span>, <span class="string">&#x27;any&#x27;</span>), (<span class="string">&#x27;py22&#x27;</span>, <span class="string">&#x27;none&#x27;</span>, <span class="string">&#x27;any&#x27;</span>), (<span class="string">&#x27;py21&#x27;</span>, <span class="string">&#x27;none&#x27;</span>, <span class="string">&#x27;any&#x27;</span>), (<span class="string">&#x27;py20&#x27;</span>, <span class="string">&#x27;none&#x27;</span>, <span class="string">&#x27;any&#x27;</span>)]</span><br></pre></td></tr></table></figure>
+<p>这里下载的是<code>numpy-1.16.5-cp27-cp27mu-manylinux1_x86_64.whl</code>（不可下载过高版本的<code>numpy</code>，它支持<code>python2</code>的最后一个版本似乎是<code>1.16.6</code>）</p>
+<p>然后安装，由于我不在<code>sudoer</code>中，没有<code>root</code>权限，所以需要手动指定安装目录</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">pip2 install --prefix=~/python2/numpy_installation numpy-1.16.5-cp27-cp27mu-manylinux1_x86_64.whl</span><br></pre></td></tr></table></figure>
+<p>然后添加环境变量，注意<code>numpy</code>库在<code>/lib64/python2.7/site-packages</code>目录中的</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">export</span> PYTHONPATH=/home/ctan/python2/numpy_installation/lib64/python2.7/site-packages:<span class="variable">$PYTHONPATH</span></span><br></pre></td></tr></table></figure>
+<p>ok啦，以上是题外话，安装完<code>numpy</code>之后就可以运行脚本了，将<code>POSCAR</code>和<code>CONTCAR</code>的坐标从分数坐标转换为笛卡尔坐标</p>
+<p><code>POSCAR</code></p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line">[ctan@baifq-hpc141 primitive-slab-opt-1]$ <span class="built_in">cat</span> POSCAR_C</span><br><span class="line">CONTCAR\(1\1\1)</span><br><span class="line">1.0</span><br><span class="line">        2.5701000690         0.0000000000         0.0000000000</span><br><span class="line">       -1.2850500345         2.2257719501         0.0000000000</span><br><span class="line">        0.0000000000         0.0000000000        21.2954006195</span><br><span class="line">   Cu</span><br><span class="line">    4</span><br><span class="line">Selective</span><br><span class="line">Cartesian</span><br><span class="line">        +0.0000000000   +0.0000000000   +0.0000000000  F F F</span><br><span class="line">        +1.2850628850   +0.7419165641   +2.0984487770  F F F</span><br><span class="line">        -0.0000128505   +1.4838553860   +4.1968975541  T T T</span><br><span class="line">        +0.0000000000   +0.0000000000   +6.2953463311  T T T</span><br></pre></td></tr></table></figure>
+<p><code>CONTCAR_C</code></p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line">[ctan@baifq-hpc141 primitive-slab-opt-1]$ <span class="built_in">cat</span> CONTCAR_C</span><br><span class="line">CONTCAR\(1\1\1)</span><br><span class="line">   1.00000000000000</span><br><span class="line">     2.5701000690000000    0.0000000000000000    0.0000000000000000</span><br><span class="line">    -1.2850500345000000    2.2257719501000000    0.0000000000000000</span><br><span class="line">     0.0000000000000000    0.0000000000000000   21.2954006195000005</span><br><span class="line">  Cu/0e71e558f37</span><br><span class="line">               4</span><br><span class="line">Selective</span><br><span class="line">Cartesian</span><br><span class="line">        +0.0000000000   +0.0000000000   +0.0000000000  F F F</span><br><span class="line">        +1.2850628850   +0.7419165641   +2.0984487770  F F F</span><br><span class="line">        -0.0000084856   +1.4838528659   +4.2004787017  T T T</span><br><span class="line">        -0.0000015980   +0.0000009226   +6.2855788488  T T T</span><br></pre></td></tr></table></figure>
+<blockquote>
+<p>Alright, I’m back.
+突然想起昨天球磨的样品今天结束了，连忙赶回实验室取出来装进样品管里等待封管。</p>
+<p>By the
+way，我真是和鱼一样，记忆只有七秒、、、😅。师兄教的球磨罐和球珠的洗涤方法忘记下来了，今天不出意外地给忘了😂。汲取教训，每次出实验室后都更加努力地总结和复盘，仔细回想每一个实验细节</p>
+</blockquote>
+<h2 id="优化前后对比">优化前后对比</h2>
+<p>Alright，扯远了，分析一下顶层和亚顶层优化前后地结构变化吧：</p>
+<ul>
+<li><code>POSCAR</code>: (+6.2953463311) - (+4.1968975541) =
+2.0984487769999998</li>
+<li><code>CONTCAR</code>: (+6.2855788488) - (+4.2004787017) =
+2.0851001471000004</li>
+</ul>
+<p>前后变化了：(2.0851001471000004-2.0984487769999998)/2.0984487769999998
+= -0.006361189296735172</p>
+<p>可以看到，表层原子向体相收缩</p>
+<p>能量变化</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">[ctan@baifq-hpc141 primitive-slab-opt-1]$ grep <span class="string">&#x27;  without&#x27;</span> OUTCAR</span><br><span class="line">  energy  without entropy=      -13.96941183  energy(sigma-&gt;0) =      -13.97673168</span><br><span class="line">  energy  without entropy=      -13.96945528  energy(sigma-&gt;0) =      -13.97676958</span><br><span class="line">  energy  without entropy=      -13.97006413  energy(sigma-&gt;0) =      -13.97726241</span><br><span class="line">  energy  without entropy=      -13.97020643  energy(sigma-&gt;0) =      -13.97735554</span><br><span class="line">  energy  without entropy=      -13.97017969  energy(sigma-&gt;0) =      -13.97735013</span><br></pre></td></tr></table></figure>
+<p>能量从<code>-13.97673168</code>变化为<code>-13.97735013</code>，降低了<code>0.000618449999999271 eV</code>，即弛豫过程是放热，刚切开的表面不稳定，表层原子向体相收缩后，体系能量降低，变得更稳定</p>
+<p>小Tips：可以使用python环境便捷地进行基本运算</p>
+<figure>
+<img src="image-20250428174029792-1756610674577-27.png"
+alt="python环境下进行基本运算" />
+<figcaption aria-hidden="true">python环境下进行基本运算</figcaption>
+</figure>
+
+                    
+                        
+
+
+                    
+                    
+                        <p>
+                            <a
+                                href="/2025/04/27/%E7%A7%91%E7%A0%94/VASP/Starry%20Sky/%E4%BB%A5p(1x1)Cu(111)%E4%B8%BA%E4%BE%8B%E5%88%86%E6%9E%90%E8%A1%A8%E9%9D%A2%E5%BC%9B%E8%B1%AB%E7%9A%84%E7%BB%93%E6%9E%9C/#post-footer"
+                                class="postShorten-excerpt_link link"
+                                aria-label=""
+                            >
+                                Comment and share
+                            </a>
+                        </p>
+                    
+                </div>
+            
+        </div>
+        
+    </article>
+    
+    
+    <article class="postShorten postShorten--thumbnailimg-bottom">
+        <div class="postShorten-wrap">
+            
+            <div class="postShorten-header">
+                <h1 class="postShorten-title">
+                    
+                        <a
+                            class="link-unstyled"
+                            href="/2025/04/27/%E7%A7%91%E7%A0%94/VASP/Starry%20Sky/Cu(111)%E6%99%B6%E9%9D%A2%E7%9A%84%E4%BC%98%E5%8C%96%E8%AE%A1%E7%AE%97/"
+                            aria-label=": p(1x1)Cu(111)的优化计算"
+                        >
+                            p(1x1)Cu(111)的优化计算
+                        </a>
+                    
+                </h1>
+                <div class="postShorten-meta">
+    <time datetime="2025-04-27T20:09:00+08:00">
+	
+		    Apr 27, 2025
+    	
+    </time>
+    
+        <span>in </span>
+        
+    <a class="category-link" href="/all-categories/%E4%BB%8E%E9%9B%B6%E5%BC%80%E5%A7%8B%E7%9A%84%E7%A7%91%E7%A0%94%E4%B9%8B%E6%97%85/">从零开始的科研之旅</a>, <a class="category-link" href="/all-categories/%E4%BB%8E%E9%9B%B6%E5%BC%80%E5%A7%8B%E7%9A%84%E7%A7%91%E7%A0%94%E4%B9%8B%E6%97%85/VASP/">VASP</a>
+
+
+    
+</div>
+
+            </div>
+            
+                <div class="postShorten-content">
+                    <h2 id="poscar的修改"><code>POSCAR</code>的修改</h2>
+<p>与单点计算不同，优化计算可能涉及到离子步迭代、晶格常数的改变。但<code>Cu(111)</code>晶面的优化计算并==不只是==在<code>INCAR</code>里添加参数<code>IBRION</code>，优化计算确实允许原子弛豫，但在<code>slab模型</code>中，<strong>只允许表面的两层原子允许弛豫，而下面的那些原子则直接固定住</strong></p>
+<blockquote>
+<p>这样做的物理意义在于：在真实的环境下，催化剂体相看做是不变的，只有表面的原子参与催化反应</p>
+</blockquote>
+<p>前面在乙醇分子的振动频率分析里面已经学过了，添加以下选择性动力学标记<code>Slective Dynamics</code>即可</p>
+<p><strong>PS：看分数坐标即可知道哪些是表层哪些是体相</strong></p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line">CONTCAR\(1\1\1)</span><br><span class="line">1.0</span><br><span class="line">        2.5701000690         0.0000000000         0.0000000000</span><br><span class="line">       -1.2850500345         2.2257719501         0.0000000000</span><br><span class="line">        0.0000000000         0.0000000000        21.2954006195</span><br><span class="line">   Cu</span><br><span class="line">    4</span><br><span class="line">Selective Dynamics</span><br><span class="line">Direct</span><br><span class="line">     0.000000000         0.000000000         0.000000000 F F F</span><br><span class="line">     0.666670000         0.333330000         0.098540000 F F F</span><br><span class="line">     0.333330000         0.666670000         0.197080000 T T T</span><br><span class="line">     0.000000000         0.000000000         0.295620000 T T T</span><br></pre></td></tr></table></figure>
+<h2 id="incar的修改"><code>INCAR</code>的修改</h2>
+<p>现在是优化计算，就得加上算法了，大师兄用的<code>IBRION = 2</code>，那我就对比一下，用<code>IBRION = 1</code>试一下吧</p>
+<h3 id="ibrion-1"><code>IBRION = 1</code></h3>
+<p>官方wiki说准牛顿迭代法对<code>POTIM</code>比较敏感，那我就调小一点吧</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line">SYSTEM = Cu-concentional-slab-statistic</span><br><span class="line">ISMEAR = 1</span><br><span class="line">SIGMA = 0.5</span><br><span class="line">ALGO = Normal</span><br><span class="line">ENCUT = 700</span><br><span class="line">EDIFF = 1E-6</span><br><span class="line">LDIPOL = .TRUE.</span><br><span class="line">IDIPOL = 3</span><br><span class="line">NCORE = 20</span><br><span class="line">NSW = 500</span><br><span class="line">NELM = 200</span><br><span class="line">IBRION = 1</span><br><span class="line">POTIM = 0.05</span><br></pre></td></tr></table></figure>
+<p>成功收敛，迭代情况</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br></pre></td><td class="code"><pre><span class="line">[ctan@baifq-hpc141 primitive-slab-opt]$ <span class="built_in">cat</span> OSZICAR</span><br><span class="line">       N       E                     dE             d eps       ncg     rms          rms(c)</span><br><span class="line">DAV:   1     0.380094340720E+03    0.38009E+03   -0.23566E+04  2548   0.269E+03</span><br><span class="line">DAV:   2     0.163549324393E+02   -0.36374E+03   -0.35588E+03  2548   0.438E+02</span><br><span class="line">DAV:   3    -0.154087935417E+02   -0.31764E+02   -0.30239E+02  2816   0.186E+02</span><br><span class="line">DAV:   4    -0.171245615883E+02   -0.17158E+01   -0.16227E+01  2856   0.463E+01</span><br><span class="line">DAV:   5    -0.171794690835E+02   -0.54907E-01   -0.54864E-01  2954   0.690E+00    0.146E+01</span><br><span class="line">DAV:   6    -0.156158003013E+02    0.15637E+01   -0.42034E+01  2712   0.133E+02    0.829E+00</span><br><span class="line">DAV:   7    -0.140078760986E+02    0.16079E+01   -0.79564E+00  2992   0.596E+01    0.790E-01</span><br><span class="line">DAV:   8    -0.140167702165E+02   -0.88941E-02   -0.53048E-01  3968   0.226E+01    0.122E+00</span><br><span class="line">DAV:   9    -0.140083290175E+02    0.84412E-02   -0.45257E-01  3848   0.291E+01    0.104E+00</span><br><span class="line">DAV:  10    -0.139869448329E+02    0.21384E-01   -0.20408E-01  4800   0.187E+01    0.615E-01</span><br><span class="line">DAV:  11    -0.139810722283E+02    0.58726E-02   -0.60166E-02  4016   0.780E+00    0.113E-01</span><br><span class="line">DAV:  12    -0.139806486192E+02    0.42361E-03   -0.10641E-02  3786   0.272E+00    0.980E-02</span><br><span class="line">DAV:  13    -0.139810968626E+02   -0.44824E-03   -0.87951E-03  4868   0.367E+00    0.844E-02</span><br><span class="line">DAV:  14    -0.139803135502E+02    0.78331E-03   -0.42901E-03  4920   0.238E+00    0.308E-02</span><br><span class="line">DAV:  15    -0.139802543403E+02    0.59210E-04   -0.32281E-04  3540   0.324E-01    0.182E-02</span><br><span class="line">DAV:  16    -0.139803209356E+02   -0.66595E-04   -0.83429E-04  4558   0.937E-01    0.301E-02</span><br><span class="line">DAV:  17    -0.139803228923E+02   -0.19567E-05   -0.15361E-04  3074   0.264E-01    0.168E-02</span><br><span class="line">DAV:  18    -0.139803417113E+02   -0.18819E-04   -0.36368E-04  4750   0.744E-01    0.954E-03</span><br><span class="line">DAV:  19    -0.139803412500E+02    0.46126E-06   -0.10659E-04  2728   0.404E-01    0.517E-03</span><br><span class="line">DAV:  20    -0.139803676358E+02   -0.26386E-04   -0.80023E-05  3638   0.357E-01    0.818E-03</span><br><span class="line">DAV:  21    -0.139803787022E+02   -0.11066E-04   -0.13797E-05  3336   0.920E-02    0.101E-02</span><br><span class="line">DAV:  22    -0.139803765945E+02    0.21077E-05   -0.39937E-05  2614   0.265E-01    0.222E-03</span><br><span class="line">DAV:  23    -0.139803888096E+02   -0.12215E-04   -0.60877E-05  2528   0.297E-01    0.725E-03</span><br><span class="line">DAV:  24    -0.139803907613E+02   -0.19517E-05   -0.71066E-06  3156   0.553E-02    0.611E-03</span><br><span class="line">DAV:  25    -0.139803916036E+02   -0.84239E-06   -0.13171E-06  1634   0.198E-02</span><br><span class="line">   1 F= -.13980392E+02 E0= -.13976732E+02  d E =-.139804E+02</span><br><span class="line">       N       E                     dE             d eps       ncg     rms          rms(c)</span><br><span class="line">DAV:   1    -0.139807173282E+02   -0.32657E-03    0.14112E+02  2602   0.612E+00    0.467E-03</span><br><span class="line">DAV:   2    -0.139804390721E+02    0.27826E-03   -0.16468E-04  4156   0.597E-01    0.165E-02</span><br><span class="line">DAV:   3    -0.139804261532E+02    0.12919E-04   -0.10604E-04  3756   0.481E-01    0.167E-03</span><br><span class="line">DAV:   4    -0.139804267349E+02   -0.58173E-06   -0.46237E-06  2500   0.225E-02</span><br><span class="line">   2 F= -.13980427E+02 E0= -.13976770E+02  d E =-.351312E-04</span><br><span class="line">       N       E                     dE             d eps       ncg     rms          rms(c)</span><br><span class="line">DAV:   1    -0.139804330907E+02   -0.69375E-05    0.16389E+02  2632   0.107E+01    0.452E-02</span><br><span class="line">DAV:   2    -0.139809280760E+02   -0.49499E-03   -0.57833E-03  3892   0.164E+00    0.586E-02</span><br><span class="line">DAV:   3    -0.139808976764E+02    0.30400E-04   -0.10914E-03  4308   0.154E+00    0.348E-02</span><br><span class="line">DAV:   4    -0.139808745784E+02    0.23098E-04   -0.21714E-04  4572   0.607E-01    0.278E-02</span><br><span class="line">DAV:   5    -0.139808671461E+02    0.74323E-05   -0.56092E-05  4164   0.315E-01    0.187E-02</span><br><span class="line">DAV:   6    -0.139808630630E+02    0.40832E-05   -0.44161E-05  4470   0.289E-01    0.698E-03</span><br><span class="line">DAV:   7    -0.139808615417E+02    0.15213E-05   -0.76178E-06  1946   0.121E-01    0.290E-03</span><br><span class="line">DAV:   8    -0.139808615453E+02   -0.35725E-08   -0.25204E-06  1800   0.234E-02</span><br><span class="line">   3 F= -.13980862E+02 E0= -.13977262E+02  d E =-.434810E-03</span><br><span class="line">       N       E                     dE             d eps       ncg     rms          rms(c)</span><br><span class="line">DAV:   1    -0.139808810490E+02   -0.19507E-04    0.54240E+01  2632   0.376E+00    0.136E-02</span><br><span class="line">DAV:   2    -0.139809351461E+02   -0.54097E-04   -0.54142E-04  3890   0.509E-01    0.173E-02</span><br><span class="line">DAV:   3    -0.139809327068E+02    0.24393E-05   -0.10930E-04  4292   0.484E-01    0.104E-02</span><br><span class="line">DAV:   4    -0.139809303964E+02    0.23104E-05   -0.18479E-05  2078   0.186E-01    0.828E-03</span><br><span class="line">DAV:   5    -0.139809300877E+02    0.30864E-06   -0.87511E-06  2780   0.122E-01</span><br><span class="line">   4 F= -.13980930E+02 E0= -.13977356E+02  d E =-.685425E-04</span><br><span class="line">       N       E                     dE             d eps       ncg     rms          rms(c)</span><br><span class="line">DAV:   1    -0.139808203045E+02    0.11009E-03    0.13819E+02  3808   0.576E+00    0.330E-03</span><br><span class="line">DAV:   2    -0.139808743367E+02   -0.54032E-04    0.77025E+00  2180   0.218E+00    0.818E-03</span><br><span class="line">DAV:   3    -0.139809353212E+02   -0.60985E-04   -0.25088E-05  2014   0.239E-01    0.103E-03</span><br><span class="line">DAV:   4    -0.139809353447E+02   -0.23522E-07   -0.62565E-07  1516   0.240E-02</span><br><span class="line">   5 F= -.13980935E+02 E0= -.13977350E+02  d E =-.525697E-05</span><br></pre></td></tr></table></figure>
+<p>能量：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">[ctan@baifq-hpc141 primitive-slab-opt]$ grep <span class="string">&#x27;  without&#x27;</span> OUTCAR</span><br><span class="line">  energy  without entropy=      -13.96941183  energy(sigma-&gt;0) =      -13.97673168</span><br><span class="line">  energy  without entropy=      -13.96945528  energy(sigma-&gt;0) =      -13.97676958</span><br><span class="line">  energy  without entropy=      -13.97006413  energy(sigma-&gt;0) =      -13.97726241</span><br><span class="line">  energy  without entropy=      -13.97020643  energy(sigma-&gt;0) =      -13.97735554</span><br><span class="line">  energy  without entropy=      -13.97017969  energy(sigma-&gt;0) =      -13.97735013</span><br></pre></td></tr></table></figure>
+<p>计算时间：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line">General timing and accounting informations for this job:</span><br><span class="line">========================================================</span><br><span class="line"></span><br><span class="line">                 Total CPU time used (sec):       53.453</span><br><span class="line">                           User time (sec):       49.556</span><br><span class="line">                         System time (sec):        3.896</span><br><span class="line">                        Elapsed time (sec):       55.466</span><br><span class="line"></span><br><span class="line">                  Maximum memory used (kb):      134456.</span><br><span class="line">                  Average memory used (kb):          N/A</span><br><span class="line"></span><br><span class="line">                         Minor page faults:        12550</span><br><span class="line">                         Major page faults:          686</span><br><span class="line">                Voluntary context switches:         1587</span><br></pre></td></tr></table></figure>
+<h3 id="ibrion-2"><code>IBRION =2</code></h3>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line">SYSTEM = Cu-concentional-slab-statistic</span><br><span class="line">ISMEAR = 1</span><br><span class="line">SIGMA = 0.5</span><br><span class="line">ALGO = Normal</span><br><span class="line">ENCUT = 700</span><br><span class="line">EDIFF = 1E-6</span><br><span class="line">LDIPOL = .TRUE.</span><br><span class="line">IDIPOL = 3</span><br><span class="line">NCORE = 20</span><br><span class="line">NSW = 500</span><br><span class="line">NELM = 200</span><br><span class="line">IBRION = 2</span><br><span class="line">POTIM = 0.1</span><br></pre></td></tr></table></figure>
+<p>成功收敛，迭代情况：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br><span class="line">89</span><br><span class="line">90</span><br><span class="line">91</span><br><span class="line">92</span><br><span class="line">93</span><br><span class="line">94</span><br><span class="line">95</span><br><span class="line">96</span><br><span class="line">97</span><br><span class="line">98</span><br><span class="line">99</span><br><span class="line">100</span><br><span class="line">101</span><br><span class="line">102</span><br><span class="line">103</span><br><span class="line">104</span><br></pre></td><td class="code"><pre><span class="line">       N       E                     dE             d eps       ncg     rms          rms(c)</span><br><span class="line">DAV:   1     0.380094340720E+03    0.38009E+03   -0.23566E+04  2548   0.269E+03</span><br><span class="line">DAV:   2     0.163549324393E+02   -0.36374E+03   -0.35588E+03  2548   0.438E+02</span><br><span class="line">DAV:   3    -0.154087935417E+02   -0.31764E+02   -0.30239E+02  2816   0.186E+02</span><br><span class="line">DAV:   4    -0.171245615883E+02   -0.17158E+01   -0.16227E+01  2856   0.463E+01</span><br><span class="line">DAV:   5    -0.171794690835E+02   -0.54907E-01   -0.54864E-01  2954   0.690E+00    0.146E+01</span><br><span class="line">DAV:   6    -0.156158003013E+02    0.15637E+01   -0.42034E+01  2712   0.133E+02    0.829E+00</span><br><span class="line">DAV:   7    -0.140078760986E+02    0.16079E+01   -0.79564E+00  2992   0.596E+01    0.790E-01</span><br><span class="line">DAV:   8    -0.140167702165E+02   -0.88941E-02   -0.53048E-01  3968   0.226E+01    0.122E+00</span><br><span class="line">DAV:   9    -0.140083290175E+02    0.84412E-02   -0.45257E-01  3848   0.291E+01    0.104E+00</span><br><span class="line">DAV:  10    -0.139869448329E+02    0.21384E-01   -0.20408E-01  4800   0.187E+01    0.615E-01</span><br><span class="line">DAV:  11    -0.139810722283E+02    0.58726E-02   -0.60166E-02  4016   0.780E+00    0.113E-01</span><br><span class="line">DAV:  12    -0.139806486192E+02    0.42361E-03   -0.10641E-02  3786   0.272E+00    0.980E-02</span><br><span class="line">DAV:  13    -0.139810968626E+02   -0.44824E-03   -0.87951E-03  4868   0.367E+00    0.844E-02</span><br><span class="line">DAV:  14    -0.139803135502E+02    0.78331E-03   -0.42901E-03  4920   0.238E+00    0.308E-02</span><br><span class="line">DAV:  15    -0.139802543403E+02    0.59210E-04   -0.32281E-04  3540   0.324E-01    0.182E-02</span><br><span class="line">DAV:  16    -0.139803209356E+02   -0.66595E-04   -0.83429E-04  4558   0.937E-01    0.301E-02</span><br><span class="line">DAV:  17    -0.139803228923E+02   -0.19567E-05   -0.15361E-04  3074   0.264E-01    0.168E-02</span><br><span class="line">DAV:  18    -0.139803417113E+02   -0.18819E-04   -0.36368E-04  4750   0.744E-01    0.954E-03</span><br><span class="line">DAV:  19    -0.139803412500E+02    0.46126E-06   -0.10659E-04  2728   0.404E-01    0.517E-03</span><br><span class="line">DAV:  20    -0.139803676358E+02   -0.26386E-04   -0.80023E-05  3638   0.357E-01    0.818E-03</span><br><span class="line">DAV:  21    -0.139803787022E+02   -0.11066E-04   -0.13797E-05  3336   0.920E-02    0.101E-02</span><br><span class="line">DAV:  22    -0.139803765945E+02    0.21077E-05   -0.39937E-05  2614   0.265E-01    0.222E-03</span><br><span class="line">DAV:  23    -0.139803888096E+02   -0.12215E-04   -0.60877E-05  2528   0.297E-01    0.725E-03</span><br><span class="line">DAV:  24    -0.139803907613E+02   -0.19517E-05   -0.71066E-06  3156   0.553E-02    0.611E-03</span><br><span class="line">DAV:  25    -0.139803916036E+02   -0.84239E-06   -0.13171E-06  1634   0.198E-02</span><br><span class="line">   1 F= -.13980392E+02 E0= -.13976732E+02  d E =-.139804E+02</span><br><span class="line">       N       E                     dE             d eps       ncg     rms          rms(c)</span><br><span class="line">DAV:   1    -0.139807447433E+02   -0.35398E-03    0.14111E+02  2590   0.632E+00    0.528E-03</span><br><span class="line">DAV:   2    -0.139804678790E+02    0.27686E-03   -0.17889E-04  4964   0.563E-01    0.155E-02</span><br><span class="line">DAV:   3    -0.139804572701E+02    0.10609E-04   -0.99595E-05  4260   0.455E-01    0.347E-03</span><br><span class="line">DAV:   4    -0.139804576704E+02   -0.40025E-06   -0.38794E-06  2444   0.252E-02</span><br><span class="line">   2 F= -.13980458E+02 E0= -.13976804E+02  d E =-.660667E-04</span><br><span class="line">       N       E                     dE             d eps       ncg     rms          rms(c)</span><br><span class="line">DAV:   1    -0.139806303531E+02   -0.17308E-03    0.10590E+01  2646   0.165E+00    0.137E-02</span><br><span class="line">DAV:   2    -0.139806282211E+02    0.21320E-05   -0.51586E-04  3892   0.441E-01    0.161E-02</span><br><span class="line">DAV:   3    -0.139806267938E+02    0.14273E-05   -0.86921E-05  4092   0.433E-01    0.112E-02</span><br><span class="line">DAV:   4    -0.139806245851E+02    0.22087E-05   -0.18757E-05  2156   0.193E-01    0.871E-03</span><br><span class="line">DAV:   5    -0.139806244737E+02    0.11138E-06   -0.11052E-05  3344   0.135E-01    0.639E-03</span><br><span class="line">DAV:   6    -0.139806241801E+02    0.29361E-06   -0.44497E-06  1850   0.106E-01</span><br><span class="line">   3 F= -.13980624E+02 E0= -.13976988E+02  d E =-.232576E-03</span><br><span class="line">       N       E                     dE             d eps       ncg     rms          rms(c)</span><br><span class="line">DAV:   1    -0.139806399034E+02   -0.15430E-04    0.10673E+02  2632   0.655E+00    0.273E-02</span><br><span class="line">DAV:   2    -0.139808756284E+02   -0.23573E-03   -0.22093E-03  3886   0.102E+00    0.353E-02</span><br><span class="line">DAV:   3    -0.139808651090E+02    0.10519E-04   -0.43844E-04  4364   0.978E-01    0.208E-02</span><br><span class="line">DAV:   4    -0.139808558492E+02    0.92598E-05   -0.82890E-05  3866   0.380E-01    0.163E-02</span><br><span class="line">DAV:   5    -0.139808537696E+02    0.20796E-05   -0.22746E-05  3796   0.195E-01    0.113E-02</span><br><span class="line">DAV:   6    -0.139808525623E+02    0.12073E-05   -0.15366E-05  3678   0.171E-01    0.403E-03</span><br><span class="line">DAV:   7    -0.139808519218E+02    0.64052E-06   -0.31561E-06  1528   0.772E-02</span><br><span class="line">   4 F= -.13980852E+02 E0= -.13977253E+02  d E =-.460318E-03</span><br><span class="line">       N       E                     dE             d eps       ncg     rms          rms(c)</span><br><span class="line">DAV:   1    -0.139800417341E+02    0.81083E-03    0.23560E+01  2630   0.588E+00    0.573E-02</span><br><span class="line">DAV:   2    -0.139809885034E+02   -0.94677E-03   -0.91190E-03  3890   0.208E+00    0.745E-02</span><br><span class="line">DAV:   3    -0.139809389586E+02    0.49545E-04   -0.17575E-03  4372   0.196E+00    0.428E-02</span><br><span class="line">DAV:   4    -0.139809007116E+02    0.38247E-04   -0.35205E-04  4684   0.779E-01    0.339E-02</span><br><span class="line">DAV:   5    -0.139808904102E+02    0.10301E-04   -0.81050E-05  4124   0.377E-01    0.239E-02</span><br><span class="line">DAV:   6    -0.139808824251E+02    0.79850E-05   -0.67930E-05  4464   0.342E-01    0.861E-03</span><br><span class="line">DAV:   7    -0.139808804209E+02    0.20042E-05   -0.13063E-05  2516   0.156E-01    0.364E-03</span><br><span class="line">DAV:   8    -0.139808803022E+02    0.11871E-06   -0.29028E-06  1874   0.341E-02</span><br><span class="line">   5 F= -.13980880E+02 E0= -.13977356E+02  d E =-.488699E-03</span><br><span class="line">       N       E                     dE             d eps       ncg     rms          rms(c)</span><br><span class="line">DAV:   1    -0.139807672910E+02    0.11313E-03    0.15468E+02  2630   0.858E+00    0.205E-02</span><br><span class="line">DAV:   2    -0.139809519135E+02   -0.18462E-03   -0.16290E-03  3860   0.606E-01    0.224E-02</span><br><span class="line">DAV:   3    -0.139809495045E+02    0.24089E-05   -0.16101E-04  3760   0.572E-01    0.195E-02</span><br><span class="line">DAV:   4    -0.139809446950E+02    0.48095E-05   -0.34715E-05  3338   0.266E-01    0.149E-02</span><br><span class="line">DAV:   5    -0.139809410051E+02    0.36899E-05   -0.17275E-05  3888   0.130E-01    0.678E-03</span><br><span class="line">DAV:   6    -0.139809401472E+02    0.85792E-06   -0.69054E-06  2716   0.164E-01</span><br><span class="line">   6 F= -.13980940E+02 E0= -.13977383E+02  d E =-.548544E-03</span><br><span class="line">       N       E                     dE             d eps       ncg     rms          rms(c)</span><br><span class="line">DAV:   1    -0.139808959432E+02    0.45062E-04    0.81868E+01  2640   0.491E+00    0.921E-03</span><br><span class="line">DAV:   2    -0.139810234583E+02   -0.12752E-03   -0.40347E-04  3868   0.335E-01    0.124E-02</span><br><span class="line">DAV:   3    -0.139810222522E+02    0.12061E-05   -0.37434E-05  3890   0.257E-01    0.934E-03</span><br><span class="line">DAV:   4    -0.139810216716E+02    0.58055E-06   -0.56497E-06  1910   0.105E-01</span><br><span class="line">   7 F= -.13981022E+02 E0= -.13977454E+02  d E =-.815244E-04</span><br><span class="line">       N       E                     dE             d eps       ncg     rms          rms(c)</span><br><span class="line">DAV:   1    -0.139809168510E+02    0.10540E-03    0.16544E+02  2640   0.100E+01    0.295E-02</span><br><span class="line">DAV:   2    -0.139812498696E+02   -0.33302E-03   -0.35344E-03  3874   0.942E-01    0.353E-02</span><br><span class="line">DAV:   3    -0.139812400259E+02    0.98437E-05   -0.31428E-04  3728   0.768E-01    0.285E-02</span><br><span class="line">DAV:   4    -0.139812339348E+02    0.60911E-05   -0.66313E-05  3954   0.364E-01    0.240E-02</span><br><span class="line">DAV:   5    -0.139812229797E+02    0.10955E-04   -0.53085E-05  4306   0.249E-01    0.134E-02</span><br><span class="line">DAV:   6    -0.139812204144E+02    0.25653E-05   -0.20199E-05  3228   0.260E-01    0.363E-03</span><br><span class="line">DAV:   7    -0.139812202373E+02    0.17704E-06   -0.19687E-06  1482   0.408E-02</span><br><span class="line">   8 F= -.13981220E+02 E0= -.13977623E+02  d E =-.280090E-03</span><br><span class="line">       N       E                     dE             d eps       ncg     rms          rms(c)</span><br><span class="line">DAV:   1    -0.139799374972E+02    0.12829E-02    0.13429E+02  2638   0.119E+01    0.609E-02</span><br><span class="line">DAV:   2    -0.139815536956E+02   -0.16162E-02   -0.15321E-02  3874   0.237E+00    0.834E-02</span><br><span class="line">DAV:   3    -0.139814840776E+02    0.69618E-04   -0.19373E-03  4340   0.194E+00    0.553E-02</span><br><span class="line">DAV:   4    -0.139814504163E+02    0.33661E-04   -0.33985E-04  4524   0.775E-01    0.477E-02</span><br><span class="line">DAV:   5    -0.139814168287E+02    0.33588E-04   -0.15051E-04  4446   0.480E-01    0.325E-02</span><br><span class="line">DAV:   6    -0.139813975448E+02    0.19284E-04   -0.12765E-04  4566   0.480E-01    0.853E-03</span><br><span class="line">DAV:   7    -0.139813962132E+02    0.13316E-05   -0.15668E-05  3464   0.152E-01    0.507E-03</span><br><span class="line">DAV:   8    -0.139813960169E+02    0.19635E-06   -0.22934E-06  1728   0.311E-02</span><br><span class="line">   9 F= -.13981396E+02 E0= -.13977735E+02  d E =-.455870E-03</span><br><span class="line">       N       E                     dE             d eps       ncg     rms          rms(c)</span><br><span class="line">DAV:   1    -0.139815084243E+02   -0.11221E-03    0.83969E+01  2670   0.421E+00    0.434E-03</span><br><span class="line">DAV:   2    -0.139813984003E+02    0.11002E-03   -0.73291E-05  3840   0.104E-01    0.437E-03</span><br><span class="line">DAV:   3    -0.139813981891E+02    0.21124E-06   -0.11427E-06  1510   0.490E-02</span><br><span class="line">  10 F= -.13981398E+02 E0= -.13977729E+02  d E =-.217219E-05</span><br><span class="line">       N       E                     dE             d eps       ncg     rms          rms(c)</span><br><span class="line">DAV:   1    -0.139815087603E+02   -0.11036E-03    0.15888E+02  2670   0.681E+00    0.323E-03</span><br><span class="line">DAV:   2    -0.139813984696E+02    0.11029E-03   -0.26471E-05  2428   0.210E-01    0.588E-03</span><br><span class="line">DAV:   3    -0.139813976417E+02    0.82788E-06   -0.27049E-05  3780   0.204E-01    0.141E-03</span><br><span class="line">DAV:   4    -0.139813978006E+02   -0.15885E-06   -0.17146E-06  1590   0.262E-02</span><br><span class="line">  11 F= -.13981398E+02 E0= -.13977732E+02  d E =-.178370E-05</span><br></pre></td></tr></table></figure>
+<p>计算时间：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line">General timing and accounting informations for this job:</span><br><span class="line">========================================================</span><br><span class="line"></span><br><span class="line">                 Total CPU time used (sec):       93.113</span><br><span class="line">                           User time (sec):       87.076</span><br><span class="line">                         System time (sec):        6.036</span><br><span class="line">                        Elapsed time (sec):       94.073</span><br><span class="line"></span><br><span class="line">                  Maximum memory used (kb):      126136.</span><br><span class="line">                  Average memory used (kb):          N/A</span><br><span class="line"></span><br><span class="line">                         Minor page faults:        11497</span><br><span class="line">                         Major page faults:          687</span><br><span class="line">                Voluntary context switches:         1456</span><br></pre></td></tr></table></figure>
+<p>能量信息：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line">[ctan@baifq-hpc141 primitive-slab-opt-2]$ grep <span class="string">&#x27;  without&#x27;</span> OUTCAR</span><br><span class="line">  energy  without entropy=      -13.96941183  energy(sigma-&gt;0) =      -13.97673168</span><br><span class="line">  energy  without entropy=      -13.96949582  energy(sigma-&gt;0) =      -13.97680372</span><br><span class="line">  energy  without entropy=      -13.96971572  energy(sigma-&gt;0) =      -13.97698803</span><br><span class="line">  energy  without entropy=      -13.97005607  energy(sigma-&gt;0) =      -13.97725330</span><br><span class="line">  energy  without entropy=      -13.97030617  energy(sigma-&gt;0) =      -13.97735559</span><br><span class="line">  energy  without entropy=      -13.97026927  energy(sigma-&gt;0) =      -13.97738319</span><br><span class="line">  energy  without entropy=      -13.97031853  energy(sigma-&gt;0) =      -13.97745396</span><br><span class="line">  energy  without entropy=      -13.97042910  energy(sigma-&gt;0) =      -13.97762319</span><br><span class="line">  energy  without entropy=      -13.97041285  energy(sigma-&gt;0) =      -13.97773496</span><br><span class="line">  energy  without entropy=      -13.97039032  energy(sigma-&gt;0) =      -13.97772890</span><br><span class="line">  energy  without entropy=      -13.97040171  energy(sigma-&gt;0) =      -13.97773244</span><br></pre></td></tr></table></figure>
+<p>对比一下发现，正如wiki所说，<code>IBRION = 1</code>适合初始结构较好的情况，<code>IBRION - 2</code>的适用性更广，更可靠，尽管<code>IBRION = 2</code>
+的<code>POTIM</code>更大，但所用时间更长。二者最终的能量相差不大</p>
+
+                    
+                        
+
+
+                    
+                    
+                        <p>
+                            <a
+                                href="/2025/04/27/%E7%A7%91%E7%A0%94/VASP/Starry%20Sky/Cu(111)%E6%99%B6%E9%9D%A2%E7%9A%84%E4%BC%98%E5%8C%96%E8%AE%A1%E7%AE%97/#post-footer"
+                                class="postShorten-excerpt_link link"
+                                aria-label=""
+                            >
+                                Comment and share
+                            </a>
+                        </p>
+                    
+                </div>
+            
+        </div>
+        
+    </article>
+    
+    
+    <article class="postShorten postShorten--thumbnailimg-bottom">
+        <div class="postShorten-wrap">
+            
+            <div class="postShorten-header">
+                <h1 class="postShorten-title">
+                    
+                        <a
+                            class="link-unstyled"
                             href="/2025/04/23/%E7%A7%91%E7%A0%94/VASP/Starry%20Sky/Cu(111)%E7%9A%84%E5%8D%95%E7%82%B9%E8%AE%A1%E7%AE%97/"
                             aria-label=": Cu(111) slab模型的单点计算"
                         >
@@ -1235,949 +1427,6 @@ out每一个参数的含义，但是大概已经弄懂一些简单算例的思�
         
     </article>
     
-    
-    <article class="postShorten postShorten--thumbnailimg-bottom">
-        <div class="postShorten-wrap">
-            
-            <div class="postShorten-header">
-                <h1 class="postShorten-title">
-                    
-                        <a
-                            class="link-unstyled"
-                            href="/2025/04/17/Stormy%20English/The%20Atlantic/April/THE%20ERA%20OF%20MIGHT%20MAKES%20RIGHT/"
-                            aria-label=": THE ERA OF MIGHT MAKES RIGHT"
-                        >
-                            THE ERA OF MIGHT MAKES RIGHT
-                        </a>
-                    
-                </h1>
-                <div class="postShorten-meta">
-    <time datetime="2025-04-17T21:20:02+08:00">
-	
-		    Apr 17, 2025
-    	
-    </time>
-    
-        <span>in </span>
-        
-    <a class="category-link" href="/all-categories/Stormy-English/">Stormy English</a>, <a class="category-link" href="/all-categories/Stormy-English/The-Atlantic/">The Atlantic</a>, <a class="category-link" href="/all-categories/Stormy-English/The-Atlantic/April/">April</a>
-
-
-    
-</div>
-
-            </div>
-            
-                <div class="postShorten-content">
-                    <h2 id="the-era-of-might-makes-right">THE ERA OF MIGHT MAKES RIGHT</h2>
-<blockquote>
-<p>In the MAGA vision of the national interest, America will be more
-like Russia, China, and Iran. (BY <em>GEORGE PACKER</em>)</p>
-</blockquote>
-<p>The best way to <em>==dismantle==</em> the federal government, then
-<em>==repurpose==</em> it as a tool of personal power and ideological
-warfare, is to start with the soft targets. Entitlements and defense,
-which comprise more than half of federal spending and a large share of
-its fraud and waste, enjoy too much support for Elon Musk to <em>==roll
-them up==</em> easily. But nothing is less popular than sending
-taxpayers’ money to unknown people in poor, faraway countries that might
-<em>==be rife with corruption==</em> . Americans dislike foreign aid so
-much that they wrongly believe it consumes at least a quarter of the
-budget (in the previous fiscal year, aid constituted barely 1 percent).
-President John F. Kennedy understood the problem, and after creating the
-United States Agency for International Development, in 1961, he told his
-advisers: “We hope we can tie this whole concept of aid to the safety of
-the United States. That is the reason we give aid. The test is whether
-it will serve the United States. Aid is not a good word. Perhaps we can
-describe it better as ‘Mutual Assistance.’ ” At another meeting, Kennedy
-suggested “International Security.”</p>
-<p>USAID continued for the next six decades because leaders of both
-parties believed that ending <em>==polio==</em> , preventing famine,
-stabilizing poor countries, strengthening democracies, and opening new
-markets served the United States. But on January 20, within hours of his
-inauguration, President Donald Trump signed an executive order that
-froze foreign aid. USAID was instructed to stop nearly all work. Its
-Washington headquarters was occupied and sensitive data were
-<em>==seized==</em> by <em>==whiz==</em> kids from Musk’s Department of
-Government Efficiency, or DOGE. One of their elder members, a 25-yearold
-software engineer and Matt Gaetz fan named Gavin Kliger, acquired an
-official email address to instruct the staff of USAID to stay home.</p>
-<p>Contractors were fired and employees <em>==were placed on indefinite
-leave==</em> ; those on overseas missions were given 30 days to return
-to the States with their families. Under orders to remain silent, they
-used <em>==pseudonyms==</em> on encrypted chats to inform the outside
-world of what was going on. When I spoke on Signal with government
-employees, they sounded as if they were in Moscow or Tehran. “It felt
-like it went very <em>==authoritarian==</em> very quickly,” one
-<em>==civil servant==</em> told me. “You have to watch everything you
-say and do in a way that is gross.”</p>
-<p>The website usaid.gov vanished, then <em>==reappeared==</em> with a
-<em>==bare-bones==</em> announcement of the organization’s
-<em>==dismemberment==</em> , followed by the message “Thank you for your
-service.” A <em>==veteran==</em> USAID official called it “
-<em>==brutal==</em> — from some 20-yearold idiot who doesn’t know
-anything. What the fuck do you know about my service?” <em>==A curtain
-fell over the public information==</em> that could have served to
-challenge the <em>==outpouring==</em> of lies and
-<em>==distortions==</em> from the White House and from Musk, who called
-USAID “a criminal organization” and “evil.” If you looked into the
-charges, nearly all turned out to be <em>==outright==</em>
-<em>==falsehoods==</em> , highly misleading, or isolated examples of the
-kind of stupid, wasteful programs that exist in any organization.</p>
-<p>A <em>==grant==</em> for hundreds of ethnic-minority students from
-Myanmar to attend universities throughout Southeast Asia became a
-propaganda tool in the hands of the <em>==wrecking crew==</em> because
-it went under the name “Diversity and <em>==Inclusion==</em> Scholar
-ship Program”—as if the money were going to a “woke” bureaucracy, not to
-Rohingya refugees from the military regime’s <em>==genocide==</em> . The
-<em>==orthodoxy==</em> of a previous administration required the
-<em>==terminology==</em> ; the orthodoxy of the new one has ended the
-students’ education and forced them to return to the country that
-<em>==oppressed==</em> them. One of Trump’s executive orders is called
-“Defending Women Against Gender Ideology Extremism and Restoring
-Biological Truth to the Federal Government”; meanwhile, the
-administration suspended the online education of nearly 1,000 women in
-Afghanistan who had been studying undetected by the Taliban with funding
-from the State Department.</p>
-<p>But hardly anyone in this country knows these things.
-<em>==Contesting==</em> Musk’s algorithmically boosted lies on X with
-the tools of a reporter is like fighting a wildfire with a garden
-hose.</p>
-<p>With no workforce or funding, USAID’s efforts around the
-world—vaccine campaigns in Nepal, HIV-drug distribution in Nigeria,
-nutrition for starving children in Sudanese refugee camps—were forced to
-end. Secretary of State Marco Rubio (who <em>==championed==</em> USAID
-as a senator and now, as the agency’s acting head, is its
-<em>==executioner==</em> ) issued a <em>==waiver==</em> for lifesaving
-programs. But it proved almost meaningless, because the people needed to
-run the programs were locked out of their computers, had no way to
-communicate, and feared punishment if they kept working.</p>
-<p>The <em>==heedlessness==</em> of the aid <em>==wreckers==</em>
-recalls Nick Carraway’s description in <em>The Great Gatsby</em> of Tom
-and Daisy Buchanan: “They were careless people, Tom and Daisy—they
-smashed up things and creatures and then retreated back into their money
-or their vast carelessness, or whatever it was that kept them together,
-and let other people clean up the mess they had made.” An agency of
-10,000 employees is shrinking to about 300 and, despite its
-<em>==statutory==</em> independence, being dissolved into the State
-Department. The veteran USAID official I spoke with foresaw a
-<em>==skeletal==</em> operation reduced to health and food assistance,
-with everything else—education, the environment, governance, economic
-development—gone.</p>
-<p>But even basic <em>==humanitarian==</em> programs will be nearly
-impossible to sustain with the numbers that the administration
-<em>==envisions==</em> —for example, 12 staff members for all of
-Africa.</p>
-<p>“This is the infrastructure and architecture that has given us a
-doubling of the human lifespan,” Atul Gawande, the writer and surgeon
-who was the most recent, and perhaps last, head of the agency’s Bureau
-for Global Health, told me. “Taking it down kills people.”</p>
-<p><strong>Trump and Musk’s</strong> destruction of USAID was a trial
-<em>==blitzkrieg==</em> : Send tanks and <em>==bombers==</em> into
-<em>==defenseless==</em> Poland to see what works before turning on the
-Western powers. The <em>==assault==</em> provided a model for
-<em>==eviscerating==</em> the rest of the federal bureaucracy. It also
-demonstrated the radicalism of Trump’s view of America’s role in the
-world.</p>
-<p>Every president from Franklin D. Roosevelt to Barack Obama understood
-that American power was enhanced, not threatened, by attaching it to
-alliances, institutions, and values that the American people support,
-such as freedom, <em>==pluralism==</em> , and humanitarianism. This was
-the common idea behind Harry Truman’s Marshall Plan for
-<em>==postwar==</em> Europe, Kennedy’s establishment of USAID, Jimmy
-Carter’s creation of the U.S. refugee program, and George W. Bush’s
-Emergency Plan for AIDS Relief. These weren’t simple acts of generosity.
-They were designed to prevent chaos and misery from overwhelming other
-countries and, eventually, harming our own. They expanded American
-influence by attraction rather than <em>==coercion==</em> , showing
-people around the world that the <em>==Leviathan==</em> could benefit
-them, too. Political scientists call this “soft power.”</p>
-<p>Every president betrayed these ideas in one way or another, making
-U.S. foreign policy <em>==a fat target==</em> for criticism at home and
-abroad, by the left and the right. Kennedy used foreign aid to
-<em>==wage==</em> a bloody <em>==counterinsurgency==</em> in South
-Vietnam; Carter put human rights at the center of his policy and then
-<em>==toasted the repressive==</em> <em>==shah==</em> of Iran; Bush,
-claiming to be spreading democracy to the Middle East, seriously damaged
-America’s global legitimacy. USAID <em>==antagonized==</em> host
-governments and local populations with its <em>==arrogance==</em> and
-<em>==bloat==</em> . “We had a hand in our own destruction,” one
-longtime official told me. “We threw money in areas we didn’t need
-to.”</p>
-<p>But the alternative to the <em>==hypocrisies==</em> of soft power and
-the postwar liberal order was never going to be a <em>==chastened==</em>
-, <em>==humbler==</em> American foreign policy— neither the left’s
-fantasy of <em>==a plus-size Norway==</em> nor the right’s of a return
-to the <em>==isolationist==</em> 1920s. The U.S. is far too big, strong,
-and <em>==messianic==</em> for voluntary diminish ment. The choice for
-this <em>==superpower==</em> is between <em>==enlightened==</em>
-<em>==selfinterest==</em> , with all its blind spots and failures, and
-raw coercion.</p>
-<p>Trump is showing what raw coercion looks like. Rather than negotiate
-with Canada and Mexico, impose U.S. demands with tariffs; rather than
-strengthen NATO, undermine it and threaten a conflict with one of its
-smallest, most <em>==benign==</em> member countries; rather than review
-aid programs for their <em>==efficacy==</em> , shut them down,
-<em>==slander==</em> the people who make them work, and shrug at the
-humanitarian catastrophe that follows. The deeper reason for the
-extinction event at USAID is Trump’s contempt for anything that looks
-like cooperation between the strong and the weak. “America First” is
-more <em>==imperialist==</em> than isolationist, which is why William
-McKinley, not George Washington or John Quincy Adams, is Donald Trump’s
-new presidential hero. He’s using a techno-futurist billionaire to
-return America to the late 19th century, when the civil service was a
-patronage network and great-power doctrine held that “might makes
-right.” He’s ridding himself and the country of restraining codes— the
-rule of law at home, the rules-based order abroad—and replacing them
-with a simple test: “What’s in it for me?” He’s
-<em>==unilaterally==</em> <em>==disarming==</em> America of its soft
-power, making the United States no different from China, Russia, or
-Iran. This is why the <em>==gutting==</em> of USAID has received
-propaganda assistance and glowing reviews from Beijing, Moscow, and
-Tehran.</p>
-<p><em>==Transactional==</em> logic has an obvious appeal.
-<em>==Dispensing==</em> with the annoying <em>==niceties==</em> of
-multilateral partnerships and foreign aid brings a kind of clarity to
-international relations, showing where the real muscle is, like <em>==a
-strip-down==</em> before a wrestling match. Set loose, the U.S. might be
-strong enough to work its will on weaker friends and neighbors, or at
-least claim to do so. Trump’s threat of tariffs to intimidate Colombia
-into allowing <em>==deportation==</em> flights to land there was like
-the assault on USAID—an easy demonstration project. His domination of
-the propaganda sphere allows him to convince the public of victories
-even where, as with Canada, there was never much of a dispute to begin
-with. If NATO dissolved while the U.S. grabbed Greenland, many Americans
-would regard it as a net win: We’d save money and gain a strategic chunk
-of the North Atlantic while freeing ourselves of an obligation whose
-benefit to us wasn’t entirely clear.</p>
-<p>It isn’t obvious why funding the education of oppressed Burmese
-students serves our national interest. It’s easier to see the advantages
-of strongarming weak countries into giving in to our demands. If this
-creates <em>==resentment==</em> , well, who said gratitude mattered
-between nations? Strength has its own attractive force. A sizable
-<em>==cohort==</em> of Americans have made their peace with Trump, not
-because he tempered his cruelty and checked his abuses but because he is
-at the height of his power and is using it without restraint. This is
-called power worship. The Russian invasion of Ukraine won Vladimir Putin
-a certain admiration in countries of the global South, as well as among
-MAGA Americans, while Joe Biden’s appeals to democratic values seemed
-<em>==pallid==</em> and hypocritical. The law of “might makes right” is
-the political norm in most countries. Trump needs no explaining in
-Nigeria or India.</p>
-<p>Coercion also depends on the American people’s
-<em>==shortsightedness==</em> and <em>==incuriosity==</em> .Trump’s
-flood of executive orders and Musk’s assault on the federal government
-are intended to create such chaos that not even the insiders most
-affected understand what’s happening. An inattentive public might simply
-see a Washington melee—the disrupters against the bureaucrats. Short of
-going to war, if the U.S. starts behaving like the great powers of
-earlier centuries and the rival powers of our own, how many Americans
-will notice a difference in their own lives?</p>
-<p><strong>According to Rubio</strong>, the purpose of the aid pause is
-to weed out programs that don’t advance “core national interests.”
-Gawande compared the process to stopping a plane in midair and firing
-the crew in order to conduct a review of the airline industry. But the
-light of the <em>==bonfire==</em> burning in Washington makes it easier
-to see how soft power actually works—how most aid programs do serve the
-national interest. Shutting down African health programs makes
-monitoring the recent outbreak of Ebola in Uganda, and preventing its
-spread from that region to the rest of the world, nearly impossible. In
-many countries, the end of aid opens the door wider to
-<em>==predatory==</em> Chinese loans and propaganda. As one USAID
-official explained: “My job literally was countering China, providing
-development assistance in a much nicer, kinder, partnership way to local
-people who were being pressured and had their arms twisted.” When 70
-Afghan students in central Asia, mostly women, had their scholarships to
-American universities suddenly suspended and in some cases their plane
-tickets canceled, the values of freedom and open inquiry lost a bit of
-their attractiveness. The American college administrator responsible for
-the students told me, “Young people who are sympathetic to the United
-States and share our best values are not only not being welcomed;
-they’re having the door slammed in their faces.”</p>
-<p>Most Americans don’t want to believe that their government is taking
-life saving medicine away from sick people in Africa, or betraying
-Afghans who sacrificed for this country. They might disapprove of
-foreign aid, but they want starving children to be fed. This native
-<em>==generosity==</em> explains why Trump and Musk have gone to such
-lengths to <em>==clog==</em> the internet with falsehoods and hide the
-consequences of their cruelty. The only obstacle to ending American soft
-power isn’t Congress, the bureaucracy, or the courts, but public
-opinion.</p>
-<p>One of the country’s most popular programs is the resettlement of
-refugees. For decades, ordinary American citizens have welcomed the
-world’s most <em>==persecuted==</em> and desperate people—European Jews
-after World War II, Vietnamese after the fall of <em>==Saigon==</em> ,
-Afghans after the fall of Kabul. Refugees are in a separate category
-from most immigrants: After years of waiting and <em>==vetting==</em> by
-U.S. and international agencies, they come here legally, with local
-sponsors. But Trump and his adviser Stephen Miller see them as no
-different from migrants crossing the southern border. The flurry of
-executive orders and memos has halted the processing of all refugees and
-ended funding for resettlement. The story has received little
-attention.</p>
-<p>Here’s what the program’s shutdown means: I spoke with an Afghan
-special-forces captain who served alongside Americans— when Kabul was
-about to fall in 2021, he prevented armed Taliban at the airport from
-seizing U.S. weaponry, but he was left behind during the evacuation.</p>
-<p>Arrested by the new regime, the captain was imprisoned for seven
-months and suffered regular and severe torture, including the
-<em>==amputation==</em> of a <em>==testicle==</em> . He managed to
-escape with his family to Pakistan in 2023 and was near the end of being
-processed as a refugee when Trump took office. He had heard Trump
-criticize the Biden administration for leaving military equipment behind
-in Afghanistan. Because he had worked to prevent that from happening, he
-told me, “that gave me a hope that the new administration would value my
-work and look at me as a valuable person, a person who is aligned with
-all the administration is hoping to achieve, and that would give a
-chance for my kids and family to be moved out safely.” Biden’s
-<em>==ineptitude==</em> <em>==stranded==</em> the captain once;</p>
-<p>Trump’s <em>==coldheartedness==</em> is doing it again.</p>
-<p>A sense of loyalty and compassion isn’t <em>==extraneous==</em> to
-American identity; it is at the core of national pride, and its betrayal
-exacts a cost that can’t be easily measured. The Biden administration
-created a program called Welcome Corps that allows ordinary Americans to
-act as resettlement agencies. (My wife and I participated in it.) In
-Pennsylvania, a retiree named Chuck Pugh formed a sponsor group to bring
-an Afghan family here, and the final medical exam was completed just
-before Inauguration Day. When resettlement was abruptly ended, Pugh
-found himself wondering, Who are we? I know what I want to think, but
-I’m just not sure. The sponsor group includes Pugh’s sister, Virginia
-Mirra. She and her husband are <em>==devout==</em> Christians and
-<em>==ardent==</em> Trump supporters. In early February, when I asked
-her how she felt about the suspension of the refugee program, she
-sounded surprised, and disappointed—she hadn’t heard the news. “I feel
-sad about that,” she said. “It does bother me. It’s starting to sink in.
-With these people in danger, I would wonder if there would be an
-exception made for them. How would we go about that?” Her husband
-frequently sends American-flag lapel pins to Trump, and I suggested that
-he write the president about the Afghan family. “I will talk to my
-husband tonight,” Mirra said. “And I will continue to pray that the Lord
-will protect them and bring them to this country by some means. I do
-believe in miracles.”</p>
-<h2 id="vocabulary-phrases-and-sentences">Vocabulary, phrases and
-sentences</h2>
-<table>
-<colgroup>
-<col style="width: 29%" />
-<col style="width: 40%" />
-<col style="width: 30%" />
-</colgroup>
-<thead>
-<tr>
-<th>Words</th>
-<th>Chinese Definition</th>
-<th>Phonetic Symbol</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td>dismantle</td>
-<td>拆除；拆卸；废除</td>
-<td>/dɪsˈmæntl/</td>
-</tr>
-<tr>
-<td>repurpose</td>
-<td>将…用于新的目的；重新利用</td>
-<td>/ˌriːˈpɜːrpəs/</td>
-</tr>
-<tr>
-<td>roll them up</td>
-<td>把它们卷起来</td>
-<td>/rəʊl ðem ʌp/</td>
-</tr>
-<tr>
-<td>be rife with corruption</td>
-<td>充满腐败</td>
-<td>/biː raɪf wɪð kəˈrʌpʃn/</td>
-</tr>
-<tr>
-<td>polio</td>
-<td>小儿麻痹症</td>
-<td>/ˈpəʊlioʊ/</td>
-</tr>
-<tr>
-<td>whiz</td>
-<td>能手；专家</td>
-<td>/wɪz/</td>
-</tr>
-<tr>
-<td>seize</td>
-<td>没收；查封</td>
-<td>/siːz/</td>
-</tr>
-<tr>
-<td>be placed on indefinite leave</td>
-<td>被无限期停职</td>
-<td>/biː pleɪst ɒn ɪnˈdefɪnət liːv/</td>
-</tr>
-<tr>
-<td>pseudonym</td>
-<td>笔名；假名</td>
-<td>/ˈsjuːdənɪm/</td>
-</tr>
-<tr>
-<td>authoritarian</td>
-<td>独裁主义的；专制的</td>
-<td>/ɔːˌθɒrəˈteəriən/</td>
-</tr>
-<tr>
-<td>civil servant</td>
-<td>公务员</td>
-<td>/ˈsɪvl ˈsɜːvənt/</td>
-</tr>
-<tr>
-<td>bare - bone</td>
-<td>最低限度的</td>
-<td>/ˈbeə bəʊn/</td>
-</tr>
-<tr>
-<td>dismemberment</td>
-<td>肢解；分割；瓜分</td>
-<td>/dɪsˈmembəmənt/</td>
-</tr>
-<tr>
-<td>veteran</td>
-<td>老兵；老手；退伍军人</td>
-<td>/ˈvetərən/</td>
-</tr>
-<tr>
-<td>brutal</td>
-<td>残忍的；野蛮的；冷酷的</td>
-<td>/ˈbruːtl/</td>
-</tr>
-<tr>
-<td>a curtain fall over the public information</td>
-<td>对公众信息的掩盖</td>
-<td>/ə ˈkɜːtn fɔːl ˈəʊvə ðə ˈpʌblɪk ˌɪnfəˈmeɪʃn/</td>
-</tr>
-<tr>
-<td>outpour</td>
-<td>倾泻；流出；流露</td>
-<td>/ˈaʊtpɔː(r)/</td>
-</tr>
-<tr>
-<td>distortion</td>
-<td>扭曲；变形；失真；曲解</td>
-<td>/dɪˈstɔːʃn/</td>
-</tr>
-<tr>
-<td>outright</td>
-<td>完全地；彻底地；公然地</td>
-<td>/ˈaʊtraɪt/</td>
-</tr>
-<tr>
-<td>falsehood</td>
-<td>谎言；虚假；不实</td>
-<td>/ˈfɔːlshʊd/</td>
-</tr>
-<tr>
-<td>grant</td>
-<td>奖学金</td>
-<td>/ɡrɑːnt/</td>
-</tr>
-<tr>
-<td>wrecking crew</td>
-<td>破坏小组；拆除队</td>
-<td>/ˈrekɪŋ kruː/</td>
-</tr>
-<tr>
-<td>inclusion</td>
-<td>包容</td>
-<td>/ɪnˈkluːʒn/</td>
-</tr>
-<tr>
-<td>genocide</td>
-<td>种族灭绝；大屠杀</td>
-<td>/ˈdʒenəsaɪd/</td>
-</tr>
-<tr>
-<td>orthodoxy</td>
-<td>正统观念；正统做法；正教</td>
-<td>/ˈɔːθədɒksi/</td>
-</tr>
-<tr>
-<td>terminology</td>
-<td>术语；专门用语</td>
-<td>/ˌtɜːmɪˈnɒlədʒi/</td>
-</tr>
-<tr>
-<td>contest</td>
-<td>争辩；质疑</td>
-<td>/ˈkɒntest/ （动词）/ˈkɒntest/（名词）</td>
-</tr>
-<tr>
-<td>champion</td>
-<td>支持；捍卫</td>
-<td>/ˈtʃæmpiən/（名词）/ˈtʃæmpiən/（动词）</td>
-</tr>
-<tr>
-<td>executioner</td>
-<td>刽子手；行刑者</td>
-<td>/ˈeksɪkjuːʃənə(r)/</td>
-</tr>
-<tr>
-<td>waiver</td>
-<td>放弃；弃权；豁免</td>
-<td>/ˈweɪvə(r)/</td>
-</tr>
-<tr>
-<td>heedlessness</td>
-<td>不注意；粗心大意</td>
-<td>/ˈhiːdləsnəs/</td>
-</tr>
-<tr>
-<td>wrecker</td>
-<td>破坏者；肇事者；使船遇难的人</td>
-<td>/ˈrekə(r)/</td>
-</tr>
-<tr>
-<td>statutory</td>
-<td>法定的；法规的；依照法令的</td>
-<td>/ˈstætʃətri/</td>
-</tr>
-<tr>
-<td>skeletal</td>
-<td>骨骼的；骨瘦如柴的；梗概的</td>
-<td>/ˈskelɪtl/</td>
-</tr>
-<tr>
-<td>humanitarian</td>
-<td>人道主义的；博爱的；慈善的</td>
-<td>/hjuːˌmænɪˈteəriən/</td>
-</tr>
-<tr>
-<td>envision</td>
-<td>想象；设想；展望</td>
-<td>/ɪnˈvɪʒn/</td>
-</tr>
-<tr>
-<td>blitzkrieg</td>
-<td>闪电战</td>
-<td>/ˈblɪtskriːɡ/</td>
-</tr>
-<tr>
-<td>bomber</td>
-<td>轰炸机；投弹手</td>
-<td>/ˈbɒmə(r)/</td>
-</tr>
-<tr>
-<td>defenseless</td>
-<td>无防御能力的；无助的</td>
-<td>/dɪˈfensləs/</td>
-</tr>
-<tr>
-<td>assault</td>
-<td>攻击；袭击；突击</td>
-<td>/əˈsɔːlt/</td>
-</tr>
-<tr>
-<td>eviscerate</td>
-<td>取出内脏；切除；彻底摧毁</td>
-<td>/ɪˈvɪsəreɪt/</td>
-</tr>
-<tr>
-<td>pluralism</td>
-<td>多元主义；多元论；多元化</td>
-<td>/ˈplʊərəlɪzəm/</td>
-</tr>
-<tr>
-<td>postwar</td>
-<td>战后的</td>
-<td>/ˈpəʊstwɔː(r)/</td>
-</tr>
-<tr>
-<td>coercion</td>
-<td>强制；强迫；高压政治</td>
-<td>/kəʊˈɜːʃn/</td>
-</tr>
-<tr>
-<td>leviathan</td>
-<td>Leviathan 海中怪兽；庞然大物</td>
-<td>/lɪˈvaɪəθən/</td>
-</tr>
-<tr>
-<td>a fat target</td>
-<td>一个容易攻击的目标</td>
-<td>/ə ˈfæt ˈtɑːɡɪt/</td>
-</tr>
-<tr>
-<td>wage</td>
-<td>开展；发动；进行；工资</td>
-<td>/ˈweɪdʒ/（动词）/ˈweɪdʒ/（名词）</td>
-</tr>
-<tr>
-<td>counterinsurgency</td>
-<td>反叛乱；平叛</td>
-<td>/ˌkaʊntərɪnˈsɜːdʒənsi/</td>
-</tr>
-<tr>
-<td>toasted the repressive</td>
-<td>为镇压者干杯（这里意译就是支持镇压者）</td>
-<td>/ˈtəʊstɪd ðə rɪˈpresɪv/</td>
-</tr>
-<tr>
-<td>shah</td>
-<td>（伊朗）国王</td>
-<td>/ʃɑː/</td>
-</tr>
-<tr>
-<td>antagonize</td>
-<td>使对抗；使敌对；引起…的敌意</td>
-<td>/ænˈtæɡənaɪz/</td>
-</tr>
-<tr>
-<td>arrogance</td>
-<td>傲慢；自大</td>
-<td>/ˈærəɡəns/</td>
-</tr>
-<tr>
-<td>bloat</td>
-<td>使膨胀；使肿胀；肿胀；臃肿；膨胀</td>
-<td>/ˈbləʊt/</td>
-</tr>
-<tr>
-<td>chastened</td>
-<td>受到惩罚后变得克制的； chastise（惩罚）的过去分词</td>
-<td>/ˈtʃeɪsnd/</td>
-</tr>
-<tr>
-<td>a plus - size Norway</td>
-<td>一个大号挪威（形象说法，指左派幻想的像挪威那样温和的美国）</td>
-<td>/ə ˈplʌs saɪz ˈnɔːweɪ/</td>
-</tr>
-<tr>
-<td>isolationist</td>
-<td>孤立主义的</td>
-<td>/ˌaɪsəˈleɪʃənɪst/</td>
-</tr>
-<tr>
-<td>messianic</td>
-<td>有救世主情结的；弥赛亚的</td>
-<td>/ˌmesiˈænɪk/</td>
-</tr>
-<tr>
-<td>superpower</td>
-<td>超级大国</td>
-<td>/ˈsuːpəpaʊə(r)/</td>
-</tr>
-<tr>
-<td>enlightened</td>
-<td>开明的；有见识的</td>
-<td>/ɪnˈlaɪtnd/</td>
-</tr>
-<tr>
-<td>selfinterest</td>
-<td>自身利益</td>
-<td>/ˈself ˈɪntrəst/</td>
-</tr>
-<tr>
-<td>benign</td>
-<td>良性的；和蔼的；温和的</td>
-<td>/bɪˈnaɪn/</td>
-</tr>
-<tr>
-<td>efficacy</td>
-<td>功效；效力；效能</td>
-<td>/ˈefɪkəsi/</td>
-</tr>
-<tr>
-<td>slander</td>
-<td>诽谤；诋毁</td>
-<td>/ˈslændə(r)/</td>
-</tr>
-<tr>
-<td>imperialist</td>
-<td>帝国主义的</td>
-<td>/ɪmˈpɪəriəlɪst/</td>
-</tr>
-<tr>
-<td>unilaterally</td>
-<td>单方面地</td>
-<td>/ˌjuːnɪˈlætrəli/</td>
-</tr>
-<tr>
-<td>disarm</td>
-<td>解除武装；裁军；使无害</td>
-<td>/dɪsˈɑːm/</td>
-</tr>
-<tr>
-<td>gut</td>
-<td>取出内脏；毁坏内部；勇气；胆量；直觉</td>
-<td>/ˈɡʌt/</td>
-</tr>
-<tr>
-<td>transactional</td>
-<td>交易的；事务性的</td>
-<td>/ˈtrænzækʃənl/</td>
-</tr>
-<tr>
-<td>dispense</td>
-<td>分配；分发；施予；执行；免除</td>
-<td>/dɪˈspens/</td>
-</tr>
-<tr>
-<td>nicety</td>
-<td>细微之处；精确性；美好</td>
-<td>/ˈnaɪsəti/</td>
-</tr>
-<tr>
-<td>a strip - down</td>
-<td>精简；缩减</td>
-<td>/ə ˈstrɪp daʊn/</td>
-</tr>
-<tr>
-<td>deportation</td>
-<td>驱逐出境；放逐</td>
-<td>/ˌdepɔːˈteɪʃn/</td>
-</tr>
-<tr>
-<td>resentment</td>
-<td>怨恨；愤恨</td>
-<td>/rɪˈzentmənt/</td>
-</tr>
-<tr>
-<td>cohort</td>
-<td>一群人；一组；同生群</td>
-<td>/ˈkəʊhɔːt/</td>
-</tr>
-<tr>
-<td>pallid</td>
-<td>苍白的；暗淡的；无生气的</td>
-<td>/ˈpælɪd/</td>
-</tr>
-<tr>
-<td>shortsightedness</td>
-<td>近视；目光短浅</td>
-<td>/ˈʃɔːtsaɪtɪdnəs/</td>
-</tr>
-<tr>
-<td>incuriosity</td>
-<td>无好奇心；不感兴趣</td>
-<td>/ˌɪnkjʊəriˈɒsəti/</td>
-</tr>
-<tr>
-<td>bonfire</td>
-<td>篝火；营火</td>
-<td>/ˈbɒnfaɪə(r)/</td>
-</tr>
-<tr>
-<td>predatory</td>
-<td>掠夺性的；食肉的；捕食性的</td>
-<td>/ˈpredətri/</td>
-</tr>
-<tr>
-<td>clog</td>
-<td>堵塞；阻塞</td>
-<td>/ˈklɒɡ/</td>
-</tr>
-<tr>
-<td>persecuted</td>
-<td>受迫害的；persecute（迫害）的过去分词</td>
-<td>/ˈpɜːsɪkjuːtɪd/</td>
-</tr>
-<tr>
-<td>Sigon</td>
-<td>西贡（可能是特定名称）</td>
-<td>/ˈsaɪɡən/</td>
-</tr>
-<tr>
-<td>vet</td>
-<td>审查；检查；诊疗；兽医；老兵</td>
-<td>/ˈvet/（动词）/ˈvet/（名词）</td>
-</tr>
-<tr>
-<td>amputation</td>
-<td>截肢；切断</td>
-<td>/ˌæmpjuˈteɪʃn/</td>
-</tr>
-<tr>
-<td>impetitude</td>
-<td>急躁；鲁莽</td>
-<td>/ɪmˈpetɪtjuːd/</td>
-</tr>
-<tr>
-<td>strand</td>
-<td>使搁浅；使滞留；线；股；缕</td>
-<td>/ˈstrænd/</td>
-</tr>
-<tr>
-<td>devout</td>
-<td>虔诚的；笃信宗教的；热忱的</td>
-<td>/dɪˈvaʊt/</td>
-</tr>
-<tr>
-<td>ardent</td>
-<td>热情的；热烈的；炽热的</td>
-<td>/ˈɑːdənt/</td>
-</tr>
-</tbody>
-</table>
-
-                    
-                        
-
-
-                    
-                    
-                        <p>
-                            <a
-                                href="/2025/04/17/Stormy%20English/The%20Atlantic/April/THE%20ERA%20OF%20MIGHT%20MAKES%20RIGHT/#post-footer"
-                                class="postShorten-excerpt_link link"
-                                aria-label=""
-                            >
-                                Comment and share
-                            </a>
-                        </p>
-                    
-                </div>
-            
-        </div>
-        
-    </article>
-    
-    
-    <article class="postShorten postShorten--thumbnailimg-bottom">
-        <div class="postShorten-wrap">
-            
-            <div class="postShorten-header">
-                <h1 class="postShorten-title">
-                    
-                        <a
-                            class="link-unstyled"
-                            href="/2025/04/15/Stormy%20English/%E8%B5%96%E4%B8%96%E9%9B%84%E9%AB%98%E7%BA%A7%E7%BE%8E%E8%AF%AD%E6%95%99%E7%A8%8B/Lesson%208/"
-                            aria-label=": Lesson8 Ireland&#39;s Contribution to English"
-                        >
-                            Lesson8 Ireland&#39;s Contribution to English
-                        </a>
-                    
-                </h1>
-                <div class="postShorten-meta">
-    <time datetime="2025-04-15T11:23:03+08:00">
-	
-		    Apr 15, 2025
-    	
-    </time>
-    
-        <span>in </span>
-        
-    <a class="category-link" href="/all-categories/Stormy-English/">Stormy English</a>, <a class="category-link" href="/all-categories/Stormy-English/%E8%B5%96%E4%B8%96%E9%9B%84%E9%AB%98%E7%BA%A7%E7%BE%8E%E8%AF%AD/">赖世雄高级美语</a>
-
-
-    
-</div>
-
-            </div>
-            
-                <div class="postShorten-content">
-                    <h2 id="irelands-contribution-to-english">Ireland’s Contribution to
-English</h2>
-<p>Nearly everyone knows that countries such as the United Kingdom, the
-United States of America, Canada, Australia, and New Zealand are
-primarily English-speaking countries; that is, English is the mother
-tongue used in these countries. What is less well known is that English
-is also the mother <em>==tongue==</em> in countries such as the Republic
-of Ireland (officially called Eire), Barbados, Jamaica, Trinidad, and
-Guyana. Among these latter few, the Irish have made contributions to the
-English language in both its <em>==lexicon==</em> and literature which
-can <em>==be considered second to none==</em> .</p>
-<p><em>==Virtually==</em> every aspect of English literature has been
-graced by the writings of the Irish. This fact is all the more amazing
-because Ireland is a relatively small country, with never more than four
-million people throughout its long history. Yet many great “English”
-writers were indeed born and often raised in Ireland, though many, too,
-immigrated to the United Kingdom at some point in their lives. Among
-these pillars of English literature were Jonathan Swift, William Butler
-Yeats, James Joyce, Samuel Beckett, Oscar Wilde, George Bernard Shaw,
-and Edmund Burke. Many other lesser-known figures have
-<em>==punctuated==</em> English literature as well. These men’s
-contributions to the English language and to Western thought in general
-are <em>==immeasurable==</em> . A review of two of these writers’ major
-works will reveal why.</p>
-<p>Jonathan Swift (1667 -1745) by most reckoning is the best
-English-language satirist ever, and one of the world’s greatest as well.
-Born in Ireland of English parents, Swift went to school there through
-his bachelor’s degree (Trinity College, Dublin, capital of Ireland).
-Thereafter he frequently Traveled between England and Ireland, including
-years spent at Oxford College, where he earned his master’s degree.
-Swift wrote a great deal of poetry, but he is best regarded as a
-<em>==prose==</em> <em>==satirist==</em> . He wrote
-<em>==prolifically==</em> both in Ireland and England, nearly constantly
-shuttling from one to the other. In Ireland he worked on Gulliver’s
-Travels, which he later had published in England in 1726. Already famous
-by that time, Swift would become <em>==immortalized==</em> with this
-last great work. What child does not know the story of the brave sailor
-Gulliver as he travels through lands in which he is at turn both a giant
-and a <em>==midget==</em> ? Yet most readers are not aware of Swift’s
-intent to satirize the political, academic, and religious leaders of his
-time. Read either way, Swift’s genius as a writer of English cannot be
-denied.</p>
-<p>A giant of English Theater was George Bernard Shaw(1856 - 1950) .
-Born in Dublin, Shaw moved to England with his family when he was 20 and
-stayed there for most of the rest of his long life. His early fiction
-writing was so poor that he could not find a publisher. Only when he
-began to work as a <em>==playwright==</em> did his <em>==fortunes==</em>
-improve. Among the many, many plays for which Shaw is famous, perhaps
-his most lasting (though not his most critically acclaimed) is Pygmalion
-(1916), the story of a language teacher who attempts to” civilize” a
-young <em>==prostitute==</em> by training her to speak correctly. If
-this story sounds familiar, it should: <em>==Pygmalion==</em> was later
-filmed winning on Oscar for Shaw and later again transformed into the
-highly popular Broadway musical My Fair Lady (1956). A good story never
-dies: the original Pygmalion has since been updated in the hit movie
-Pretty woman (1990) starring Richard Gere and Julia Roberts. As with
-Shakespeare, many of Shaw’s plays are continually restaged or rewritten
-into new media because Shaw wrote on many themes which touch on the
-human condition, <em>==independent of time and space==</em> .</p>
-<p>Among the <em>==constellation==</em> of Irish talents, perhaps Swift
-and Shaw are two among the more brilliant stars, but much more could be
-written of those mentioned above and many others. Though English
-literature written by the British suffices as an eternal and shining
-<em>==canon==</em> of literature, it would be nonetheless
-<em>==dimmer==</em> without the considerable talents of its Irish
-contributors</p>
-<h2 id="vocabulary-idioms">Vocabulary &amp; Idioms</h2>
-<ul>
-<li>tongue——语言</li>
-<li>lexicon——全部词汇</li>
-<li>be second to none——无人出其右</li>
-<li>virtually——几乎</li>
-<li>punctuate——不时打断</li>
-<li>immeasurable——不可估量的</li>
-<li>prose——散文</li>
-<li>immortalize——永垂不朽</li>
-<li>midget——侏儒</li>
-<li>playwright——剧作家</li>
-<li>fortune——前途</li>
-<li>prostitute——妓女</li>
-<li><em>Pygmalion</em>——《茶花女》</li>
-<li>independent of time and space——独立于时间和空间</li>
-<li>constellation——星座</li>
-<li>canon——精品</li>
-<li>dimmer——暗淡的</li>
-</ul>
-
-                    
-                        
-
-
-                    
-                    
-                        <p>
-                            <a
-                                href="/2025/04/15/Stormy%20English/%E8%B5%96%E4%B8%96%E9%9B%84%E9%AB%98%E7%BA%A7%E7%BE%8E%E8%AF%AD%E6%95%99%E7%A8%8B/Lesson%208/#post-footer"
-                                class="postShorten-excerpt_link link"
-                                aria-label=""
-                            >
-                                Comment and share
-                            </a>
-                        </p>
-                    
-                </div>
-            
-        </div>
-        
-    </article>
-    
     <div class="pagination-bar">
     <ul class="pagination">
         
@@ -2204,7 +1453,7 @@ contributors</p>
             </a>
           </li>
         
-        <li class="pagination-number">page 4 of 8</li>
+        <li class="pagination-number">page 4 of 9</li>
     </ul>
 </div>
 

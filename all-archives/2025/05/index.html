@@ -275,14 +275,14 @@
 <p><strong>VMD版本请尽可能使用1.9.3而不要使用bug较多的1.9.4</strong></p>
 <p>本文参考了<a target="_blank" rel="noopener" href="http://sobereva.com/443">Sob老师的博文</a></p>
 <h2 id="目标分子的结构优化">目标分子的结构优化</h2>
-<p>本次的目标分子为二茂铁分子</p>
+<p>本次的目标体系为二茂铁</p>
 <figure>
 <img src="1.png" alt="优化完成的二茂铁分子" />
 <figcaption aria-hidden="true">优化完成的二茂铁分子</figcaption>
 </figure>
-<p>首先建立二茂铁分子的模型，并且手动设置全重叠的D5d点群，<strong>这样可以极大的减少优化用时</strong>，关键词如下：</p>
+<p>首先建立二茂铁的模型，并且手动设置全重叠的D5d点群，<strong>这样可以极大的减少优化用时</strong>，关键词如下：</p>
 <figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">#p tpssh/def2tzvp opt freq</span><br></pre></td></tr></table></figure>
-<p>体系是过渡金属配合物，因此选择tpssh泛函，由于初猜结构比较合适，算得还是挺快的</p>
+<p>体系是含有3d金属的配合物，选择tpssh泛函，由于初猜结构比较合适，算得还是挺快的</p>
 <figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">                                   -- CHARLES MCCARRY IN &quot;THE GREAT SOUTHWEST&quot;</span><br><span class="line">Job cpu time:       0 days  1 hours 57 minutes 15.2 seconds.</span><br><span class="line">Elapsed time:       0 days  0 hours  5 minutes 58.7 seconds.</span><br><span class="line">File lengths (MBytes):  RWF=    147 Int=      0 D2E=      0 Chk=     16 Scr=      1</span><br><span class="line">Normal termination of Gaussian 16 at Wed May 28 21:43:45 2025.</span><br></pre></td></tr></table></figure>
 <p>如下图，优化完成，没有虚频</p>
 <figure>
@@ -320,7 +320,7 @@ alt="根据电荷等值面着色的ESP图" />
 </figure>
 <p>接下来是自定义图片的导出，<code>File-Render</code>，渲染器选择<code>Tachyon</code>，开始渲染，然后在<code>VMD</code>的根目录下得到了文件<code>vmdscene.dat</code>，接下来调用渲染器进行渲染，渲染的<code>.bat</code>脚本是：</p>
 <figure class="highlight bat"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">tachyon_WIN32.exe vmdscene.dat -aasamples <span class="number">24</span> -mediumshade -trans_vmd -res <span class="number">1024</span> <span class="number">768</span> -<span class="built_in">format</span> BMP -o vmdscene.bmp</span><br></pre></td></tr></table></figure>
-<p>其中的1024是长，768是宽，可以改成想要的分辨率</p>
+<p>其中的1024是长，768是宽，可以改成想要的像素</p>
 <figure>
 <img src="Ferocene.jpg" alt="二茂铁的ESP图像" />
 <figcaption aria-hidden="true">二茂铁的ESP图像</figcaption>
