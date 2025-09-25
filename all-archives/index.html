@@ -243,6 +243,315 @@
                     
                         <a
                             class="link-unstyled"
+                            href="/2025/09/21/%E5%91%A8%E6%97%A5%E9%97%B2%E7%9D%80%E5%BF%83%E8%A1%80%E6%9D%A5%E6%BD%AE%EF%BC%8C%E7%9C%8B%E7%9C%8B%E8%BF%9C%E5%A4%84%E7%9A%84Gentoo/"
+                            aria-label=": "
+                        >
+                            (no title)
+                        </a>
+                    
+                </h1>
+                <div class="postShorten-meta">
+    <time datetime="2025-09-21T16:49:08+08:00">
+	
+		    Sep 21, 2025
+    	
+    </time>
+    
+</div>
+
+            </div>
+            
+                <div class="postShorten-content">
+                    <p>周日闲着心血来潮，看看远处的<code>Gentoo</code>，这篇博文也当成长期更新的记录贴吧，只针对于<code>AMD 64</code>架构，just
+keep learning!</p>
+<h1 id="安装">安装</h1>
+<h2 id="引导进入安装镜像">引导进入安装镜像</h2>
+<p>与其他发行版一样，<code>Gentoo</code>安装也需要一个启动镜像，有纯命令行的最小化安装CD和<code>Gentoo LiveGUI</code>两种，我选择前者。这个镜像可以方便地使用<code>Ventoy</code>进行引导，<strong>但仅仅是一个安装媒介而已</strong>。</p>
+<p>引导时我选择默认地<code>gentoo</code>内核，除此外还有一个<code>gentoo-nofb</code>，nofb即no
+framebuffer，它让内核和用户态程序通过一个统一的设备文件（通常是
+<code>/dev/fb0</code>）直接访问显卡的显存，从而在不依赖 X server 或
+Wayland
+之类图形系统的情况下，也能在控制台显示图形、字体、图片，甚至跑一些简单的图形程序。</p>
+<p>安装时可以用另一台机器远程<code>ssh</code>链接，一边查wiki一边安装，复制粘贴什么的都很方便。然鹅我没有多余的机子，手敲长串的命令行，屏幕还没驱动默认最大亮度，就很坐牢。</p>
+<h2 id="配置网络">配置网络</h2>
+<p><code>gentoo</code>的安装是需要网络的，如果计算机使用网线连接到IPv6路由或DHCP路由器，那么安装镜像一般是可以自动连接网络的。如果没有路由器只有个光猫，需要pppoe拨号上网，具体参考wiki。用安卓手机通过数据线连接至电脑，启用USB网络共享模式大概也是可行的。</p>
+<p>使用WiFi连接网络也是可行的，可以使用<code>net-setup</code>工具，参考wiki</p>
+<h2 id="磁盘分区">磁盘分区</h2>
+<p>这一步可以在先前已有的系统上进行，实在不行在pe系统里进行也可以，更直观更不容易出错，并且Linux自带的<code>cfdisk</code>工具和<code>diskgenius</code>之类的软件的操作逻辑有些不同。数据无价，谨慎更改！</p>
+<p>2025年了，legacy
+BIOS逐渐消亡，GUID(GPT)表早已成为主流。我大概分了三个区：根分区、与Windows共用的EFI分区、Swap分区</p>
+<p>使用<code>fdisk -l</code>命令查看磁盘设备，如果不是用ssh连接的，消息过多，可能会无法看到部分信息，此时也可以使用<code>lsblk</code>命令查看。</p>
+<p>分好区之后接着将分区格式化为Linux适用的文件系统。俗话说：人生苦短，远离<code>Gentoo</code>😇。<code>Gentoo</code>是纯手动档，大量的软件包需要自己编译，这可能会对磁盘进行较多的高速I/O读写，笔者了解的文件系统类型也不多：</p>
+<ul>
+<li>xfs</li>
+<li>btrfs</li>
+<li>ext4(以及过去的ext3,ext2)</li>
+<li>zfs</li>
+<li>f2fs</li>
+</ul>
+<p>我选择了xfs，它在高速IO读写方面略胜一筹，接下来是格式化：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">mkfs.xfs /dev/nvmexnxpx</span><br></pre></td></tr></table></figure>
+<p>EFI分区由于是共用的，不用格式化，接下来开启swap分区：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">mkswap /dev/nvmexnxpx</span><br></pre></td></tr></table></figure>
+<p>接下来挂载分区：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">mkdir</span> --parents /mnt/gentoo</span><br><span class="line">mount /dev/nvmexnxpx /mnt/gentoo</span><br></pre></td></tr></table></figure>
+<p>wiki推荐挂载EFI分区到/efi，我已经习惯了挂载到/boot/efi</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">mkdir --parents /mnt/gentoo/boot/efi</span><br><span class="line">mount /dev/nvmexnxpx /mnt/gentoo/boot/efi</span><br></pre></td></tr></table></figure>
+<h2 id="安装基本的系统环境">安装基本的系统环境</h2>
+<p>安装镜像提供了一个<strong>临时的基本系统环境</strong>，带有内核、常用工具（bash、fdisk、wget…），让你能进入一个命令行环境进行磁盘分区、下载文件等操作。它不是最终系统，只是“施工工具”。接下来需要下载stage3文件，这是一个
+<strong>预编译好的基础系统</strong>，是一个能开机、能用
+<code>chroot</code> 进去的最小 Linux 用户空间环境，里面已经有：</p>
+<ul>
+<li>C 库（glibc 或 musl）</li>
+<li>编译器（gcc 或 clang）</li>
+<li>核心工具链（binutils、bash、coreutils、portage …）</li>
+</ul>
+<p>有了 stage3，就能在 chroot 里运行 <code>emerge</code>
+去拉源码并编译其余的软件。</p>
+<p>stage3文件类型多种多样，我选择了最省事最习惯的使用systemd和multilib的stage3文件。</p>
+<p>首先进入挂载位置/mnt/gentoo，然后设置时间，这个很关键，因为Stage
+存档通常使用 HTTPS 获取，这需要相对准确的系统时间。</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">chronyd -q</span><br></pre></td></tr></table></figure>
+<p>使用命令行浏览器下载stage3文件：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">links https://www.gentoo.org/downloads/mirrors/</span><br></pre></td></tr></table></figure>
+<p>进入后选择Asia源中的CN，即中国镜像源，选择合适的镜像站点后进入<code>releases/amd64/autobuilds/</code>目录，选中合适的stage3文件，按<code>d</code>键开始下载，一般下载没什么问题。</p>
+<p>接着解压包：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">tar xpvf stage3-*.tar.xz --xattrs-include=<span class="string">&#x27;*.*&#x27;</span> --numeric-owner -C /mnt/gentoo</span><br></pre></td></tr></table></figure>
+<p><code>Gentoo</code>系统是需要编译的，因此接下来配置的编译选项也是非常重要的。</p>
+<p>编译选项配置文件是<code>/mnt/gentoo/etc/portage/make.conf</code>，下面是一个示例：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line"># These settings were set by the catalyst build script that automatically</span><br><span class="line"># built this stage.</span><br><span class="line"># Please consult /usr/share/portage/config/make.conf.example for a more</span><br><span class="line"># detailed example.</span><br><span class="line">COMMON_FLAGS=&quot;-march=znver4 -O3 -pipe -fomit-frame-pointer -flto=thin&quot;</span><br><span class="line">CFLAGS=&quot;$&#123;COMMON_FLAGS&#125;&quot;</span><br><span class="line">CXXFLAGS=&quot;$&#123;COMMON_FLAGS&#125;&quot;</span><br><span class="line">FCFLAGS=&quot;$&#123;COMMON_FLAGS&#125;&quot;</span><br><span class="line">FFLAGS=&quot;$&#123;COMMON_FLAGS&#125;&quot;</span><br><span class="line">RUSTFLAGS=&quot;-C target-cpu=native -C opt-level=3 -C codegen-units=1 -C lto&quot;</span><br><span class="line">MAKEOPTS=&quot;-j20&quot;</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"># NOTE: This stage was built with the bindist USE flag enabled</span><br><span class="line"></span><br><span class="line"># This sets the language of build output to English.</span><br><span class="line"># Please keep this setting intact when reporting bugs.</span><br><span class="line">LC_MESSAGES=C.utf8</span><br></pre></td></tr></table></figure>
+<p>CFLAGS 和 CXXFLAGS 变量分别定义了GCC C和C
+++编译器的优化标志，详细信息在GNU在线手册中。</p>
+<h2 id="编译安装基础系统">编译安装基础系统</h2>
+<p>接下来就是<code>chroot</code>到stage3所带的基础编译环境，开始编译新的系统，在这之前需要：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">cp</span> --dereference /etc/resolv.conf /mnt/gentoo/etc/</span><br></pre></td></tr></table></figure>
+<p>以此确保<code>chroot</code>后网络仍然可用，接下来：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">arch-chroot /mnt/gentoo</span><br><span class="line"><span class="built_in">source</span> /etc/profile</span><br><span class="line"><span class="built_in">export</span> PS1=<span class="string">&quot;(chroot) <span class="variable">$&#123;PS1&#125;</span>&quot;</span></span><br></pre></td></tr></table></figure>
+<p>至此，我们已经进入了stage3所带的基础编译环境，也是根分区。接下来挂载EFI分区：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">mount /dev/nvmexnxpx /boot/efi</span><br></pre></td></tr></table></figure>
+<p>然后选择合适的镜像源：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">emerge --ask --verbose --oneshot app-portage/mirrorselect</span><br><span class="line">mirrorselect -i -o &gt;&gt; /etc/portage/make.conf</span><br></pre></td></tr></table></figure>
+<p>然后执行：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">emerge-webrsyn</span><br></pre></td></tr></table></figure>
+<p><code>Gentoo</code>的软件包源<code>rsyn</code>和<code>git</code>两种方式，可以方便时换成后者。</p>
+<p>接下来选择合适的配置文件，我选择了<code>plasma</code>桌面且带有<code>systemd</code>，使用<code>eselect profile list</code>查看所有的配置文件，使用<code>eselect profile set 2</code>选择相应的配置文件。</p>
+<p>也有部分二进制软件包来自官方，参考wiki，然而我拒绝🤪。</p>
+<p>接下来是USE变量的设置，这非常重要，它控制了编译时是否加入/删除对某些功能的支持，比如说<code>-gtk</code>就是删除所有编译后的包对gtk的支持，他也是在<code>/mnt/gentoo/etc/portage/make.conf</code>中进行配置</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br></pre></td><td class="code"><pre><span class="line">USE=<span class="string">&quot;</span></span><br><span class="line"><span class="string"># 桌面环境 &amp; UI</span></span><br><span class="line"><span class="string">X wayland kde plasma egl gles2 gtk gtk2 gtk3 gtk4 qt4 qt5 qt6</span></span><br><span class="line"><span class="string">xinerama xrandr xcomposite xcursor</span></span><br><span class="line"><span class="string">opengl vulkan vaapi vdpau drm</span></span><br><span class="line"><span class="string"></span></span><br><span class="line"><span class="string"># 音频</span></span><br><span class="line"><span class="string">alsa pulseaudio pipewire sound server dbus</span></span><br><span class="line"><span class="string">jack -oss</span></span><br><span class="line"><span class="string"></span></span><br><span class="line"><span class="string"># 视频/图像</span></span><br><span class="line"><span class="string">jpeg png gif tiff webp heif</span></span><br><span class="line"><span class="string">ffmpeg theora x264 x265</span></span><br><span class="line"><span class="string">av1 vpx opencl openmp</span></span><br><span class="line"><span class="string"></span></span><br><span class="line"><span class="string"># 输入法/语言</span></span><br><span class="line"><span class="string">icu nls l10n_zh l10n_en</span></span><br><span class="line"><span class="string">freetype fontconfig</span></span><br><span class="line"><span class="string">xim ibus</span></span><br><span class="line"><span class="string"></span></span><br><span class="line"><span class="string"># 网络</span></span><br><span class="line"><span class="string">ssl tls http2 curl</span></span><br><span class="line"><span class="string">samba smbclient</span></span><br><span class="line"><span class="string">ssh bluetooth wifi networkmanager</span></span><br><span class="line"><span class="string">dns ipv6 zeroconf</span></span><br><span class="line"><span class="string"></span></span><br><span class="line"><span class="string"># 游戏相关</span></span><br><span class="line"><span class="string">steam vulkan opengl sdl sdl2</span></span><br><span class="line"><span class="string">gamepad joystick</span></span><br><span class="line"><span class="string"></span></span><br><span class="line"><span class="string"># 文件压缩/格式</span></span><br><span class="line"><span class="string">zlib bzip2 lzma lzo zstd</span></span><br><span class="line"><span class="string">archive rar zip 7zip</span></span><br><span class="line"><span class="string"></span></span><br><span class="line"><span class="string"># 开发/脚本语言支持</span></span><br><span class="line"><span class="string">python ruby perl lua</span></span><br><span class="line"><span class="string">jit jit-lua</span></span><br><span class="line"><span class="string"></span></span><br><span class="line"><span class="string"># 其他通用优化</span></span><br><span class="line"><span class="string">threads multilib</span></span><br><span class="line"><span class="string">udev udisks upower</span></span><br><span class="line"><span class="string">policykit systemd</span></span><br><span class="line"><span class="string">&quot;</span></span><br></pre></td></tr></table></figure>
+<p>接下来设置<code>CPU_FLAGS_*</code>，这是给 ebuild 提供 CPU
+指令集信息的，不同包会根据这些 flag 决定是否启用 SIMD 优化。</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">emerge --ask --oneshot app-portage/cpuid2cpuflags</span><br><span class="line">cpuid2cpuflags</span><br><span class="line"><span class="built_in">echo</span> <span class="string">&quot;*/* <span class="subst">$(cpuid2cpuflags)</span>&quot;</span> &gt; /etc/portage/package.use/00cpu-flags</span><br></pre></td></tr></table></figure>
+<p>在<code>/etc/portage/make.conf</code>设置显示卡：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">VIDEO_CARDS=<span class="string">&quot;amdgpu radeonsi vdpau vaapi&quot;</span></span><br></pre></td></tr></table></figure>
+<p>娱乐用户直接大开：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">ACCEPT_LICENSE=<span class="string">&quot;*&quot;</span></span><br></pre></td></tr></table></figure>
+<p>更新系统：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">emerge --ask --verbose --update --deep --newuse @world</span><br></pre></td></tr></table></figure>
+<p>设置时区：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">ls</span> /usr/share/zoneinfo</span><br><span class="line"><span class="built_in">ls</span> -l /usr/share/zoneinfo/Europe/</span><br><span class="line"><span class="built_in">ln</span> -sf ../usr/share/zoneinfo/Europe/Brussels /etc/localtime</span><br></pre></td></tr></table></figure>
+<p>设置本地化：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">echo</span> <span class="string">&#x27;zh_CN.UTF-8 UTF-8&#x27;</span> &gt;&gt; /etc/locale.gen</span><br><span class="line"><span class="built_in">echo</span> <span class="string">&#x27;en_US.UTF-8 UTF-8&#x27;</span> &gt;&gt; /etc/locale.gen</span><br><span class="line">locale-gen</span><br></pre></td></tr></table></figure>
+<p>安装固件、微码：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">emerge --ask sys-kernel/linux-firmware</span><br></pre></td></tr></table></figure>
+<p>安装内核：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">sys-kernel/installkernel</span><br></pre></td></tr></table></figure>
+<p>安装引导程序，创建文件<code>/etc/portage/package.use/installkernel</code></p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">sys-kernel/installkernel grub</span><br></pre></td></tr></table></figure>
+<p>接着：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">emerge --ask sys-kernel/installkernel</span><br></pre></td></tr></table></figure>
+<h2 id="配置系统">配置系统</h2>
+<p>创建fstab！！！</p>
+<p>设置主机名：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">echo</span> storm &gt; /etc/hostname</span><br><span class="line">hostnamectl hostname storm</span><br></pre></td></tr></table></figure>
+<p>安装dhcpcd并启用：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">emerge --ask net-misc/dhcpcd</span><br><span class="line">systemctl <span class="built_in">enable</span> dhcpcd</span><br></pre></td></tr></table></figure>
+<p>创建hosts文件</p>
+<p>设置root密码</p>
+<h2 id="收尾">收尾</h2>
+<p>将<code>GRUB_PLATFORMS="efi-64"</code>加如<code>/etc/portage/make.conf</code></p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">echo</span> <span class="string">&#x27;GRUB_PLATFORMS=&quot;efi-64&quot;&#x27;</span> &gt;&gt; /etc/portage/make.conf</span><br><span class="line">emerge --ask sys-boot/grub</span><br><span class="line">grub-install --target=x86_64-efi --efi-directory=/efi</span><br></pre></td></tr></table></figure>
+<p>创建一个普通用户：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">useradd -m -G <span class="built_in">users</span>,wheel,audio -s /bin/bash storm</span><br><span class="line">passwd storm</span><br></pre></td></tr></table></figure>
+<p>添加sudo权限</p>
+<h4 id="内核选择">内核选择</h4>
+<ul>
+<li><p>gentoo</p>
+<p>默认内核，支持K8 CPU（包括NUMA支持）和EM64T CPU。</p></li>
+<li><p>gentoo-nofb</p>
+<p>与“gentoo”相同，但没有framebuffer支持。</p></li>
+</ul>
+
+                    
+                        
+
+
+                    
+                    
+                        <p>
+                            <a
+                                href="/2025/09/21/%E5%91%A8%E6%97%A5%E9%97%B2%E7%9D%80%E5%BF%83%E8%A1%80%E6%9D%A5%E6%BD%AE%EF%BC%8C%E7%9C%8B%E7%9C%8B%E8%BF%9C%E5%A4%84%E7%9A%84Gentoo/#post-footer"
+                                class="postShorten-excerpt_link link"
+                                aria-label=""
+                            >
+                                Comment and share
+                            </a>
+                        </p>
+                    
+                </div>
+            
+        </div>
+        
+    </article>
+    
+    
+    <article class="postShorten postShorten--thumbnailimg-bottom">
+        <div class="postShorten-wrap">
+            
+            <div class="postShorten-header">
+                <h1 class="postShorten-title">
+                    
+                        <a
+                            class="link-unstyled"
+                            href="/2025/09/16/%E7%A7%91%E7%A0%94/VASP/vasp6.5.1+HDF5+Wannier90%E7%BC%96%E8%AF%91%E5%AE%89%E8%A3%85/"
+                            aria-label=": "
+                        >
+                            (no title)
+                        </a>
+                    
+                </h1>
+                <div class="postShorten-meta">
+    <time datetime="2025-09-16T21:10:34+08:00">
+	
+		    Sep 16, 2025
+    	
+    </time>
+    
+</div>
+
+            </div>
+            
+                <div class="postShorten-content">
+                    <h1 id="后记">后记</h1>
+<p>重新安装了<code>Rocky Linux10</code>，并安装了<code>Slurm</code>作业系统，尝试编译安装<code>vasp</code>，由于用的<code>Rocky10</code>，gcc等各种套件都比较新，折腾麻了，各种编译报错，干脆换到了较新的<code>vasp.6.5.1</code>版本，一遍过！</p>
+<h2 id="编译hdf5">编译HDF5</h2>
+<p>编译<code>HDF5</code>部分内容参考了教程：https://zhuanlan.zhihu.com/p/617261007</p>
+<p>编译安装<code>HDF5</code>之前需要先编译安装它的依赖<code>zlib</code>😂，首先去官网https://www.zlib.net/，目前最新的的版本是<code>zlib 1.3.1</code>，下载源代码source
+code，哪种格式的都行，我的工作站有网就直接用<code>wget</code>了：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">wget https://www.zlib.net/zlib-1.3.1.tar.gz</span><br></pre></td></tr></table></figure>
+<p>没网的集群自己下载到本地计算机再上传到集群上。</p>
+<p>解压、配置、编译、测试、安装：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">tar -zxvf zlib-1.3.1.tar.gz</span><br></pre></td></tr></table></figure>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">./configure --prefix=install_directory</span><br></pre></td></tr></table></figure>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">make -jN</span><br></pre></td></tr></table></figure>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">make <span class="built_in">test</span></span><br></pre></td></tr></table></figure>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">make install</span><br></pre></td></tr></table></figure>
+<p>接下来安装<code>szip</code>，官网(https://docs.hdfgroup.org/archive/support/doc_resource/SZIP/index.html)同样只提供了源代码，需要编译安装，安装过程大差不差，类似的</p>
+<p>接下来编译安装<code>HDF5</code>，官网打开比较慢、、、目前最新版本是<code>1.14.6</code>，使用<code>1.14.5</code>版本编译成功</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">wget https://support.hdfgroup.org/releases/hdf5/v1_14/v1_14_6/downloads/hdf5-1.14.6.tar.gz</span><br></pre></td></tr></table></figure>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">tar -zxvf hdf5-1.14.6.tar.gz</span><br></pre></td></tr></table></figure>
+<p>接下来是配置，需要使用intel的编译器，所有首先需要安装intel的<code>oneapi</code>套件，安装下面这些：</p>
+<figure>
+<img src="image-20250916212752349.png"
+alt="intel的C++编译器，部分组件会捆绑其他组件" />
+<figcaption
+aria-hidden="true">intel的C++编译器，部分组件会捆绑其他组件</figcaption>
+</figure>
+<figure>
+<img src="image-20250916212947895.png" alt="intel的fortran编译器" />
+<figcaption aria-hidden="true">intel的fortran编译器</figcaption>
+</figure>
+<p>需要格外注意，我是用的是最新版的<code>oneapi</code>套件，已经删除了对<code>icc</code>、<code>ifort</code>的支持，所以需要注意<code>CC</code>、<code>FC</code>、<code>CXX</code>的写法</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">./configure --prefix=/opt/apps/vasp.6.5.1/hdf5/hdf5 \</span><br><span class="line">	--enable-fortran \</span><br><span class="line">	--with-zlib=/opt/apps/vasp.6.5.1/hdf5/dependences/zlib \</span><br><span class="line">	--with-szlib=/opt/apps/vasp.6.5.1/hdf5/dependencies/szip \</span><br><span class="line">	--enable-shared \</span><br><span class="line">	--enable-parallel \</span><br><span class="line">	CC=mpiicx \</span><br><span class="line">	FC=mpiifx \</span><br><span class="line">	CXX=mpiicpx</span><br></pre></td></tr></table></figure>
+<p>接着编译、测试、安装</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">make -jN</span><br></pre></td></tr></table></figure>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">make check</span><br></pre></td></tr></table></figure>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">make install</span><br></pre></td></tr></table></figure>
+<h2 id="wannier安装">Wannier安装</h2>
+<p>接下来编译安装<code>Wannier90</code>，官网是https://wannier.org/download/，下载：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">wget https://github.com/wannier-developers/wannier90/archive/v3.1.0.tar.gz</span><br></pre></td></tr></table></figure>
+<p>然后是解压，接着拷贝<code>config</code>文件夹中的模板：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">cp</span> config/make.inc.ifort make.inc</span><br></pre></td></tr></table></figure>
+<p><code>Wannier90</code>的模板并没有调整，依然使用的<code>ifort</code>，然鹅Intel已经废弃了<code>ifort</code>，所以得手动修改一下模板了，把<code>ifort</code>改成<code>ifx</code>，依此类推，改完后的模板如下：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br></pre></td><td class="code"><pre><span class="line">root@cernet2:~/Wannier90/wannier90-3.1.0# <span class="built_in">cat</span> make.inc </span><br><span class="line"></span><br><span class="line"><span class="comment">#=====================================================</span></span><br><span class="line"><span class="comment"># For Linux with intel version 11/12 on 64bit machines</span></span><br><span class="line"><span class="comment">#=====================================================</span></span><br><span class="line">F90 = ifx</span><br><span class="line">COMMS=mpi</span><br><span class="line">MPIF90=mpiifx</span><br><span class="line">FCOPTS=-O2</span><br><span class="line">LDOPTS=-O2</span><br><span class="line"></span><br><span class="line"><span class="comment">#========================================================</span></span><br><span class="line"><span class="comment"># Intel mkl libraries. Set LIBPATH if not in default path</span></span><br><span class="line"><span class="comment">#========================================================</span></span><br><span class="line"></span><br><span class="line">LIBDIR = /opt/intel/mkl/lib/intel64</span><br><span class="line">LIBS   =  -L$(LIBDIR) -lmkl_core -lmkl_intel_lp64 -lmkl_sequential -lpthread</span><br><span class="line"></span><br><span class="line"><span class="comment">#=======================</span></span><br><span class="line"><span class="comment"># ATLAS Blas and LAPACK</span></span><br><span class="line"><span class="comment">#=======================</span></span><br><span class="line"><span class="comment">#LIBDIR = /usr/local/lib</span></span><br><span class="line"><span class="comment">#LIBS = -L$(LIBDIR)  -llapack -lf77blas -lcblas -latlas</span></span><br></pre></td></tr></table></figure>
+<p>接着编译吧：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">make -jN</span><br></pre></td></tr></table></figure>
+<p>再编译库：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">make lib -jN</span><br></pre></td></tr></table></figure>
+<p>最终，得到了两个重要的文件：<code>wannier90.x</code>和<code>libwannier.a</code>，记住这两个文件所在的目录，</p>
+<h2 id="vtst的安装">VTST的安装</h2>
+<p><code>VTST</code>，是一个”插件“，随着<code>vasp</code>的编译而安装，首先下载<code>VTST</code>：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">wget https://theory.cm.utexas.edu/code/vtstcode-209.tgz</span><br></pre></td></tr></table></figure>
+<p>参考官网的安装过程，需要修改源代码，谨慎且小麻烦，https://theory.cm.utexas.edu/vtsttools/installation.html</p>
+<p>按照教程修改vasp的<code>main.F</code>源代码，源代码都在<code>src</code>目录内</p>
+<figure>
+<img src="image-20250919165649395.png" alt="修改main.F，记得备份源码" />
+<figcaption aria-hidden="true">修改main.F，记得备份源码</figcaption>
+</figure>
+<figure>
+<img src="image-20250919165729633.png" alt="修改main.F，记得备份源码" />
+<figcaption aria-hidden="true">修改main.F，记得备份源码</figcaption>
+</figure>
+<p>接着将<code>VTST</code>文件夹下的所有源码文件复制到<code>vasp</code>的源码文件夹内，此时会覆盖掉<code>chain.F</code></p>
+<p>然后修改<code>.object</code></p>
+<figure>
+<img src="image-20250919170037549.png" alt="修改.object，记得备份" />
+<figcaption aria-hidden="true">修改.object，记得备份</figcaption>
+</figure>
+<p>接着修改<code>源码目录</code>内的<code>makefile</code>文件，将其中的某一行由：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">LIB=lib parser</span><br></pre></td></tr></table></figure>
+<p>修改为：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">LIB= lib parser pyamff_fortran</span><br></pre></td></tr></table></figure>
+<p>我编译<code>vasp</code>时为了加快编译速度，需要并行编译，因此也需要将：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">dependencies: sources</span><br></pre></td></tr></table></figure>
+<p>修改为：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">dependencies: sources libs</span><br></pre></td></tr></table></figure>
+<p>至此，<code>VTST</code>需要做的已经完成了，开始编译<code>vasp</code>吧~~</p>
+<h2 id="编译vasp">编译vasp</h2>
+<p>使用<code>makefile.include.oneapi</code>这个模板，这个模板已经适配了新版的<code>intel</code>套件，只需要修改<code>hdf5</code>和<code>wannier90</code>这两个地方就行，本次编译使用了<code>比较激进</code>的方案，</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br></pre></td><td class="code"><pre><span class="line"># Default precompiler options</span><br><span class="line">CPP_OPTIONS = -DHOST=\&quot;LinuxIFC\&quot; \</span><br><span class="line">              -DMPI -DMPI_BLOCK=8000 -Duse_collective \</span><br><span class="line">              -DscaLAPACK \</span><br><span class="line">              -DCACHE_SIZE=4000 \</span><br><span class="line">              -Davoidalloc \</span><br><span class="line">              -Dvasp6 \</span><br><span class="line">              -Dtbdyn \</span><br><span class="line">              -Dfock_dblbuf</span><br><span class="line"></span><br><span class="line">CPP         = fpp -f_com=no -free -w0  $*$(FUFFIX) $*$(SUFFIX) $(CPP_OPTIONS)</span><br><span class="line"></span><br><span class="line">FC          = mpiifort -fc=ifx</span><br><span class="line">FCL         = mpiifort -fc=ifx</span><br><span class="line"></span><br><span class="line">FREE        = -free -names lowercase</span><br><span class="line"></span><br><span class="line">FFLAGS      = -assume byterecl -w</span><br><span class="line"></span><br><span class="line">OFLAG       = -O3 -xHost -unroll-aggressive  #激进的方案</span><br><span class="line">OFLAG_IN    = $(OFLAG)</span><br><span class="line">DEBUG       = -O0</span><br><span class="line"></span><br><span class="line"># For what used to be vasp.5.lib</span><br><span class="line">CPP_LIB     = $(CPP)</span><br><span class="line">FC_LIB      = $(FC)</span><br><span class="line">CC_LIB      = icx</span><br><span class="line">CFLAGS_LIB  = -O</span><br><span class="line">FFLAGS_LIB  = -O1</span><br><span class="line">FREE_LIB    = $(FREE)</span><br><span class="line"></span><br><span class="line">OBJECTS_LIB = linpack_double.o</span><br><span class="line"></span><br><span class="line"># For the parser library</span><br><span class="line">CXX_PARS    = icpx</span><br><span class="line">LLIBS       = -lstdc++</span><br><span class="line"></span><br><span class="line">##</span><br><span class="line">## Customize as of this point! Of course you may change the preceding</span><br><span class="line">## part of this file as well if you like, but it should rarely be</span><br><span class="line">## necessary ...</span><br><span class="line">##</span><br><span class="line"></span><br><span class="line"># When compiling on the target machine itself, change this to the</span><br><span class="line"># relevant target when cross-compiling for another architecture</span><br><span class="line">VASP_TARGET_CPU ?= -xHOST</span><br><span class="line">FFLAGS     += $(VASP_TARGET_CPU)</span><br><span class="line"></span><br><span class="line"># Intel MKL (FFTW, BLAS, LAPACK, and scaLAPACK)</span><br><span class="line"># (Note: for Intel Parallel Studio&#x27;s MKL use -mkl instead of -qmkl)</span><br><span class="line">FCL        += -qmkl=parallel</span><br><span class="line">MKLROOT    ?= /path/to/your/mkl/installation</span><br><span class="line">LLIBS      += -L$(MKLROOT)/lib/intel64 -lmkl_scalapack_lp64 -lmkl_blacs_intelmpi_lp64</span><br><span class="line">INCS        =-I$(MKLROOT)/include/fftw</span><br><span class="line"></span><br><span class="line">MKL_THREADING_LAYER=INTEL </span><br><span class="line">OMP_NUM_THREADS=1 # MPI+MKL 并行时必须绑 1，否则容易 oversubscribe</span><br><span class="line"></span><br><span class="line"># HDF5-support (optional but strongly recommended, and mandatory for some features)</span><br><span class="line">CPP_OPTIONS+= -DVASP_HDF5</span><br><span class="line">HDF5_ROOT  ?= /opt/apps/vasp.6.5.1/hdf5/hdf5</span><br><span class="line">LLIBS      += -L$(HDF5_ROOT)/lib -lhdf5_fortran</span><br><span class="line">INCS       += -I$(HDF5_ROOT)/include</span><br><span class="line"></span><br><span class="line"># For the VASP-2-Wannier90 interface (optional)</span><br><span class="line">CPP_OPTIONS    += -DVASP2WANNIER90</span><br><span class="line">WANNIER90_ROOT ?= /opt/apps/vasp.6.5.1/wannier90-3.1.0</span><br><span class="line">LLIBS          += -L$(WANNIER90_ROOT)/lib -lwannier</span><br><span class="line"></span><br><span class="line"># For machine learning library vaspml (experimental)</span><br><span class="line">#CPP_OPTIONS += -Dlibvaspml</span><br><span class="line">#CPP_OPTIONS += -DVASPML_USE_CBLAS</span><br><span class="line">#CPP_OPTIONS += -DVASPML_USE_MKL</span><br><span class="line">#CPP_OPTIONS += -DVASPML_DEBUG_LEVEL=3</span><br><span class="line">#CXX_ML      = mpiicpc -cxx=icpx</span><br><span class="line">#CXXFLAGS_ML = -O3 -std=c++17 -Wall</span><br><span class="line">#INCLUDE_ML  =</span><br></pre></td></tr></table></figure>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">make DEPS=1 -jN</span><br></pre></td></tr></table></figure>
+<p>笔者用的双路<code>2676 v3</code>的落后的工作站，因为调用了24个核心并行编译所以比较快，编译时间大概是四五分钟</p>
+<p>接着是测试，<code>make test</code>默认调用4个核心，可以编辑<code>runtest</code>文件手动修改核心数目加快测试速度，关于测试的说明在官网：https://www.vasp.at/wiki/Validation_tests</p>
+<p>我自己测试时需要手动加上<code>hdf5</code>库的环境变量，否则一个测试也跑不了：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">export</span> LD_LIBRARY_PATH=/opt/apps/vasp.6.5.1/hdf5/hdf5/lib:<span class="variable">$LD_LIBRARY_PATH</span></span><br></pre></td></tr></table></figure>
+<p>对了，为了避免任何关于内存栈的错误，也请执行下面四行命令（从集群slurm脚本抄的）</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">ulimit</span> -d unlimited</span><br><span class="line"><span class="built_in">ulimit</span> -s unlimited</span><br><span class="line"><span class="built_in">ulimit</span> -t unlimited</span><br><span class="line"><span class="built_in">ulimit</span> -v unlimited</span><br></pre></td></tr></table></figure>
+<p>./install_cp2k_toolchain.sh –with-sirius=no –with-intelmpi=system
+–with-mkl=system –with-openmpi=no –with-plumed=install
+–with-cmake=system –with-ninja=install –with-dftd4=install</p>
+<p>cp2k的dftd4库和ninja库参考公社上的文件，http://bbs.keinsci.com/forum.php?mod=viewthread&amp;tid=55624&amp;highlight=dftd4</p>
+
+                    
+                        
+
+
+                    
+                    
+                        <p>
+                            <a
+                                href="/2025/09/16/%E7%A7%91%E7%A0%94/VASP/vasp6.5.1+HDF5+Wannier90%E7%BC%96%E8%AF%91%E5%AE%89%E8%A3%85/#post-footer"
+                                class="postShorten-excerpt_link link"
+                                aria-label=""
+                            >
+                                Comment and share
+                            </a>
+                        </p>
+                    
+                </div>
+            
+        </div>
+        
+    </article>
+    
+    
+    <article class="postShorten postShorten--thumbnailimg-bottom">
+        <div class="postShorten-wrap">
+            
+            <div class="postShorten-header">
+                <h1 class="postShorten-title">
+                    
+                        <a
+                            class="link-unstyled"
                             href="/2025/09/11/%E6%B2%89%E6%80%9D%E5%BD%95/Isolated%20city/"
                             aria-label=": Isolated city"
                         >
@@ -1304,387 +1613,6 @@ alt="安装ipk文件" />
                         <p>
                             <a
                                 href="/2025/08/22/%E5%9C%A8Immortalwrt%E4%B8%8A%E4%BD%BF%E7%94%A8dogcom%E8%BF%9B%E8%A1%8C%E6%A0%A1%E5%9B%AD%E7%BD%91%E8%AE%A4%E8%AF%81/#post-footer"
-                                class="postShorten-excerpt_link link"
-                                aria-label=""
-                            >
-                                Comment and share
-                            </a>
-                        </p>
-                    
-                </div>
-            
-        </div>
-        
-    </article>
-    
-    
-    <article class="postShorten postShorten--thumbnailimg-bottom">
-        <div class="postShorten-wrap">
-            
-            <div class="postShorten-header">
-                <h1 class="postShorten-title">
-                    
-                        <a
-                            class="link-unstyled"
-                            href="/2025/08/12/%E7%A7%91%E7%A0%94/VASP/Starry%20Sky/vaspkit%E4%B8%ADCIF%E8%BD%ACPOSCAR%E8%84%9A%E6%9C%AC%E7%9A%84%E6%8A%A5%E9%94%99/"
-                            aria-label=": np.asmatrix函数被废弃使得CIF转POSCAR脚本报错"
-                        >
-                            np.asmatrix函数被废弃使得CIF转POSCAR脚本报错
-                        </a>
-                    
-                </h1>
-                <div class="postShorten-meta">
-    <time datetime="2025-08-12T17:00:00+08:00">
-	
-		    Aug 12, 2025
-    	
-    </time>
-    
-        <span>in </span>
-        
-    <a class="category-link" href="/all-categories/%E4%BB%8E%E9%9B%B6%E5%BC%80%E5%A7%8B%E7%9A%84%E7%A7%91%E7%A0%94%E4%B9%8B%E6%97%85/">从零开始的科研之旅</a>, <a class="category-link" href="/all-categories/%E4%BB%8E%E9%9B%B6%E5%BC%80%E5%A7%8B%E7%9A%84%E7%A7%91%E7%A0%94%E4%B9%8B%E6%97%85/VASP/">VASP</a>
-
-
-    
-</div>
-
-            </div>
-            
-                <div class="postShorten-content">
-                    <p>使用最新版的<code>Miniconda3</code>，<code>python</code>环境的版本是14.x，顺手<code>pip install numpy</code>安装的<code>numpy</code>版本过高，使用<code>vaspkit</code>尝试将<code>.cif</code>文件转换为<code>POSCAR</code>时报错:</p>
-<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">AttributeError: `np.mat` was removed <span class="keyword">in</span> the NumPy <span class="number">2.0</span> release. Use `np.asmatrix` instead</span><br></pre></td></tr></table></figure>
-<p>错误原因在于当前的<code>NumPy</code>版本太新（&gt;=2.0），而<code>vaspkit</code>的<code>cif2pos.py</code>脚本中使用了已被移除的<code>np.mat</code>函数，最简单的方式是降级<code>numpy</code>版本：</p>
-<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">pip install numpy==<span class="number">1.26</span><span class="number">.4</span></span><br></pre></td></tr></table></figure>
-
-                    
-                        
-
-
-                    
-                    
-                        <p>
-                            <a
-                                href="/2025/08/12/%E7%A7%91%E7%A0%94/VASP/Starry%20Sky/vaspkit%E4%B8%ADCIF%E8%BD%ACPOSCAR%E8%84%9A%E6%9C%AC%E7%9A%84%E6%8A%A5%E9%94%99/#post-footer"
-                                class="postShorten-excerpt_link link"
-                                aria-label=""
-                            >
-                                Comment and share
-                            </a>
-                        </p>
-                    
-                </div>
-            
-        </div>
-        
-    </article>
-    
-    
-    <article class="postShorten postShorten--thumbnailimg-bottom">
-        <div class="postShorten-wrap">
-            
-            <div class="postShorten-header">
-                <h1 class="postShorten-title">
-                    
-                        <a
-                            class="link-unstyled"
-                            href="/2025/07/28/%E9%87%8F%E5%AD%90%E5%8C%96%E5%AD%A6/Sob%E8%80%81%E5%B8%88%E5%8D%9A%E6%96%87%E5%AD%A6%E4%B9%A0/"
-                            aria-label=": Sob老师博文学习"
-                        >
-                            Sob老师博文学习
-                        </a>
-                    
-                </h1>
-                <div class="postShorten-meta">
-    <time datetime="2025-07-28T09:20:02+08:00">
-	
-		    Jul 28, 2025
-    	
-    </time>
-    
-        <span>in </span>
-        
-    <a class="category-link" href="/all-categories/%E4%BB%8E%E9%9B%B6%E5%BC%80%E5%A7%8B%E7%9A%84%E7%A7%91%E7%A0%94%E4%B9%8B%E6%97%85/">从零开始的科研之旅</a>, <a class="category-link" href="/all-categories/%E4%BB%8E%E9%9B%B6%E5%BC%80%E5%A7%8B%E7%9A%84%E7%A7%91%E7%A0%94%E4%B9%8B%E6%97%85/first-stage/">first stage</a>
-
-
-    
-</div>
-
-            </div>
-            
-                <div class="postShorten-content">
-                    <p>pi-pi作用的定义和说法比较乱，Sob老师认为：pi-pi作用是相距较近的两个片段上彼此朝向相对的pi电子之间的独特的色散吸引作用。</p>
-<ol type="1">
-<li>pi-pi作用可以是分子间的也可以是分子内的，满足以上定义即可</li>
-<li>诸如苯分子里面的pi电子之间的作用不叫pi-pi作用，那属于共享电子作用</li>
-<li>两套pi电子的分布必须近乎彼此相对才可能算pi-pi作用。而诸如两套pi电子近乎肩并肩挨着就不能算pi-pi作用，像是不能说环丁二烯里面两套近乎定域的pi电子之间是分子内pi-pi作用</li>
-<li>“相距较近”一般是在4.0-4.5埃以内。也不是说更远距离就完全没有pi-pi作用了，只不过由于色散作用随作用距离r呈<span
-class="math inline">$-\dfrac{1}{r^6}$</span>快速衰减行为，因此距离稍微一远pi-pi作用就非常弱了，就不太值得一提了。但相互作用的片段间距离也不能太近，若显著小于相接触的原子的范德华半径之和，则显著的位阻互斥作用会远大于pi-pi吸引作用，使得pi-pi作用也相对不值得一提</li>
-<li>pi-pi作用最常出现在碳原子间，因为碳最容易带显著的pi电子。碳的Bondi和CSD范德华半径分别为1.70和1.77埃。如果没有特殊的因素影响相互作用距离的话，在平衡结构（势能面极小点结构）下，C-C间的pi-pi作用出现在3.4-3.6埃左右是最常见的</li>
-<li>pi-pi作用属于弱相互作用和非共价相互作用范畴。虽然名义上算作弱相互作用，但实际强度可大可小，直接取决于作用面积，详见后文</li>
-<li>有一个词叫pi-pi堆积（pi-pi
-stacking），这个词往往和pi-pi作用混用。但这个词更适合用来形容由于pi-pi作用的吸引效果使得相互作用的两个部分发生紧密结合从而产生的彼此堆积的结构特征</li>
-</ol>
-<p>比如下面这个图是晕苯二聚体的局部极小点构型
-（最小点为垂直构型）——平行错位构型，有一部分pi电子相对，算作pi-pi作用</p>
-<figure>
-<img src="1_2.jpg" alt="img" />
-<figcaption aria-hidden="true">img</figcaption>
-</figure>
-<p>pi-pi作用是一种非共价相互作用，内在本质是来自于相距较近的pi电子之间的色散作用。pi-pi堆积的体系有一个普遍特点是在极小点结构下，pi-pi作用区域的原子间通常不是正好对着，而是相互错位。下图是晕苯二聚体的俯视图，其中一个晕苯用红色显示，可以很清楚看到错位特征，即一层的碳对着另一层的六元环中心。一层层堆叠的石墨中每一层之间也同样是这样错位的。这可能是<a
-target="_blank" rel="noopener" href="https://pubs.rsc.org/en/content/articlelanding/2022/cp/d2cp00714b">因为错位的结构下的静电相互作用能更负（静电吸引作用更强）</a>，也可能是因为<a
-target="_blank" rel="noopener" href="https://pubs.rsc.org/en/content/articlelanding/2020/sc/d0sc02667k">错位的结构下比严格面对面的结构下的原子间的Pauli互斥更低</a>。</p>
-<p>下图为<a
-target="_blank" rel="noopener" href="https://www.sciencedirect.com/science/article/pii/S0008622320309076#bib6">二聚体极小点结构下的单体的静电势着色的分子范德华表面的叠加图（18碳环）</a>，若上层静电势为蓝色则下层为红色，这样构型下的静电吸引作用比一个个碳原子彼此精确对着的时候更强。</p>
-<figure>
-<img src="3.jpg"
-alt="Carbon, 171, 514-523 (2021) DOI: 10.1016/j.carbon.2020.09.048" />
-<figcaption aria-hidden="true">Carbon, 171, 514-523 (2021) DOI:
-10.1016/j.carbon.2020.09.048</figcaption>
-</figure>
-<p>虽然pi-pi相互作用与静电有些关系，但不可过分夸大静电的作用，pi-pi作用绝不是静电相互作用，比如下面这张描述pi-pi作用的图就是不合理的。</p>
-<figure>
-<img src="image-20250625214052295.png"
-alt="Chem. Sci., 2012, 3, 2191" />
-<figcaption aria-hidden="true">Chem. Sci., 2012, 3, 2191</figcaption>
-</figure>
-<p>pi-pi相互作用能量的深入剖析可以借助Sob老师的提出的sobEDAw能量分解方法，本人比较菜，还没有阅读过相关内容。</p>
-<p>pi-pi堆积的结构在现实环境中一般很容易发生分子间相对滑移（除非有额外的位阻效应等阻碍），这是由于==滑移导致能量变化很小。==</p>
-<p>pi-pi相互作用的强度与涉及pi-pi作用的原子数目显著相关，若射击pi-pi作用的原子数目很多，相互作用能量甚至能够达到接近化学键的强度。</p>
-<p>如果不知道pi-pi作用在哪， 不方便定义片段，则应当用<a
-target="_blank" rel="noopener" href="http://sobereva.com/598">使用IRI方法图形化考察化学体系中的化学键和弱相互作用</a>介绍的IRI方法，可以把体系中所有相互作用区域全都展现出来，也包括化学键作用区域</p>
-<h1 id="考察体系的弱相互作用">考察体系的弱相互作用</h1>
-<h2 id="对相互作用的认识">对相互作用的认识</h2>
-<p>化学体系中的相互作用主要分为化学键作用和弱相互作用（区别于物理学中的术语）两大类。</p>
-<p>从相互作用能上看，前者一般强度比较强，共价键和离子键都属于此类，也可以叫强相互作用；而后者一般强度比较弱，比前者通常弱一个数量级。弱相互作用既可以是分子间的，也可以是分子内的。弱相互包括范德华作用、pi-pi堆积作用、氢键、二氢键、卤键，以及后来很多人炒作概念而提出来的碳/硫/磷/金/银/铜…键等等，还有个词叫做非共价相互作用（noncovalent
-interaction），这个词的范畴相当于==弱相互作用和离子键的并集==。</p>
-<p>弱相互作用形式多样，但主要本质只有两个：</p>
-<ul>
-<li>静电相互作用。可以起到互斥作用也可以起到吸引作用，看具体情况（体系，以及相对位置）。这里说的静电相互作用也把极化作用包含进去了。
-<ul>
-<li>色散作用。它起到==吸引作用==。必须从量子力学角度才能予以解释。而从量化理论角度来讲，它对应于==电子的长程的库仑相关作用==。</li>
-</ul></li>
-</ul>
-<p>一般强度的氢/二氢/卤/硫/磷键等等是以==静电吸引主导，色散作用为辅构成的==，这点通过能量分解也可以体现出来。而一般说的范德华相互作用，以及pi-pi堆积作用的本质都是色散作用。</p>
-<p>注：</p>
-<ol type="1">
-<li>还有个作用叫交换互斥，它起到互斥作用，不管算什么类型相互作用都要考虑这个，==只有在较近距离（比如小于两个原子的范德华半径和）的时候才开始凸显出来，且原子间距离越近此作用越大==。正是这个作用使得弱相互作用的势能曲线总是有极小点，而不会令原子间距离因为静电吸引和色散作用而无限减小。</li>
-<li>“范德华作用”这个词描述的是电中性的两个原子之间的非共价相互作用，故本质包含了交换互斥和色散吸引作用两个部分。这个词可以囊括比如两个氩原子间的相互作用的全部内涵。这个词也可以用来描述无极性分子间的全部相互作用（但实际上，没有绝对严格意义的无极性分子，比如就连一般说的无极性分子氮气也有四极矩，可以认为是局部极性，因此氮气之间也有静电相互作用，讨论见http://sobereva.com/209。但本文就不咬文嚼字了）。至于一些初级的教材里说的范德华作用包括“诱导力、色散力、取向力”，这种歪曲的说法应该彻底从量化研究者的脑海中删除</li>
-<li>“范德华作用”这个词描述的是电中性的两个原子之间的非共价相互作用，故本质包含了交换互斥和色散吸引作用两个部分。这个词可以囊括比如两个氩原子间的相互作用的全部内涵。这个词也可以用来描述无极性分子间的全部相互作用（但实际上，没有绝对严格意义的无极性分子，比如就连一般说的无极性分子氮气也有四极矩，可以认为是局部极性，因此氮气之间也有静电相互作用，讨论见http://sobereva.com/209。但本文就不咬文嚼字了）。至于一些初级的教材里说的范德华作用包括“诱导力、色散力、取向力”，这种歪曲的说法应该彻底从量化研究者的脑海中删除</li>
-<li>《透彻认识氢键本质、简单可靠地估计氢键强度：一篇2019年JCC上的重要研究文章介绍》（http://sobereva.com/513）。</li>
-</ol>
-<h2 id="选择合适的方法分析说相互作用">选择合适的方法分析说相互作用</h2>
-<p>•
-IGMH：如果你的目就是分析特定片段间或片段内的相互作用，很明确地知道片段该怎么定义，那么IGMH绝对是最理想的选择。从上一节的大量例子可看出，IGMH对各类体系表现得都很理想，图像很美观。</p>
-<p>•
-IRI：如果你想将体系中所有相互作用（不分类型和强弱）在一张图里同时展现出来，肯定要用IRI，另外，IRI还有个重要优点是可以很好地展现出化学反应过程中化学键和弱相互作用的变化和过渡，==还可以做成生动的动画予以动态展现==，这在IRI介绍文章里都给出了，一定记得看。此外，IRI还有个变体IRI-pi，<a
-target="_blank" rel="noopener" href="http://sobereva.com/432">对于专门研究pi电子作用极有用处</a>。</p>
-<p>•
-IGM：有了图像效果好得多且物理上更严格的IGMH后，IGM基本就不用再考虑了。IGM仍有点用处的地方也就是这几个：(1)分析巨大体系时出于耗时考虑不得不用IGM
-(2)仅仅是想很粗略、快速地预览一下片段间弱相互作用出现的区域
-(3)有坐标文件，但由于特殊情况不方便得到用于IGMH分析的波函数文件。</p>
-<p>•
-NCI：有了IGMH和IRI后，NCI就基本没用了。IRI比NCI能展现更丰富的信息，尤其是能同时展现出强相互作用。而IGMH由于能自定义片段，比NCI方便灵活太多了，避免了无关区域的等值面妨碍分析，而且IGMH不需要特别精细的格点就能得到较平滑的等值面，从这个角度来说IGMH比NCI耗时还更低。若无特殊理由就没必要再用NCI了。</p>
-<p>D3校正本质上校正的是体系的势能面，会令所有依赖于势能面的问题都受到影响，自然也包括优化出的结构（势能面极小点的位置）、振动频率（取决于势能面极小点处Hessian矩阵）、IRC（质权坐标下的势能面上的能量极小路径）等。因为D3校正仅仅是基于几何结构计算校正能，与电子态无关，而且只改变能量而不影响体系的波函数，因此对这些问题，加不加D3结果都一样：计算某个结构下的gap、轨道、偶极矩、极化率、NMR、原子电荷、键级、静电势分布等等。因为这些问题不涉及体系的能量或者能量对核坐标的导数。D3也不会影响这些问题的计算结果：垂直激发能、理论电子光谱（不考虑振动耦合时）、垂直电离能、垂直电子亲合能、垂直单-三重态能量差等等，因为计算不同电子态时用的几何结构相同，把D3校正能精确抵消了。但是，D3可以间接地对上述问题产生影响。比如一个二聚体，用B3LYP和B3LYP-D3优化出来的结构可能相差很大，那显然最终计算的偶极矩、吸收光谱等性质也会有明显不同。算垂直吸收/发射能和振子强度、计算激发态与基态的密度差、计算NTO等等，前面说了，D3丝毫不可能影响结果，因为结构没变，而且D3不影响波函数。而对于激发态几何优化，D3显然会影响结果，而且如果优化基态时加了D3则优化激发态也得加，得保持统一。</p>
-<p>==<strong>不知道该不该加就加</strong>==</p>
-<h2 id="non-covalent-interactionnci">Non-covalent interaction(NCI)</h2>
-<p>NCI方法，2010年有Weitao Yang等人提出，核心思想是使用reduced density
-gradient(RDG)这一标量函数的三维等值面图来描述出现弱相互作用的区域，RDG函数定义为：
-<span class="math display">$$
-RDG(\bold r)=\dfrac{1}{2(3\pi^2)^{1/3}}\dfrac{\lvert \nabla \rho (\bold
-r) \rvert}{\rho(\bold r)^{4/3}}
-$$</span> 其中<span
-class="math inline"><em>ρ</em></span>是电子密度，可有量子化学程序计算出，也可由高分辨晶体衍射确定</p>
-<table>
-<colgroup>
-<col style="width: 31%" />
-<col style="width: 11%" />
-<col style="width: 18%" />
-<col style="width: 21%" />
-<col style="width: 17%" />
-</colgroup>
-<thead>
-<tr>
-<th></th>
-<th>Around nuclei</th>
-<th>Around chemical bonds</th>
-<th>Weak interaction regions</th>
-<th>Boundary of molecule</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td><span class="math inline">$\lvert \nabla \rho(\bold r)
-\rvert$</span></td>
-<td>Large</td>
-<td>0 ~ Minor</td>
-<td>0 ~ Small</td>
-<td>Very small ~ Small</td>
-</tr>
-<tr>
-<td><span class="math inline"><em>ρ</em>(<strong>r</strong>)</span></td>
-<td>Large</td>
-<td>Medium</td>
-<td>Small</td>
-<td>0 ~ Small</td>
-</tr>
-<tr>
-<td>RDG(<span class="math inline">$\bold r$</span>)</td>
-<td>Medium</td>
-<td>0 ~ Minor</td>
-<td>0 ~ Medium</td>
-<td>Medium ~ Very large</td>
-</tr>
-</tbody>
-</table>
-<p>在原子核附近，低能级上的电子高速运动，电子密度大，周围的电子密度变化迅速（即<span
-class="math inline">$\lvert \nabla \rho(\bold r)
-\rvert$</span>比较大），总体上RDG(<span class="math inline">$\bold
-r$</span>)函数值中等。在化学键和弱相互作用区域，RDG相对较小，而化学键区域周围的<span
-class="math inline"><em>ρ</em></span>明显大于弱相互作用区域。因此，如果只考虑电子密度较低的区域，具有较小等值的RDG等值面将能够显示发生弱相互作用的区域。在NCI(非共价相互作用)分析中，通常使用等值为0.4-0.6的RDG等值面来直观展示弱相互作用，在<span
-class="math inline"><em>ρ</em></span>大于某一阈值的区域，将RDG设为任意较大值以抑制其等值面的出现。该阈值通常选择为0.05原子单位(a.u.)，因为在弱相互作用区域，<span
-class="math inline"><em>ρ</em></span>很少高于此值。然而，具有部分共价性质的弱相互作用，如带电氢键H-bond，其在相互作用区域的<span
-class="math inline"><em>ρ</em></span>可能明显更大，因此阈值需要根据实际情况进行适当调整。</p>
-<figure>
-<img src="bo_d1ggo1ref24c73ai0kjg_2_512_178_822_654_0.jpg"
-alt="乙炔-氨气复合物的RDG等值面图" />
-<figcaption aria-hidden="true">乙炔-氨气复合物的RDG等值面图</figcaption>
-</figure>
-<p>如上图所示，(a)是RDG平面图，可以看出，在氢键区域（圆环中心），RDG值确实较小；与(b)相比，(c)的三维RDG等值面函数图屏蔽了<span
-class="math inline">$\rho (\bold r)$</span>大于0.05
-a.u.的区域（即屏蔽了原子核和键的区域，将这部分区域的RDG值设得较大）</p>
-<p>此外，NCI(非共价相互作用)方法还提出通过不同颜色在RDG(电子密度梯度)等值面上映射<span
-class="math inline">$\operatorname{sign}\left( {\lambda }_{2}\right)
-\rho(\bold r)$</span>函数，以直观区分相互作用的类型。<span
-class="math inline">$\operatorname{sign}\left( {\lambda }_{2}\right)
-\rho(\bold r)$</span>表示<span class="math inline">$\rho (\bold
-r)$</span>与<span
-class="math inline"><em>λ</em><sub>2</sub></span>符号的乘积，其中<span
-class="math inline"><em>λ</em><sub>2</sub></span>代表<span
-class="math inline">$\rho (\bold
-r)$</span>的Hessian矩阵的第二大特征值。用于在RDG等值面上映射<span
-class="math inline">$\operatorname{sign}\left( {\lambda }_{2}\right)
-\rho (\bold
-r)$</span>的常用色标如下图所示。由于化学体系中相互作用的复杂性和多样性，图中的标注仅适用于一般情况。</p>
-<figure>
-<img src="image-20250629183003721.png"
-alt="NCI图中常用的色阶和各种颜色范围的常见解释" />
-<figcaption
-aria-hidden="true">NCI图中常用的色阶和各种颜色范围的常见解释</figcaption>
-</figure>
-<p>范德华(vdW)相互作用区域的<span
-class="math inline"><em>ρ</em></span>通常非常小，因此图2中对应的<span
-class="math inline">sign (<em>λ</em><sub>2</sub>)<em>ρ</em></span>颜色为绿色。此外，<span
-class="math inline"><em>π</em> − <em>π</em></span>堆叠具有与范德华吸引部分相同的物理性质，即色散效应(dispersion
-effect)。因此，<span
-class="math inline"><em>π</em> − <em>π</em></span>堆叠区域的<span
-class="math inline"><em>ρ</em></span>也相当小。对应明显的空间位阻效应或吸引性弱相互作用的区域(例如，中等强度的<span
-class="math inline">H</span>-键和<span
-class="math inline">X</span>-键)具有较大的<span
-class="math inline"><em>ρ</em></span>(通常为0.02-0.05原子单位)，因此在图2中分别对应红色和蓝色区域。虽然离子键的强度通常比弱相互作用大一个数量级，==但它们相互作用区域内<span
-class="math inline"><em>ρ</em></span>的大小是相当的==。例如，Na-Cl键的BCP(临界点)处的<span
-class="math inline"><em>ρ</em></span>仅约为0.03原子单位。因此，RDG等值面不仅可以揭示弱相互作用，还能显示离子键相互作用。相反，具有显著共价性的相互作用，尤其是共价键，==其在相互作用区域的<span
-class="math inline"><em>ρ</em></span>通常明显大于0.05原子单位==。因此，它们在采用密度截断的标准NCI(非共价相互作用)图中不可见。显然，NCI本质上是一种旨在揭示各种非共价相互作用的方法</p>
-<p>在绘制NCI(非共价相互作用)图之前，波函数分析代码需要计算大量在矩形区域内均匀分布的网格点的RDG和<span
-class="math inline">sign (<em>λ</em><sub>2</sub>)<em>ρ</em></span>值，区域应合理设置以确保所有感兴趣的RDG等值面都位于其中。可以绘制RDG与<span
-class="math inline">sign (<em>λ</em><sub>2</sub>)<em>ρ</em></span>的==散点图==，以更好地理解NCI图的本质，这类图在文献中常用NCI分析进行讨论。下图(b)显示了对应于图(a)网格数据的散点图。从图中可以看到四个明显的峰，每个峰由多个点组成，延伸到图底。通过比较颜色，可以识别等值面图与散点图之间的对应关系，两个图中的圈内数字标示了这种对应关系。每个峰的最低点基本对应电子密度梯度为零的位置，实际上就是AIM理论中的==CP(临界点)==。图3(b)中的粉色虚线对应RDG为0.5，显然它只与上述四个峰相交，这也是(a)中<span
-class="math inline">&lt;! − −<em>s</em><em>w</em><em>i</em><em>g</em>￼0 − − &gt;  = 0.5</span>等值面能够揭示所有弱相互作用的原因。将RDG的等值线降低到低于0.5的值也是可以的，但如果设置得太低，NCI图中的RDG等值面会变得过小，难以观察。绘制NCI图的RDG等值线也不宜过大，否则可能出现不理想的等值面，严重干扰对感兴趣的弱相互作用的视觉分析。例如，如果RDG的等值线设置大于约0.7，散点图中的粉色虚线将与一些没有明显意义的网格点相交，从而导致出现意外的等值面。</p>
-<figure>
-<img src="bo_d1ggo1ref24c73ai0kjg_3_204_587_1405_476_0.jpg"
-alt="(a)为RDG函数等值面图，(b)为RDG vs sign(λ_2)ρ散点图" />
-<figcaption aria-hidden="true">(a)为RDG函数等值面图，(b)为RDG vs
-sign(λ_2)ρ散点图</figcaption>
-</figure>
-<figure>
-<img src="bo_d1ggo1ref24c73ai0kjg_4_221_166_1408_947_0.jpg"
-alt="各种系统的NCI图，蓝色、红色、青色和白色原子分别对应氮、氧、碳和氢" />
-<figcaption
-aria-hidden="true">各种系统的NCI图，蓝色、红色、青色和白色原子分别对应氮、氧、碳和氢</figcaption>
-</figure>
-<p>如上图所示，分别描述了：</p>
-<ul>
-<li>(a)：N-I键的颜色为蓝绿色，故卤键的强度大于van der Waals相互作用</li>
-<li>(b)：苯甲酸钠粒子中，钠离子和阳离子之间等值面为蓝色表明二者的相互作用为离子键</li>
-<li>(c)：<span
-class="math inline"><em>π</em></span>氢键（苯环和氟化氢分子之间），强度较弱</li>
-<li>(d)：离子键+氢键</li>
-<li>(e)：一氧化碳与18碳环间的范德华相互作用</li>
-<li>(f)：<span class="math inline">$\rm
-C_{17}H{36}$</span>的分子内显著的范德华相互作用（色散吸引作用），这也是该构象为该分子的最佳构象的原因（对于线性烷烃系统，当链长足够长时，发夹构象的能量低于直线构象的能量）</li>
-<li>(g)：由一个<span
-class="math inline"><em>σ</em></span>键连接的壬并苯二聚体中的显著的色散吸引作用(<span
-class="math inline"><em>π</em> − <em>π</em></span>堆叠)和空间位阻斥力</li>
-</ul>
-<p>如果用于NCI分析的几何结构来自X射线晶体衍射实验且分辨率令人满意，并且打算研究晶体环境中的弱相互作用，则可以避免对非氢原子进行优化，但氢原子的位置仍需通过几何优化进行精细调整，尤其是在关注氢键的情况下，因为氢原子的坐标通常无法通过X射线衍射准确确定。否则，在进行NCI分析之前通常需要进行结构优化，否则可能出现下面的错误</p>
-<p>NCI分析对波函数的质量要求不高，且几何优化任务本身比较基础，通常的做法是==结合中等规模的基组使用DFT进行计算==再将收敛后的波函数文件载入Multiwfn进行分析。尤其需要注意使用的DFT泛函需要能合理描述色散作用。</p>
-<ul>
-<li>孤立体系：B3LYP-D3(BJ)和<span class="math inline">$\omega\rm
-B97XD$</span></li>
-<li>周期性体系：PBE-D3(BJ)和TPSS-D3(BJ)</li>
-</ul>
-<p>在基组的选择上，三重ζ(基组(如def-TZVP)且不含昂贵的高角动量极化函数是不错的选择。<span
-class="math inline">6 − 311G * *</span>
-提升基组质量通常不会带来明显的结果改善。使用包含极化函数的较便宜的双重ζ基组(如<span
-class="math inline">6 − 31G * *</span>和def2-SVP也是完全可以接受的。</p>
-<p>对于DFT超大体系，也可以使用GFN-xTB方法，它可以被是为DFT方法的半经验变体，GFN-xTB能够轻松在个人计算机上优化包含数百甚至上千个原子的系统。</p>
-<p>NCI图的图形质量对RDG(电子密度梯度)和<span
-class="math inline">sign (<em>λ</em><sub>2</sub>)<em>ρ</em></span>的网格数据质量非常敏感，这主要体现在网格点之间的间距上。网格间距过大会导致等值面出现难看的锯齿边缘；但如果网格间距过小，则会带来过高的计算成本。请注意，如果空间范围固定，计算网格数据所花费的时间与网格间距的三次方成反比。根据经验，网格间距为0.2
-Bohr通常是NCI图的最低可接受质量；如果对图形质量要求较高，明显应使用小于0.15
-Bohr的网格间距。在开始计算之前，应正确设置网格数据的空间范围。一般指导原则是空间范围应充分覆盖所有可能出现感兴趣的微弱相互作用等值面(isosurfaces)区域，否则可能会遗漏或截断某些等值面。例如，如果微弱相互作用分布在整个系统中，并且希望在NCI(非共价相互作用)图中同时显示所有这些相互作用，则网格数据的范围应覆盖整个系统。相反，如果感兴趣的微弱相互作用仅发生在大型系统的局部区域，则可以合理定义空间范围，使得网格点仅分布在感兴趣的区域，这不仅大大减少计算时间，还能避免在无关区域出现等值面。用于绘制RDG等值面的等值值(isovalue)也可以根据实际情况适当调整，以改善图形质量。大多数情况下，选择0.5作为RDG值是合理的。通常可以将其略微提高到0.6，这样等值面会变得更宽，更易于观察。然而，如果设置得过大，则会导致无意义且杂乱的等值面。</p>
-<h2 id="iri">IRI</h2>
-<p>IRI(Interaction Region Indicator)，由卢天老师提出 <span
-class="math display">$$
-\rm IRI(r)=\dfrac{\lvert \nabla \rho(r) \rvert}{[\rho(r)]^a }
-$$</span></p>
-<p>在常规的量子化学计算之后可得波函数信息，再进一步可以计算出电子密度ρ及其梯度，即可计算IRI，一般a=1.1，这是最优的经验数值。</p>
-<p>Hessian矩阵是电子密度函数的二阶导数矩阵，描述电子密度在空间中的==曲率变化==。数学形式为：
-<span class="math display">$$
-H_{ij}=\dfrac{\partial ^2 \rho}{\partial x_i \partial
-y_j}\quad(i,j=x,y,z)
-$$</span></p>
-<ul>
-<li>物理意义
-<ul>
-<li>正曲率（凸起）→ 电子密度在某个方向“向外膨胀”（如原子核附近）</li>
-<li>负曲率（凹陷）→
-电子密度在某个方向“向内收缩”（如化学键或分子间区域）</li>
-</ul></li>
-</ul>
-<p><span
-class="math inline"><em>λ</em><sub>2</sub></span>是其Hessian矩阵的第二本征值，在AIM理论中：</p>
-<ul>
-<li>键临界点处sign(<span
-class="math inline"><em>λ</em><sub>2</sub></span>)=-1</li>
-<li>环、笼临界点处sign(<span
-class="math inline"><em>λ</em><sub>2</sub></span>)=+1</li>
-<li>接近临界点的区域其值与临界点处一般相同</li>
-</ul>
-<p>可以将sign(<span
-class="math inline"><em>λ</em><sub>2</sub></span>)函数用不同色彩投影到RDG等值面上，用来表现某一个区域的相互作用类型，==这便是用RDG方法分析弱相互作用==，但不如==IRI方法==全面，IRI与RDG在展现弱相互作用方面效果是等同的，而IRI有个关键性的好处是可以把化学键作用区域一起直观地展现出来！因此可以一目了然地图形化考察体系当中存在的所有类型相互作用，更有价值。考察体系的弱相互作用时会绘制电等值面图，IRI方法绘制的等值面图横坐标是sign(<span
-class="math inline"><em>λ</em><sub>2</sub></span>)<span
-class="math inline"><em>ρ</em>(<em>r</em>)</span>，纵坐标是IRI函数；而RDG方法绘制的等值面图横坐标只有<span
-class="math inline"><em>ρ</em>(<em>r</em>)</span>，纵坐标为RDG函数</p>
-<h2 id="rdg">RDG</h2>
-<p>RDG(Reduced Density
-Gradient)，即约化密度梯度，是量子化学中==一种比较落后==的可视化弱相互作用的重要函数
-<span class="math display">$$
-\rm RDG=\dfrac{\lvert  \nabla \rho
-\rvert}{2(3\pi^2)^{\frac{1}{3}}\rho^{\frac{4}{3}}}
-$$</span>
-ρ(r)只能反映出强度，但类型需要由sign(λ_2)函数来反映，这个函数是电子密度Hessian矩阵的第二大的本征值λ_2的符号，在AIM理论中键临界点的sign(λ_2)=-1，环、笼临界点的sign(λ_2)=+1，在接近临界点的区域其值与临界点处一般相同。可以将sign(λ_2)函数用不同色彩投影到RDG等值面上，用来表现某一个区域的相互作用类型。</p>
-<figure>
-<img src="20151207174225_62105.jpg" alt="img" />
-<figcaption aria-hidden="true">img</figcaption>
-</figure>
-
-                    
-                        
-
-
-                    
-                    
-                        <p>
-                            <a
-                                href="/2025/07/28/%E9%87%8F%E5%AD%90%E5%8C%96%E5%AD%A6/Sob%E8%80%81%E5%B8%88%E5%8D%9A%E6%96%87%E5%AD%A6%E4%B9%A0/#post-footer"
                                 class="postShorten-excerpt_link link"
                                 aria-label=""
                             >

@@ -242,6 +242,702 @@
                     
                         <a
                             class="link-unstyled"
+                            href="/2025/04/29/%E7%A7%91%E7%A0%94/VASP/Starry%20Sky/%E8%A1%A8%E9%9D%A2%E8%83%BD%E7%9A%84%E8%AE%A1%E7%AE%97/"
+                            aria-label=": 表面能的计算"
+                        >
+                            表面能的计算
+                        </a>
+                    
+                </h1>
+                <div class="postShorten-meta">
+    <time datetime="2025-04-29T21:40:00+08:00">
+	
+		    Apr 29, 2025
+    	
+    </time>
+    
+        <span>in </span>
+        
+    <a class="category-link" href="/all-categories/%E4%BB%8E%E9%9B%B6%E5%BC%80%E5%A7%8B%E7%9A%84%E7%A7%91%E7%A0%94%E4%B9%8B%E6%97%85/">从零开始的科研之旅</a>, <a class="category-link" href="/all-categories/%E4%BB%8E%E9%9B%B6%E5%BC%80%E5%A7%8B%E7%9A%84%E7%A7%91%E7%A0%94%E4%B9%8B%E6%97%85/VASP/">VASP</a>
+
+
+    
+</div>
+
+            </div>
+            
+                <div class="postShorten-content">
+                    <h2 id="关于表面能">关于表面能</h2>
+<p>根据VASP官方手册<code>Hands on Session III</code>，表面能的定义如下，大师兄的文章也提到了这个定义(
+<a
+target="_blank" rel="noopener" href="https://pubs.rsc.org/en/content/articlelanding/2017/nr/c7nr03889e">Nanoscale,
+2017, 9, 13089–13094</a>) <span class="math display">$$
+\sigma=\sigma^{unrelax}+E^{relax}=\dfrac{1}{2}(E_{surf}-N_{atoms}\cdot
+E_{bulk})+E^{relax}
+$$</span></p>
+<p><span class="math display">$$
+\gamma_s=\dfrac{1}{2A}(E_{surf}^{unrelax}-N\cdot
+E_{bulk})+\dfrac{1}{A}(E_{surf}^{relax}-E_{surf}^{unrelax})
+$$</span></p>
+<p>其中，弛豫能量被定义为： <span
+class="math display"><em>E</em><sup><em>r</em><em>e</em><em>l</em><em>a</em><em>x</em></sup> = <em>E</em><sub><em>s</em><em>u</em><em>r</em><em>f</em></sub><sup><em>r</em><em>e</em><em>l</em><em>a</em><em>x</em></sup> − <em>E</em><sub><em>s</em><em>u</em><em>r</em><em>f</em></sub><sup><em>u</em><em>n</em><em>r</em><em>e</em><em>l</em><em>a</em><em>x</em></sup></span></p>
+<ul>
+<li>手册的公式和大师兄文章中公式的区别在于表面积A，表面能应当除以表面积，所以后者更合理一些</li>
+<li><span
+class="math inline"><em>E</em><sub><em>b</em><em>u</em><em>l</em><em>k</em></sub></span>为体相中单个原子的能量，所以<span
+class="math inline"><em>N</em> ⋅ <em>E</em><sub><em>b</em><em>u</em><em>l</em><em>k</em></sub></span>为这个体相的能量，即为<code>OUTCAR</code>直接读出的能量</li>
+</ul>
+<h2 id="关于表面积a的计算">关于表面积A的计算</h2>
+<p>这部分有些难理解，涉及到一点<code>高等数学</code>和<code>线性代数</code>🤕</p>
+<p><strong>表面积可通过晶格基矢量的叉积确定</strong>，在POSCAR或CONTCAR文件中，晶格基矢量通常以三行的形式定义</p>
+<p>对于面积的计算，可设一组不共线的基矢量为<span
+class="math inline"><strong>a</strong><sub><strong>1</strong></sub> = (<em>a</em><sub>11</sub>, <em>a</em><sub>12</sub>, 0), <strong>a</strong><sub><strong>2</strong></sub> = (<em>a</em><sub>21</sub>, <em>a</em><sub>22</sub>, 0)</span></p>
+<p>下面这张图应该挺形象</p>
+<figure>
+<img src="向量外积-1756610585521-23.jpg"
+alt="https://zhuanlan.zhihu.com/p/359975221" />
+<figcaption
+aria-hidden="true">https://zhuanlan.zhihu.com/p/359975221</figcaption>
+</figure>
+<p><span
+class="math inline"><em>a⃗</em> × <em>b⃗</em> = (0, 0, <em>a</em><sub>11</sub> × <em>a</em><sub>22</sub> − <em>a</em><sub>12</sub> × <em>a</em><sub>21</sub>)</span></p>
+<p>面积为外积模乘以缩放银子 <span
+class="math display"><em>实</em><em>际</em><em>面</em><em>积</em> = <em>s</em><sup>2</sup> ⋅ |<em>a</em><sub>11</sub><em>a</em><sub>22</sub> − <em>a</em><sub>12</sub><em>a</em><sub>21</sub>|</span>
+PS：对于三维的体积 <span
+class="math display"><em>体</em><em>积</em> = <em>s</em><sup>3</sup> ⋅ |<strong>a</strong><sub><strong>1</strong></sub> ⋅ (<strong>a</strong><sub><strong>2</strong></sub> <strong>×</strong> <strong>a</strong><sub><strong>3</strong></sub>)|</span></p>
+<h2 id="p1x1cu111的表面能">p(1x1)Cu(111)的表面能</h2>
+<p>前面已经算得差不多了</p>
+<p>slab模型的能量信息</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">[ctan@baifq-hpc141 primitive-slab-opt-1]$ grep <span class="string">&#x27;  without&#x27;</span> OUTCAR</span><br><span class="line">  energy  without entropy=      -13.96941183  energy(sigma-&gt;0) =      -13.97673168</span><br><span class="line">  energy  without entropy=      -13.96945528  energy(sigma-&gt;0) =      -13.97676958</span><br><span class="line">  energy  without entropy=      -13.97006413  energy(sigma-&gt;0) =      -13.97726241</span><br><span class="line">  energy  without entropy=      -13.97020643  energy(sigma-&gt;0) =      -13.97735554</span><br><span class="line">  energy  without entropy=      -13.97017969  energy(sigma-&gt;0) =      -13.97735013</span><br></pre></td></tr></table></figure>
+<p>slab模型优化后的结构信息</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line">CONTCAR\(1\1\1)</span><br><span class="line">   1.00000000000000</span><br><span class="line">     2.5701000690000000    0.0000000000000000    0.0000000000000000</span><br><span class="line">    -1.2850500345000000    2.2257719501000000    0.0000000000000000</span><br><span class="line">     0.0000000000000000    0.0000000000000000   21.2954006195000005</span><br><span class="line">  Cu/0e71e558f37</span><br><span class="line">               4</span><br><span class="line">Selective dynamics</span><br><span class="line">Direct</span><br><span class="line">  0.0000000000000000  0.0000000000000000  0.0000000000000000   F   F   F</span><br><span class="line">  0.6666700000000034  0.3333299999999966  0.0985399999999998   F   F   F</span><br><span class="line">  0.3333311322281505  0.6666688677718494  0.1972481653092927   T   T   T</span><br><span class="line"> -0.0000004145140272  0.0000004145140272  0.2951613337135311   T   T   T</span><br><span class="line"></span><br><span class="line">  0.00000000E+00  0.00000000E+00  0.00000000E+00</span><br><span class="line">  0.00000000E+00  0.00000000E+00  0.00000000E+00</span><br><span class="line">  0.00000000E+00  0.00000000E+00  0.00000000E+00</span><br><span class="line">  0.00000000E+00  0.00000000E+00  0.00000000E+00</span><br></pre></td></tr></table></figure>
+<p>bulk模型的能量信息</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">[ctan@baifq-hpc141 primitive-slab-opt-1]$ grep <span class="string">&#x27;  without&#x27;</span> .bulk-calc/OUTCAR</span><br><span class="line">  energy  without entropy=      -14.90258332  energy(sigma-&gt;0) =      -14.90537746</span><br><span class="line">  energy  without entropy=      -14.90568039  energy(sigma-&gt;0) =      -14.90844732</span><br><span class="line">  energy  without entropy=      -14.90859467  energy(sigma-&gt;0) =      -14.91129762</span><br></pre></td></tr></table></figure>
+<ul>
+<li><span
+class="math inline"><em>A</em> = 2.570100069 * 2.2257719501 − 0.0000000000000000 * (−1.2850500345) = 5.720456642530275</span>
+Å<span class="math inline"><sup>2</sup></span></li>
+<li><span
+class="math inline"><em>E</em><sub><em>s</em><em>u</em><em>r</em><em>f</em></sub><sup><em>u</em><em>n</em><em>r</em><em>e</em><em>l</em><em>a</em><em>x</em></sup> = −13.9767</span>
+eV</li>
+<li><span
+class="math inline"><em>E</em><sub><em>b</em><em>u</em><em>l</em><em>k</em></sub> ⋅ <em>N</em> = −14.9112</span>
+eV</li>
+<li><span
+class="math inline"><em>E</em><sub><em>s</em><em>u</em><em>r</em><em>f</em><em>a</em><em>c</em><em>e</em></sub><sup><em>r</em><em>e</em><em>l</em><em>a</em><em>x</em></sup> = −13.9773</span>
+eV</li>
+</ul>
+<p>所以表面能<span
+class="math inline"><em>γ</em><sub><em>s</em></sub></span> = 0.08158
+eV/Å<span class="math inline"><sup>2</sup></span> ,又1 eV/Å<span
+class="math inline"><sup>2</sup></span>=16.0218 J/m<span
+class="math inline"><sup>2</sup></span>，所以表面能<span
+class="math inline"><em>γ</em><sub><em>s</em></sub>=</span> 1.3070
+J/m<span class="math inline"><sup>2</sup></span></p>
+<h2 id="c1x1cu111的表面能">c(1x1)Cu(111)的表面能</h2>
+<p>之前大师兄提到过，对于面心立方最密堆积的形式，slab模型的建立可以使用原胞也可以使用单胞，那么接下来看看用单胞计算表面能吧</p>
+<p>c(1x1)Cu(111)优化计算的能量信息：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><span class="line">[ctan@baifq-hpc141 conventional-slab-opt]$ grep <span class="string">&#x27;  without&#x27;</span> OUTCAR</span><br><span class="line">  energy  without entropy=      -55.94972046  energy(sigma-&gt;0) =      -55.94434499</span><br><span class="line">  energy  without entropy=      -55.94997517  energy(sigma-&gt;0) =      -55.94458201</span><br><span class="line">  energy  without entropy=      -55.95396000  energy(sigma-&gt;0) =      -55.94820485</span><br><span class="line">  energy  without entropy=      -55.95519341  energy(sigma-&gt;0) =      -55.94928561</span><br><span class="line">  energy  without entropy=      -55.95554732  energy(sigma-&gt;0) =      -55.94959634</span><br><span class="line">  energy  without entropy=      -55.95713778  energy(sigma-&gt;0) =      -55.95095507</span><br><span class="line">  energy  without entropy=      -55.95788514  energy(sigma-&gt;0) =      -55.95158140</span><br><span class="line">  energy  without entropy=      -55.95893404  energy(sigma-&gt;0) =      -55.95242747</span><br><span class="line">  energy  without entropy=      -55.95963672  energy(sigma-&gt;0) =      -55.95296199</span><br><span class="line">  energy  without entropy=      -55.96031694  energy(sigma-&gt;0) =      -55.95340564</span><br><span class="line">  energy  without entropy=      -55.96050719  energy(sigma-&gt;0) =      -55.95349958</span><br><span class="line">  energy  without entropy=      -55.96053048  energy(sigma-&gt;0) =      -55.95316488</span><br><span class="line">  energy  without entropy=      -55.96067995  energy(sigma-&gt;0) =      -55.95346716</span><br><span class="line">  energy  without entropy=      -55.96069855  energy(sigma-&gt;0) =      -55.95356576</span><br><span class="line">  energy  without entropy=      -55.96051601  energy(sigma-&gt;0) =      -55.95360396</span><br><span class="line">  energy  without entropy=      -55.96050802  energy(sigma-&gt;0) =      -55.95361124</span><br><span class="line">  energy  without entropy=      -55.96041586  energy(sigma-&gt;0) =      -55.95360050</span><br><span class="line">  energy  without entropy=      -55.96018279  energy(sigma-&gt;0) =      -55.95347398</span><br></pre></td></tr></table></figure>
+<p>结构信息：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br></pre></td><td class="code"><pre><span class="line">[ctan@baifq-hpc141 conventional-slab-opt]$ <span class="built_in">cat</span> CONTCAR</span><br><span class="line">CONTCAR\(1\1\1)</span><br><span class="line">   1.00000000000000</span><br><span class="line">     5.1402001381000000    0.0000000000000000    0.0000000000000000</span><br><span class="line">    -2.5701000690000000    4.4515439000999999    0.0000000000000000</span><br><span class="line">     0.0000000000000000    0.0000000000000000   21.2954006195000005</span><br><span class="line">  Cu/0e71e558f37</span><br><span class="line">              16</span><br><span class="line">Direct</span><br><span class="line">  0.0000006270807907 -0.0000006270807907  0.0011656342599333</span><br><span class="line">  0.6666672048402060  0.3333327951597896  0.0988195745854847</span><br><span class="line">  0.3333327951597896  0.6666672048402060  0.1968004254145135</span><br><span class="line"> -0.0000006270807907  0.0000006270807907  0.2944543657400676</span><br><span class="line">  0.0000006270807907  0.4999993729192098  0.0011656342599333</span><br><span class="line">  0.6666672048402060  0.8333327951597940  0.0988195745854847</span><br><span class="line">  0.3333327951597896  0.1666672048402087  0.1968004254145135</span><br><span class="line"> -0.0000006270807907  0.5000006270807924  0.2944543657400676</span><br><span class="line">  0.5000006270807924  0.4999993729192098  0.0011656342599333</span><br><span class="line">  0.1666672048402087  0.8333327951597940  0.0988195745854847</span><br><span class="line">  0.8333327951597940  0.1666672048402087  0.1968004254145135</span><br><span class="line">  0.4999993729192098  0.5000006270807924  0.2944543657400676</span><br><span class="line">  0.5000006270807924 -0.0000006270807907  0.0011656342599333</span><br><span class="line">  0.1666672048402087  0.3333327951597896  0.0988195745854847</span><br><span class="line">  0.8333327951597940  0.6666672048402060  0.1968004254145135</span><br><span class="line">  0.4999993729192098  0.0000006270807907  0.2944543657400676</span><br><span class="line"></span><br><span class="line">  0.00000000E+00  0.00000000E+00  0.00000000E+00</span><br><span class="line">  0.00000000E+00  0.00000000E+00  0.00000000E+00</span><br><span class="line">  0.00000000E+00  0.00000000E+00  0.00000000E+00</span><br><span class="line">  0.00000000E+00  0.00000000E+00  0.00000000E+00</span><br><span class="line">  0.00000000E+00  0.00000000E+00  0.00000000E+00</span><br><span class="line">  0.00000000E+00  0.00000000E+00  0.00000000E+00</span><br><span class="line">  0.00000000E+00  0.00000000E+00  0.00000000E+00</span><br><span class="line">  0.00000000E+00  0.00000000E+00  0.00000000E+00</span><br><span class="line">  0.00000000E+00  0.00000000E+00  0.00000000E+00</span><br><span class="line">  0.00000000E+00  0.00000000E+00  0.00000000E+00</span><br><span class="line">  0.00000000E+00  0.00000000E+00  0.00000000E+00</span><br><span class="line">  0.00000000E+00  0.00000000E+00  0.00000000E+00</span><br><span class="line">  0.00000000E+00  0.00000000E+00  0.00000000E+00</span><br><span class="line">  0.00000000E+00  0.00000000E+00  0.00000000E+00</span><br><span class="line">  0.00000000E+00  0.00000000E+00  0.00000000E+00</span><br><span class="line">  0.00000000E+00  0.00000000E+00  0.00000000E+00</span><br></pre></td></tr></table></figure>
+<p>Cu(111)的体相能量：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">[ctan@baifq-hpc141 conventional-slab-opt]$ grep <span class="string">&#x27;  without&#x27;</span> .bulk-calc/OUTCAR</span><br><span class="line">  energy  without entropy=      -14.90258332  energy(sigma-&gt;0) =      -14.90537746</span><br><span class="line">  energy  without entropy=      -14.90568039  energy(sigma-&gt;0) =      -14.90844732</span><br><span class="line">  energy  without entropy=      -14.90859467  energy(sigma-&gt;0) =      -14.91129762</span><br></pre></td></tr></table></figure>
+<ul>
+<li>表面积A=<span
+class="math inline">5.1402001381000000 * 4.4515439000999999 = 22.8818</span>
+Å<span class="math inline"><sup>2</sup></span></li>
+<li><span
+class="math inline"><em>E</em><sub><em>s</em><em>u</em><em>r</em><em>f</em></sub><sup><em>u</em><em>n</em><em>r</em><em>e</em><em>l</em><em>a</em><em>x</em></sup></span>
+= -55.9443 eV</li>
+<li><span
+class="math inline"><em>N</em> ⋅ <em>E</em><sub><em>b</em><em>u</em><em>l</em><em>k</em></sub></span>
+= -59.6452 eV
+<ul>
+<li><strong>N指的是slab模型中的原子个数而非bulk中的原子个数</strong></li>
+</ul></li>
+<li><span
+class="math inline"><em>E</em><sub><em>s</em><em>u</em><em>r</em><em>f</em></sub><sup><em>r</em><em>e</em><em>l</em><em>a</em><em>x</em></sup></span>
+= -55.9535 eV</li>
+</ul>
+<p>计算得表面能<span
+class="math inline"><em>γ</em><sub><em>s</em></sub></span>=0.08047
+eV/Å<span class="math inline"><sup>2</sup></span> = 1.2892 J/m<span
+class="math inline"><sup>2</sup></span></p>
+<p>这与p(1x1)Cu(111)计算所得的表面能有一定的差距，目前现阶段我还无法解决这个问题🤔😵‍💫</p>
+<h2 id="p1x1ni100的表面能">p(1x1)Ni(100)的表面能</h2>
+<p>这个例子来自于vasp官方的手册<code>Hands on Session III</code></p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line">general:</span><br><span class="line">SYSTEM = clean Ni(100) surface</span><br><span class="line">ISTART = 0 ; ICHARG=2</span><br><span class="line">ENCUT = 270</span><br><span class="line">ISMEAR = 2 ; SIGMA = 0.2</span><br><span class="line">spin:</span><br><span class="line">ISPIN=2</span><br><span class="line">MAGMOM = 5*1</span><br><span class="line">dynamic:</span><br><span class="line">IBRION = 1</span><br><span class="line">NSW = 100</span><br><span class="line">POTIM = 0.2</span><br></pre></td></tr></table></figure>
+<p>有个疑惑的点是手册中的<code>INCAR</code>没有加上偶极矫正，我在自己算的时候加上了偶极矫正</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><span class="line">System = Nickel-slab-opt</span><br><span class="line">ISMEAR = 1</span><br><span class="line">ISTART = 0</span><br><span class="line">ICHARG = 2</span><br><span class="line">SIGMA = 0.05</span><br><span class="line">ENCUT = 360</span><br><span class="line">ALGO = Normal</span><br><span class="line">ISPIN = 2</span><br><span class="line">MAGMOM = 5*1</span><br><span class="line">NSW = 200</span><br><span class="line">NELM = 200</span><br><span class="line">EDIFF = 1E-6</span><br><span class="line">EDIFFG = -0.01</span><br><span class="line">IDIPOL = 3</span><br><span class="line">LDIPOL = .TRUE.</span><br><span class="line">LWAVE = .FALSE.</span><br><span class="line">LCHARG = .FALSE.</span><br><span class="line">IBRION = 1</span><br><span class="line">POTIM = 0.05</span><br></pre></td></tr></table></figure>
+<p>体相能量信息：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">[ctan@baifq-hpc141 primitive-opt]$ grep <span class="string">&#x27;  without&#x27;</span> .bulk/OUTCAR</span><br><span class="line">  energy  without entropy=      -21.88865316  energy(sigma-&gt;0) =      -21.88759144</span><br><span class="line">  energy  without entropy=      -21.88930785  energy(sigma-&gt;0) =      -21.88825056</span><br><span class="line">  energy  without entropy=      -21.89056178  energy(sigma-&gt;0) =      -21.88952707</span><br></pre></td></tr></table></figure>
+<p>弛豫与未弛豫的slab模型的能量信息：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">[ctan@baifq-hpc141 primitive-opt]$ grep <span class="string">&#x27;  without&#x27;</span> OUTCAR</span><br><span class="line">  energy  without entropy=      -25.97155386  energy(sigma-&gt;0) =      -25.97291371</span><br><span class="line">  energy  without entropy=      -25.97233802  energy(sigma-&gt;0) =      -25.97366730</span><br><span class="line">  energy  without entropy=      -25.97412653  energy(sigma-&gt;0) =      -25.97534340</span><br><span class="line">  energy  without entropy=      -25.97511519  energy(sigma-&gt;0) =      -25.97602399</span><br><span class="line">  energy  without entropy=      -25.97516432  energy(sigma-&gt;0) =      -25.97619350</span><br><span class="line">  energy  without entropy=      -25.97516747  energy(sigma-&gt;0) =      -25.97619463</span><br><span class="line">  energy  without entropy=      -25.97517140  energy(sigma-&gt;0) =      -25.97620156</span><br></pre></td></tr></table></figure>
+<p>优化后的结构：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><span class="line">CONTCAR\(1\0\0)</span><br><span class="line">   1.00000000000000</span><br><span class="line">     2.4846000671000001    0.0000000000000000    0.0000000000000000</span><br><span class="line">    -1.2423000336000001    2.1517267763999999    0.0000000000000000</span><br><span class="line">     0.0000000000000000    0.0000000000000000   18.7047996521000002</span><br><span class="line">  Ni_pv/368cd815</span><br><span class="line">               5</span><br><span class="line">Direct</span><br><span class="line">  0.6666685456044492  0.3333314543955508  0.0005454007373249</span><br><span class="line">  0.0000003831810720 -0.0000003831810720  0.1078816295897802</span><br><span class="line">  0.3333305745814666  0.6666694254185335  0.2169200598414882</span><br><span class="line">  0.6666681017676376  0.3333318982323624  0.3259932620996842</span><br><span class="line">  0.0000023948653782 -0.0000023948653782  0.4332496477317282</span><br><span class="line"></span><br><span class="line">  0.00000000E+00  0.00000000E+00  0.00000000E+00</span><br><span class="line">  0.00000000E+00  0.00000000E+00  0.00000000E+00</span><br><span class="line">  0.00000000E+00  0.00000000E+00  0.00000000E+00</span><br><span class="line">  0.00000000E+00  0.00000000E+00  0.00000000E+00</span><br><span class="line">  0.00000000E+00  0.00000000E+00  0.00000000E+00</span><br></pre></td></tr></table></figure>
+<ul>
+<li>表面积A=2.4846000671000001*2.1517267763999999=5.346180493024307
+eV</li>
+<li><span
+class="math inline"><em>E</em><sub><em>s</em><em>u</em><em>r</em><em>f</em></sub><sup><em>u</em><em>n</em><em>r</em><em>e</em><em>l</em><em>a</em><em>x</em></sup></span>
+= -25.97291371 eV</li>
+<li><span
+class="math inline"><em>E</em><sub><em>s</em><em>u</em><em>r</em><em>f</em></sub><sup><em>r</em><em>e</em><em>l</em><em>a</em><em>x</em></sup></span>
+= -25.97620156 eV</li>
+<li><span
+class="math inline"><em>N</em> ⋅ <em>E</em><sub><em>b</em><em>u</em><em>l</em><em>k</em></sub></span>
+= -21.88952707 eV</li>
+</ul>
+<p>表面能 <span
+class="math inline"><em>γ</em><sub><em>s</em></sub></span> = 0.1293
+eV/Å<span class="math inline"><sup>2</sup></span> = 2.0715 J/m<span
+class="math inline"><sup>2</sup></span></p>
+<h2 id="小结">小结</h2>
+<ul>
+<li>本节主要是联系表面能的计算</li>
+<li>Ni(100)表面能的计算选用的赝势为Ni_sv赝势</li>
+</ul>
+
+                    
+                        
+
+
+                    
+                    
+                        <p>
+                            <a
+                                href="/2025/04/29/%E7%A7%91%E7%A0%94/VASP/Starry%20Sky/%E8%A1%A8%E9%9D%A2%E8%83%BD%E7%9A%84%E8%AE%A1%E7%AE%97/#post-footer"
+                                class="postShorten-excerpt_link link"
+                                aria-label=""
+                            >
+                                Comment and share
+                            </a>
+                        </p>
+                    
+                </div>
+            
+        </div>
+        
+    </article>
+    
+    
+    <article class="postShorten postShorten--thumbnailimg-bottom">
+        <div class="postShorten-wrap">
+            
+            <div class="postShorten-header">
+                <h1 class="postShorten-title">
+                    
+                        <a
+                            class="link-unstyled"
+                            href="/2025/04/29/%E7%A7%91%E7%A0%94/VASP/Starry%20Sky/POTCAR%E8%B5%9D%E5%8A%BF%E7%9A%84%E9%80%89%E5%8F%96/"
+                            aria-label=": POTCAR赝势的选取"
+                        >
+                            POTCAR赝势的选取
+                        </a>
+                    
+                </h1>
+                <div class="postShorten-meta">
+    <time datetime="2025-04-29T20:45:00+08:00">
+	
+		    Apr 29, 2025
+    	
+    </time>
+    
+        <span>in </span>
+        
+    <a class="category-link" href="/all-categories/%E4%BB%8E%E9%9B%B6%E5%BC%80%E5%A7%8B%E7%9A%84%E7%A7%91%E7%A0%94%E4%B9%8B%E6%97%85/">从零开始的科研之旅</a>, <a class="category-link" href="/all-categories/%E4%BB%8E%E9%9B%B6%E5%BC%80%E5%A7%8B%E7%9A%84%E7%A7%91%E7%A0%94%E4%B9%8B%E6%97%85/VASP/">VASP</a>
+
+
+    
+</div>
+
+            </div>
+            
+                <div class="postShorten-content">
+                    <p>本文为一个查阅性的记录文章，也可以说是搬运，内容取自<strong>侯柱锋</strong>老师的<code>使用VASP的个人经验手册</code></p>
+<table>
+<colgroup>
+<col style="width: 5%" />
+<col style="width: 18%" />
+<col style="width: 18%" />
+<col style="width: 15%" />
+<col style="width: 43%" />
+</colgroup>
+<thead>
+<tr>
+<th>元素</th>
+<th>普通赝势 (eV)</th>
+<th>高硬赝势 (eV)</th>
+<th>软赝势 (eV)</th>
+<th>d 电子作为半芯态来处理赝势 (eV)</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>B</td>
+<td><strong>318</strong></td>
+<td>700 (B_h)</td>
+<td>250 (B_s)</td>
+<td>-</td>
+</tr>
+<tr>
+<td>C</td>
+<td><strong>400</strong></td>
+<td>700 (C_h)</td>
+<td>273 (C_s)</td>
+<td>-</td>
+</tr>
+<tr>
+<td>N</td>
+<td><strong>400</strong></td>
+<td>700 (N_h)</td>
+<td>250 (N_s)</td>
+<td>-</td>
+</tr>
+<tr>
+<td>O</td>
+<td><strong>400</strong></td>
+<td>700 (O_h)</td>
+<td>250 (O_s)</td>
+<td>-</td>
+</tr>
+<tr>
+<td>F</td>
+<td><strong>400</strong></td>
+<td>700 (F_h)</td>
+<td>250 (F_s)</td>
+<td>-</td>
+</tr>
+<tr>
+<td>Al</td>
+<td><strong>240</strong></td>
+<td>295 (Al_h)</td>
+<td>-</td>
+<td>-</td>
+</tr>
+<tr>
+<td>Si</td>
+<td><strong>245</strong></td>
+<td>380 (Si_h)</td>
+<td>-</td>
+<td>-</td>
+</tr>
+<tr>
+<td>P</td>
+<td><strong>270</strong></td>
+<td>390 (P_h)</td>
+<td>-</td>
+<td>-</td>
+</tr>
+<tr>
+<td>S</td>
+<td><strong>280</strong></td>
+<td>402 (S_h)</td>
+<td>-</td>
+<td>-</td>
+</tr>
+<tr>
+<td>Cl</td>
+<td><strong>280</strong></td>
+<td>409 (Cl_h)</td>
+<td>-</td>
+<td>-</td>
+</tr>
+<tr>
+<td>Ga</td>
+<td>134</td>
+<td>404 (Ga_h)</td>
+<td>-</td>
+<td><strong>282 (Ga_d)</strong></td>
+</tr>
+<tr>
+<td>Ge</td>
+<td>173</td>
+<td>410 (Ge_h)</td>
+<td>-</td>
+<td><strong>287 (Ge_d)</strong></td>
+</tr>
+<tr>
+<td>As</td>
+<td><strong>208</strong></td>
+<td>-</td>
+<td>-</td>
+<td>-</td>
+</tr>
+<tr>
+<td>Se</td>
+<td><strong>211</strong></td>
+<td>-</td>
+<td>-</td>
+<td>-</td>
+</tr>
+<tr>
+<td>Br</td>
+<td><strong>216</strong></td>
+<td>-</td>
+<td>-</td>
+<td>-</td>
+</tr>
+<tr>
+<td>In</td>
+<td>95</td>
+<td>-</td>
+<td>-</td>
+<td><strong>239 (In_d)</strong></td>
+</tr>
+<tr>
+<td>Sn</td>
+<td>103</td>
+<td>-</td>
+<td>-</td>
+<td><strong>241 (Sn_d)</strong></td>
+</tr>
+<tr>
+<td>Sb</td>
+<td><strong>172</strong></td>
+<td>-</td>
+<td>-</td>
+<td>-</td>
+</tr>
+<tr>
+<td>Te</td>
+<td><strong>174</strong></td>
+<td>-</td>
+<td>-</td>
+<td>-</td>
+</tr>
+<tr>
+<td>I</td>
+<td><strong>175</strong></td>
+<td>-</td>
+<td>-</td>
+<td>-</td>
+</tr>
+<tr>
+<td>Tl</td>
+<td>95</td>
+<td>-</td>
+<td>-</td>
+<td><strong>239 (Tl_d)</strong></td>
+</tr>
+<tr>
+<td>Pb</td>
+<td>98</td>
+<td>-</td>
+<td>-</td>
+<td><strong>237 (Pb_d)</strong></td>
+</tr>
+<tr>
+<td>Bi</td>
+<td>105</td>
+<td>-</td>
+<td>-</td>
+<td><strong>242 (Bi_d)</strong></td>
+</tr>
+</tbody>
+</table>
+<table>
+<colgroup>
+<col style="width: 6%" />
+<col style="width: 25%" />
+<col style="width: 25%" />
+<col style="width: 43%" />
+</colgroup>
+<thead>
+<tr>
+<th>元素</th>
+<th>X——普通赝势 (eV)</th>
+<th>X_h——硬赝势 (eV)</th>
+<th>其他赝势 (eV)</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>H</td>
+<td><strong>250</strong></td>
+<td>700 (H_h)</td>
+<td>-</td>
+</tr>
+<tr>
+<td>Li</td>
+<td>140</td>
+<td>-</td>
+<td><strong>271 (Li_sv)</strong></td>
+</tr>
+<tr>
+<td>Be</td>
+<td><strong>300</strong></td>
+<td>-</td>
+<td>308 (Be_sv)</td>
+</tr>
+<tr>
+<td>Na</td>
+<td>81</td>
+<td>-</td>
+<td><strong>300 (Na_pv)</strong>, 700 (Na_sv)</td>
+</tr>
+<tr>
+<td>Mg</td>
+<td><strong>210</strong></td>
+<td>-</td>
+<td>265 (Mg_pv)</td>
+</tr>
+<tr>
+<td>K</td>
+<td>-</td>
+<td>-</td>
+<td>150 (K_pv), <strong>259 (K_sv)</strong></td>
+</tr>
+<tr>
+<td>Ca</td>
+<td>-</td>
+<td>-</td>
+<td><strong>150 (Ca_pv)</strong>, 290 (Ca_sv)</td>
+</tr>
+<tr>
+<td>Rb</td>
+<td>-</td>
+<td>-</td>
+<td>121 (Rb_pv), <strong>220 (Rb_sv)</strong></td>
+</tr>
+<tr>
+<td>Sr</td>
+<td>-</td>
+<td>-</td>
+<td><strong>226 (Sr_sv)</strong></td>
+</tr>
+<tr>
+<td>Cs</td>
+<td>-</td>
+<td>-</td>
+<td><strong>220 (Cs_sv)</strong></td>
+</tr>
+<tr>
+<td>Ba</td>
+<td>-</td>
+<td>-</td>
+<td><strong>187 (Ba_sv)</strong></td>
+</tr>
+</tbody>
+</table>
+<table>
+<thead>
+<tr>
+<th>元素</th>
+<th>普通赝势 (eV)</th>
+<th>X_pv赝势 (eV)</th>
+<th>X_sv赝势 (eV)</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Sc</td>
+<td>-</td>
+<td>-</td>
+<td><strong>222 (Sc_sv)</strong></td>
+</tr>
+<tr>
+<td>Ti</td>
+<td>178</td>
+<td><strong>222 (Ti_pv)</strong></td>
+<td>-</td>
+</tr>
+<tr>
+<td>V</td>
+<td>192</td>
+<td><strong>263 (V_pv)</strong></td>
+<td>-</td>
+</tr>
+<tr>
+<td>Cr</td>
+<td>227</td>
+<td><strong>265 (Cr_pv)</strong></td>
+<td>-</td>
+</tr>
+<tr>
+<td>Mn</td>
+<td><strong>269</strong></td>
+<td>269 (Mn_pv)</td>
+<td>-</td>
+</tr>
+<tr>
+<td>Fe</td>
+<td><strong>267</strong></td>
+<td>293 (Fe_pv)</td>
+<td>-</td>
+</tr>
+<tr>
+<td>Co</td>
+<td><strong>267</strong></td>
+<td>-</td>
+<td>-</td>
+</tr>
+<tr>
+<td>Ni</td>
+<td><strong>269</strong></td>
+<td>367 (Ni_pv)</td>
+<td>-</td>
+</tr>
+<tr>
+<td>Cu</td>
+<td><strong>273</strong></td>
+<td>368 (Cu_pv)</td>
+<td>-</td>
+</tr>
+<tr>
+<td>Zn</td>
+<td><strong>276</strong></td>
+<td>-</td>
+<td>-</td>
+</tr>
+<tr>
+<td>Y</td>
+<td>-</td>
+<td>-</td>
+<td><strong>211 (Y_sv)</strong></td>
+</tr>
+<tr>
+<td>Zr</td>
+<td>-</td>
+<td>-</td>
+<td><strong>229 (Zr_sv)</strong></td>
+</tr>
+<tr>
+<td>Nb</td>
+<td>-</td>
+<td><strong>207 (Nb_pv)</strong></td>
+<td>-</td>
+</tr>
+<tr>
+<td>Mo</td>
+<td>224</td>
+<td><strong>224 (Mo_pv)</strong></td>
+<td>-</td>
+</tr>
+<tr>
+<td>Tc</td>
+<td>228</td>
+<td><strong>228 (Tc_pv)</strong></td>
+<td>-</td>
+</tr>
+<tr>
+<td>Ru</td>
+<td><strong>213</strong></td>
+<td>230 (Ru_pv)</td>
+<td>-</td>
+</tr>
+<tr>
+<td>Rh</td>
+<td><strong>228</strong></td>
+<td>271 (Rh_pv)</td>
+<td>-</td>
+</tr>
+<tr>
+<td>Pd</td>
+<td><strong>250</strong></td>
+<td>350 (Pd_pv)</td>
+<td>-</td>
+</tr>
+<tr>
+<td>Ag</td>
+<td><strong>249</strong></td>
+<td>-</td>
+<td>-</td>
+</tr>
+<tr>
+<td>Cd</td>
+<td><strong>274</strong></td>
+<td>-</td>
+<td>-</td>
+</tr>
+<tr>
+<td>Hf</td>
+<td>220</td>
+<td><strong>220 (Hf_pv)</strong></td>
+<td>-</td>
+</tr>
+<tr>
+<td>Ta</td>
+<td>223</td>
+<td><strong>223 (Ta_pv)</strong></td>
+<td>-</td>
+</tr>
+<tr>
+<td>W</td>
+<td>223</td>
+<td><strong>223 (W_pv)</strong></td>
+<td>-</td>
+</tr>
+<tr>
+<td>Re</td>
+<td><strong>226</strong></td>
+<td>226 (Re_pv)</td>
+<td>-</td>
+</tr>
+<tr>
+<td>Os</td>
+<td>228</td>
+<td><strong>228 (Os_pv)</strong></td>
+<td>-</td>
+</tr>
+<tr>
+<td>Ir</td>
+<td><strong>210</strong></td>
+<td>-</td>
+<td>-</td>
+</tr>
+<tr>
+<td>Pt</td>
+<td><strong>230</strong></td>
+<td>-</td>
+<td>-</td>
+</tr>
+<tr>
+<td>Au</td>
+<td><strong>229</strong></td>
+<td>-</td>
+<td>-</td>
+</tr>
+<tr>
+<td>Hg</td>
+<td><strong>233</strong></td>
+<td>-</td>
+<td>-</td>
+</tr>
+</tbody>
+</table>
+
+                    
+                        
+
+
+                    
+                    
+                        <p>
+                            <a
+                                href="/2025/04/29/%E7%A7%91%E7%A0%94/VASP/Starry%20Sky/POTCAR%E8%B5%9D%E5%8A%BF%E7%9A%84%E9%80%89%E5%8F%96/#post-footer"
+                                class="postShorten-excerpt_link link"
+                                aria-label=""
+                            >
+                                Comment and share
+                            </a>
+                        </p>
+                    
+                </div>
+            
+        </div>
+        
+    </article>
+    
+    
+    <article class="postShorten postShorten--thumbnailimg-bottom">
+        <div class="postShorten-wrap">
+            
+            <div class="postShorten-header">
+                <h1 class="postShorten-title">
+                    
+                        <a
+                            class="link-unstyled"
                             href="/2025/04/27/%E7%A7%91%E7%A0%94/VASP/Starry%20Sky/%E4%BB%A5p(1x1)Cu(111)%E4%B8%BA%E4%BE%8B%E5%88%86%E6%9E%90%E8%A1%A8%E9%9D%A2%E5%BC%9B%E8%B1%AB%E7%9A%84%E7%BB%93%E6%9E%9C/"
                             aria-label=": 以p(1x1)Cu(111)为例分析表面弛豫的结果"
                         >
@@ -1250,170 +1946,6 @@ alt="优化完的氧气分子的键长" />
                         <p>
                             <a
                                 href="/2025/04/18/%E7%A7%91%E7%A0%94/VASP/Starry%20Sky/%E6%B0%A7%E6%B0%94%E5%88%86%E5%AD%90/#post-footer"
-                                class="postShorten-excerpt_link link"
-                                aria-label=""
-                            >
-                                Comment and share
-                            </a>
-                        </p>
-                    
-                </div>
-            
-        </div>
-        
-    </article>
-    
-    
-    <article class="postShorten postShorten--thumbnailimg-bottom">
-        <div class="postShorten-wrap">
-            
-            <div class="postShorten-header">
-                <h1 class="postShorten-title">
-                    
-                        <a
-                            class="link-unstyled"
-                            href="/2025/04/17/%E7%A7%91%E7%A0%94/VASP/2025%E5%B9%B45%E6%9C%88AMD%E5%B9%B3%E5%8F%B0%E4%B8%8BVASP%E7%9A%84%E7%BC%96%E8%AF%91%E5%AE%89%E8%A3%85/"
-                            aria-label=": 2025年4月AMD平台下VASP的编译安装"
-                        >
-                            2025年4月AMD平台下VASP的编译安装
-                        </a>
-                    
-                </h1>
-                <div class="postShorten-meta">
-    <time datetime="2025-04-17T23:40:00+08:00">
-	
-		    Apr 17, 2025
-    	
-    </time>
-    
-        <span>in </span>
-        
-    <a class="category-link" href="/all-categories/%E4%BB%8E%E9%9B%B6%E5%BC%80%E5%A7%8B%E7%9A%84%E7%A7%91%E7%A0%94%E4%B9%8B%E6%97%85/">从零开始的科研之旅</a>, <a class="category-link" href="/all-categories/%E4%BB%8E%E9%9B%B6%E5%BC%80%E5%A7%8B%E7%9A%84%E7%A7%91%E7%A0%94%E4%B9%8B%E6%97%85/VASP/">VASP</a>
-
-
-    
-</div>
-
-            </div>
-            
-                <div class="postShorten-content">
-                    <h1
-id="年4月amd平台下vasp的编译安装">2025年4月AMD平台下VASP的编译安装</h1>
-<h2 id="wsl2安装">WSL2安装</h2>
-<p>本次安装选择的Ubuntu作为发行版，使用人数较多，解决方案较多</p>
-<figure>
-<img src="image-20250417225652853-1756610753766-1.png"
-alt="Ubuntu 24.04.1 on AMD 7840HS" />
-<figcaption aria-hidden="true">Ubuntu 24.04.1 on AMD 7840HS</figcaption>
-</figure>
-<p>更新源</p>
-<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">sudo</span> apt update</span><br></pre></td></tr></table></figure>
-<h2 id="安装编译器">安装编译器</h2>
-<h3 id="aocc">AOCC</h3>
-<p>下载aocc-compiler-5.0.0.tar，解压</p>
-<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">tar -xvf aocc-compiler-5.0.0.tar <span class="comment">#解压</span></span><br><span class="line"><span class="built_in">cd</span> aocc-compiler-3.2.0 <span class="comment">#进入目录</span></span><br><span class="line">install.sh <span class="comment">#如果没有可执行权限请赋予可执行权限, chmod +x install.sh</span></span><br><span class="line"><span class="built_in">source</span> .setenv_AOCC.sh <span class="comment">#这一行可以写入~/.bashrc，然后source ~/.bashrc，刷新一下环境变量</span></span><br></pre></td></tr></table></figure>
-<h3 id="aocl">AOCL</h3>
-<p>下载AOCL 5.0 binary packages compiled with AOCC 5.0</p>
-<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">tar -zxvf XXX.tar.gz <span class="comment">#解压tar.gz包，如果报错请查询Linux下的解压命令，up记不太清了、、、  </span></span><br><span class="line"><span class="built_in">cd</span> XXX</span><br><span class="line">install.sh -t /home/XXX <span class="comment">#安装，可以指定安装目录，up安装在/home目录下的某个文件夹里的，这样不需要管理员权限、</span></span><br></pre></td></tr></table></figure>
-<h2 id="安装openmpi">安装OpenMPI</h2>
-<p>在安装OpenMPI之前请确保AOCC、AOCL以及必备的依赖已安装完全</p>
-<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">which</span> clang <span class="comment">#检查clang</span></span><br><span class="line"><span class="built_in">which</span> clang++ <span class="comment">#检查clang++</span></span><br><span class="line"><span class="built_in">which</span> flang <span class="comment">#检查flang</span></span><br><span class="line">以上三个来自于AOCC和AOCL</span><br><span class="line"><span class="built_in">which</span> c <span class="comment">#检查有没有C</span></span><br><span class="line"><span class="built_in">which</span> c++ <span class="comment">#检查有没有C++</span></span><br><span class="line"><span class="built_in">sudo</span> apt install g++</span><br><span class="line"><span class="built_in">sudo</span> apt install gcc</span><br></pre></td></tr></table></figure>
-<p>下载OpenMPI的稳定版本，然后解压，进入目录</p>
-<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">configure CC=clang CXX=clang++ FC=flang --prefix=/xxxx <span class="comment">#可以手动指定/xxx目录</span></span><br><span class="line">make -j4 <span class="comment">#以4核心编译，大小可调，比如16核处理器就改成make -j16</span></span><br><span class="line">make install <span class="comment">#编译安装</span></span><br></pre></td></tr></table></figure>
-<p>OpenMPI安装时报错很可能是由于依赖问题造成的，建议安装之前<code>sudo apt install g++ cmake gcc</code></p>
-<p>在<code>~/.bashrc</code>中添加环境变量</p>
-<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">MPI_HOME=/xxx/; make <span class="comment">#这一步容易出错，记得添加对目录</span></span><br><span class="line"><span class="built_in">export</span> PATH=<span class="variable">$&#123;MPI_HOME&#125;</span>/bin:<span class="variable">$PATH</span></span><br><span class="line"><span class="built_in">export</span> LD_LIBRARY_PATH=<span class="variable">$&#123;MPI_HOME&#125;</span>/lib:<span class="variable">$LD_LIBRARY_PATH</span></span><br><span class="line"><span class="built_in">export</span> MANPATH=<span class="variable">$&#123;MPI_HOME&#125;</span>/share/man:<span class="variable">$MANPATH</span></span><br></pre></td></tr></table></figure>
-<p>安装完后检查一下<code>which mpirun</code></p>
-<h2 id="编译vasp">编译VASP</h2>
-<p>不提供源码包，可以尝试去各种论坛，微信公众号搜索，仅供学习使用</p>
-<p>本次使用的源码包是vasp.6.4.2.tgz</p>
-<p>编译之前首先要选择模板，也就是makefile.include，将/vasp.x.x.x/arch文件夹下的<code>makefile.include.aocc_ompi_aocl</code>复制一份到/vasp.x.x.x根目录，因为本次平台是AMD
-ZEN4，安装了AOCC，AOCL和OpenMPI，所以选择此模板，接下来修改模板</p>
-<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># Default precompiler options</span></span><br><span class="line">CPP_OPTIONS = -DHOST=\&quot;LinuxGNU\&quot; \</span><br><span class="line">              -DMPI -DMPI_BLOCK=8000 -Duse_collective \</span><br><span class="line">              -DscaLAPACK \</span><br><span class="line">              -DCACHE_SIZE=4000 \</span><br><span class="line">              -Davoidalloc \</span><br><span class="line">              -Dvasp6 \</span><br><span class="line">              -Duse_bse_te \</span><br><span class="line">              -Dtbdyn \</span><br><span class="line">              -Dfock_dblbuf</span><br><span class="line"></span><br><span class="line">CPP         = flang -E -ffree-form -C -w $*$(FUFFIX) &gt;$*$(SUFFIX) $(CPP_OPTIONS)</span><br><span class="line"></span><br><span class="line">FC          = mpif90</span><br><span class="line">FCL         = mpif90</span><br><span class="line"></span><br><span class="line">FREE        = -ffree-form -ffree-line-length-none</span><br><span class="line"></span><br><span class="line">FFLAGS      = -w -fno-fortran-main -Mbackslash</span><br><span class="line"></span><br><span class="line">OFLAG       = -O2</span><br><span class="line">OFLAG_IN    = $(OFLAG)</span><br><span class="line">DEBUG       = -O0</span><br><span class="line"></span><br><span class="line">OBJECTS     = fftmpiw.o fftmpi_map.o fftw3d.o fft3dlib.o</span><br><span class="line">OBJECTS_O1 += fftw3d.o fftmpi.o fftmpiw.o</span><br><span class="line">OBJECTS_O2 += fft3dlib.o</span><br><span class="line"></span><br><span class="line"><span class="comment"># For what used to be vasp.5.lib</span></span><br><span class="line">CPP_LIB     = $(CPP)</span><br><span class="line">FC_LIB      = $(FC)</span><br><span class="line">CC_LIB      = clang</span><br><span class="line">CFLAGS_LIB  = -O</span><br><span class="line">FFLAGS_LIB  = -O1</span><br><span class="line">FREE_LIB    = $(FREE)</span><br><span class="line"></span><br><span class="line">OBJECTS_LIB = linpack_double.o</span><br><span class="line"></span><br><span class="line"><span class="comment"># For the parser library</span></span><br><span class="line">CXX_PARS    = clang++</span><br><span class="line">LLIBS       = -lstdc++</span><br><span class="line"></span><br><span class="line"><span class="comment">##</span></span><br><span class="line"><span class="comment">## Customize as of this point! Of course you may change the preceding</span></span><br><span class="line"><span class="comment">## part of this file as well if you like, but it should rarely be</span></span><br><span class="line"><span class="comment">## necessary ...</span></span><br><span class="line"><span class="comment">##</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># When compiling on the target machine itself, change this to the</span></span><br><span class="line"><span class="comment"># relevant target when cross-compiling for another architecture</span></span><br><span class="line">VASP_TARGET_CPU ?= -march=znver4 <span class="comment">#7840HS belongs to ZEN4 platform</span></span><br><span class="line">FFLAGS     += $(VASP_TARGET_CPU)</span><br><span class="line"></span><br><span class="line"><span class="comment"># BLAS (mandatory)</span></span><br><span class="line">AMDBLIS_ROOT ?= /home/storm/AOCL_INSTALL/5.0.0/aocc <span class="comment">#Installation category of AOCL</span></span><br><span class="line">BLAS        = -L<span class="variable">$&#123;AMDBLIS_ROOT&#125;</span>/lib -lblis</span><br><span class="line"></span><br><span class="line"><span class="comment"># LAPACK (mandatory)</span></span><br><span class="line">AMDLIBFLAME_ROOT ?= /home/storm/AOCL_INSTALL/5.0.0/aocc <span class="comment">#Installation category of AOCL</span></span><br><span class="line">LAPACK      = -L<span class="variable">$&#123;AMDLIBFLAME_ROOT&#125;</span>/lib -lflame</span><br><span class="line"></span><br><span class="line"><span class="comment"># scaLAPACK (mandatory)</span></span><br><span class="line">AMDSCALAPACK_ROOT ?= /home/storm/AOCL_INSTALL/5.0.0/aocc <span class="comment">#Installation category of AOCL</span></span><br><span class="line">SCALAPACK   = -L<span class="variable">$&#123;AMDSCALAPACK_ROOT&#125;</span>/lib -lscalapack</span><br><span class="line"></span><br><span class="line">LLIBS      += $(SCALAPACK) $(LAPACK) $(BLAS)</span><br><span class="line"></span><br><span class="line"><span class="comment"># FFTW (mandatory)</span></span><br><span class="line">AMDFFTW_ROOT  ?= /home/storm/AOCL_INSTALL/5.0.0/aocc <span class="comment">#Installation category of AOCL</span></span><br><span class="line">LLIBS      += -L$(AMDFFTW_ROOT)/lib -lfftw3</span><br><span class="line">INCS       += -I$(AMDFFTW_ROOT)/include</span><br><span class="line"></span><br><span class="line"><span class="comment"># HDF5-support (optional but strongly recommended)</span></span><br><span class="line"><span class="comment">#CPP_OPTIONS+= -DVASP_HDF5</span></span><br><span class="line"><span class="comment">#HDF5_ROOT  ?= /path/to/your/hdf5/installation</span></span><br><span class="line"><span class="comment">#LLIBS      += -L$(HDF5_ROOT)/lib -lhdf5_fortran</span></span><br><span class="line"><span class="comment">#INCS       += -I$(HDF5_ROOT)/include</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># For the VASP-2-Wannier90 interface (optional)</span></span><br><span class="line"><span class="comment">#CPP_OPTIONS    += -DVASP2WANNIER90</span></span><br><span class="line"><span class="comment">#WANNIER90_ROOT ?= /path/to/your/wannier90/installation</span></span><br><span class="line"><span class="comment">#LLIBS          += -L$(WANNIER90_ROOT)/lib -lwannier</span></span><br></pre></td></tr></table></figure>
-<p>然后运行<code>make all</code>即可，官网给的命令是并行安装<code>make DEPS=1 -Jn &lt;target&gt;</code>，我自己尝试并行安装后测试<code>make test</code>会报错，所以<code>make all</code>，这样去测试全部通过不报错</p>
-<h2 id="测试安装">测试安装</h2>
-<p>为了测试是否正确安装，可以进行测试</p>
-<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">make <span class="built_in">test</span></span><br></pre></td></tr></table></figure>
-<h2 id="添加到环境变量">添加到环境变量</h2>
-<p>官方提供的是源码包，通过编译，我们得到了CPU可执行的二进制包，再二进制包的目录下(bin/目录下)，我可以同在终端中直接输入二进制包的名字来直接执行(VASP编译会产生三个二进制包：vasp_std,
-vasp_gam,
-vasp_ncl)，比如在bin/目录下直接输入vasp_std就可以看到VASP的标志，但是为了随时随地在任意目录下也能执行计算，因此需要将bin/目录添加到环境变量里(前提是make
-test不报错)</p>
-<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">export</span> PATH=<span class="variable">$PATH</span>:/path/to/vasp.x.x.x/bin</span><br><span class="line"><span class="built_in">source</span> ~/.bashrc</span><br></pre></td></tr></table></figure>
-
-                    
-                        
-
-
-                    
-                    
-                        <p>
-                            <a
-                                href="/2025/04/17/%E7%A7%91%E7%A0%94/VASP/2025%E5%B9%B45%E6%9C%88AMD%E5%B9%B3%E5%8F%B0%E4%B8%8BVASP%E7%9A%84%E7%BC%96%E8%AF%91%E5%AE%89%E8%A3%85/#post-footer"
-                                class="postShorten-excerpt_link link"
-                                aria-label=""
-                            >
-                                Comment and share
-                            </a>
-                        </p>
-                    
-                </div>
-            
-        </div>
-        
-    </article>
-    
-    
-    <article class="postShorten postShorten--thumbnailimg-bottom">
-        <div class="postShorten-wrap">
-            
-            <div class="postShorten-header">
-                <h1 class="postShorten-title">
-                    
-                        <a
-                            class="link-unstyled"
-                            href="/2025/04/17/%E6%B2%89%E6%80%9D%E5%BD%95/Mild%20Waterfall/"
-                            aria-label=": Mild Waterfall"
-                        >
-                            Mild Waterfall
-                        </a>
-                    
-                </h1>
-                <div class="postShorten-meta">
-    <time datetime="2025-04-17T21:30:17+08:00">
-	
-		    Apr 17, 2025
-    	
-    </time>
-    
-        <span>in </span>
-        
-    <a class="category-link" href="/all-categories/%E6%B2%89%E6%80%9D%E5%BD%95/">沉思录</a>
-
-
-    
-</div>
-
-            </div>
-            
-                <div class="postShorten-content">
-                    <p>这几天高强度学习VASP第一性原理计算，越来越上头了，尽管还不能figure
-out每一个参数的含义，但是大概已经弄懂一些简单算例的思路了。</p>
-<p>上午终于也是向老师交流完实验室的事，有一种如释重负的感觉。</p>
-<p>中午意外地抢到了五一去北京的票，终于能和老同学相见了～😜</p>
-<p>下午又是、、、仪器分析实验，D A M N!
-极度缺乏ATP的大脑拖着我，稀里糊涂的弄完高效液相色谱实验，回到图书馆美美地睡了一觉，起床又继续学VASP😇</p>
-<p>春日宴，绿酒一杯歌一遍～</p>
-
-                    
-                        
-
-
-                    
-                    
-                        <p>
-                            <a
-                                href="/2025/04/17/%E6%B2%89%E6%80%9D%E5%BD%95/Mild%20Waterfall/#post-footer"
                                 class="postShorten-excerpt_link link"
                                 aria-label=""
                             >

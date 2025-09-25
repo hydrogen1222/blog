@@ -1,0 +1,709 @@
+
+<!DOCTYPE html>
+<html lang="en">
+    
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="generator" content="Hexo">
+    <title> - Hexo</title>
+    <meta name="author" content="John Doe">
+    
+    
+    
+    <script type="application/ld+json">{"@context":"http://schema.org","@type":"BlogPosting","author":{"@type":"Person","name":"John Doe","sameAs":["https://github.com/hydrogen1222","https://user.qzone.qq.com/2170147489/infocenter"],"image":"https://www.gravatar.com/avatar/59bc94fdda371da7bfe585b96a3463b0"},"articleBody":"周日闲着心血来潮，看看远处的Gentoo，这篇博文也当成长期更新的记录贴吧，只针对于AMD 64架构，just\r\nkeep learning!\r\n安装\r\n引导进入安装镜像\r\n与其他发行版一样，Gentoo安装也需要一个启动镜像，有纯命令行的最小化安装CD和Gentoo LiveGUI两种，我选择前者。这个镜像可以方便地使用Ventoy进行引导，但仅仅是一个安装媒介而已。\r\n引导时我选择默认地gentoo内核，除此外还有一个gentoo-nofb，nofb即no\r\nframebuffer，它让内核和用户态程序通过一个统一的设备文件（通常是\r\n/dev/fb0）直接访问显卡的显存，从而在不依赖 X server 或\r\nWayland\r\n之类图形系统的情况下，也能在控制台显示图形、字体、图片，甚至跑一些简单的图形程序。\r\n安装时可以用另一台机器远程ssh链接，一边查wiki一边安装，复制粘贴什么的都很方便。然鹅我没有多余的机子，手敲长串的命令行，屏幕还没驱动默认最大亮度，就很坐牢。\r\n配置网络\r\ngentoo的安装是需要网络的，如果计算机使用网线连接到IPv6路由或DHCP路由器，那么安装镜像一般是可以自动连接网络的。如果没有路由器只有个光猫，需要pppoe拨号上网，具体参考wiki。用安卓手机通过数据线连接至电脑，启用USB网络共享模式大概也是可行的。\r\n使用WiFi连接网络也是可行的，可以使用net-setup工具，参考wiki\r\n磁盘分区\r\n这一步可以在先前已有的系统上进行，实在不行在pe系统里进行也可以，更直观更不容易出错，并且Linux自带的cfdisk工具和diskgenius之类的软件的操作逻辑有些不同。数据无价，谨慎更改！\r\n2025年了，legacy\r\nBIOS逐渐消亡，GUID(GPT)表早已成为主流。我大概分了三个区：根分区、与Windows共用的EFI分区、Swap分区\r\n使用fdisk -l命令查看磁盘设备，如果不是用ssh连接的，消息过多，可能会无法看到部分信息，此时也可以使用lsblk命令查看。\r\n分好区之后接着将分区格式化为Linux适用的文件系统。俗话说：人生苦短，远离Gentoo😇。Gentoo是纯手动档，大量的软件包需要自己编译，这可能会对磁盘进行较多的高速I/O读写，笔者了解的文件系统类型也不多：\r\n\r\nxfs\r\nbtrfs\r\next4(以及过去的ext3,ext2)\r\nzfs\r\nf2fs\r\n\r\n我选择了xfs，它在高速IO读写方面略胜一筹，接下来是格式化：\r\n1mkfs.xfs /dev/nvmexnxpx\r\nEFI分区由于是共用的，不用格式化，接下来开启swap分区：\r\n1mkswap /dev/nvmexnxpx\r\n接下来挂载分区：\r\n12mkdir --parents /mnt/gentoomount /dev/nvmexnxpx /mnt/gentoo\r\nwiki推荐挂载EFI分区到/efi，我已经习惯了挂载到/boot/efi\r\n12mkdir --parents /mnt/gentoo/boot/efimount /dev/nvmexnxpx /mnt/gentoo/boot/efi\r\n安装基本的系统环境\r\n安装镜像提供了一个临时的基本系统环境，带有内核、常用工具（bash、fdisk、wget…），让你能进入一个命令行环境进行磁盘分区、下载文件等操作。它不是最终系统，只是“施工工具”。接下来需要下载stage3文件，这是一个\r\n预编译好的基础系统，是一个能开机、能用\r\nchroot 进去的最小 Linux 用户空间环境，里面已经有：\r\n\r\nC 库（glibc 或 musl）\r\n编译器（gcc 或 clang）\r\n核心工具链（binutils、bash、coreutils、portage …）\r\n\r\n有了 stage3，就能在 chroot 里运行 emerge\r\n去拉源码并编译其余的软件。\r\nstage3文件类型多种多样，我选择了最省事最习惯的使用systemd和multilib的stage3文件。\r\n首先进入挂载位置/mnt/gentoo，然后设置时间，这个很关键，因为Stage\r\n存档通常使用 HTTPS 获取，这需要相对准确的系统时间。\r\n1chronyd -q\r\n使用命令行浏览器下载stage3文件：\r\n1links https://www.gentoo.org/downloads/mirrors/\r\n进入后选择Asia源中的CN，即中国镜像源，选择合适的镜像站点后进入releases/amd64/autobuilds/目录，选中合适的stage3文件，按d键开始下载，一般下载没什么问题。\r\n接着解压包：\r\n1tar xpvf stage3-*.tar.xz --xattrs-include=&#x27;*.*&#x27; --numeric-owner -C /mnt/gentoo\r\nGentoo系统是需要编译的，因此接下来配置的编译选项也是非常重要的。\r\n编译选项配置文件是/mnt/gentoo/etc/portage/make.conf，下面是一个示例：\r\n123456789101112131415161718# These settings were set by the catalyst build script that automatically# built this stage.# Please consult /usr/share/portage/config/make.conf.example for a more# detailed example.COMMON_FLAGS=&quot;-march=znver4 -O3 -pipe -fomit-frame-pointer -flto=thin&quot;CFLAGS=&quot;$&#123;COMMON_FLAGS&#125;&quot;CXXFLAGS=&quot;$&#123;COMMON_FLAGS&#125;&quot;FCFLAGS=&quot;$&#123;COMMON_FLAGS&#125;&quot;FFLAGS=&quot;$&#123;COMMON_FLAGS&#125;&quot;RUSTFLAGS=&quot;-C target-cpu=native -C opt-level=3 -C codegen-units=1 -C lto&quot;MAKEOPTS=&quot;-j20&quot;# NOTE: This stage was built with the bindist USE flag enabled# This sets the language of build output to English.# Please keep this setting intact when reporting bugs.LC_MESSAGES=C.utf8\r\nCFLAGS 和 CXXFLAGS 变量分别定义了GCC C和C\r\n++编译器的优化标志，详细信息在GNU在线手册中。\r\n编译安装基础系统\r\n接下来就是chroot到stage3所带的基础编译环境，开始编译新的系统，在这之前需要：\r\n1cp --dereference /etc/resolv.conf /mnt/gentoo/etc/\r\n以此确保chroot后网络仍然可用，接下来：\r\n123arch-chroot /mnt/gentoosource /etc/profileexport PS1=&quot;(chroot) $&#123;PS1&#125;&quot;\r\n至此，我们已经进入了stage3所带的基础编译环境，也是根分区。接下来挂载EFI分区：\r\n1mount /dev/nvmexnxpx /boot/efi\r\n然后选择合适的镜像源：\r\n12emerge --ask --verbose --oneshot app-portage/mirrorselectmirrorselect -i -o &gt;&gt; /etc/portage/make.conf\r\n然后执行：\r\n1emerge-webrsyn\r\nGentoo的软件包源rsyn和git两种方式，可以方便时换成后者。\r\n接下来选择合适的配置文件，我选择了plasma桌面且带有systemd，使用eselect profile list查看所有的配置文件，使用eselect profile set 2选择相应的配置文件。\r\n也有部分二进制软件包来自官方，参考wiki，然而我拒绝🤪。\r\n接下来是USE变量的设置，这非常重要，它控制了编译时是否加入/删除对某些功能的支持，比如说-gtk就是删除所有编译后的包对gtk的支持，他也是在/mnt/gentoo/etc/portage/make.conf中进行配置\r\n12345678910111213141516171819202122232425262728293031323334353637383940414243USE=&quot;# 桌面环境 &amp; UIX wayland kde plasma egl gles2 gtk gtk2 gtk3 gtk4 qt4 qt5 qt6xinerama xrandr xcomposite xcursoropengl vulkan vaapi vdpau drm# 音频alsa pulseaudio pipewire sound server dbusjack -oss# 视频/图像jpeg png gif tiff webp heifffmpeg theora x264 x265av1 vpx opencl openmp# 输入法/语言icu nls l10n_zh l10n_enfreetype fontconfigxim ibus# 网络ssl tls http2 curlsamba smbclientssh bluetooth wifi networkmanagerdns ipv6 zeroconf# 游戏相关steam vulkan opengl sdl sdl2gamepad joystick# 文件压缩/格式zlib bzip2 lzma lzo zstdarchive rar zip 7zip# 开发/脚本语言支持python ruby perl luajit jit-lua# 其他通用优化threads multilibudev udisks upowerpolicykit systemd&quot;\r\n接下来设置CPU_FLAGS_*，这是给 ebuild 提供 CPU\r\n指令集信息的，不同包会根据这些 flag 决定是否启用 SIMD 优化。\r\n123emerge --ask --oneshot app-portage/cpuid2cpuflagscpuid2cpuflagsecho &quot;*/* $(cpuid2cpuflags)&quot; &gt; /etc/portage/package.use/00cpu-flags\r\n在/etc/portage/make.conf设置显示卡：\r\n1VIDEO_CARDS=&quot;amdgpu radeonsi vdpau vaapi&quot;\r\n娱乐用户直接大开：\r\n1ACCEPT_LICENSE=&quot;*&quot;\r\n更新系统：\r\n1emerge --ask --verbose --update --deep --newuse @world\r\n设置时区：\r\n123ls /usr/share/zoneinfols -l /usr/share/zoneinfo/Europe/ln -sf ../usr/share/zoneinfo/Europe/Brussels /etc/localtime\r\n设置本地化：\r\n123echo &#x27;zh_CN.UTF-8 UTF-8&#x27; &gt;&gt; /etc/locale.genecho &#x27;en_US.UTF-8 UTF-8&#x27; &gt;&gt; /etc/locale.genlocale-gen\r\n安装固件、微码：\r\n1emerge --ask sys-kernel/linux-firmware\r\n安装内核：\r\n1sys-kernel/installkernel\r\n安装引导程序，创建文件/etc/portage/package.use/installkernel\r\n1sys-kernel/installkernel grub\r\n接着：\r\n1emerge --ask sys-kernel/installkernel\r\n配置系统\r\n创建fstab！！！\r\n设置主机名：\r\n12echo storm &gt; /etc/hostnamehostnamectl hostname storm\r\n安装dhcpcd并启用：\r\n12emerge --ask net-misc/dhcpcdsystemctl enable dhcpcd\r\n创建hosts文件\r\n设置root密码\r\n收尾\r\n将GRUB_PLATFORMS=\"efi-64\"加如/etc/portage/make.conf\r\n123echo &#x27;GRUB_PLATFORMS=&quot;efi-64&quot;&#x27; &gt;&gt; /etc/portage/make.confemerge --ask sys-boot/grubgrub-install --target=x86_64-efi --efi-directory=/efi\r\n创建一个普通用户：\r\n12useradd -m -G users,wheel,audio -s /bin/bash stormpasswd storm\r\n添加sudo权限\r\n内核选择\r\n\r\ngentoo\r\n默认内核，支持K8 CPU（包括NUMA支持）和EM64T CPU。\r\ngentoo-nofb\r\n与“gentoo”相同，但没有framebuffer支持。\r\n\r\n","dateCreated":"2025-09-21T16:49:08+08:00","dateModified":"2025-09-23T23:51:18+08:00","datePublished":"2025-09-21T16:49:08+08:00","description":"","headline":"","image":[],"mainEntityOfPage":{"@type":"WebPage","@id":"https://hydrogen1222.xyz/2025/09/21/%E5%91%A8%E6%97%A5%E9%97%B2%E7%9D%80%E5%BF%83%E8%A1%80%E6%9D%A5%E6%BD%AE%EF%BC%8C%E7%9C%8B%E7%9C%8B%E8%BF%9C%E5%A4%84%E7%9A%84Gentoo/"},"publisher":{"@type":"Organization","name":"John Doe","sameAs":["https://github.com/hydrogen1222","https://user.qzone.qq.com/2170147489/infocenter"],"image":"https://www.gravatar.com/avatar/59bc94fdda371da7bfe585b96a3463b0","logo":{"@type":"ImageObject","url":"https://www.gravatar.com/avatar/59bc94fdda371da7bfe585b96a3463b0"}},"url":"https://hydrogen1222.xyz/2025/09/21/%E5%91%A8%E6%97%A5%E9%97%B2%E7%9D%80%E5%BF%83%E8%A1%80%E6%9D%A5%E6%BD%AE%EF%BC%8C%E7%9C%8B%E7%9C%8B%E8%BF%9C%E5%A4%84%E7%9A%84Gentoo/"}</script>
+    <meta name="description" content="周日闲着心血来潮，看看远处的Gentoo，这篇博文也当成长期更新的记录贴吧，只针对于AMD 64架构，just keep learning! 安装 引导进入安装镜像 与其他发行版一样，Gentoo安装也需要一个启动镜像，有纯命令行的最小化安装CD和Gentoo LiveGUI两种，我选择前者。这个镜像可以方便地使用Ventoy进行引导，但仅仅是一个安装媒介而已。 引导时我选择默认地gen">
+<meta property="og:type" content="blog">
+<meta property="og:title" content="Hexo">
+<meta property="og:url" content="https://hydrogen1222.xyz/2025/09/21/%E5%91%A8%E6%97%A5%E9%97%B2%E7%9D%80%E5%BF%83%E8%A1%80%E6%9D%A5%E6%BD%AE%EF%BC%8C%E7%9C%8B%E7%9C%8B%E8%BF%9C%E5%A4%84%E7%9A%84Gentoo/index.html">
+<meta property="og:site_name" content="Hexo">
+<meta property="og:description" content="周日闲着心血来潮，看看远处的Gentoo，这篇博文也当成长期更新的记录贴吧，只针对于AMD 64架构，just keep learning! 安装 引导进入安装镜像 与其他发行版一样，Gentoo安装也需要一个启动镜像，有纯命令行的最小化安装CD和Gentoo LiveGUI两种，我选择前者。这个镜像可以方便地使用Ventoy进行引导，但仅仅是一个安装媒介而已。 引导时我选择默认地gen">
+<meta property="og:locale" content="en_US">
+<meta property="article:published_time" content="2025-09-21T08:49:08.128Z">
+<meta property="article:modified_time" content="2025-09-23T15:51:18.002Z">
+<meta property="article:author" content="John Doe">
+<meta name="twitter:card" content="summary">
+    
+    
+        
+    
+    
+    
+    
+    
+    <!--STYLES-->
+    
+<link rel="stylesheet" href="/assets/css/all.css">
+
+    
+<link rel="stylesheet" href="/assets/css/jquery.fancybox.css">
+
+    
+<link rel="stylesheet" href="/assets/css/thumbs.css">
+
+    
+<link rel="stylesheet" href="/assets/css/tranquilpeak.css">
+
+    <!--STYLES END-->
+    
+
+    
+
+    
+        
+    
+
+
+
+
+<script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+<script>
+  MathJax = {
+    tex: {
+      inlineMath: [['$', '$'], ['\\(', '\\)']],
+      displayMath: [['$$', '$$'], ['\\[', '\\]']],
+      tags: 'ams'
+    },
+    svg: {
+      fontCache: 'global'
+    }
+  };
+</script>
+
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/lionsoul2014/kaiti-font/kaiti.css">
+
+
+
+
+<!-- hexo injector head_end start -->
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.12.0/dist/katex.min.css">
+
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/hexo-math@4.0.0/dist/style.css">
+<!-- hexo injector head_end end --></head>
+
+    <body>
+        <div id="blog">
+            <!-- Define author's picture -->
+
+
+    
+
+<header id="header" data-behavior="4">
+    <i id="btn-open-sidebar" class="fa fa-lg fa-bars"></i>
+    <div class="header-title">
+        <a
+            class="header-title-link"
+            href="/"
+            aria-label=""
+        >
+            Hexo
+        </a>
+    </div>
+    
+        
+            <a
+                class="header-right-picture "
+                href="#about"
+                aria-label="Open the link: /#about"
+            >
+        
+        
+        </a>
+    
+</header>
+
+            <!-- Define author's picture -->
+
+
+<nav id="sidebar" data-behavior="4">
+    <div class="sidebar-container">
+        
+        
+            <ul class="sidebar-buttons">
+            
+                <li class="sidebar-button">
+                    
+                        <a
+                            class="sidebar-button-link "
+                            href="/"
+                            
+                            rel="noopener"
+                            title="Home"
+                        >
+                        <i class="sidebar-button-icon fa fa-home" aria-hidden="true"></i>
+                        <span class="sidebar-button-desc">Home</span>
+                    </a>
+            </li>
+            
+                <li class="sidebar-button">
+                    
+                        <a
+                            class="sidebar-button-link "
+                            href="/all-categories"
+                            
+                            rel="noopener"
+                            title="Categories"
+                        >
+                        <i class="sidebar-button-icon fa fa-bookmark" aria-hidden="true"></i>
+                        <span class="sidebar-button-desc">Categories</span>
+                    </a>
+            </li>
+            
+                <li class="sidebar-button">
+                    
+                        <a
+                            class="sidebar-button-link "
+                            href="/all-tags"
+                            
+                            rel="noopener"
+                            title="Tags"
+                        >
+                        <i class="sidebar-button-icon fa fa-tags" aria-hidden="true"></i>
+                        <span class="sidebar-button-desc">Tags</span>
+                    </a>
+            </li>
+            
+                <li class="sidebar-button">
+                    
+                        <a
+                            class="sidebar-button-link "
+                            href="/all-archives"
+                            
+                            rel="noopener"
+                            title="Archives"
+                        >
+                        <i class="sidebar-button-icon fa fa-archive" aria-hidden="true"></i>
+                        <span class="sidebar-button-desc">Archives</span>
+                    </a>
+            </li>
+            
+                <li class="sidebar-button">
+                    
+                        <a
+                            class="sidebar-button-link "
+                            href="/about"
+                            
+                            rel="noopener"
+                            title="About"
+                        >
+                        <i class="sidebar-button-icon fa fa-question" aria-hidden="true"></i>
+                        <span class="sidebar-button-desc">About</span>
+                    </a>
+            </li>
+            
+        </ul>
+        
+            <ul class="sidebar-buttons">
+            
+                <li class="sidebar-button">
+                    
+                        <a
+                            class="sidebar-button-link "
+                            href="https://github.com/hydrogen1222"
+                            
+                                target="_blank"
+                            
+                            rel="noopener"
+                            title="GitHub"
+                        >
+                        <i class="sidebar-button-icon fab fa-github" aria-hidden="true"></i>
+                        <span class="sidebar-button-desc">GitHub</span>
+                    </a>
+            </li>
+            
+                <li class="sidebar-button">
+                    
+                        <a
+                            class="sidebar-button-link "
+                            href="https://user.qzone.qq.com/2170147489/infocenter"
+                            
+                                target="_blank"
+                            
+                            rel="noopener"
+                            title="QQ"
+                        >
+                        <i class="sidebar-button-icon fab fa-qq" aria-hidden="true"></i>
+                        <span class="sidebar-button-desc">QQ</span>
+                    </a>
+            </li>
+            
+        </ul>
+        
+    </div>
+</nav>
+
+            
+            <div id="main" data-behavior="4"
+                 class="
+                        hasCoverMetaIn
+                        ">
+                
+<article class="post">
+    
+    
+        <div class="post-header main-content-wrap text-left">
+    
+        <h1 class="post-title">
+            (no title)
+        </h1>
+    
+    
+        <div class="post-meta">
+    <time datetime="2025-09-21T16:49:08+08:00">
+	
+		    Sep 21, 2025
+    	
+    </time>
+    
+</div>
+
+    
+</div>
+
+    
+    <div class="post-content markdown">
+        <div class="main-content-wrap">
+            <p>周日闲着心血来潮，看看远处的<code>Gentoo</code>，这篇博文也当成长期更新的记录贴吧，只针对于<code>AMD 64</code>架构，just
+keep learning!</p>
+<h1 id="安装">安装</h1>
+<h2 id="引导进入安装镜像">引导进入安装镜像</h2>
+<p>与其他发行版一样，<code>Gentoo</code>安装也需要一个启动镜像，有纯命令行的最小化安装CD和<code>Gentoo LiveGUI</code>两种，我选择前者。这个镜像可以方便地使用<code>Ventoy</code>进行引导，<strong>但仅仅是一个安装媒介而已</strong>。</p>
+<p>引导时我选择默认地<code>gentoo</code>内核，除此外还有一个<code>gentoo-nofb</code>，nofb即no
+framebuffer，它让内核和用户态程序通过一个统一的设备文件（通常是
+<code>/dev/fb0</code>）直接访问显卡的显存，从而在不依赖 X server 或
+Wayland
+之类图形系统的情况下，也能在控制台显示图形、字体、图片，甚至跑一些简单的图形程序。</p>
+<p>安装时可以用另一台机器远程<code>ssh</code>链接，一边查wiki一边安装，复制粘贴什么的都很方便。然鹅我没有多余的机子，手敲长串的命令行，屏幕还没驱动默认最大亮度，就很坐牢。</p>
+<h2 id="配置网络">配置网络</h2>
+<p><code>gentoo</code>的安装是需要网络的，如果计算机使用网线连接到IPv6路由或DHCP路由器，那么安装镜像一般是可以自动连接网络的。如果没有路由器只有个光猫，需要pppoe拨号上网，具体参考wiki。用安卓手机通过数据线连接至电脑，启用USB网络共享模式大概也是可行的。</p>
+<p>使用WiFi连接网络也是可行的，可以使用<code>net-setup</code>工具，参考wiki</p>
+<h2 id="磁盘分区">磁盘分区</h2>
+<p>这一步可以在先前已有的系统上进行，实在不行在pe系统里进行也可以，更直观更不容易出错，并且Linux自带的<code>cfdisk</code>工具和<code>diskgenius</code>之类的软件的操作逻辑有些不同。数据无价，谨慎更改！</p>
+<p>2025年了，legacy
+BIOS逐渐消亡，GUID(GPT)表早已成为主流。我大概分了三个区：根分区、与Windows共用的EFI分区、Swap分区</p>
+<p>使用<code>fdisk -l</code>命令查看磁盘设备，如果不是用ssh连接的，消息过多，可能会无法看到部分信息，此时也可以使用<code>lsblk</code>命令查看。</p>
+<p>分好区之后接着将分区格式化为Linux适用的文件系统。俗话说：人生苦短，远离<code>Gentoo</code>😇。<code>Gentoo</code>是纯手动档，大量的软件包需要自己编译，这可能会对磁盘进行较多的高速I/O读写，笔者了解的文件系统类型也不多：</p>
+<ul>
+<li>xfs</li>
+<li>btrfs</li>
+<li>ext4(以及过去的ext3,ext2)</li>
+<li>zfs</li>
+<li>f2fs</li>
+</ul>
+<p>我选择了xfs，它在高速IO读写方面略胜一筹，接下来是格式化：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">mkfs.xfs /dev/nvmexnxpx</span><br></pre></td></tr></table></figure>
+<p>EFI分区由于是共用的，不用格式化，接下来开启swap分区：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">mkswap /dev/nvmexnxpx</span><br></pre></td></tr></table></figure>
+<p>接下来挂载分区：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">mkdir</span> --parents /mnt/gentoo</span><br><span class="line">mount /dev/nvmexnxpx /mnt/gentoo</span><br></pre></td></tr></table></figure>
+<p>wiki推荐挂载EFI分区到/efi，我已经习惯了挂载到/boot/efi</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">mkdir --parents /mnt/gentoo/boot/efi</span><br><span class="line">mount /dev/nvmexnxpx /mnt/gentoo/boot/efi</span><br></pre></td></tr></table></figure>
+<h2 id="安装基本的系统环境">安装基本的系统环境</h2>
+<p>安装镜像提供了一个<strong>临时的基本系统环境</strong>，带有内核、常用工具（bash、fdisk、wget…），让你能进入一个命令行环境进行磁盘分区、下载文件等操作。它不是最终系统，只是“施工工具”。接下来需要下载stage3文件，这是一个
+<strong>预编译好的基础系统</strong>，是一个能开机、能用
+<code>chroot</code> 进去的最小 Linux 用户空间环境，里面已经有：</p>
+<ul>
+<li>C 库（glibc 或 musl）</li>
+<li>编译器（gcc 或 clang）</li>
+<li>核心工具链（binutils、bash、coreutils、portage …）</li>
+</ul>
+<p>有了 stage3，就能在 chroot 里运行 <code>emerge</code>
+去拉源码并编译其余的软件。</p>
+<p>stage3文件类型多种多样，我选择了最省事最习惯的使用systemd和multilib的stage3文件。</p>
+<p>首先进入挂载位置/mnt/gentoo，然后设置时间，这个很关键，因为Stage
+存档通常使用 HTTPS 获取，这需要相对准确的系统时间。</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">chronyd -q</span><br></pre></td></tr></table></figure>
+<p>使用命令行浏览器下载stage3文件：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">links https://www.gentoo.org/downloads/mirrors/</span><br></pre></td></tr></table></figure>
+<p>进入后选择Asia源中的CN，即中国镜像源，选择合适的镜像站点后进入<code>releases/amd64/autobuilds/</code>目录，选中合适的stage3文件，按<code>d</code>键开始下载，一般下载没什么问题。</p>
+<p>接着解压包：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">tar xpvf stage3-*.tar.xz --xattrs-include=<span class="string">&#x27;*.*&#x27;</span> --numeric-owner -C /mnt/gentoo</span><br></pre></td></tr></table></figure>
+<p><code>Gentoo</code>系统是需要编译的，因此接下来配置的编译选项也是非常重要的。</p>
+<p>编译选项配置文件是<code>/mnt/gentoo/etc/portage/make.conf</code>，下面是一个示例：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line"># These settings were set by the catalyst build script that automatically</span><br><span class="line"># built this stage.</span><br><span class="line"># Please consult /usr/share/portage/config/make.conf.example for a more</span><br><span class="line"># detailed example.</span><br><span class="line">COMMON_FLAGS=&quot;-march=znver4 -O3 -pipe -fomit-frame-pointer -flto=thin&quot;</span><br><span class="line">CFLAGS=&quot;$&#123;COMMON_FLAGS&#125;&quot;</span><br><span class="line">CXXFLAGS=&quot;$&#123;COMMON_FLAGS&#125;&quot;</span><br><span class="line">FCFLAGS=&quot;$&#123;COMMON_FLAGS&#125;&quot;</span><br><span class="line">FFLAGS=&quot;$&#123;COMMON_FLAGS&#125;&quot;</span><br><span class="line">RUSTFLAGS=&quot;-C target-cpu=native -C opt-level=3 -C codegen-units=1 -C lto&quot;</span><br><span class="line">MAKEOPTS=&quot;-j20&quot;</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"># NOTE: This stage was built with the bindist USE flag enabled</span><br><span class="line"></span><br><span class="line"># This sets the language of build output to English.</span><br><span class="line"># Please keep this setting intact when reporting bugs.</span><br><span class="line">LC_MESSAGES=C.utf8</span><br></pre></td></tr></table></figure>
+<p>CFLAGS 和 CXXFLAGS 变量分别定义了GCC C和C
+++编译器的优化标志，详细信息在GNU在线手册中。</p>
+<h2 id="编译安装基础系统">编译安装基础系统</h2>
+<p>接下来就是<code>chroot</code>到stage3所带的基础编译环境，开始编译新的系统，在这之前需要：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">cp</span> --dereference /etc/resolv.conf /mnt/gentoo/etc/</span><br></pre></td></tr></table></figure>
+<p>以此确保<code>chroot</code>后网络仍然可用，接下来：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">arch-chroot /mnt/gentoo</span><br><span class="line"><span class="built_in">source</span> /etc/profile</span><br><span class="line"><span class="built_in">export</span> PS1=<span class="string">&quot;(chroot) <span class="variable">$&#123;PS1&#125;</span>&quot;</span></span><br></pre></td></tr></table></figure>
+<p>至此，我们已经进入了stage3所带的基础编译环境，也是根分区。接下来挂载EFI分区：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">mount /dev/nvmexnxpx /boot/efi</span><br></pre></td></tr></table></figure>
+<p>然后选择合适的镜像源：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">emerge --ask --verbose --oneshot app-portage/mirrorselect</span><br><span class="line">mirrorselect -i -o &gt;&gt; /etc/portage/make.conf</span><br></pre></td></tr></table></figure>
+<p>然后执行：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">emerge-webrsyn</span><br></pre></td></tr></table></figure>
+<p><code>Gentoo</code>的软件包源<code>rsyn</code>和<code>git</code>两种方式，可以方便时换成后者。</p>
+<p>接下来选择合适的配置文件，我选择了<code>plasma</code>桌面且带有<code>systemd</code>，使用<code>eselect profile list</code>查看所有的配置文件，使用<code>eselect profile set 2</code>选择相应的配置文件。</p>
+<p>也有部分二进制软件包来自官方，参考wiki，然而我拒绝🤪。</p>
+<p>接下来是USE变量的设置，这非常重要，它控制了编译时是否加入/删除对某些功能的支持，比如说<code>-gtk</code>就是删除所有编译后的包对gtk的支持，他也是在<code>/mnt/gentoo/etc/portage/make.conf</code>中进行配置</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br></pre></td><td class="code"><pre><span class="line">USE=<span class="string">&quot;</span></span><br><span class="line"><span class="string"># 桌面环境 &amp; UI</span></span><br><span class="line"><span class="string">X wayland kde plasma egl gles2 gtk gtk2 gtk3 gtk4 qt4 qt5 qt6</span></span><br><span class="line"><span class="string">xinerama xrandr xcomposite xcursor</span></span><br><span class="line"><span class="string">opengl vulkan vaapi vdpau drm</span></span><br><span class="line"><span class="string"></span></span><br><span class="line"><span class="string"># 音频</span></span><br><span class="line"><span class="string">alsa pulseaudio pipewire sound server dbus</span></span><br><span class="line"><span class="string">jack -oss</span></span><br><span class="line"><span class="string"></span></span><br><span class="line"><span class="string"># 视频/图像</span></span><br><span class="line"><span class="string">jpeg png gif tiff webp heif</span></span><br><span class="line"><span class="string">ffmpeg theora x264 x265</span></span><br><span class="line"><span class="string">av1 vpx opencl openmp</span></span><br><span class="line"><span class="string"></span></span><br><span class="line"><span class="string"># 输入法/语言</span></span><br><span class="line"><span class="string">icu nls l10n_zh l10n_en</span></span><br><span class="line"><span class="string">freetype fontconfig</span></span><br><span class="line"><span class="string">xim ibus</span></span><br><span class="line"><span class="string"></span></span><br><span class="line"><span class="string"># 网络</span></span><br><span class="line"><span class="string">ssl tls http2 curl</span></span><br><span class="line"><span class="string">samba smbclient</span></span><br><span class="line"><span class="string">ssh bluetooth wifi networkmanager</span></span><br><span class="line"><span class="string">dns ipv6 zeroconf</span></span><br><span class="line"><span class="string"></span></span><br><span class="line"><span class="string"># 游戏相关</span></span><br><span class="line"><span class="string">steam vulkan opengl sdl sdl2</span></span><br><span class="line"><span class="string">gamepad joystick</span></span><br><span class="line"><span class="string"></span></span><br><span class="line"><span class="string"># 文件压缩/格式</span></span><br><span class="line"><span class="string">zlib bzip2 lzma lzo zstd</span></span><br><span class="line"><span class="string">archive rar zip 7zip</span></span><br><span class="line"><span class="string"></span></span><br><span class="line"><span class="string"># 开发/脚本语言支持</span></span><br><span class="line"><span class="string">python ruby perl lua</span></span><br><span class="line"><span class="string">jit jit-lua</span></span><br><span class="line"><span class="string"></span></span><br><span class="line"><span class="string"># 其他通用优化</span></span><br><span class="line"><span class="string">threads multilib</span></span><br><span class="line"><span class="string">udev udisks upower</span></span><br><span class="line"><span class="string">policykit systemd</span></span><br><span class="line"><span class="string">&quot;</span></span><br></pre></td></tr></table></figure>
+<p>接下来设置<code>CPU_FLAGS_*</code>，这是给 ebuild 提供 CPU
+指令集信息的，不同包会根据这些 flag 决定是否启用 SIMD 优化。</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">emerge --ask --oneshot app-portage/cpuid2cpuflags</span><br><span class="line">cpuid2cpuflags</span><br><span class="line"><span class="built_in">echo</span> <span class="string">&quot;*/* <span class="subst">$(cpuid2cpuflags)</span>&quot;</span> &gt; /etc/portage/package.use/00cpu-flags</span><br></pre></td></tr></table></figure>
+<p>在<code>/etc/portage/make.conf</code>设置显示卡：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">VIDEO_CARDS=<span class="string">&quot;amdgpu radeonsi vdpau vaapi&quot;</span></span><br></pre></td></tr></table></figure>
+<p>娱乐用户直接大开：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">ACCEPT_LICENSE=<span class="string">&quot;*&quot;</span></span><br></pre></td></tr></table></figure>
+<p>更新系统：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">emerge --ask --verbose --update --deep --newuse @world</span><br></pre></td></tr></table></figure>
+<p>设置时区：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">ls</span> /usr/share/zoneinfo</span><br><span class="line"><span class="built_in">ls</span> -l /usr/share/zoneinfo/Europe/</span><br><span class="line"><span class="built_in">ln</span> -sf ../usr/share/zoneinfo/Europe/Brussels /etc/localtime</span><br></pre></td></tr></table></figure>
+<p>设置本地化：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">echo</span> <span class="string">&#x27;zh_CN.UTF-8 UTF-8&#x27;</span> &gt;&gt; /etc/locale.gen</span><br><span class="line"><span class="built_in">echo</span> <span class="string">&#x27;en_US.UTF-8 UTF-8&#x27;</span> &gt;&gt; /etc/locale.gen</span><br><span class="line">locale-gen</span><br></pre></td></tr></table></figure>
+<p>安装固件、微码：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">emerge --ask sys-kernel/linux-firmware</span><br></pre></td></tr></table></figure>
+<p>安装内核：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">sys-kernel/installkernel</span><br></pre></td></tr></table></figure>
+<p>安装引导程序，创建文件<code>/etc/portage/package.use/installkernel</code></p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">sys-kernel/installkernel grub</span><br></pre></td></tr></table></figure>
+<p>接着：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">emerge --ask sys-kernel/installkernel</span><br></pre></td></tr></table></figure>
+<h2 id="配置系统">配置系统</h2>
+<p>创建fstab！！！</p>
+<p>设置主机名：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">echo</span> storm &gt; /etc/hostname</span><br><span class="line">hostnamectl hostname storm</span><br></pre></td></tr></table></figure>
+<p>安装dhcpcd并启用：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">emerge --ask net-misc/dhcpcd</span><br><span class="line">systemctl <span class="built_in">enable</span> dhcpcd</span><br></pre></td></tr></table></figure>
+<p>创建hosts文件</p>
+<p>设置root密码</p>
+<h2 id="收尾">收尾</h2>
+<p>将<code>GRUB_PLATFORMS="efi-64"</code>加如<code>/etc/portage/make.conf</code></p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">echo</span> <span class="string">&#x27;GRUB_PLATFORMS=&quot;efi-64&quot;&#x27;</span> &gt;&gt; /etc/portage/make.conf</span><br><span class="line">emerge --ask sys-boot/grub</span><br><span class="line">grub-install --target=x86_64-efi --efi-directory=/efi</span><br></pre></td></tr></table></figure>
+<p>创建一个普通用户：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">useradd -m -G <span class="built_in">users</span>,wheel,audio -s /bin/bash storm</span><br><span class="line">passwd storm</span><br></pre></td></tr></table></figure>
+<p>添加sudo权限</p>
+<h4 id="内核选择">内核选择</h4>
+<ul>
+<li><p>gentoo</p>
+<p>默认内核，支持K8 CPU（包括NUMA支持）和EM64T CPU。</p></li>
+<li><p>gentoo-nofb</p>
+<p>与“gentoo”相同，但没有framebuffer支持。</p></li>
+</ul>
+
+            
+
+
+        </div>
+    </div>
+    <div id="post-footer" class="post-footer main-content-wrap">
+        
+        
+            <div class="post-actions-wrap">
+    <nav>
+        <ul class="post-actions post-action-nav">
+            <li class="post-action">
+                
+                    <a
+                        class="post-action-btn btn btn--disabled"
+                        aria-hidden="true"
+                    >
+                        
+                        <i class="fa fa-angle-left" aria-hidden="true"></i>
+                        <span class="hide-xs hide-sm text-small icon-ml">PREVIOUS</span>
+                    </a>
+            </li>
+            <li class="post-action">
+                
+                    
+                <a
+                    class="post-action-btn btn btn--default tooltip--top"
+                    href="/2025/09/16/%E7%A7%91%E7%A0%94/VASP/vasp6.5.1+HDF5+Wannier90%E7%BC%96%E8%AF%91%E5%AE%89%E8%A3%85/"
+                    data-tooltip="(no title)"
+                    aria-label="NEXT: (no title)"
+                >
+                    
+                        <span class="hide-xs hide-sm text-small icon-mr">NEXT</span>
+                        <i class="fa fa-angle-right" aria-hidden="true"></i>
+                    </a>
+            </li>
+        </ul>
+    </nav>
+    <ul class="post-actions post-action-share">
+        <li class="post-action hide-lg hide-md hide-sm">
+            <a
+                class="post-action-btn btn btn--default btn-open-shareoptions"
+                href="#btn-open-shareoptions"
+                aria-label="Share this post"
+            >
+                <i class="fa fa-share-alt" aria-hidden="true"></i>
+            </a>
+        </li>
+        
+            
+            
+            <li class="post-action hide-xs">
+                <a
+                    class="post-action-btn btn btn--default"
+                    target="new" href="https://www.facebook.com/sharer/sharer.php?u=https://hydrogen1222.xyz/2025/09/21/%E5%91%A8%E6%97%A5%E9%97%B2%E7%9D%80%E5%BF%83%E8%A1%80%E6%9D%A5%E6%BD%AE%EF%BC%8C%E7%9C%8B%E7%9C%8B%E8%BF%9C%E5%A4%84%E7%9A%84Gentoo/"
+                    title="Share on Facebook"
+                    aria-label="Share on Facebook"
+                >
+                    <i class="fab fa-facebook" aria-hidden="true"></i>
+                </a>
+            </li>
+        
+            
+            
+            <li class="post-action hide-xs">
+                <a
+                    class="post-action-btn btn btn--default"
+                    target="new" href="https://twitter.com/intent/tweet?text=https://hydrogen1222.xyz/2025/09/21/%E5%91%A8%E6%97%A5%E9%97%B2%E7%9D%80%E5%BF%83%E8%A1%80%E6%9D%A5%E6%BD%AE%EF%BC%8C%E7%9C%8B%E7%9C%8B%E8%BF%9C%E5%A4%84%E7%9A%84Gentoo/"
+                    title="Share on Twitter"
+                    aria-label="Share on Twitter"
+                >
+                    <i class="fab fa-twitter" aria-hidden="true"></i>
+                </a>
+            </li>
+        
+            
+            
+            <li class="post-action hide-xs">
+                <a
+                    class="post-action-btn btn btn--default"
+                    target="new" href="https://plus.google.com/share?url=https://hydrogen1222.xyz/2025/09/21/%E5%91%A8%E6%97%A5%E9%97%B2%E7%9D%80%E5%BF%83%E8%A1%80%E6%9D%A5%E6%BD%AE%EF%BC%8C%E7%9C%8B%E7%9C%8B%E8%BF%9C%E5%A4%84%E7%9A%84Gentoo/"
+                    title="Share on Google+"
+                    aria-label="Share on Google+"
+                >
+                    <i class="fab fa-google-plus" aria-hidden="true"></i>
+                </a>
+            </li>
+        
+        
+            
+        
+        <li class="post-action">
+            
+                <a class="post-action-btn btn btn--default" href="#" aria-label="Back to top">
+            
+                <i class="fa fa-list" aria-hidden="true"></i>
+            </a>
+        </li>
+    </ul>
+</div>
+
+
+        
+        
+            
+        
+    </div>
+</article>
+
+<script>
+document.addEventListener("DOMContentLoaded", function() {
+  const elements = document.querySelectorAll('.post-body'); // 取文章正文
+  elements.forEach(el => {
+    el.innerHTML = el.innerHTML.replace(/==([^=]+)==/g, '<mark>$1</mark>');
+  });
+});
+</script>
+
+
+                <footer id="footer" class="main-content-wrap">
+    <span class="copyrights">
+        Copyrights &copy; 2025 John Doe. All Rights Reserved.
+    </span>
+</footer>
+
+            </div>
+            
+                <div id="bottom-bar" class="post-bottom-bar" data-behavior="4">
+                    <div class="post-actions-wrap">
+    <nav>
+        <ul class="post-actions post-action-nav">
+            <li class="post-action">
+                
+                    <a
+                        class="post-action-btn btn btn--disabled"
+                        aria-hidden="true"
+                    >
+                        
+                        <i class="fa fa-angle-left" aria-hidden="true"></i>
+                        <span class="hide-xs hide-sm text-small icon-ml">PREVIOUS</span>
+                    </a>
+            </li>
+            <li class="post-action">
+                
+                    
+                <a
+                    class="post-action-btn btn btn--default tooltip--top"
+                    href="/2025/09/16/%E7%A7%91%E7%A0%94/VASP/vasp6.5.1+HDF5+Wannier90%E7%BC%96%E8%AF%91%E5%AE%89%E8%A3%85/"
+                    data-tooltip="(no title)"
+                    aria-label="NEXT: (no title)"
+                >
+                    
+                        <span class="hide-xs hide-sm text-small icon-mr">NEXT</span>
+                        <i class="fa fa-angle-right" aria-hidden="true"></i>
+                    </a>
+            </li>
+        </ul>
+    </nav>
+    <ul class="post-actions post-action-share">
+        <li class="post-action hide-lg hide-md hide-sm">
+            <a
+                class="post-action-btn btn btn--default btn-open-shareoptions"
+                href="#btn-open-shareoptions"
+                aria-label="Share this post"
+            >
+                <i class="fa fa-share-alt" aria-hidden="true"></i>
+            </a>
+        </li>
+        
+            
+            
+            <li class="post-action hide-xs">
+                <a
+                    class="post-action-btn btn btn--default"
+                    target="new" href="https://www.facebook.com/sharer/sharer.php?u=https://hydrogen1222.xyz/2025/09/21/%E5%91%A8%E6%97%A5%E9%97%B2%E7%9D%80%E5%BF%83%E8%A1%80%E6%9D%A5%E6%BD%AE%EF%BC%8C%E7%9C%8B%E7%9C%8B%E8%BF%9C%E5%A4%84%E7%9A%84Gentoo/"
+                    title="Share on Facebook"
+                    aria-label="Share on Facebook"
+                >
+                    <i class="fab fa-facebook" aria-hidden="true"></i>
+                </a>
+            </li>
+        
+            
+            
+            <li class="post-action hide-xs">
+                <a
+                    class="post-action-btn btn btn--default"
+                    target="new" href="https://twitter.com/intent/tweet?text=https://hydrogen1222.xyz/2025/09/21/%E5%91%A8%E6%97%A5%E9%97%B2%E7%9D%80%E5%BF%83%E8%A1%80%E6%9D%A5%E6%BD%AE%EF%BC%8C%E7%9C%8B%E7%9C%8B%E8%BF%9C%E5%A4%84%E7%9A%84Gentoo/"
+                    title="Share on Twitter"
+                    aria-label="Share on Twitter"
+                >
+                    <i class="fab fa-twitter" aria-hidden="true"></i>
+                </a>
+            </li>
+        
+            
+            
+            <li class="post-action hide-xs">
+                <a
+                    class="post-action-btn btn btn--default"
+                    target="new" href="https://plus.google.com/share?url=https://hydrogen1222.xyz/2025/09/21/%E5%91%A8%E6%97%A5%E9%97%B2%E7%9D%80%E5%BF%83%E8%A1%80%E6%9D%A5%E6%BD%AE%EF%BC%8C%E7%9C%8B%E7%9C%8B%E8%BF%9C%E5%A4%84%E7%9A%84Gentoo/"
+                    title="Share on Google+"
+                    aria-label="Share on Google+"
+                >
+                    <i class="fab fa-google-plus" aria-hidden="true"></i>
+                </a>
+            </li>
+        
+        
+            
+        
+        <li class="post-action">
+            
+                <a class="post-action-btn btn btn--default" href="#" aria-label="Back to top">
+            
+                <i class="fa fa-list" aria-hidden="true"></i>
+            </a>
+        </li>
+    </ul>
+</div>
+
+
+                </div>
+                
+    <div id="share-options-bar" class="share-options-bar" data-behavior="4">
+        <i id="btn-close-shareoptions" class="fa fa-times"></i>
+        <ul class="share-options">
+            
+                
+                
+                <li class="share-option">
+                    <a
+                        class="share-option-btn"
+                        target="new"
+                        href="https://www.facebook.com/sharer/sharer.php?u=https://hydrogen1222.xyz/2025/09/21/%E5%91%A8%E6%97%A5%E9%97%B2%E7%9D%80%E5%BF%83%E8%A1%80%E6%9D%A5%E6%BD%AE%EF%BC%8C%E7%9C%8B%E7%9C%8B%E8%BF%9C%E5%A4%84%E7%9A%84Gentoo/"
+                        aria-label="Share on Facebook"
+                    >
+                        <i class="fab fa-facebook" aria-hidden="true"></i><span>Share on Facebook</span>
+                    </a>
+                </li>
+            
+                
+                
+                <li class="share-option">
+                    <a
+                        class="share-option-btn"
+                        target="new"
+                        href="https://twitter.com/intent/tweet?text=https://hydrogen1222.xyz/2025/09/21/%E5%91%A8%E6%97%A5%E9%97%B2%E7%9D%80%E5%BF%83%E8%A1%80%E6%9D%A5%E6%BD%AE%EF%BC%8C%E7%9C%8B%E7%9C%8B%E8%BF%9C%E5%A4%84%E7%9A%84Gentoo/"
+                        aria-label="Share on Twitter"
+                    >
+                        <i class="fab fa-twitter" aria-hidden="true"></i><span>Share on Twitter</span>
+                    </a>
+                </li>
+            
+                
+                
+                <li class="share-option">
+                    <a
+                        class="share-option-btn"
+                        target="new"
+                        href="https://plus.google.com/share?url=https://hydrogen1222.xyz/2025/09/21/%E5%91%A8%E6%97%A5%E9%97%B2%E7%9D%80%E5%BF%83%E8%A1%80%E6%9D%A5%E6%BD%AE%EF%BC%8C%E7%9C%8B%E7%9C%8B%E8%BF%9C%E5%A4%84%E7%9A%84Gentoo/"
+                        aria-label="Share on Google+"
+                    >
+                        <i class="fab fa-google-plus" aria-hidden="true"></i><span>Share on Google+</span>
+                    </a>
+                </li>
+            
+        </ul>
+    </div>
+
+
+            
+        </div>
+        
+
+
+<div id="about">
+    <div id="about-card">
+        <div id="about-btn-close">
+            <i class="fa fa-times"></i>
+        </div>
+        
+            <h4 id="about-card-name">John Doe</h4>
+        
+            <div id="about-card-bio"><p>author.bio</p>
+</div>
+        
+        
+            <div id="about-card-job">
+                <i class="fa fa-briefcase"></i>
+                <br/>
+                <p>author.job</p>
+
+            </div>
+        
+        
+            <div id="about-card-location">
+                <i class="fa fa-map-marker-alt"></i>
+                <br/>
+                Changchun, China
+            </div>
+        
+    </div>
+</div>
+
+        
+        
+<div id="cover" style="background-image:url('/assets/images/cover.jpg');"></div>
+        <!--SCRIPTS-->
+
+<script src="/assets/js/script-akgy1kkmfssyzznzlvk9mjwcvnsn87aqalldnf43rojvlib0s8vpmeb5mayw.min.js"></script>
+
+<!--SCRIPTS END-->
+
+
+    
+
+
+
+
+<script src="/js/equals-mark.js"></script>
+
+
+    </body>
+</html>

@@ -2886,6 +2886,157 @@ $$</span> 离子电导率和温度、活化能的关系</p>
 <li><p>力学均一性</p></li>
 <li><p>第二相结晶强化</p></li>
 </ul>
+<h1 id="锂电池原理与技术">锂电池原理与技术</h1>
+<p>液流电池，在电解液中进行反应</p>
+<p>电池能量密度决定因素：容量、电压</p>
+<ol type="1">
+<li>质量轻</li>
+<li>标准电极电势负</li>
+</ol>
+<p>枝晶的形成：</p>
+<p>传统锂离子电池中，在电场极化下，由于扩散需要时间，靠近电极表面的区域出现Li的缺失，，由于尖端效应，电极表面的坑洼出具有更高的锂沉积优先级，最终形成枝晶，沉积时间成为Sand’s
+time。</p>
+<p>死锂消耗锂，即使0.995的库伦效率，100圈循环后容量保持率仅为60%</p>
+<p>2019年Nobel化学奖：Goodenough、Whittingham、Yoshino</p>
+<p>Goodenough：LiCoO<sub>2</sub>、LiFePO<sub>4</sub>、LiMn<sub>2</sub>O<sub>4</sub></p>
+<p>Whittingham：插层反应<span class="math inline">$\rm
+TiS_2$</span>的转化反应可以储存锂</p>
+<p>Yoshino：焦炭负极，利用焦炭存储锂</p>
+<p>==电拓扑化学==</p>
+<p>锂电池的四大焦虑：</p>
+<ul>
+<li>里程焦虑</li>
+<li>价格焦虑</li>
+<li>安全焦虑</li>
+<li>温度焦虑</li>
+</ul>
+<p>三种常见的电池结构：</p>
+<ul>
+<li>扣式电池
+<ul>
+<li>正极壳</li>
+<li>正极材料</li>
+<li>隔膜</li>
+<li>锂金属片</li>
+<li>垫片</li>
+<li>弹簧片</li>
+<li>负极壳</li>
+</ul></li>
+<li>软包电池</li>
+<li>柱状电池</li>
+</ul>
+<p>插层式锂离子电池（也被叫做摇椅电池）的结构：graphene|EC&amp;DC|LiCoO2</p>
+<p>脱锂：Co(+3)—&gt;Co(+4)，插入graphene并接收从LiCoO2从外电路来的电子变成LiC6</p>
+<p>电压上升（充电）=正极（上升）-负极（下降）</p>
+<p>最主要的储存锂的方式还是插层 储存锂</p>
+<p>常见的正负极材料：</p>
+<ul>
+<li>正极
+<ul>
+<li>钴酸锂</li>
+<li>锰酸锂</li>
+<li>磷酸铁锂</li>
+</ul></li>
+<li>负极
+<ul>
+<li>石墨（以及软碳、硬碳，在钠离子电池用的比较多，因为钠的体积比锂大、钠的插层化合物不稳定（主要原因），导致插层时石墨剥离）</li>
+<li>钛酸锂</li>
+</ul></li>
+</ul>
+<p>DoD：deepth of discharge放电深度</p>
+<p>Current rate: A/g</p>
+<p>Current density: $ \rm
+cm^2/s$，对于一个耗时100s的实验，考虑一维/二维/三维？</p>
+<p>菲克第二定律的目标是简历浓度c（差）随时间和空间变化的函数， <span
+class="math display">$$
+\dfrac{\partial C_0(x,t)}{\partial t}=-D_0\nabla^2C_0
+$$</span></p>
+<p>离子扩散系数测量方法：GITT(更准确)、CV、交流阻抗法</p>
+<p>前者可以精确到电极表面的扩散，后者不是特别准确</p>
+<p>离子迁移数： <span
+class="math display"><em>t</em><sub>−</sub> + <em>t</em><sub>+</sub> = 1</span>
+Grotthus机制：氢键的断裂和重组进行传输</p>
+<p>不符合Fick定律的情况：离子液体、</p>
+<h2 id="电解液界面和界相">电解液、界面和界相</h2>
+<p>电解质的现代定义：<strong>离子导体</strong>和<strong>电子绝缘体</strong></p>
+<p>典型实例：</p>
+<ul>
+<li>氯化钠（离子载体ionophore）</li>
+<li>醋酸（中性分子，离子源ionogen）</li>
+<li>熔融氯化钠（熔融盐molten salt），高温热电池可能使用</li>
+<li>固体电解质：LiPSCl，具有开放的孔道、缺陷等，热扰动进行传输</li>
+</ul>
+<p>水具有“双极结构”，能够同时“吸引”阳离子和阴离子</p>
+<p>而其他溶剂比如碳酸乙烯酯的结构是“单极子”（空间位阻引起）</p>
+<p>介电常数： <span class="math display">$$
+\varepsilon=\dfrac{X_v}{X_s}
+$$</span></p>
+<ul>
+<li>分子为真空电场强度</li>
+<li>分母为填充溶剂分子的空间电场强度</li>
+<li>真空为1</li>
+<li>分子对称性越差，一般极性越大，介电常数越大</li>
+<li>介电常数本身是由分子间作用力影响的：ion-dipole、dipole-dipole、H-bond</li>
+</ul>
+<p>真空中带电荷的平行极板之间存在电场，带有溶剂时，部分电场能被消耗用于重新极化溶剂分子取向。</p>
+<p>如果电场方向翻转过快，那么溶剂分子反转速度可能无法跟上，偶极子的贡献就会逐渐消失。</p>
+<p>离子溶剂化的动态模型——溶剂化鞘</p>
+<ul>
+<li>第一溶剂化鞘，平均溶剂分子数目成为溶剂化数，能够感受中央离子的电场，因此具有取向性</li>
+<li>第二溶剂化鞘</li>
+<li>本体溶剂，不受中心离子影响，但受外电场影响</li>
+</ul>
+<p>溶剂化鞘模型引入后的结果是施加的电场遇到的阻力减小了。</p>
+<p>溶剂化数：</p>
+<ul>
+<li><p>锂：6</p></li>
+<li><p>钠：4</p></li>
+<li><p>氢：10</p></li>
+<li><p>镁：14</p></li>
+</ul>
+<h2 id="离子强度">离子强度</h2>
+<p>水溶液中的真实情况偏离了Arrhenius理论，提出了离子强度的概念 <span
+class="math display">$$
+I=\dfrac{1}{2}\sum_{i=1}^nc_iz_i^2
+$$</span> Molarity：摩尔浓度（物质的量浓度）</p>
+<p>Molality：质量浓度，在高浓度电解液中，体积会发生变化</p>
+<h2 id="离子氛">离子氛</h2>
+<p>表征中央离子对外围的影响（描述带相反电荷的离子分布情况）——离子氛</p>
+<ul>
+<li>将电解液视为由一个中心离子及周围环境组成的二元体系，除中心离子外，其他离子均为失去独立性而融合成的一个弥散环境</li>
+</ul>
+<p>这种假设的情况，符合Poisson方程 <span class="math display">$$
+\dfrac{1}{r^2}\dfrac{d}{dr}(r^2\dfrac{d\varphi_r}{dr})=-\dfrac{4\pi}{\varepsilon}\rho_r
+$$</span> 离子氛的有效厚度——德拜厚度 <span class="math display">$$
+K^{-1}=\sqrt{\dfrac{\varepsilon k_BT}{\sum_in_i^0z_i^2e_0^2}}
+$$</span> 较高的离子强度和浓度会使德拜半径减小，高温使德拜半径扩大</p>
+<p>基于修订后的德拜厚度，可以得到活度系数的表达式</p>
+<ul>
+<li>稀溶液：&lt;0.01 M</li>
+<li>中等浓度电解质： 1 M</li>
+<li>高浓度电解质： &gt;2 M</li>
+<li>超浓缩电解质：&gt;5 M</li>
+</ul>
+<h2 id="双电层">双电层</h2>
+<ul>
+<li>Helmholtz-Perrin模型，均匀电荷分布，电荷层大概是一个离子的直径厚度</li>
+<li>Gouy-Chapman，既有极板静电吸引的离子又有自身吸引的离子</li>
+<li>Stern模型，加入范德华修正</li>
+<li>Grahame模型，溶剂化阳离子层外还有弥散阳离子层</li>
+<li>Brckris-Devanathan-Mullen模型，内IHP层（溶剂分子），外OHP层（溶剂化离子），弥散层</li>
+</ul>
+<h2 id="界面与界相">界面与界相</h2>
+<ul>
+<li><p>界面：定向分布的排布层，没有新的产物生成</p></li>
+<li><p>界相：生成新的产物</p></li>
+</ul>
+<p>如何判断电解液是否合适？</p>
+<ul>
+<li>测试一：循环伏安法</li>
+<li>测试二：线性伏安法</li>
+</ul>
+<p>电解液不稳定分解后产生过电势</p>
+<p>最理想的SEI：LiF（电子绝缘体）、Li2O（离子导体）</p>
 
                     
                         

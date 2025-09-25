@@ -1,0 +1,692 @@
+
+<!DOCTYPE html>
+<html lang="en">
+    
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="generator" content="Hexo">
+    <title> - Hexo</title>
+    <meta name="author" content="John Doe">
+    
+    
+    
+    <script type="application/ld+json">{"@context":"http://schema.org","@type":"BlogPosting","author":{"@type":"Person","name":"John Doe","sameAs":["https://github.com/hydrogen1222","https://user.qzone.qq.com/2170147489/infocenter"],"image":"https://www.gravatar.com/avatar/59bc94fdda371da7bfe585b96a3463b0"},"articleBody":"后记\r\n重新安装了Rocky Linux10，并安装了Slurm作业系统，尝试编译安装vasp，由于用的Rocky10，gcc等各种套件都比较新，折腾麻了，各种编译报错，干脆换到了较新的vasp.6.5.1版本，一遍过！\r\n编译HDF5\r\n编译HDF5部分内容参考了教程：https://zhuanlan.zhihu.com/p/617261007\r\n编译安装HDF5之前需要先编译安装它的依赖zlib😂，首先去官网https://www.zlib.net/，目前最新的的版本是zlib 1.3.1，下载源代码source\r\ncode，哪种格式的都行，我的工作站有网就直接用wget了：\r\n1wget https://www.zlib.net/zlib-1.3.1.tar.gz\r\n没网的集群自己下载到本地计算机再上传到集群上。\r\n解压、配置、编译、测试、安装：\r\n1tar -zxvf zlib-1.3.1.tar.gz\r\n1./configure --prefix=install_directory\r\n1make -jN\r\n1make test\r\n1make install\r\n接下来安装szip，官网(https://docs.hdfgroup.org/archive/support/doc_resource/SZIP/index.html)同样只提供了源代码，需要编译安装，安装过程大差不差，类似的\r\n接下来编译安装HDF5，官网打开比较慢、、、目前最新版本是1.14.6，使用1.14.5版本编译成功\r\n1wget https://support.hdfgroup.org/releases/hdf5/v1_14/v1_14_6/downloads/hdf5-1.14.6.tar.gz\r\n1tar -zxvf hdf5-1.14.6.tar.gz\r\n接下来是配置，需要使用intel的编译器，所有首先需要安装intel的oneapi套件，安装下面这些：\r\n\r\n\r\nintel的C++编译器，部分组件会捆绑其他组件\r\n\r\n\r\n\r\nintel的fortran编译器\r\n\r\n需要格外注意，我是用的是最新版的oneapi套件，已经删除了对icc、ifort的支持，所以需要注意CC、FC、CXX的写法\r\n123456789./configure --prefix=/opt/apps/vasp.6.5.1/hdf5/hdf5 \\\t--enable-fortran \\\t--with-zlib=/opt/apps/vasp.6.5.1/hdf5/dependences/zlib \\\t--with-szlib=/opt/apps/vasp.6.5.1/hdf5/dependencies/szip \\\t--enable-shared \\\t--enable-parallel \\\tCC=mpiicx \\\tFC=mpiifx \\\tCXX=mpiicpx\r\n接着编译、测试、安装\r\n1make -jN\r\n1make check\r\n1make install\r\nWannier安装\r\n接下来编译安装Wannier90，官网是https://wannier.org/download/，下载：\r\n1wget https://github.com/wannier-developers/wannier90/archive/v3.1.0.tar.gz\r\n然后是解压，接着拷贝config文件夹中的模板：\r\n1cp config/make.inc.ifort make.inc\r\nWannier90的模板并没有调整，依然使用的ifort，然鹅Intel已经废弃了ifort，所以得手动修改一下模板了，把ifort改成ifx，依此类推，改完后的模板如下：\r\n1234567891011121314151617181920212223root@cernet2:~/Wannier90/wannier90-3.1.0# cat make.inc #=====================================================# For Linux with intel version 11/12 on 64bit machines#=====================================================F90 = ifxCOMMS=mpiMPIF90=mpiifxFCOPTS=-O2LDOPTS=-O2#========================================================# Intel mkl libraries. Set LIBPATH if not in default path#========================================================LIBDIR = /opt/intel/mkl/lib/intel64LIBS   =  -L$(LIBDIR) -lmkl_core -lmkl_intel_lp64 -lmkl_sequential -lpthread#=======================# ATLAS Blas and LAPACK#=======================#LIBDIR = /usr/local/lib#LIBS = -L$(LIBDIR)  -llapack -lf77blas -lcblas -latlas\r\n接着编译吧：\r\n1make -jN\r\n再编译库：\r\n1make lib -jN\r\n最终，得到了两个重要的文件：wannier90.x和libwannier.a，记住这两个文件所在的目录，\r\nVTST的安装\r\nVTST，是一个”插件“，随着vasp的编译而安装，首先下载VTST：\r\n1wget https://theory.cm.utexas.edu/code/vtstcode-209.tgz\r\n参考官网的安装过程，需要修改源代码，谨慎且小麻烦，https://theory.cm.utexas.edu/vtsttools/installation.html\r\n按照教程修改vasp的main.F源代码，源代码都在src目录内\r\n\r\n\r\n修改main.F，记得备份源码\r\n\r\n\r\n\r\n修改main.F，记得备份源码\r\n\r\n接着将VTST文件夹下的所有源码文件复制到vasp的源码文件夹内，此时会覆盖掉chain.F\r\n然后修改.object\r\n\r\n\r\n修改.object，记得备份\r\n\r\n接着修改源码目录内的makefile文件，将其中的某一行由：\r\n1LIB=lib parser\r\n修改为：\r\n1LIB= lib parser pyamff_fortran\r\n我编译vasp时为了加快编译速度，需要并行编译，因此也需要将：\r\n1dependencies: sources\r\n修改为：\r\n1dependencies: sources libs\r\n至此，VTST需要做的已经完成了，开始编译vasp吧~~\r\n编译vasp\r\n使用makefile.include.oneapi这个模板，这个模板已经适配了新版的intel套件，只需要修改hdf5和wannier90这两个地方就行，本次编译使用了比较激进的方案，\r\n1234567891011121314151617181920212223242526272829303132333435363738394041424344454647484950515253545556575859606162636465666768697071727374757677# Default precompiler optionsCPP_OPTIONS = -DHOST=\\&quot;LinuxIFC\\&quot; \\              -DMPI -DMPI_BLOCK=8000 -Duse_collective \\              -DscaLAPACK \\              -DCACHE_SIZE=4000 \\              -Davoidalloc \\              -Dvasp6 \\              -Dtbdyn \\              -Dfock_dblbufCPP         = fpp -f_com=no -free -w0  $*$(FUFFIX) $*$(SUFFIX) $(CPP_OPTIONS)FC          = mpiifort -fc=ifxFCL         = mpiifort -fc=ifxFREE        = -free -names lowercaseFFLAGS      = -assume byterecl -wOFLAG       = -O3 -xHost -unroll-aggressive  #激进的方案OFLAG_IN    = $(OFLAG)DEBUG       = -O0# For what used to be vasp.5.libCPP_LIB     = $(CPP)FC_LIB      = $(FC)CC_LIB      = icxCFLAGS_LIB  = -OFFLAGS_LIB  = -O1FREE_LIB    = $(FREE)OBJECTS_LIB = linpack_double.o# For the parser libraryCXX_PARS    = icpxLLIBS       = -lstdc++#### Customize as of this point! Of course you may change the preceding## part of this file as well if you like, but it should rarely be## necessary ...### When compiling on the target machine itself, change this to the# relevant target when cross-compiling for another architectureVASP_TARGET_CPU ?= -xHOSTFFLAGS     += $(VASP_TARGET_CPU)# Intel MKL (FFTW, BLAS, LAPACK, and scaLAPACK)# (Note: for Intel Parallel Studio&#x27;s MKL use -mkl instead of -qmkl)FCL        += -qmkl=parallelMKLROOT    ?= /path/to/your/mkl/installationLLIBS      += -L$(MKLROOT)/lib/intel64 -lmkl_scalapack_lp64 -lmkl_blacs_intelmpi_lp64INCS        =-I$(MKLROOT)/include/fftwMKL_THREADING_LAYER=INTEL OMP_NUM_THREADS=1 # MPI+MKL 并行时必须绑 1，否则容易 oversubscribe# HDF5-support (optional but strongly recommended, and mandatory for some features)CPP_OPTIONS+= -DVASP_HDF5HDF5_ROOT  ?= /opt/apps/vasp.6.5.1/hdf5/hdf5LLIBS      += -L$(HDF5_ROOT)/lib -lhdf5_fortranINCS       += -I$(HDF5_ROOT)/include# For the VASP-2-Wannier90 interface (optional)CPP_OPTIONS    += -DVASP2WANNIER90WANNIER90_ROOT ?= /opt/apps/vasp.6.5.1/wannier90-3.1.0LLIBS          += -L$(WANNIER90_ROOT)/lib -lwannier# For machine learning library vaspml (experimental)#CPP_OPTIONS += -Dlibvaspml#CPP_OPTIONS += -DVASPML_USE_CBLAS#CPP_OPTIONS += -DVASPML_USE_MKL#CPP_OPTIONS += -DVASPML_DEBUG_LEVEL=3#CXX_ML      = mpiicpc -cxx=icpx#CXXFLAGS_ML = -O3 -std=c++17 -Wall#INCLUDE_ML  =\r\n1make DEPS=1 -jN\r\n笔者用的双路2676 v3的落后的工作站，因为调用了24个核心并行编译所以比较快，编译时间大概是四五分钟\r\n接着是测试，make test默认调用4个核心，可以编辑runtest文件手动修改核心数目加快测试速度，关于测试的说明在官网：https://www.vasp.at/wiki/Validation_tests\r\n我自己测试时需要手动加上hdf5库的环境变量，否则一个测试也跑不了：\r\n1export LD_LIBRARY_PATH=/opt/apps/vasp.6.5.1/hdf5/hdf5/lib:$LD_LIBRARY_PATH\r\n对了，为了避免任何关于内存栈的错误，也请执行下面四行命令（从集群slurm脚本抄的）\r\n1234ulimit -d unlimitedulimit -s unlimitedulimit -t unlimitedulimit -v unlimited\r\n./install_cp2k_toolchain.sh –with-sirius=no –with-intelmpi=system\r\n–with-mkl=system –with-openmpi=no –with-plumed=install\r\n–with-cmake=system –with-ninja=install –with-dftd4=install\r\ncp2k的dftd4库和ninja库参考公社上的文件，http://bbs.keinsci.com/forum.php?mod=viewthread&amp;tid=55624&amp;highlight=dftd4\r\n","dateCreated":"2025-09-16T21:10:34+08:00","dateModified":"2025-09-20T15:48:41+08:00","datePublished":"2025-09-16T21:10:34+08:00","description":"","headline":"","image":[],"mainEntityOfPage":{"@type":"WebPage","@id":"https://hydrogen1222.xyz/2025/09/16/%E7%A7%91%E7%A0%94/VASP/vasp6.5.1+HDF5+Wannier90%E7%BC%96%E8%AF%91%E5%AE%89%E8%A3%85/"},"publisher":{"@type":"Organization","name":"John Doe","sameAs":["https://github.com/hydrogen1222","https://user.qzone.qq.com/2170147489/infocenter"],"image":"https://www.gravatar.com/avatar/59bc94fdda371da7bfe585b96a3463b0","logo":{"@type":"ImageObject","url":"https://www.gravatar.com/avatar/59bc94fdda371da7bfe585b96a3463b0"}},"url":"https://hydrogen1222.xyz/2025/09/16/%E7%A7%91%E7%A0%94/VASP/vasp6.5.1+HDF5+Wannier90%E7%BC%96%E8%AF%91%E5%AE%89%E8%A3%85/"}</script>
+    <meta name="description" content="后记 重新安装了Rocky Linux10，并安装了Slurm作业系统，尝试编译安装vasp，由于用的Rocky10，gcc等各种套件都比较新，折腾麻了，各种编译报错，干脆换到了较新的vasp.6.5.1版本，一遍过！ 编译HDF5 编译HDF5部分内容参考了教程：https:&#x2F;&#x2F;zhuanlan.zhihu.com&#x2F;p&#x2F;617261007 编译安装HDF5之前需要先编译安装它的依赖zli">
+<meta property="og:type" content="blog">
+<meta property="og:title" content="Hexo">
+<meta property="og:url" content="https://hydrogen1222.xyz/2025/09/16/%E7%A7%91%E7%A0%94/VASP/vasp6.5.1+HDF5+Wannier90%E7%BC%96%E8%AF%91%E5%AE%89%E8%A3%85/index.html">
+<meta property="og:site_name" content="Hexo">
+<meta property="og:description" content="后记 重新安装了Rocky Linux10，并安装了Slurm作业系统，尝试编译安装vasp，由于用的Rocky10，gcc等各种套件都比较新，折腾麻了，各种编译报错，干脆换到了较新的vasp.6.5.1版本，一遍过！ 编译HDF5 编译HDF5部分内容参考了教程：https:&#x2F;&#x2F;zhuanlan.zhihu.com&#x2F;p&#x2F;617261007 编译安装HDF5之前需要先编译安装它的依赖zli">
+<meta property="og:locale" content="en_US">
+<meta property="og:image" content="https://hydrogen1222.xyz/2025/09/16/%E7%A7%91%E7%A0%94/VASP/vasp6.5.1+HDF5+Wannier90%E7%BC%96%E8%AF%91%E5%AE%89%E8%A3%85/image-20250916212752349.png">
+<meta property="og:image" content="https://hydrogen1222.xyz/2025/09/16/%E7%A7%91%E7%A0%94/VASP/vasp6.5.1+HDF5+Wannier90%E7%BC%96%E8%AF%91%E5%AE%89%E8%A3%85/image-20250916212947895.png">
+<meta property="og:image" content="https://hydrogen1222.xyz/2025/09/16/%E7%A7%91%E7%A0%94/VASP/vasp6.5.1+HDF5+Wannier90%E7%BC%96%E8%AF%91%E5%AE%89%E8%A3%85/image-20250919165649395.png">
+<meta property="og:image" content="https://hydrogen1222.xyz/2025/09/16/%E7%A7%91%E7%A0%94/VASP/vasp6.5.1+HDF5+Wannier90%E7%BC%96%E8%AF%91%E5%AE%89%E8%A3%85/image-20250919165729633.png">
+<meta property="og:image" content="https://hydrogen1222.xyz/2025/09/16/%E7%A7%91%E7%A0%94/VASP/vasp6.5.1+HDF5+Wannier90%E7%BC%96%E8%AF%91%E5%AE%89%E8%A3%85/image-20250919170037549.png">
+<meta property="article:published_time" content="2025-09-16T13:10:34.922Z">
+<meta property="article:modified_time" content="2025-09-20T07:48:41.598Z">
+<meta property="article:author" content="John Doe">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://hydrogen1222.xyz/2025/09/16/%E7%A7%91%E7%A0%94/VASP/vasp6.5.1+HDF5+Wannier90%E7%BC%96%E8%AF%91%E5%AE%89%E8%A3%85/image-20250916212752349.png">
+    
+    
+        
+    
+    
+    
+    
+    
+    <!--STYLES-->
+    
+<link rel="stylesheet" href="/assets/css/all.css">
+
+    
+<link rel="stylesheet" href="/assets/css/jquery.fancybox.css">
+
+    
+<link rel="stylesheet" href="/assets/css/thumbs.css">
+
+    
+<link rel="stylesheet" href="/assets/css/tranquilpeak.css">
+
+    <!--STYLES END-->
+    
+
+    
+
+    
+        
+    
+
+
+
+
+<script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+<script>
+  MathJax = {
+    tex: {
+      inlineMath: [['$', '$'], ['\\(', '\\)']],
+      displayMath: [['$$', '$$'], ['\\[', '\\]']],
+      tags: 'ams'
+    },
+    svg: {
+      fontCache: 'global'
+    }
+  };
+</script>
+
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/lionsoul2014/kaiti-font/kaiti.css">
+
+
+
+
+<!-- hexo injector head_end start -->
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.12.0/dist/katex.min.css">
+
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/hexo-math@4.0.0/dist/style.css">
+<!-- hexo injector head_end end --></head>
+
+    <body>
+        <div id="blog">
+            <!-- Define author's picture -->
+
+
+    
+
+<header id="header" data-behavior="4">
+    <i id="btn-open-sidebar" class="fa fa-lg fa-bars"></i>
+    <div class="header-title">
+        <a
+            class="header-title-link"
+            href="/"
+            aria-label=""
+        >
+            Hexo
+        </a>
+    </div>
+    
+        
+            <a
+                class="header-right-picture "
+                href="#about"
+                aria-label="Open the link: /#about"
+            >
+        
+        
+        </a>
+    
+</header>
+
+            <!-- Define author's picture -->
+
+
+<nav id="sidebar" data-behavior="4">
+    <div class="sidebar-container">
+        
+        
+            <ul class="sidebar-buttons">
+            
+                <li class="sidebar-button">
+                    
+                        <a
+                            class="sidebar-button-link "
+                            href="/"
+                            
+                            rel="noopener"
+                            title="Home"
+                        >
+                        <i class="sidebar-button-icon fa fa-home" aria-hidden="true"></i>
+                        <span class="sidebar-button-desc">Home</span>
+                    </a>
+            </li>
+            
+                <li class="sidebar-button">
+                    
+                        <a
+                            class="sidebar-button-link "
+                            href="/all-categories"
+                            
+                            rel="noopener"
+                            title="Categories"
+                        >
+                        <i class="sidebar-button-icon fa fa-bookmark" aria-hidden="true"></i>
+                        <span class="sidebar-button-desc">Categories</span>
+                    </a>
+            </li>
+            
+                <li class="sidebar-button">
+                    
+                        <a
+                            class="sidebar-button-link "
+                            href="/all-tags"
+                            
+                            rel="noopener"
+                            title="Tags"
+                        >
+                        <i class="sidebar-button-icon fa fa-tags" aria-hidden="true"></i>
+                        <span class="sidebar-button-desc">Tags</span>
+                    </a>
+            </li>
+            
+                <li class="sidebar-button">
+                    
+                        <a
+                            class="sidebar-button-link "
+                            href="/all-archives"
+                            
+                            rel="noopener"
+                            title="Archives"
+                        >
+                        <i class="sidebar-button-icon fa fa-archive" aria-hidden="true"></i>
+                        <span class="sidebar-button-desc">Archives</span>
+                    </a>
+            </li>
+            
+                <li class="sidebar-button">
+                    
+                        <a
+                            class="sidebar-button-link "
+                            href="/about"
+                            
+                            rel="noopener"
+                            title="About"
+                        >
+                        <i class="sidebar-button-icon fa fa-question" aria-hidden="true"></i>
+                        <span class="sidebar-button-desc">About</span>
+                    </a>
+            </li>
+            
+        </ul>
+        
+            <ul class="sidebar-buttons">
+            
+                <li class="sidebar-button">
+                    
+                        <a
+                            class="sidebar-button-link "
+                            href="https://github.com/hydrogen1222"
+                            
+                                target="_blank"
+                            
+                            rel="noopener"
+                            title="GitHub"
+                        >
+                        <i class="sidebar-button-icon fab fa-github" aria-hidden="true"></i>
+                        <span class="sidebar-button-desc">GitHub</span>
+                    </a>
+            </li>
+            
+                <li class="sidebar-button">
+                    
+                        <a
+                            class="sidebar-button-link "
+                            href="https://user.qzone.qq.com/2170147489/infocenter"
+                            
+                                target="_blank"
+                            
+                            rel="noopener"
+                            title="QQ"
+                        >
+                        <i class="sidebar-button-icon fab fa-qq" aria-hidden="true"></i>
+                        <span class="sidebar-button-desc">QQ</span>
+                    </a>
+            </li>
+            
+        </ul>
+        
+    </div>
+</nav>
+
+            
+            <div id="main" data-behavior="4"
+                 class="
+                        hasCoverMetaIn
+                        ">
+                
+<article class="post">
+    
+    
+        <div class="post-header main-content-wrap text-left">
+    
+        <h1 class="post-title">
+            (no title)
+        </h1>
+    
+    
+        <div class="post-meta">
+    <time datetime="2025-09-16T21:10:34+08:00">
+	
+		    Sep 16, 2025
+    	
+    </time>
+    
+</div>
+
+    
+</div>
+
+    
+    <div class="post-content markdown">
+        <div class="main-content-wrap">
+            <h1 id="后记">后记</h1>
+<p>重新安装了<code>Rocky Linux10</code>，并安装了<code>Slurm</code>作业系统，尝试编译安装<code>vasp</code>，由于用的<code>Rocky10</code>，gcc等各种套件都比较新，折腾麻了，各种编译报错，干脆换到了较新的<code>vasp.6.5.1</code>版本，一遍过！</p>
+<h2 id="编译hdf5">编译HDF5</h2>
+<p>编译<code>HDF5</code>部分内容参考了教程：https://zhuanlan.zhihu.com/p/617261007</p>
+<p>编译安装<code>HDF5</code>之前需要先编译安装它的依赖<code>zlib</code>😂，首先去官网https://www.zlib.net/，目前最新的的版本是<code>zlib 1.3.1</code>，下载源代码source
+code，哪种格式的都行，我的工作站有网就直接用<code>wget</code>了：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">wget https://www.zlib.net/zlib-1.3.1.tar.gz</span><br></pre></td></tr></table></figure>
+<p>没网的集群自己下载到本地计算机再上传到集群上。</p>
+<p>解压、配置、编译、测试、安装：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">tar -zxvf zlib-1.3.1.tar.gz</span><br></pre></td></tr></table></figure>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">./configure --prefix=install_directory</span><br></pre></td></tr></table></figure>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">make -jN</span><br></pre></td></tr></table></figure>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">make <span class="built_in">test</span></span><br></pre></td></tr></table></figure>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">make install</span><br></pre></td></tr></table></figure>
+<p>接下来安装<code>szip</code>，官网(https://docs.hdfgroup.org/archive/support/doc_resource/SZIP/index.html)同样只提供了源代码，需要编译安装，安装过程大差不差，类似的</p>
+<p>接下来编译安装<code>HDF5</code>，官网打开比较慢、、、目前最新版本是<code>1.14.6</code>，使用<code>1.14.5</code>版本编译成功</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">wget https://support.hdfgroup.org/releases/hdf5/v1_14/v1_14_6/downloads/hdf5-1.14.6.tar.gz</span><br></pre></td></tr></table></figure>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">tar -zxvf hdf5-1.14.6.tar.gz</span><br></pre></td></tr></table></figure>
+<p>接下来是配置，需要使用intel的编译器，所有首先需要安装intel的<code>oneapi</code>套件，安装下面这些：</p>
+<figure>
+<img src="image-20250916212752349.png"
+alt="intel的C++编译器，部分组件会捆绑其他组件" />
+<figcaption
+aria-hidden="true">intel的C++编译器，部分组件会捆绑其他组件</figcaption>
+</figure>
+<figure>
+<img src="image-20250916212947895.png" alt="intel的fortran编译器" />
+<figcaption aria-hidden="true">intel的fortran编译器</figcaption>
+</figure>
+<p>需要格外注意，我是用的是最新版的<code>oneapi</code>套件，已经删除了对<code>icc</code>、<code>ifort</code>的支持，所以需要注意<code>CC</code>、<code>FC</code>、<code>CXX</code>的写法</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">./configure --prefix=/opt/apps/vasp.6.5.1/hdf5/hdf5 \</span><br><span class="line">	--enable-fortran \</span><br><span class="line">	--with-zlib=/opt/apps/vasp.6.5.1/hdf5/dependences/zlib \</span><br><span class="line">	--with-szlib=/opt/apps/vasp.6.5.1/hdf5/dependencies/szip \</span><br><span class="line">	--enable-shared \</span><br><span class="line">	--enable-parallel \</span><br><span class="line">	CC=mpiicx \</span><br><span class="line">	FC=mpiifx \</span><br><span class="line">	CXX=mpiicpx</span><br></pre></td></tr></table></figure>
+<p>接着编译、测试、安装</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">make -jN</span><br></pre></td></tr></table></figure>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">make check</span><br></pre></td></tr></table></figure>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">make install</span><br></pre></td></tr></table></figure>
+<h2 id="wannier安装">Wannier安装</h2>
+<p>接下来编译安装<code>Wannier90</code>，官网是https://wannier.org/download/，下载：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">wget https://github.com/wannier-developers/wannier90/archive/v3.1.0.tar.gz</span><br></pre></td></tr></table></figure>
+<p>然后是解压，接着拷贝<code>config</code>文件夹中的模板：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">cp</span> config/make.inc.ifort make.inc</span><br></pre></td></tr></table></figure>
+<p><code>Wannier90</code>的模板并没有调整，依然使用的<code>ifort</code>，然鹅Intel已经废弃了<code>ifort</code>，所以得手动修改一下模板了，把<code>ifort</code>改成<code>ifx</code>，依此类推，改完后的模板如下：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br></pre></td><td class="code"><pre><span class="line">root@cernet2:~/Wannier90/wannier90-3.1.0# <span class="built_in">cat</span> make.inc </span><br><span class="line"></span><br><span class="line"><span class="comment">#=====================================================</span></span><br><span class="line"><span class="comment"># For Linux with intel version 11/12 on 64bit machines</span></span><br><span class="line"><span class="comment">#=====================================================</span></span><br><span class="line">F90 = ifx</span><br><span class="line">COMMS=mpi</span><br><span class="line">MPIF90=mpiifx</span><br><span class="line">FCOPTS=-O2</span><br><span class="line">LDOPTS=-O2</span><br><span class="line"></span><br><span class="line"><span class="comment">#========================================================</span></span><br><span class="line"><span class="comment"># Intel mkl libraries. Set LIBPATH if not in default path</span></span><br><span class="line"><span class="comment">#========================================================</span></span><br><span class="line"></span><br><span class="line">LIBDIR = /opt/intel/mkl/lib/intel64</span><br><span class="line">LIBS   =  -L$(LIBDIR) -lmkl_core -lmkl_intel_lp64 -lmkl_sequential -lpthread</span><br><span class="line"></span><br><span class="line"><span class="comment">#=======================</span></span><br><span class="line"><span class="comment"># ATLAS Blas and LAPACK</span></span><br><span class="line"><span class="comment">#=======================</span></span><br><span class="line"><span class="comment">#LIBDIR = /usr/local/lib</span></span><br><span class="line"><span class="comment">#LIBS = -L$(LIBDIR)  -llapack -lf77blas -lcblas -latlas</span></span><br></pre></td></tr></table></figure>
+<p>接着编译吧：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">make -jN</span><br></pre></td></tr></table></figure>
+<p>再编译库：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">make lib -jN</span><br></pre></td></tr></table></figure>
+<p>最终，得到了两个重要的文件：<code>wannier90.x</code>和<code>libwannier.a</code>，记住这两个文件所在的目录，</p>
+<h2 id="vtst的安装">VTST的安装</h2>
+<p><code>VTST</code>，是一个”插件“，随着<code>vasp</code>的编译而安装，首先下载<code>VTST</code>：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">wget https://theory.cm.utexas.edu/code/vtstcode-209.tgz</span><br></pre></td></tr></table></figure>
+<p>参考官网的安装过程，需要修改源代码，谨慎且小麻烦，https://theory.cm.utexas.edu/vtsttools/installation.html</p>
+<p>按照教程修改vasp的<code>main.F</code>源代码，源代码都在<code>src</code>目录内</p>
+<figure>
+<img src="image-20250919165649395.png" alt="修改main.F，记得备份源码" />
+<figcaption aria-hidden="true">修改main.F，记得备份源码</figcaption>
+</figure>
+<figure>
+<img src="image-20250919165729633.png" alt="修改main.F，记得备份源码" />
+<figcaption aria-hidden="true">修改main.F，记得备份源码</figcaption>
+</figure>
+<p>接着将<code>VTST</code>文件夹下的所有源码文件复制到<code>vasp</code>的源码文件夹内，此时会覆盖掉<code>chain.F</code></p>
+<p>然后修改<code>.object</code></p>
+<figure>
+<img src="image-20250919170037549.png" alt="修改.object，记得备份" />
+<figcaption aria-hidden="true">修改.object，记得备份</figcaption>
+</figure>
+<p>接着修改<code>源码目录</code>内的<code>makefile</code>文件，将其中的某一行由：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">LIB=lib parser</span><br></pre></td></tr></table></figure>
+<p>修改为：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">LIB= lib parser pyamff_fortran</span><br></pre></td></tr></table></figure>
+<p>我编译<code>vasp</code>时为了加快编译速度，需要并行编译，因此也需要将：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">dependencies: sources</span><br></pre></td></tr></table></figure>
+<p>修改为：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">dependencies: sources libs</span><br></pre></td></tr></table></figure>
+<p>至此，<code>VTST</code>需要做的已经完成了，开始编译<code>vasp</code>吧~~</p>
+<h2 id="编译vasp">编译vasp</h2>
+<p>使用<code>makefile.include.oneapi</code>这个模板，这个模板已经适配了新版的<code>intel</code>套件，只需要修改<code>hdf5</code>和<code>wannier90</code>这两个地方就行，本次编译使用了<code>比较激进</code>的方案，</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br></pre></td><td class="code"><pre><span class="line"># Default precompiler options</span><br><span class="line">CPP_OPTIONS = -DHOST=\&quot;LinuxIFC\&quot; \</span><br><span class="line">              -DMPI -DMPI_BLOCK=8000 -Duse_collective \</span><br><span class="line">              -DscaLAPACK \</span><br><span class="line">              -DCACHE_SIZE=4000 \</span><br><span class="line">              -Davoidalloc \</span><br><span class="line">              -Dvasp6 \</span><br><span class="line">              -Dtbdyn \</span><br><span class="line">              -Dfock_dblbuf</span><br><span class="line"></span><br><span class="line">CPP         = fpp -f_com=no -free -w0  $*$(FUFFIX) $*$(SUFFIX) $(CPP_OPTIONS)</span><br><span class="line"></span><br><span class="line">FC          = mpiifort -fc=ifx</span><br><span class="line">FCL         = mpiifort -fc=ifx</span><br><span class="line"></span><br><span class="line">FREE        = -free -names lowercase</span><br><span class="line"></span><br><span class="line">FFLAGS      = -assume byterecl -w</span><br><span class="line"></span><br><span class="line">OFLAG       = -O3 -xHost -unroll-aggressive  #激进的方案</span><br><span class="line">OFLAG_IN    = $(OFLAG)</span><br><span class="line">DEBUG       = -O0</span><br><span class="line"></span><br><span class="line"># For what used to be vasp.5.lib</span><br><span class="line">CPP_LIB     = $(CPP)</span><br><span class="line">FC_LIB      = $(FC)</span><br><span class="line">CC_LIB      = icx</span><br><span class="line">CFLAGS_LIB  = -O</span><br><span class="line">FFLAGS_LIB  = -O1</span><br><span class="line">FREE_LIB    = $(FREE)</span><br><span class="line"></span><br><span class="line">OBJECTS_LIB = linpack_double.o</span><br><span class="line"></span><br><span class="line"># For the parser library</span><br><span class="line">CXX_PARS    = icpx</span><br><span class="line">LLIBS       = -lstdc++</span><br><span class="line"></span><br><span class="line">##</span><br><span class="line">## Customize as of this point! Of course you may change the preceding</span><br><span class="line">## part of this file as well if you like, but it should rarely be</span><br><span class="line">## necessary ...</span><br><span class="line">##</span><br><span class="line"></span><br><span class="line"># When compiling on the target machine itself, change this to the</span><br><span class="line"># relevant target when cross-compiling for another architecture</span><br><span class="line">VASP_TARGET_CPU ?= -xHOST</span><br><span class="line">FFLAGS     += $(VASP_TARGET_CPU)</span><br><span class="line"></span><br><span class="line"># Intel MKL (FFTW, BLAS, LAPACK, and scaLAPACK)</span><br><span class="line"># (Note: for Intel Parallel Studio&#x27;s MKL use -mkl instead of -qmkl)</span><br><span class="line">FCL        += -qmkl=parallel</span><br><span class="line">MKLROOT    ?= /path/to/your/mkl/installation</span><br><span class="line">LLIBS      += -L$(MKLROOT)/lib/intel64 -lmkl_scalapack_lp64 -lmkl_blacs_intelmpi_lp64</span><br><span class="line">INCS        =-I$(MKLROOT)/include/fftw</span><br><span class="line"></span><br><span class="line">MKL_THREADING_LAYER=INTEL </span><br><span class="line">OMP_NUM_THREADS=1 # MPI+MKL 并行时必须绑 1，否则容易 oversubscribe</span><br><span class="line"></span><br><span class="line"># HDF5-support (optional but strongly recommended, and mandatory for some features)</span><br><span class="line">CPP_OPTIONS+= -DVASP_HDF5</span><br><span class="line">HDF5_ROOT  ?= /opt/apps/vasp.6.5.1/hdf5/hdf5</span><br><span class="line">LLIBS      += -L$(HDF5_ROOT)/lib -lhdf5_fortran</span><br><span class="line">INCS       += -I$(HDF5_ROOT)/include</span><br><span class="line"></span><br><span class="line"># For the VASP-2-Wannier90 interface (optional)</span><br><span class="line">CPP_OPTIONS    += -DVASP2WANNIER90</span><br><span class="line">WANNIER90_ROOT ?= /opt/apps/vasp.6.5.1/wannier90-3.1.0</span><br><span class="line">LLIBS          += -L$(WANNIER90_ROOT)/lib -lwannier</span><br><span class="line"></span><br><span class="line"># For machine learning library vaspml (experimental)</span><br><span class="line">#CPP_OPTIONS += -Dlibvaspml</span><br><span class="line">#CPP_OPTIONS += -DVASPML_USE_CBLAS</span><br><span class="line">#CPP_OPTIONS += -DVASPML_USE_MKL</span><br><span class="line">#CPP_OPTIONS += -DVASPML_DEBUG_LEVEL=3</span><br><span class="line">#CXX_ML      = mpiicpc -cxx=icpx</span><br><span class="line">#CXXFLAGS_ML = -O3 -std=c++17 -Wall</span><br><span class="line">#INCLUDE_ML  =</span><br></pre></td></tr></table></figure>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">make DEPS=1 -jN</span><br></pre></td></tr></table></figure>
+<p>笔者用的双路<code>2676 v3</code>的落后的工作站，因为调用了24个核心并行编译所以比较快，编译时间大概是四五分钟</p>
+<p>接着是测试，<code>make test</code>默认调用4个核心，可以编辑<code>runtest</code>文件手动修改核心数目加快测试速度，关于测试的说明在官网：https://www.vasp.at/wiki/Validation_tests</p>
+<p>我自己测试时需要手动加上<code>hdf5</code>库的环境变量，否则一个测试也跑不了：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">export</span> LD_LIBRARY_PATH=/opt/apps/vasp.6.5.1/hdf5/hdf5/lib:<span class="variable">$LD_LIBRARY_PATH</span></span><br></pre></td></tr></table></figure>
+<p>对了，为了避免任何关于内存栈的错误，也请执行下面四行命令（从集群slurm脚本抄的）</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">ulimit</span> -d unlimited</span><br><span class="line"><span class="built_in">ulimit</span> -s unlimited</span><br><span class="line"><span class="built_in">ulimit</span> -t unlimited</span><br><span class="line"><span class="built_in">ulimit</span> -v unlimited</span><br></pre></td></tr></table></figure>
+<p>./install_cp2k_toolchain.sh –with-sirius=no –with-intelmpi=system
+–with-mkl=system –with-openmpi=no –with-plumed=install
+–with-cmake=system –with-ninja=install –with-dftd4=install</p>
+<p>cp2k的dftd4库和ninja库参考公社上的文件，http://bbs.keinsci.com/forum.php?mod=viewthread&amp;tid=55624&amp;highlight=dftd4</p>
+
+            
+
+
+        </div>
+    </div>
+    <div id="post-footer" class="post-footer main-content-wrap">
+        
+        
+            <div class="post-actions-wrap">
+    <nav>
+        <ul class="post-actions post-action-nav">
+            <li class="post-action">
+                
+                    
+                <a
+                    class="post-action-btn btn btn--default tooltip--top"
+                    href="/2025/09/21/%E5%91%A8%E6%97%A5%E9%97%B2%E7%9D%80%E5%BF%83%E8%A1%80%E6%9D%A5%E6%BD%AE%EF%BC%8C%E7%9C%8B%E7%9C%8B%E8%BF%9C%E5%A4%84%E7%9A%84Gentoo/"
+                    data-tooltip="(no title)"
+                    aria-label="PREVIOUS: (no title)"
+                >
+                    
+                        <i class="fa fa-angle-left" aria-hidden="true"></i>
+                        <span class="hide-xs hide-sm text-small icon-ml">PREVIOUS</span>
+                    </a>
+            </li>
+            <li class="post-action">
+                
+                    
+                <a
+                    class="post-action-btn btn btn--default tooltip--top"
+                    href="/2025/09/11/%E6%B2%89%E6%80%9D%E5%BD%95/Isolated%20city/"
+                    data-tooltip="Isolated city"
+                    aria-label="NEXT: Isolated city"
+                >
+                    
+                        <span class="hide-xs hide-sm text-small icon-mr">NEXT</span>
+                        <i class="fa fa-angle-right" aria-hidden="true"></i>
+                    </a>
+            </li>
+        </ul>
+    </nav>
+    <ul class="post-actions post-action-share">
+        <li class="post-action hide-lg hide-md hide-sm">
+            <a
+                class="post-action-btn btn btn--default btn-open-shareoptions"
+                href="#btn-open-shareoptions"
+                aria-label="Share this post"
+            >
+                <i class="fa fa-share-alt" aria-hidden="true"></i>
+            </a>
+        </li>
+        
+            
+            
+            <li class="post-action hide-xs">
+                <a
+                    class="post-action-btn btn btn--default"
+                    target="new" href="https://www.facebook.com/sharer/sharer.php?u=https://hydrogen1222.xyz/2025/09/16/%E7%A7%91%E7%A0%94/VASP/vasp6.5.1+HDF5+Wannier90%E7%BC%96%E8%AF%91%E5%AE%89%E8%A3%85/"
+                    title="Share on Facebook"
+                    aria-label="Share on Facebook"
+                >
+                    <i class="fab fa-facebook" aria-hidden="true"></i>
+                </a>
+            </li>
+        
+            
+            
+            <li class="post-action hide-xs">
+                <a
+                    class="post-action-btn btn btn--default"
+                    target="new" href="https://twitter.com/intent/tweet?text=https://hydrogen1222.xyz/2025/09/16/%E7%A7%91%E7%A0%94/VASP/vasp6.5.1+HDF5+Wannier90%E7%BC%96%E8%AF%91%E5%AE%89%E8%A3%85/"
+                    title="Share on Twitter"
+                    aria-label="Share on Twitter"
+                >
+                    <i class="fab fa-twitter" aria-hidden="true"></i>
+                </a>
+            </li>
+        
+            
+            
+            <li class="post-action hide-xs">
+                <a
+                    class="post-action-btn btn btn--default"
+                    target="new" href="https://plus.google.com/share?url=https://hydrogen1222.xyz/2025/09/16/%E7%A7%91%E7%A0%94/VASP/vasp6.5.1+HDF5+Wannier90%E7%BC%96%E8%AF%91%E5%AE%89%E8%A3%85/"
+                    title="Share on Google+"
+                    aria-label="Share on Google+"
+                >
+                    <i class="fab fa-google-plus" aria-hidden="true"></i>
+                </a>
+            </li>
+        
+        
+            
+        
+        <li class="post-action">
+            
+                <a class="post-action-btn btn btn--default" href="#" aria-label="Back to top">
+            
+                <i class="fa fa-list" aria-hidden="true"></i>
+            </a>
+        </li>
+    </ul>
+</div>
+
+
+        
+        
+            
+        
+    </div>
+</article>
+
+<script>
+document.addEventListener("DOMContentLoaded", function() {
+  const elements = document.querySelectorAll('.post-body'); // 取文章正文
+  elements.forEach(el => {
+    el.innerHTML = el.innerHTML.replace(/==([^=]+)==/g, '<mark>$1</mark>');
+  });
+});
+</script>
+
+
+                <footer id="footer" class="main-content-wrap">
+    <span class="copyrights">
+        Copyrights &copy; 2025 John Doe. All Rights Reserved.
+    </span>
+</footer>
+
+            </div>
+            
+                <div id="bottom-bar" class="post-bottom-bar" data-behavior="4">
+                    <div class="post-actions-wrap">
+    <nav>
+        <ul class="post-actions post-action-nav">
+            <li class="post-action">
+                
+                    
+                <a
+                    class="post-action-btn btn btn--default tooltip--top"
+                    href="/2025/09/21/%E5%91%A8%E6%97%A5%E9%97%B2%E7%9D%80%E5%BF%83%E8%A1%80%E6%9D%A5%E6%BD%AE%EF%BC%8C%E7%9C%8B%E7%9C%8B%E8%BF%9C%E5%A4%84%E7%9A%84Gentoo/"
+                    data-tooltip="(no title)"
+                    aria-label="PREVIOUS: (no title)"
+                >
+                    
+                        <i class="fa fa-angle-left" aria-hidden="true"></i>
+                        <span class="hide-xs hide-sm text-small icon-ml">PREVIOUS</span>
+                    </a>
+            </li>
+            <li class="post-action">
+                
+                    
+                <a
+                    class="post-action-btn btn btn--default tooltip--top"
+                    href="/2025/09/11/%E6%B2%89%E6%80%9D%E5%BD%95/Isolated%20city/"
+                    data-tooltip="Isolated city"
+                    aria-label="NEXT: Isolated city"
+                >
+                    
+                        <span class="hide-xs hide-sm text-small icon-mr">NEXT</span>
+                        <i class="fa fa-angle-right" aria-hidden="true"></i>
+                    </a>
+            </li>
+        </ul>
+    </nav>
+    <ul class="post-actions post-action-share">
+        <li class="post-action hide-lg hide-md hide-sm">
+            <a
+                class="post-action-btn btn btn--default btn-open-shareoptions"
+                href="#btn-open-shareoptions"
+                aria-label="Share this post"
+            >
+                <i class="fa fa-share-alt" aria-hidden="true"></i>
+            </a>
+        </li>
+        
+            
+            
+            <li class="post-action hide-xs">
+                <a
+                    class="post-action-btn btn btn--default"
+                    target="new" href="https://www.facebook.com/sharer/sharer.php?u=https://hydrogen1222.xyz/2025/09/16/%E7%A7%91%E7%A0%94/VASP/vasp6.5.1+HDF5+Wannier90%E7%BC%96%E8%AF%91%E5%AE%89%E8%A3%85/"
+                    title="Share on Facebook"
+                    aria-label="Share on Facebook"
+                >
+                    <i class="fab fa-facebook" aria-hidden="true"></i>
+                </a>
+            </li>
+        
+            
+            
+            <li class="post-action hide-xs">
+                <a
+                    class="post-action-btn btn btn--default"
+                    target="new" href="https://twitter.com/intent/tweet?text=https://hydrogen1222.xyz/2025/09/16/%E7%A7%91%E7%A0%94/VASP/vasp6.5.1+HDF5+Wannier90%E7%BC%96%E8%AF%91%E5%AE%89%E8%A3%85/"
+                    title="Share on Twitter"
+                    aria-label="Share on Twitter"
+                >
+                    <i class="fab fa-twitter" aria-hidden="true"></i>
+                </a>
+            </li>
+        
+            
+            
+            <li class="post-action hide-xs">
+                <a
+                    class="post-action-btn btn btn--default"
+                    target="new" href="https://plus.google.com/share?url=https://hydrogen1222.xyz/2025/09/16/%E7%A7%91%E7%A0%94/VASP/vasp6.5.1+HDF5+Wannier90%E7%BC%96%E8%AF%91%E5%AE%89%E8%A3%85/"
+                    title="Share on Google+"
+                    aria-label="Share on Google+"
+                >
+                    <i class="fab fa-google-plus" aria-hidden="true"></i>
+                </a>
+            </li>
+        
+        
+            
+        
+        <li class="post-action">
+            
+                <a class="post-action-btn btn btn--default" href="#" aria-label="Back to top">
+            
+                <i class="fa fa-list" aria-hidden="true"></i>
+            </a>
+        </li>
+    </ul>
+</div>
+
+
+                </div>
+                
+    <div id="share-options-bar" class="share-options-bar" data-behavior="4">
+        <i id="btn-close-shareoptions" class="fa fa-times"></i>
+        <ul class="share-options">
+            
+                
+                
+                <li class="share-option">
+                    <a
+                        class="share-option-btn"
+                        target="new"
+                        href="https://www.facebook.com/sharer/sharer.php?u=https://hydrogen1222.xyz/2025/09/16/%E7%A7%91%E7%A0%94/VASP/vasp6.5.1+HDF5+Wannier90%E7%BC%96%E8%AF%91%E5%AE%89%E8%A3%85/"
+                        aria-label="Share on Facebook"
+                    >
+                        <i class="fab fa-facebook" aria-hidden="true"></i><span>Share on Facebook</span>
+                    </a>
+                </li>
+            
+                
+                
+                <li class="share-option">
+                    <a
+                        class="share-option-btn"
+                        target="new"
+                        href="https://twitter.com/intent/tweet?text=https://hydrogen1222.xyz/2025/09/16/%E7%A7%91%E7%A0%94/VASP/vasp6.5.1+HDF5+Wannier90%E7%BC%96%E8%AF%91%E5%AE%89%E8%A3%85/"
+                        aria-label="Share on Twitter"
+                    >
+                        <i class="fab fa-twitter" aria-hidden="true"></i><span>Share on Twitter</span>
+                    </a>
+                </li>
+            
+                
+                
+                <li class="share-option">
+                    <a
+                        class="share-option-btn"
+                        target="new"
+                        href="https://plus.google.com/share?url=https://hydrogen1222.xyz/2025/09/16/%E7%A7%91%E7%A0%94/VASP/vasp6.5.1+HDF5+Wannier90%E7%BC%96%E8%AF%91%E5%AE%89%E8%A3%85/"
+                        aria-label="Share on Google+"
+                    >
+                        <i class="fab fa-google-plus" aria-hidden="true"></i><span>Share on Google+</span>
+                    </a>
+                </li>
+            
+        </ul>
+    </div>
+
+
+            
+        </div>
+        
+
+
+<div id="about">
+    <div id="about-card">
+        <div id="about-btn-close">
+            <i class="fa fa-times"></i>
+        </div>
+        
+            <h4 id="about-card-name">John Doe</h4>
+        
+            <div id="about-card-bio"><p>author.bio</p>
+</div>
+        
+        
+            <div id="about-card-job">
+                <i class="fa fa-briefcase"></i>
+                <br/>
+                <p>author.job</p>
+
+            </div>
+        
+        
+            <div id="about-card-location">
+                <i class="fa fa-map-marker-alt"></i>
+                <br/>
+                Changchun, China
+            </div>
+        
+    </div>
+</div>
+
+        
+        
+<div id="cover" style="background-image:url('/assets/images/cover.jpg');"></div>
+        <!--SCRIPTS-->
+
+<script src="/assets/js/script-akgy1kkmfssyzznzlvk9mjwcvnsn87aqalldnf43rojvlib0s8vpmeb5mayw.min.js"></script>
+
+<!--SCRIPTS END-->
+
+
+    
+
+
+
+
+<script src="/js/equals-mark.js"></script>
+
+
+    </body>
+</html>
